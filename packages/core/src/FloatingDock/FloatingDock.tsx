@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef, useState, useCallback, useEffect, createContext, useContext, type ReactNode } from 'react';
-import { calculateDockItemSize, lerpDockScale, type DockDirection, type DockPanelStyle } from './dock-math';
+import React, { useRef, useState, useCallback, useEffect, createContext, useContext, useId, type ReactNode } from 'react';
+import { calculateDockItemSize, dampDockScale, lerpDockScale, type DockDirection, type DockPanelStyle } from './dock-math';
 
 export type { DockDirection, DockPanelStyle };
 
@@ -64,6 +64,7 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 	const itemsRef = useRef<HTMLElement[]>([]);
 	const currentSizesRef = useRef<Map<HTMLElement, number>>(new Map());
 	const rafIdRef = useRef<number | null>(null);
+	const lastTimeRef = useRef<number>(0);
 
 	const registerItem = useCallback(
 		(el: HTMLElement) => {
@@ -77,7 +78,7 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 		[baseSize]
 	);
 
-	const updateScales = useCallback(() => {
+	const updateScales = useCallback((timestamp: number = performance.now()) => {
 		const isHovered = isHoveredRef.current;
 		const coord = pointerCoord.current;
 		const isHorizontal = direction === 'bottom' || direction === 'top';
@@ -86,17 +87,21 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 
 		if (count === 0) {
 			rafIdRef.current = null;
+			lastTimeRef.current = 0;
 			return;
 		}
 
 		if (!isHovered || coord === -9999) {
-			// Graceful exit decay back to baseSize
+			const dt = lastTimeRef.current > 0 ? Math.min((timestamp - lastTimeRef.current) / 1000, 0.05) : 0.016;
+			lastTimeRef.current = timestamp;
+
+			// Graceful exit decay back to baseSize with frame-rate independence
 			let stillDecaying = false;
 			for (let i = 0; i < count; i++) {
 				const el = elements[i];
 				const currentSize = currentSizesRef.current.get(el) ?? baseSize;
-				if (Math.abs(currentSize - baseSize) > 0.1) {
-					const nextSize = lerpDockScale(currentSize, baseSize, 0.32);
+				if (Math.abs(currentSize - baseSize) > 0.05) {
+					const nextSize = dampDockScale(currentSize, baseSize, 22, dt);
 					currentSizesRef.current.set(el, nextSize);
 					el.style.width = `${nextSize.toFixed(2)}px`;
 					el.style.height = `${nextSize.toFixed(2)}px`;
@@ -111,9 +116,12 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 				rafIdRef.current = requestAnimationFrame(updateScales);
 			} else {
 				rafIdRef.current = null;
+				lastTimeRef.current = 0;
 			}
 			return;
 		}
+
+		lastTimeRef.current = 0;
 
 		// When hovered: 120Hz continuous proximity magnification (Big-Ω: strictly separated read/write passes)
 		// Pass 1: Batched geometry measurement (reads only)
@@ -211,6 +219,37 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 		...style,
 	};
 
+	const handleKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLDivElement>) => {
+			const elements = itemsRef.current;
+			if (elements.length === 0) return;
+			const focusedIndex = elements.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
+			if (focusedIndex === -1) return;
+
+			let nextIndex = focusedIndex;
+			const isHorizontal = direction === 'bottom' || direction === 'top';
+
+			if ((isHorizontal && e.key === 'ArrowRight') || (!isHorizontal && e.key === 'ArrowDown')) {
+				e.preventDefault();
+				nextIndex = (focusedIndex + 1) % elements.length;
+			} else if ((isHorizontal && e.key === 'ArrowLeft') || (!isHorizontal && e.key === 'ArrowUp')) {
+				e.preventDefault();
+				nextIndex = (focusedIndex - 1 + elements.length) % elements.length;
+			} else if (e.key === 'Home') {
+				e.preventDefault();
+				nextIndex = 0;
+			} else if (e.key === 'End') {
+				e.preventDefault();
+				nextIndex = elements.length - 1;
+			}
+
+			if (nextIndex !== focusedIndex) {
+				elements[nextIndex]?.focus();
+			}
+		},
+		[direction]
+	);
+
 	return (
 		<DockContext.Provider
 			value={{
@@ -230,6 +269,7 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 				onPointerDown={handlePointerDown}
 				onPointerUp={handlePointerUp}
 				onPointerCancel={handlePointerUp}
+				onKeyDown={handleKeyDown}
 				className={`exhuma-dock-root relative inline-flex max-w-[calc(100vw-24px)] touch-none gap-2 select-none sm:gap-2.5 ${directionLayoutClasses} ${panelStyleClasses} ${className}`}
 				style={mergedStyle}
 				role='toolbar'
@@ -256,6 +296,7 @@ export const DockItem: React.FC<{
 	className?: string;
 }> = ({ children, title, href, onClick, active = false, className = '' }) => {
 	const itemRef = useRef<HTMLDivElement>(null);
+	const tooltipId = useId();
 	const ctx = useContext(DockContext);
 	const [hovered, setHovered] = useState(false);
 	const [focused, setFocused] = useState(false);
@@ -291,6 +332,7 @@ export const DockItem: React.FC<{
 			tabIndex={href ? undefined : 0}
 			role={href ? undefined : 'button'}
 			aria-label={title}
+			aria-describedby={showTooltip ? tooltipId : undefined}
 			className={`exhuma-dock-item focus-visible:ring-primary/50 relative flex shrink-0 cursor-pointer items-center justify-center rounded-2xl will-change-[width,height] outline-none focus-visible:ring-2 ${className}`}
 			style={{
 				width: `${baseSize}px`,
@@ -300,6 +342,7 @@ export const DockItem: React.FC<{
 			{/* Exhuma Smooth Popover Tooltip */}
 			{showTooltip && (
 				<div
+					id={tooltipId}
 					role='tooltip'
 					aria-hidden={!showTooltip}
 					className={`border-border/70 bg-popover/95 text-popover-foreground animate-in fade-in zoom-in-95 pointer-events-none absolute z-50 rounded-lg border px-2.5 py-1 font-sans text-xs font-medium whitespace-nowrap shadow-lg backdrop-blur-xl duration-100 select-none ${tooltipDirectionClasses}`}
@@ -315,7 +358,7 @@ export const DockItem: React.FC<{
 
 	if (href) {
 		return (
-			<a href={href} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} className='focus-visible:ring-primary/40 inline-block rounded-2xl outline-none focus-visible:ring-2' aria-label={title}>
+			<a href={href} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} className='focus-visible:ring-primary/40 inline-block rounded-2xl outline-none focus-visible:ring-2' aria-label={title} aria-describedby={showTooltip ? tooltipId : undefined}>
 				{content}
 			</a>
 		);

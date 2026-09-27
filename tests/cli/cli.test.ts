@@ -313,6 +313,28 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('maxDisplacement');
   });
 
+  it('installs real Floating Dock component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add floating-dock --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/FloatingDock.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('FloatingDock');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Floating Dock component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add floating-dock --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/FloatingDock.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('FloatingDock');
+    expect(code).toContain('calculateCosineBellScale');
+    expect(code).toContain('calculateDockItemSize');
+    expect(code).toContain('requestAnimationFrame');
+  });
+
   it('executes exhuma build to generate static registry JSON', () => {
     const buildOut = resolve(TEST_DIR, 'dist-registry');
     execSync(`node "${CLI_BIN}" build --output="${buildOut}"`, { cwd: TEST_DIR });

@@ -33,6 +33,8 @@ export const MagneticButton = memo(
 				maxDisplacement = 36,
 				className = '',
 				style,
+				type = 'button',
+				asChild,
 				onPointerMove,
 				onPointerLeave,
 				...props
@@ -150,6 +152,7 @@ export const MagneticButton = memo(
 			return (
 				<button
 					ref={buttonRef}
+					type={type}
 					onPointerMove={handlePointerMove}
 					onPointerLeave={handlePointerLeave}
 					className={className}

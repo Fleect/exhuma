@@ -1500,11 +1500,11 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		// Floating Dock
 		if (component.slug === 'floating-dock') {
 			const direction = (propValues.direction as any) || 'bottom';
-			const baseSize = Number(propValues.baseSize ?? 44);
-			const maxMagnification = Number(propValues.maxMagnification ?? 0.65);
-			const influenceRadius = Number(propValues.influenceRadius ?? 85);
+			const baseSize = Number(propValues.baseSize ?? 36);
+			const maxMagnification = Number(propValues.maxMagnification ?? 0.75);
+			const influenceRadius = Number(propValues.influenceRadius ?? 60);
 			const showLabels = propValues.showLabels !== false;
-			const panelStyle = (propValues.panelStyle as any) || 'glass';
+			const panelStyle = (propValues.panelStyle as any) || 'translucent';
 
 			const dockPositionClass =
 				direction === 'bottom'
@@ -1634,7 +1634,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 			];
 
 			const isSocial = dockIconSet === 'social';
-			const isMobile = viewportMode === 'mobile' || activePreset === 'Compact Mobile';
+			const isMobile = viewportMode === 'mobile' || activePreset === 'Compact Mobile' || (typeof window !== 'undefined' && window.innerWidth < 640);
 			const effectiveAppDockItems = isMobile ? [appDockItems[0], appDockItems[1], appDockItems[2], appDockItems[4], appDockItems[7]] : appDockItems;
 			const activeDockItems = isSocial ? socialItems : effectiveAppDockItems;
 

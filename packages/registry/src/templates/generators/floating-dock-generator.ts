@@ -1,12 +1,16 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
+function toDartDouble(val: number): string {
+	return Number.isInteger(val) ? `${val}.0` : `${val}`;
+}
+
 export function getFloatingDockOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const direction = (props.direction as string) || 'bottom';
-	const baseSize = Number(props.baseSize ?? 44);
-	const maxMagnification = Number(props.maxMagnification ?? 0.65);
-	const influenceRadius = Number(props.influenceRadius ?? 85);
+	const baseSize = Number(props.baseSize ?? 36);
+	const maxMagnification = Number(props.maxMagnification ?? 0.75);
+	const influenceRadius = Number(props.influenceRadius ?? 60);
 	const showLabels = props.showLabels !== false;
-	const panelStyle = (props.panelStyle as string) || 'glass';
+	const panelStyle = (props.panelStyle as string) || 'translucent';
 
 	switch (flavor) {
 		case 'react':
@@ -433,12 +437,16 @@ const props = withDefaults(
     baseSize?: number;
     maxMagnification?: number;
     influenceRadius?: number;
+    showLabels?: boolean;
+    panelStyle?: 'glass' | 'translucent' | 'minimal';
   }>(),
   {
     direction: '${direction}',
     baseSize: ${baseSize},
     maxMagnification: ${maxMagnification},
     influenceRadius: ${influenceRadius},
+    showLabels: ${showLabels},
+    panelStyle: '${panelStyle}',
   }
 );
 
@@ -572,7 +580,7 @@ onUnmounted(() => {
     >
       <!-- macOS Tooltip -->
       <div
-        v-if="activeTooltip === item.title"
+        v-if="props.showLabels && activeTooltip === item.title"
         role="tooltip"
         :class="['pointer-events-none absolute z-50 rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none', tooltipClasses]"
       >
@@ -616,12 +624,16 @@ onUnmounted(() => {
     baseSize = ${baseSize},
     maxMagnification = ${maxMagnification},
     influenceRadius = ${influenceRadius},
+    showLabels = ${showLabels},
+    panelStyle = '${panelStyle}',
   }: {
     items?: DockItemData[];
     direction?: 'bottom' | 'top' | 'left' | 'right';
     baseSize?: number;
     maxMagnification?: number;
     influenceRadius?: number;
+    showLabels?: boolean;
+    panelStyle?: 'glass' | 'translucent' | 'minimal';
   } = $props();
 
   let containerEl: HTMLDivElement;
@@ -739,7 +751,7 @@ onUnmounted(() => {
       class="relative flex shrink-0 items-center justify-center rounded-full cursor-pointer"
       style="width: {baseSize}px; height: {baseSize}px;"
     >
-      {#if hoveredTitle === item.title}
+      {#if showLabels && hoveredTitle === item.title}
         <div
           role="tooltip"
           class="pointer-events-none absolute z-50 rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none {tooltipClasses}"
@@ -765,7 +777,7 @@ onUnmounted(() => {
 					filename: 'floating-dock.component.ts',
 					language: 'typescript',
 					description: 'Floating Dock — Angular 18+ Standalone Component with signal inputs, direct DOM rendering, and rAF proximity interpolation.',
-					code: `import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy } from '@angular/core';
+					code: `import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface DockItemData {
@@ -784,7 +796,7 @@ export interface DockItemData {
       (pointerenter)="onPointerMove($event)"
       (pointermove)="onPointerMove($event)"
       (pointerleave)="onPointerLeave()"
-      class="relative inline-flex gap-2 sm:gap-2.5 max-w-[calc(100vw-24px)] rounded-full border border-white/20 bg-background/60 dark:border-white/10 dark:bg-card/50 shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.35)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150 select-none touch-none"
+      class="relative inline-flex gap-2 sm:gap-2.5 max-w-[calc(100vw-24px)] rounded-2xl border border-white/20 bg-background/60 dark:border-white/10 dark:bg-card/50 shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.35)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150 select-none touch-none"
       [style.height.px]="(direction === 'bottom' || direction === 'top') ? baseSize + 16 : null"
       [style.width.px]="(direction === 'left' || direction === 'right') ? baseSize + 16 : null"
       [ngClass]="getDirectionClasses()"
@@ -796,14 +808,14 @@ export interface DockItemData {
         #dockItem
         (pointerenter)="activeTooltip = item.title"
         (pointerleave)="activeTooltip = null"
-        class="relative flex shrink-0 items-center justify-center rounded-full cursor-pointer"
+        class="relative flex shrink-0 items-center justify-center rounded-2xl cursor-pointer"
         [style.width.px]="baseSize"
         [style.height.px]="baseSize"
       >
         <div
-          *ngIf="activeTooltip === item.title"
+          *ngIf="showLabels && activeTooltip === item.title"
           role="tooltip"
-          class="pointer-events-none absolute z-50 rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none"
+          class="pointer-events-none absolute z-50 rounded-lg border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none"
           [ngClass]="getTooltipClasses()"
         >
           {{ item.title }}
@@ -822,6 +834,8 @@ export class FloatingDockComponent implements AfterViewInit, OnDestroy {
   @Input() baseSize = ${baseSize};
   @Input() maxMagnification = ${maxMagnification};
   @Input() influenceRadius = ${influenceRadius};
+  @Input() showLabels = ${showLabels};
+  @Input() panelStyle: 'glass' | 'translucent' | 'minimal' = '${panelStyle}';
 
   @ViewChildren('dockItem') itemRefs!: QueryList<ElementRef<HTMLElement>>;
 
@@ -830,6 +844,8 @@ export class FloatingDockComponent implements AfterViewInit, OnDestroy {
   private isHovered = false;
   private rafId: number | null = null;
   private currentSizes = new Map<HTMLElement, number>();
+
+  constructor(private ngZone: NgZone) {}
 
   ngAfterViewInit() {
     this.itemRefs.forEach((ref) => {
@@ -852,7 +868,9 @@ export class FloatingDockComponent implements AfterViewInit, OnDestroy {
 
   private scheduleUpdate() {
     if (this.rafId === null) {
-      this.rafId = requestAnimationFrame(() => this.updateScales());
+      this.ngZone.runOutsideAngular(() => {
+        this.rafId = requestAnimationFrame(() => this.updateScales());
+      });
     }
   }
 
@@ -898,7 +916,9 @@ export class FloatingDockComponent implements AfterViewInit, OnDestroy {
     }
 
     if (this.isHovered || stillAnimating) {
-      this.rafId = requestAnimationFrame(() => this.updateScales());
+      this.ngZone.runOutsideAngular(() => {
+        this.rafId = requestAnimationFrame(() => this.updateScales());
+      });
     } else {
       for (let i = 0; i < count; i++) {
         const el = items[i].nativeElement;
@@ -958,6 +978,8 @@ export interface FloatingDockProps {
   baseSize?: number;
   maxMagnification?: number;
   influenceRadius?: number;
+  showLabels?: boolean;
+  panelStyle?: 'glass' | 'translucent' | 'minimal';
 }
 
 export const FloatingDock: Component<FloatingDockProps> = (props) => {
@@ -965,6 +987,8 @@ export const FloatingDock: Component<FloatingDockProps> = (props) => {
   const baseSize = () => props.baseSize || ${baseSize};
   const maxMagnification = () => props.maxMagnification || ${maxMagnification};
   const influenceRadius = () => props.influenceRadius || ${influenceRadius};
+  const showLabels = () => props.showLabels !== false;
+  const panelStyle = () => props.panelStyle || '${panelStyle}';
 
   const [activeTooltip, setActiveTooltip] = createSignal<string | null>(null);
   let elements: HTMLElement[] = [];
@@ -1081,7 +1105,7 @@ export const FloatingDock: Component<FloatingDockProps> = (props) => {
             class="relative flex shrink-0 items-center justify-center rounded-full cursor-pointer"
             style={{ width: \`\${baseSize()}px\`, height: \`\${baseSize()}px\` }}
           >
-            {activeTooltip() === item.title && (
+            {showLabels() && activeTooltip() === item.title && (
               <div
                 role="tooltip"
                 class={\`pointer-events-none absolute z-50 rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none \${tooltipClass()}\`}
@@ -1123,6 +1147,8 @@ interface Props {
   baseSize?: number;
   maxMagnification?: number;
   influenceRadius?: number;
+  showLabels?: boolean;
+  panelStyle?: 'glass' | 'translucent' | 'minimal';
   class?: string;
 }
 
@@ -1132,6 +1158,8 @@ const {
   baseSize = ${baseSize},
   maxMagnification = ${maxMagnification},
   influenceRadius = ${influenceRadius},
+  showLabels = ${showLabels},
+  panelStyle = '${panelStyle}',
   class: className = '',
 } = Astro.props;
 
@@ -1159,12 +1187,14 @@ const directionClasses = {
       style="width: ${baseSize}px; height: ${baseSize}px;"
       data-title={item.title}
     >
-      <div
-        role="tooltip"
-        class="exhuma-dock-tooltip pointer-events-none absolute z-50 hidden rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none"
-      >
-        {item.title}
-      </div>
+      {showLabels && (
+        <div
+          role="tooltip"
+          class="exhuma-dock-tooltip pointer-events-none absolute z-50 hidden rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none"
+        >
+          {item.title}
+        </div>
+      )}
 
       <div class="exhuma-dock-icon relative z-10 flex size-full items-center justify-center overflow-hidden rounded-[inherit]">
         <span class="text-xs font-mono font-bold text-white">{item.title.slice(0, 2).toUpperCase()}</span>
@@ -1299,6 +1329,8 @@ const directionClasses = {
     'baseSize' => ${baseSize},
     'maxMagnification' => ${maxMagnification},
     'influenceRadius' => ${influenceRadius},
+    'showLabels' => ${showLabels ? 'true' : 'false'},
+    'panelStyle' => '${panelStyle}',
 ])
 
 @php
@@ -1328,6 +1360,8 @@ const directionClasses = {
     data-base-size="{{ $baseSize }}"
     data-max-mag="{{ $maxMagnification }}"
     data-radius="{{ $influenceRadius }}"
+    data-show-labels="{{ $showLabels ? 'true' : 'false' }}"
+    data-panel-style="{{ $panelStyle }}"
     role="toolbar"
     aria-label="Application Dock"
 >
@@ -1337,12 +1371,14 @@ const directionClasses = {
             style="width: {{ $baseSize }}px; height: {{ $baseSize }}px;"
             data-title="{{ $item['title'] ?? '' }}"
         >
+            @if ($showLabels)
             <div
                 role="tooltip"
                 class="exhuma-dock-tooltip pointer-events-none absolute z-50 hidden rounded-full border border-border/60 bg-popover/90 px-3 py-1 font-sans text-xs font-medium text-popover-foreground shadow-xl backdrop-blur-2xl whitespace-nowrap select-none touch-none {{ $tooltipClasses }}"
             >
                 {{ $item['title'] ?? '' }}
             </div>
+            @endif
 
             <div class="exhuma-dock-icon relative z-10 flex size-full items-center justify-center overflow-hidden rounded-[inherit]">
                 <span class="text-xs font-mono font-bold text-white">{{ strtoupper(substr($item['title'] ?? 'AP', 0, 2)) }}</span>
@@ -1458,6 +1494,8 @@ export function initFloatingDock(container, options = {}) {
   const baseSize = options.baseSize || ${baseSize};
   const maxMag = options.maxMagnification || ${maxMagnification};
   const radius = options.influenceRadius || ${influenceRadius};
+  const showLabels = options.showLabels !== false;
+  const panelStyle = options.panelStyle || '${panelStyle}';
 
   const items = Array.from(container.querySelectorAll('.exhuma-dock-item'));
   let pointerCoord = -9999;
@@ -1469,6 +1507,11 @@ export function initFloatingDock(container, options = {}) {
     currentSizes.set(el, baseSize);
     const tooltip = el.querySelector('.exhuma-dock-tooltip');
     if (!tooltip) return;
+
+    if (!showLabels) {
+      tooltip.style.display = 'none';
+      return;
+    }
 
     if (direction === 'top') {
       tooltip.style.top = 'calc(100% + 12px)';
@@ -1655,9 +1698,11 @@ export function initFloatingDock(container, options = {}) {
     "direction": { "type": "string", "default": "${direction}" },
     "baseSize": { "type": "number", "default": ${baseSize} },
     "maxMagnification": { "type": "number", "default": ${maxMagnification} },
-    "influenceRadius": { "type": "number", "default": ${influenceRadius} }
+    "influenceRadius": { "type": "number", "default": ${influenceRadius} },
+    "showLabels": { "type": "boolean", "default": ${showLabels} },
+    "panelStyle": { "type": "string", "default": "${panelStyle}" }
   },
-  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
   "render": "file:./render.php"
 }
 `,
@@ -1671,6 +1716,8 @@ $direction = $attributes['direction'] ?? '${direction}';
 $baseSize = $attributes['baseSize'] ?? ${baseSize};
 $maxMag = $attributes['maxMagnification'] ?? ${maxMagnification};
 $radius = $attributes['influenceRadius'] ?? ${influenceRadius};
+$showLabels = $attributes['showLabels'] ?? ${showLabels};
+$panelStyle = $attributes['panelStyle'] ?? '${panelStyle}';
 ?>
 <div
   class="exhuma-dock"
@@ -1678,11 +1725,111 @@ $radius = $attributes['influenceRadius'] ?? ${influenceRadius};
   data-base-size="<?php echo esc_attr($baseSize); ?>"
   data-max-mag="<?php echo esc_attr($maxMag); ?>"
   data-radius="<?php echo esc_attr($radius); ?>"
+  data-show-labels="<?php echo esc_attr($showLabels ? 'true' : 'false'); ?>"
+  data-panel-style="<?php echo esc_attr($panelStyle); ?>"
   role="toolbar"
   aria-label="Application Dock"
 >
   <?php echo $content; ?>
 </div>
+`,
+				},
+				{
+					filename: 'view.js',
+					language: 'javascript',
+					description: 'WordPress frontend kinetic proximity magnification script for Floating Dock.',
+					code: `(function() {
+  function initDocks() {
+    var docks = document.querySelectorAll('.exhuma-dock');
+    docks.forEach(function(dock) {
+      if (dock.dataset.initialized) return;
+      dock.dataset.initialized = 'true';
+
+      var direction = dock.dataset.direction || '${direction}';
+      var baseSize = parseFloat(dock.dataset.baseSize || '${baseSize}');
+      var maxMag = parseFloat(dock.dataset.maxMag || '${maxMagnification}');
+      var radius = parseFloat(dock.dataset.radius || '${influenceRadius}');
+      var isHorizontal = direction === 'bottom' || direction === 'top';
+
+      var items = Array.prototype.slice.call(dock.querySelectorAll('.exhuma-dock-item, .wp-block-button'));
+      var pointerCoord = -9999;
+      var isHovered = false;
+      var rafId = null;
+      var currentSizes = new WeakMap();
+
+      items.forEach(function(el) {
+        currentSizes.set(el, baseSize);
+        el.style.width = baseSize + 'px';
+        el.style.height = baseSize + 'px';
+      });
+
+      function update() {
+        var count = items.length;
+        if (count === 0) {
+          rafId = null;
+          return;
+        }
+
+        var centers = [];
+        for (var i = 0; i < count; i++) {
+          var rect = items[i].getBoundingClientRect();
+          centers[i] = isHorizontal ? rect.left + rect.width / 2 : rect.top + rect.height / 2;
+        }
+
+        var stillAnimating = false;
+        for (var j = 0; j < count; j++) {
+          var el = items[j];
+          var current = currentSizes.get(el) || baseSize;
+          var target = baseSize;
+
+          if (isHovered && pointerCoord !== -9999) {
+            var dist = Math.abs(pointerCoord - centers[j]);
+            if (radius > 0 && dist < radius) {
+              var factor = Math.cos((dist / radius) * (Math.PI / 2));
+              target = baseSize * (1.0 + maxMag * factor * factor);
+            }
+          }
+
+          var next = current + (target - current) * (isHovered ? 0.38 : 0.22);
+          currentSizes.set(el, next);
+
+          if (Math.abs(next - target) > 0.05) stillAnimating = true;
+
+          el.style.width = next.toFixed(2) + 'px';
+          el.style.height = next.toFixed(2) + 'px';
+        }
+
+        if (isHovered || stillAnimating) {
+          rafId = requestAnimationFrame(update);
+        } else {
+          rafId = null;
+        }
+      }
+
+      function onPointerMove(e) {
+        isHovered = true;
+        pointerCoord = isHorizontal ? e.clientX : e.clientY;
+        if (!rafId) rafId = requestAnimationFrame(update);
+      }
+
+      function onPointerLeave() {
+        isHovered = false;
+        pointerCoord = -9999;
+        if (!rafId) rafId = requestAnimationFrame(update);
+      }
+
+      dock.addEventListener('pointerenter', onPointerMove);
+      dock.addEventListener('pointermove', onPointerMove);
+      dock.addEventListener('pointerleave', onPointerLeave);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDocks);
+  } else {
+    initDocks();
+  }
+})();
 `,
 				},
 			];
@@ -1782,6 +1929,12 @@ $radius = $attributes['influenceRadius'] ?? ${influenceRadius};
     };
 
     this._update = update;
+    this._cancelRaf = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    };
     this._onEnter = (e) => {
       isHovered = true;
       pointerCoord = direction === 'bottom' || direction === 'top' ? e.clientX : e.clientY;
@@ -1809,6 +1962,7 @@ $radius = $attributes['influenceRadius'] ?? ${influenceRadius};
     if (this._onEnter) this.removeEventListener('pointerenter', this._onEnter);
     if (this._onMove) this.removeEventListener('pointermove', this._onMove);
     if (this._onLeave) this.removeEventListener('pointerleave', this._onLeave);
+    if (this._cancelRaf) this._cancelRaf();
   }
 }
 
@@ -1991,9 +2145,9 @@ class ExhumaFloatingDock extends StatefulWidget {
     Key? key,
     required this.items,
     this.direction = '${direction}',
-    this.baseSize = ${baseSize}.0,
-    this.maxMagnification = ${maxMagnification},
-    this.influenceRadius = ${influenceRadius}.0,
+    this.baseSize = ${toDartDouble(baseSize)},
+    this.maxMagnification = ${toDartDouble(maxMagnification)},
+    this.influenceRadius = ${toDartDouble(influenceRadius)},
   }) : super(key: key);
 
   @override
@@ -2603,9 +2757,9 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: ExhumaFloatingDock(
             direction: '${direction}',
-            baseSize: ${baseSize}.0,
-            maxMagnification: ${maxMagnification},
-            influenceRadius: ${influenceRadius}.0,
+            baseSize: ${toDartDouble(baseSize)},
+            maxMagnification: ${toDartDouble(maxMagnification)},
+            influenceRadius: ${toDartDouble(influenceRadius)},
             items: const [
               DockItemData(title: 'Dashboard', icon: Icons.dashboard, active: true),
               DockItemData(title: 'Projects', icon: Icons.folder, active: false),

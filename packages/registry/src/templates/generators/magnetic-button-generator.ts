@@ -1,5 +1,9 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
+function toDartDouble(val: number): string {
+	return Number.isInteger(val) ? `${val}.0` : `${val}`;
+}
+
 export function getMagneticButtonOuterFiles(
 	flavor: EcosystemFlavor,
 	props: Record<string, unknown>,
@@ -753,7 +757,7 @@ export class ExhumaMagneticButtonComponent implements OnDestroy {
 					filename: 'MagneticButton.tsx',
 					language: 'tsx',
 					description: 'Magnetic Button — SolidJS fine-grained reactivity with direct DOM transform writes.',
-					code: `import { Component, JSX, onCleanup } from 'solid-js';
+					code: `import { Component, JSX, onCleanup, mergeProps } from 'solid-js';
 
 export interface MagneticButtonProps {
   strength?: number;
@@ -792,6 +796,13 @@ function calculateMagneticPull(px: number, py: number, cx: number, cy: number, r
 }
 
 export const MagneticButton: Component<MagneticButtonProps> = (props) => {
+  const merged = mergeProps({
+    strength: ${strength},
+    radius: ${radius},
+    springDamping: ${springDamping},
+    maxDisplacement: ${maxDisplacement},
+  }, props);
+
   let buttonRef: HTMLButtonElement | undefined;
   const target = { x: 0, y: 0 };
   const current = { x: 0, y: 0 };
@@ -799,18 +810,13 @@ export const MagneticButton: Component<MagneticButtonProps> = (props) => {
   let rafId: number | null = null;
   let lastTime = 0;
 
-  const strength = props.strength ?? ${strength};
-  const radius = props.radius ?? ${radius};
-  const springDamping = props.springDamping ?? ${springDamping};
-  const maxDisplacement = props.maxDisplacement ?? ${maxDisplacement};
-
   function updateLoop(timestamp: number) {
     if (!lastTime) lastTime = timestamp;
     const dt = Math.min((timestamp - lastTime) / 1000, 0.05);
     lastTime = timestamp;
 
-    current.x = damp(current.x, target.x, springDamping, dt);
-    current.y = damp(current.y, target.y, springDamping, dt);
+    current.x = damp(current.x, target.x, merged.springDamping, dt);
+    current.y = damp(current.y, target.y, merged.springDamping, dt);
 
     if (buttonRef) {
       buttonRef.style.transform = \`translate3d(\${current.x.toFixed(2)}px, \${current.y.toFixed(2)}px, 0)\`;
@@ -850,9 +856,9 @@ export const MagneticButton: Component<MagneticButtonProps> = (props) => {
       e.clientY,
       baseCenterX,
       baseCenterY,
-      radius,
-      strength,
-      maxDisplacement
+      merged.radius,
+      merged.strength,
+      merged.maxDisplacement
     );
 
     target.x = pull.x;
@@ -880,7 +886,7 @@ export const MagneticButton: Component<MagneticButtonProps> = (props) => {
       ref={buttonRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      onClick={props.onClick}
+      onClick={merged.onClick}
       class={\`group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-foreground px-8 py-4 text-sm font-black text-background shadow-2xl transition-transform hover:scale-105 active:scale-95 cursor-pointer will-change-transform select-none \${props.class ?? ''}\`}
       style={{ 'will-change': 'transform' }}
     >
@@ -1777,10 +1783,10 @@ class ExhumaMagneticButton extends StatefulWidget {
     super.key,
     this.child,
     this.text = '${text}',
-    this.strength = ${strength}.0,
-    this.radius = ${radius}.0,
-    this.springDamping = ${springDamping}.0,
-    this.maxDisplacement = ${maxDisplacement}.0,
+    this.strength = ${toDartDouble(strength)},
+    this.radius = ${toDartDouble(radius)},
+    this.springDamping = ${toDartDouble(springDamping)},
+    this.maxDisplacement = ${toDartDouble(maxDisplacement)},
     this.onTap,
   });
 
@@ -2384,10 +2390,10 @@ class MyApp extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ExhumaMagneticButton(
-                strength: ${strength}.0,
-                radius: ${radius}.0,
-                springDamping: ${springDamping}.0,
-                maxDisplacement: ${maxDisplacement}.0,
+                strength: ${toDartDouble(strength)},
+                radius: ${toDartDouble(radius)},
+                springDamping: ${toDartDouble(springDamping)},
+                maxDisplacement: ${toDartDouble(maxDisplacement)},
                 text: '${text}',
                 onTap: () {
                   debugPrint('Magnetic button tapped!');

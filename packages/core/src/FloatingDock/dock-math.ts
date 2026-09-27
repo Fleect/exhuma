@@ -38,10 +38,10 @@ export function calculateGaussianScale(distance: number, influenceRadius: number
 }
 
 /**
- * Computes exact item width/height in pixels using the Gaussian proximity curve.
+ * Computes exact item width/height in pixels using the smooth C1 continuous cosine proximity curve.
  */
 export function calculateDockItemSize(distance: number, baseSize: number = 36, influenceRadius: number = 60, maxMagnification: number = 0.75): number {
-	return baseSize * calculateGaussianScale(distance, influenceRadius, maxMagnification);
+	return baseSize * calculateDockScale(distance, influenceRadius, maxMagnification);
 }
 
 /**
@@ -51,4 +51,13 @@ export function lerpDockScale(current: number, target: number, speed: number = 0
 	const diff = target - current;
 	if (Math.abs(diff) < 0.002) return target;
 	return current + diff * speed;
+}
+
+/**
+ * Frame-rate independent exponential decay towards target scale.
+ */
+export function dampDockScale(current: number, target: number, lambda: number = 24, dt: number = 0.016): number {
+	const diff = target - current;
+	if (Math.abs(diff) < 0.02) return target;
+	return current + diff * (1 - Math.exp(-lambda * dt));
 }

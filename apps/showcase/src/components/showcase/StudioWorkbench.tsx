@@ -1312,11 +1312,11 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 
 		if (selectedSlug === 'floating-dock') {
 			const direction = (propValues.direction as any) || 'bottom';
-			const baseSize = Number(propValues.baseSize ?? 44);
-			const maxMagnification = Number(propValues.maxMagnification ?? 0.65);
-			const influenceRadius = Number(propValues.influenceRadius ?? 85);
+			const baseSize = Number(propValues.baseSize ?? 36);
+			const maxMagnification = Number(propValues.maxMagnification ?? 0.75);
+			const influenceRadius = Number(propValues.influenceRadius ?? 60);
 			const showLabels = propValues.showLabels !== false;
-			const panelStyle = (propValues.panelStyle as any) || 'glass';
+			const panelStyle = (propValues.panelStyle as any) || 'translucent';
 
 			const dockPositionClass =
 				direction === 'bottom'
@@ -1446,7 +1446,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 			];
 
 			const isSocial = dockIconSet === 'social';
-			const isMobile = viewportMode === 'mobile' || activePreset === 'Compact Mobile';
+			const isMobile = viewportMode === 'mobile' || activePreset === 'Compact Mobile' || (typeof window !== 'undefined' && window.innerWidth < 640);
 			const effectiveAppDockItems = isMobile ? [appDockItems[0], appDockItems[1], appDockItems[2], appDockItems[4], appDockItems[7]] : appDockItems;
 			const activeDockItems = isSocial ? socialItems : effectiveAppDockItems;
 
@@ -1636,15 +1636,21 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 						<div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
 							<div
 								style={{ width: `${fieldDiameter}px`, height: `${fieldDiameter}px` }}
-								className='border-foreground/15 absolute max-h-[85%] max-w-[85%] animate-[spin_60s_linear_infinite] rounded-full border border-dashed sm:max-h-none sm:max-w-none'
+								className={cn(
+									'border-foreground/15 absolute animate-[spin_60s_linear_infinite] rounded-full border border-dashed',
+									viewportMode === 'mobile' ? 'max-h-[85%] max-w-[85%]' : 'max-h-[85%] max-w-[85%] sm:max-h-none sm:max-w-none'
+								)}
 							/>
 							<div
 								style={{ width: `${fieldDiameter * 0.75}px`, height: `${fieldDiameter * 0.75}px` }}
-								className='border-foreground/15 absolute max-h-[65%] max-w-[65%] rounded-full border border-dotted sm:max-h-none sm:max-w-none'
+								className={cn(
+									'border-foreground/15 absolute rounded-full border border-dotted',
+									viewportMode === 'mobile' ? 'max-h-[65%] max-w-[65%]' : 'max-h-[65%] max-w-[65%] sm:max-h-none sm:max-w-none'
+								)}
 							/>
 							<div
 								style={{ width: `${fieldDiameter * 0.5}px`, height: `${fieldDiameter * 0.5}px` }}
-								className='border-foreground/10 absolute max-h-[45%] max-w-[45%] rounded-full border sm:max-h-none sm:max-w-none'
+								className={cn('border-foreground/10 absolute rounded-full border', viewportMode === 'mobile' ? 'max-h-[45%] max-w-[45%]' : 'max-h-[45%] max-w-[45%] sm:max-h-none sm:max-w-none')}
 							/>
 						</div>
 
