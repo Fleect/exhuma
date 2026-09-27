@@ -1641,13 +1641,19 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 			return (
 				<div className='border-border/60 bg-card/40 relative mx-auto flex h-[440px] w-full max-w-4xl flex-col justify-between overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-2xl select-none sm:h-[480px]'>
 					{/* Responsive Application Shell Header */}
-					<div className='border-border/50 bg-background/50 z-20 flex min-h-10 w-full shrink-0 flex-wrap items-center justify-between gap-2 border-b px-2.5 py-1.5 backdrop-blur-md sm:h-11 sm:px-4 sm:py-0'>
+					<div className='border-border/50 bg-background/50 z-20 flex h-10 w-full shrink-0 items-center justify-between border-b px-2.5 backdrop-blur-md sm:h-11 sm:px-4'>
 						<div className='flex min-w-0 items-center gap-1.5 sm:gap-2.5'>
 							<div className='border-primary/30 bg-primary/10 text-primary flex size-5 shrink-0 items-center justify-center rounded-lg border sm:size-6'>
 								<Sparkles className='size-3 sm:size-3.5' />
 							</div>
 							<span className='text-foreground truncate text-xs font-semibold tracking-tight'>
-								<span className='hidden sm:inline'>Exhuma </span>Workspace
+								{isMobile ? (
+									'Dock Studio'
+								) : (
+									<>
+										<span className='hidden sm:inline'>Exhuma </span>Workspace
+									</>
+								)}
 							</span>
 						</div>
 
@@ -1657,28 +1663,45 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 									type='button'
 									onClick={() => setDockIconSet('app')}
 									className={cn(
-										'text-3xs cursor-pointer rounded-md px-1.5 py-0.5 font-medium transition-all sm:px-2',
+										'text-3xs cursor-pointer rounded-md px-1.5 py-0.5 font-medium transition-all sm:px-2.5',
 										dockIconSet === 'app' ? 'bg-background text-foreground font-semibold shadow-2xs' : 'text-muted-foreground hover:text-foreground'
 									)}
 								>
-									<span className='sm:hidden'>Apps</span>
-									<span className='hidden sm:inline'>App Icons</span>
+									{isMobile ? (
+										'Apps'
+									) : (
+										<>
+											<span className='sm:hidden'>Apps</span>
+											<span className='hidden sm:inline'>App Icons</span>
+										</>
+									)}
 								</button>
 								<button
 									type='button'
 									onClick={() => setDockIconSet('social')}
 									className={cn(
-										'text-3xs cursor-pointer rounded-md px-1.5 py-0.5 font-medium transition-all sm:px-2',
+										'text-3xs cursor-pointer rounded-md px-1.5 py-0.5 font-medium transition-all sm:px-2.5',
 										dockIconSet === 'social' ? 'bg-background text-foreground font-semibold shadow-2xs' : 'text-muted-foreground hover:text-foreground'
 									)}
 								>
-									<span className='sm:hidden'>Social</span>
-									<span className='hidden sm:inline'>Social Icons</span>
+									{isMobile ? (
+										'Social'
+									) : (
+										<>
+											<span className='sm:hidden'>Social</span>
+											<span className='hidden sm:inline'>Social Icons</span>
+										</>
+									)}
 								</button>
 							</div>
-							<span className='text-3xs inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-medium text-emerald-400 sm:px-2.5'>
+							<span
+								className={cn(
+									'text-3xs shrink-0 items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-medium text-emerald-400 sm:px-2.5',
+									isMobile ? 'hidden' : 'hidden sm:inline-flex'
+								)}
+							>
 								<span className='size-1.5 animate-pulse rounded-full bg-emerald-400' />
-								<span className='hidden sm:inline'>120 FPS </span>NATIVE
+								120 FPS NATIVE
 							</span>
 						</div>
 					</div>
@@ -2241,30 +2264,28 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 						<div className='via-foreground/20 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent' />
 
 						{/* Left: Component Category & Presets Selector */}
-						<div className='flex flex-wrap items-center gap-3 max-sm:w-full'>
-							<Badge variant='outline' className='text-3xs bg-background/90 text-foreground font-mono font-bold tracking-wider uppercase'>
+						<div className='flex max-w-full min-w-0 flex-wrap items-center gap-2 sm:gap-3'>
+							<Badge variant='outline' className='text-3xs bg-background/90 text-foreground shrink-0 font-mono font-bold tracking-wider uppercase'>
 								{component.category}
 							</Badge>
 
 							{Object.keys(presets).length > 0 && (
-								<div className='flex items-center gap-2 pl-1 max-sm:w-full'>
-									<span className='text-muted-foreground text-3xs font-mono font-semibold uppercase max-sm:hidden'>Preset:</span>
-									<div className='flex max-sm:scrollbar-none max-sm:overflow-x-auto'>
-										<div className='border-border/70 bg-background/80 no-scrollbar flex max-w-full items-center gap-1 overflow-x-auto rounded-lg border p-0.5 whitespace-nowrap'>
-											{Object.keys(presets).map((pName) => (
-												<button
-													key={pName}
-													type='button'
-													onClick={() => applyPreset(pName)}
-													className={cn(
-														'cursor-pointer rounded-md px-2.5 py-1 font-mono text-xs transition-all',
-														activePreset === pName ? 'bg-foreground text-background font-bold shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-													)}
-												>
-													{pName}
-												</button>
-											))}
-										</div>
+								<div className='flex max-w-full min-w-0 items-center gap-2'>
+									<span className='text-muted-foreground text-3xs hidden font-mono font-semibold uppercase sm:inline'>Preset:</span>
+									<div className='border-border/70 bg-background/80 no-scrollbar flex max-w-full min-w-0 items-center gap-1 overflow-x-auto rounded-lg border p-0.5 whitespace-nowrap'>
+										{Object.keys(presets).map((pName) => (
+											<button
+												key={pName}
+												type='button'
+												onClick={() => applyPreset(pName)}
+												className={cn(
+													'shrink-0 cursor-pointer rounded-md px-2.5 py-1 font-mono text-xs transition-all',
+													activePreset === pName ? 'bg-foreground text-background font-bold shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+												)}
+											>
+												{pName}
+											</button>
+										))}
 									</div>
 								</div>
 							)}
