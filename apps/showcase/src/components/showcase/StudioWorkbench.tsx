@@ -199,9 +199,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Smooth: { duration: 420 },
 	},
 	'cursor-tooltip': {
-		Default: { springDamping: 22 },
-		Elastic: { springDamping: 14 },
-		Instant: { springDamping: 35 },
+		'Default Smooth': { content: 'Explore Showcase', springDamping: 20, offsetX: 16, offsetY: 16, variant: 'frosted', collisionPadding: 12 },
+		'Snappy Pill': { content: 'Click to Inspect', springDamping: 32, offsetX: 12, offsetY: 14, variant: 'accent', collisionPadding: 8 },
+		'Elastic Lag': { content: 'Kinetic Physics', springDamping: 10, offsetX: 22, offsetY: 22, variant: 'dark', collisionPadding: 16 },
+		'Minimal Direct': { content: 'Target Active', springDamping: 38, offsetX: 8, offsetY: 10, variant: 'minimal', collisionPadding: 8 },
+		'Glow Badge': { content: '120 FPS GPU', springDamping: 18, offsetX: 18, offsetY: 18, variant: 'glow', collisionPadding: 14 },
 	},
 };
 
@@ -1844,17 +1846,40 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		}
 
 		if (selectedSlug === 'cursor-tooltip') {
-			const springDamping = Number(propValues.springDamping ?? 22);
+			const content = String(propValues.content ?? 'Explore Showcase');
+			const springDamping = Number(propValues.springDamping ?? 20);
+			const offsetX = Number(propValues.offsetX ?? 16);
+			const offsetY = Number(propValues.offsetY ?? 16);
+			const variant = (propValues.variant as any) ?? 'frosted';
+			const collisionPadding = Number(propValues.collisionPadding ?? 12);
+
 			return (
-				<div className='flex flex-col items-center justify-center p-12'>
+				<div className='flex w-full flex-col items-center justify-center p-6 md:p-12'>
 					<CursorTooltip
+						content={content}
 						springDamping={springDamping}
-						content='Exhuma Exponential Cursor Smoothing'
-						className='border-border bg-card/80 hover:border-primary cursor-pointer rounded-2xl border p-8 text-center shadow-xl transition-colors'
+						offsetX={offsetX}
+						offsetY={offsetY}
+						variant={variant}
+						collisionPadding={collisionPadding}
+						className='border-border bg-card/80 hover:border-primary group relative w-full max-w-lg cursor-pointer overflow-hidden rounded-2xl border p-8 text-center shadow-xl transition-all duration-300 md:p-12'
 					>
-						<span className='kbd text-primary text-3xs mb-2 inline-block'>HOVER OVER CARD</span>
-						<h4 className='text-foreground text-xl font-bold'>Interactive Viewport Target</h4>
-						<p className='text-muted-foreground mt-1 text-xs'>Hover cursor anywhere over this card to activate the magnetic trailing tooltip.</p>
+						<div className='bg-radial-gradient from-primary/5 pointer-events-none absolute inset-0 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100' />
+						<div className='bg-primary/10 border-primary/20 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs font-medium'>
+							<span className='bg-primary h-2 w-2 animate-pulse rounded-full' />
+							INTERACTIVE KINETIC TARGET
+						</div>
+						<h4 className='text-foreground text-xl font-bold tracking-tight md:text-2xl'>Exponential Cursor Smoothing</h4>
+						<p className='text-muted-foreground mt-2 text-xs leading-relaxed md:text-sm'>
+							Move your pointer freely across this sandbox. The tooltip trails your cursor using high-performance exponential decay math with viewport collision clamping.
+						</p>
+						<div className='border-border/50 text-3xs text-muted-foreground mt-6 flex items-center justify-between border-t pt-4 font-mono'>
+							<span>DAMPING: {springDamping}</span>
+							<span>
+								OFFSET: ({offsetX}px, {offsetY}px)
+							</span>
+							<span>VARIANT: {String(variant).toUpperCase()}</span>
+						</div>
 					</CursorTooltip>
 				</div>
 			);

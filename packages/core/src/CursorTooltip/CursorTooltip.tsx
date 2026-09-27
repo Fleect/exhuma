@@ -3,7 +3,9 @@
 import React, { useRef, useState, useCallback, useEffect, createContext, useContext, memo, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { damp } from '../physics/lerp';
-import { calculateElementCenter, clampTooltipToViewport } from './cursor-math';
+import { calculateElementCenter, clampTooltipToViewport, type CursorTooltipVariant } from './cursor-math';
+
+export type { CursorTooltipVariant };
 
 interface CursorTooltipContextValue {
 	isVisible: boolean;
@@ -14,6 +16,8 @@ interface CursorTooltipContextValue {
 	setContentNode: (node: ReactNode) => void;
 	offset: { x: number; y: number };
 	springDamping: number;
+	variant: CursorTooltipVariant;
+	collisionPadding: number;
 }
 
 const CursorTooltipContext = createContext<CursorTooltipContextValue | null>(null);
@@ -21,25 +25,49 @@ const CursorTooltipContext = createContext<CursorTooltipContextValue | null>(nul
 export interface CursorTooltipProps {
 	children: ReactNode;
 	content?: ReactNode;
-	offset?: { x: number; y: number };
 	springDamping?: number;
+	offsetX?: number;
+	offsetY?: number;
+	offset?: { x: number; y: number };
+	variant?: CursorTooltipVariant;
+	collisionPadding?: number;
 	className?: string;
 	contentClassName?: string;
 }
 
+const VARIANT_CLASSES: Record<CursorTooltipVariant, string> = {
+	frosted: 'border border-white/20 bg-background/80 text-foreground dark:border-white/10 dark:bg-card/75 shadow-xl backdrop-blur-2xl rounded-xl',
+	accent: 'border border-primary/50 bg-primary text-primary-foreground shadow-lg shadow-primary/25 rounded-full font-bold',
+	dark: 'border border-zinc-800 bg-zinc-950 text-zinc-100 shadow-2xl rounded-lg',
+	minimal: 'border border-border/60 bg-background/90 text-foreground shadow-sm rounded-md',
+	glow: 'border border-emerald-500/50 bg-background/90 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] rounded-xl font-mono',
+};
+
 /**
  * CursorTooltip — Exhuma Kinetic Methodology (EKM)
- * Elevated from sapan.dev (Zero Framer Motion)
+ * High-Performance Kinetic Floating Cursor Tooltip
  *
  * Big-Omega (Ω) Guarantees:
  * - 120Hz rAF continuous transform writes directly to element style.
  * - Zero Framer Motion / GSAP dependencies.
- * - Viewport boundary collision avoidance.
+ * - Viewport boundary collision avoidance with customizable padding.
  * - Zero React re-renders during cursor tracking.
+ * - Multi-variant tokenized visual design.
  */
 export const CursorTooltip: React.FC<CursorTooltipProps> & {
 	Content: typeof TooltipFloatingContent;
-} = ({ children, content, offset = { x: 16, y: 16 }, springDamping = 22, className = '', contentClassName = '' }) => {
+} = ({
+	children,
+	content,
+	springDamping = 20,
+	offsetX,
+	offsetY,
+	offset,
+	variant = 'frosted',
+	collisionPadding = 12,
+	className = '',
+	contentClassName = '',
+}) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [contentNode, setContentNode] = useState<ReactNode>(content);
 	const targetPosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
@@ -48,6 +76,11 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 	const rafIdRef = useRef<number | null>(null);
 	const lastTimeRef = useRef<number>(0);
 	const [mounted, setMounted] = useState(false);
+
+	const effectiveOffset = {
+		x: offsetX ?? offset?.x ?? 16,
+		y: offsetY ?? offset?.y ?? 16,
+	};
 
 	useEffect(() => {
 		setMounted(true);
@@ -68,25 +101,32 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			const cur = currentPosRef.current;
 			const target = targetPosRef.current;
 
-			cur.x = damp(cur.x, target.x, springDamping, dt);
-			cur.y = damp(cur.y, target.y, springDamping, dt);
+			const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			if (isReducedMotion) {
+				cur.x = target.x;
+				cur.y = target.y;
+			} else {
+				cur.x = damp(cur.x, target.x, springDamping, dt);
+				cur.y = damp(cur.y, target.y, springDamping, dt);
+			}
 
 			if (tooltipElRef.current) {
 				const el = tooltipElRef.current;
 				const rect = el.getBoundingClientRect();
-				const clamped = clampTooltipToViewport(cur.x, cur.y, rect.width, rect.height, window.innerWidth, window.innerHeight);
+				const clamped = clampTooltipToViewport(cur.x, cur.y, rect.width, rect.height, window.innerWidth, window.innerHeight, collisionPadding);
 				el.style.transform = `translate3d(${clamped.x.toFixed(2)}px, ${clamped.y.toFixed(2)}px, 0)`;
 			}
 
 			const dist = Math.hypot(target.x - cur.x, target.y - cur.y);
-			if (dist > 0.2) {
+			if (dist > 0.2 && isVisible) {
 				rafIdRef.current = requestAnimationFrame(updateRafLoop);
 			} else {
 				rafIdRef.current = null;
 				lastTimeRef.current = 0;
 			}
 		},
-		[springDamping]
+		[springDamping, collisionPadding, isVisible]
 	);
 
 	const startRafIfNeeded = useCallback(() => {
@@ -98,8 +138,8 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 
 	const show = useCallback(
 		(e: React.MouseEvent<HTMLElement>) => {
-			const targetX = e.clientX + offset.x;
-			const targetY = e.clientY + offset.y;
+			const targetX = e.clientX + effectiveOffset.x;
+			const targetY = e.clientY + effectiveOffset.y;
 
 			// Initialize position at element center if first appearance
 			if (currentPosRef.current.x < 0) {
@@ -111,7 +151,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			setIsVisible(true);
 			startRafIfNeeded();
 		},
-		[offset.x, offset.y, startRafIfNeeded]
+		[effectiveOffset.x, effectiveOffset.y, startRafIfNeeded]
 	);
 
 	const hide = useCallback(() => {
@@ -126,11 +166,11 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 
 	const update = useCallback(
 		(e: React.MouseEvent<HTMLElement>) => {
-			targetPosRef.current.x = e.clientX + offset.x;
-			targetPosRef.current.y = e.clientY + offset.y;
+			targetPosRef.current.x = e.clientX + effectiveOffset.x;
+			targetPosRef.current.y = e.clientY + effectiveOffset.y;
 			startRafIfNeeded();
 		},
-		[offset.x, offset.y, startRafIfNeeded]
+		[effectiveOffset.x, effectiveOffset.y, startRafIfNeeded]
 	);
 
 	useEffect(() => {
@@ -150,8 +190,10 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 				update,
 				contentNode,
 				setContentNode,
-				offset,
+				offset: effectiveOffset,
 				springDamping,
+				variant,
+				collisionPadding,
 			}}
 		>
 			<div onMouseEnter={show} onMouseMove={update} onMouseLeave={hide} className={`inline-block ${className}`}>
@@ -170,7 +212,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 							transform: `translate3d(${targetPosRef.current.x}px, ${targetPosRef.current.y}px, 0)`,
 						}}
 					>
-						<TooltipFloatingContent>{contentNode}</TooltipFloatingContent>
+						<TooltipFloatingContent variant={variant}>{contentNode}</TooltipFloatingContent>
 					</div>,
 					document.body
 				)}
@@ -178,9 +220,16 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 	);
 };
 
-export const TooltipFloatingContent = memo<{ children: ReactNode; className?: string }>(({ children, className = '' }) => (
-	<div className={`border-primary/40 bg-card/95 text-foreground rounded-xl border px-3 py-1.5 text-xs font-semibold shadow-2xl backdrop-blur-md ${className}`}>{children}</div>
-));
+export const TooltipFloatingContent = memo<{
+	children: ReactNode;
+	className?: string;
+	variant?: CursorTooltipVariant;
+}>(({ children, className = '', variant = 'frosted' }) => {
+	const variantClass = VARIANT_CLASSES[variant] || VARIANT_CLASSES.frosted;
+	return <div className={`px-3 py-1.5 text-xs font-semibold select-none ${variantClass} ${className}`}>{children}</div>;
+});
 TooltipFloatingContent.displayName = 'TooltipFloatingContent';
 
 CursorTooltip.Content = TooltipFloatingContent;
+
+export { TooltipFloatingContent as CursorTooltipContent };

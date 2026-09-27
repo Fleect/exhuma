@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T21:32:19.080Z",
+	"generatedAt": "2026-09-27T22:17:39.103Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -911,10 +911,46 @@
 			"name": "Cursor Tooltip",
 			"slug": "cursor-tooltip",
 			"category": "primitives",
-			"description": "Tactile cursor-following tooltip with continuous exponential lerp tracking, boundary viewport collision clamping, and zero Framer Motion dependencies.",
+			"description": "Tactile cursor-following tooltip with continuous exponential lerp tracking, boundary viewport collision clamping, multi-variant tokens, and zero Framer Motion dependencies.",
 			"version": "1.0.0",
 			"props": [
-				{ "name": "springDamping", "label": "Spring Damping", "type": "number", "defaultValue": 22, "min": 5, "max": 40, "step": 1, "description": "Exponential smoothing factor for trailing cursor physics." }
+				{ "name": "content", "label": "Tooltip Content", "type": "string", "defaultValue": "Explore Showcase", "description": "Text or badge label displayed inside the trailing tooltip." },
+				{
+					"name": "springDamping",
+					"label": "Spring Damping",
+					"type": "number",
+					"defaultValue": 20,
+					"min": 6,
+					"max": 40,
+					"step": 2,
+					"description": "Exponential smoothing factor for trailing cursor physics (higher = snappy, lower = trailing glide)."
+				},
+				{ "name": "offsetX", "label": "Offset X (px)", "type": "number", "defaultValue": 16, "min": 0, "max": 48, "step": 2, "description": "Horizontal distance from cursor to tooltip origin in pixels." },
+				{ "name": "offsetY", "label": "Offset Y (px)", "type": "number", "defaultValue": 16, "min": 0, "max": 48, "step": 2, "description": "Vertical distance from cursor to tooltip origin in pixels." },
+				{
+					"name": "variant",
+					"label": "Badge Variant",
+					"type": "select",
+					"defaultValue": "frosted",
+					"options": [
+						{ "label": "macOS Frosted Glass", "value": "frosted" },
+						{ "label": "High-Contrast Accent", "value": "accent" },
+						{ "label": "Dark Charcoal", "value": "dark" },
+						{ "label": "Minimal Border", "value": "minimal" },
+						{ "label": "Emerald Glow", "value": "glow" }
+					],
+					"description": "Visual token styling of the floating tooltip badge."
+				},
+				{
+					"name": "collisionPadding",
+					"label": "Collision Padding (px)",
+					"type": "number",
+					"defaultValue": 12,
+					"min": 4,
+					"max": 32,
+					"step": 2,
+					"description": "Safe margin in pixels between tooltip and viewport edges to prevent clipping."
+				}
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],

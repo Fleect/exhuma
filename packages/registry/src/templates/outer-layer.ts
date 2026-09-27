@@ -16,6 +16,7 @@ import { getStackingCardsOuterFiles } from './generators/stacking-cards-generato
 import { getSpotlightCardOuterFiles } from './generators/spotlight-card-generator';
 import { getBorderBeamOuterFiles } from './generators/border-beam-generator';
 import { getMagneticButtonOuterFiles } from './generators/magnetic-button-generator';
+import { getCursorTooltipOuterFiles } from './generators/cursor-tooltip-generator';
 
 export interface CompoundPart {
 	name: string;
@@ -131,6 +132,11 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 
 	if (slug === 'magnetic-button') {
 		const files = getMagneticButtonOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'cursor-tooltip') {
+		const files = getCursorTooltipOuterFiles(flavor, props, isEjected);
 		if (files) return files;
 	}
 

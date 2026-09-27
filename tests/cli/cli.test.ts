@@ -335,6 +335,28 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('requestAnimationFrame');
   });
 
+  it('installs real Cursor Tooltip component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add cursor-tooltip --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/CursorTooltip.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('CursorTooltip');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Cursor Tooltip component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add cursor-tooltip --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/CursorTooltip.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('CursorTooltip');
+    expect(code).toContain('dampCursorCoordinate');
+    expect(code).toContain('clampTooltipToViewport');
+    expect(code).toContain('requestAnimationFrame');
+  });
+
   it('executes exhuma build to generate static registry JSON', () => {
     const buildOut = resolve(TEST_DIR, 'dist-registry');
     execSync(`node "${CLI_BIN}" build --output="${buildOut}"`, { cwd: TEST_DIR });

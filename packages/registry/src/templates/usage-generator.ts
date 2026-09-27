@@ -9,6 +9,7 @@ import { getFloatingDockUsage } from './generators/floating-dock-generator';
 import { getAccordionUsage } from './generators/accordion-generator';
 import { getNumberTickerUsage } from './generators/number-ticker-generator';
 import { getMagneticButtonUsage } from './generators/magnetic-button-generator';
+import { getCursorTooltipUsage } from './generators/cursor-tooltip-generator';
 
 /**
  * Generates a complete, production-ready usage example for a component across all 13 supported ecosystems.
@@ -87,6 +88,10 @@ export function generateComponentUsage(component: UniversalComponent, flavor: Ec
 
 	if (slug === 'magnetic-button') {
 		return getMagneticButtonUsage(flavor, props);
+	}
+
+	if (slug === 'cursor-tooltip') {
+		return getCursorTooltipUsage(flavor, props);
 	}
 
 	return getGenericComponentUsage(component, flavor, props);
