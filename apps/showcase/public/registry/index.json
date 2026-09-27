@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-22T09:17:40.428Z",
+	"generatedAt": "2026-09-27T02:25:50.384Z",
 	"components": [
 		{
 			"name": "Stacking Cards",

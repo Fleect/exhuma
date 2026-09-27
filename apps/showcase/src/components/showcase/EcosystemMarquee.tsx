@@ -14,7 +14,7 @@ export function EcosystemMarquee() {
 
 	return (
 		<div className='relative mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]'>
-			<InfiniteMarquee speed={28} pauseOnHover gap='0.75rem'>
+			<InfiniteMarquee speed={28} pauseOnHover gap='0.75rem' showFadeEdges={false}>
 				{flavors.map((flavor) => (
 					<div
 						key={flavor}

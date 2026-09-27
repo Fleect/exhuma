@@ -97,46 +97,7 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 		}
 	}, [pauseOnHover]);
 
-	const [isDark, setIsDark] = useState(() => {
-		if (typeof document !== 'undefined') {
-			return (
-				document.documentElement.classList.contains('dark') ||
-				(!document.documentElement.classList.contains('light') && typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
-			);
-		}
-		return false;
-	});
-
-	useEffect(() => {
-		if (typeof window === 'undefined') return;
-
-		const checkDark = () => {
-			const isDarkClass = document.documentElement.classList.contains('dark');
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			const isExplicitLight = document.documentElement.classList.contains('light');
-			setIsDark(isDarkClass || (!isExplicitLight && prefersDark));
-		};
-
-		checkDark();
-
-		const observer = new MutationObserver(checkDark);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['class', 'data-theme'],
-		});
-
-		const mq = window.matchMedia('(prefers-color-scheme: dark)');
-		mq.addEventListener('change', checkDark);
-
-		return () => {
-			observer.disconnect();
-			mq.removeEventListener('change', checkDark);
-		};
-	}, []);
-
-	const resolvedFadeColor = isDark && fadeEdgeColorDark ? fadeEdgeColorDark : fadeEdgeColor;
-
-	const useColorOverlay = Boolean(showFadeEdges && resolvedFadeColor && resolvedFadeColor.trim() !== '');
+	const useColorOverlay = Boolean(showFadeEdges && (fadeEdgeColor || fadeEdgeColorDark));
 
 	const maskStyle: React.CSSProperties =
 		showFadeEdges && !useColorOverlay
@@ -156,20 +117,39 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 		>
 			{useColorOverlay && (
 				<>
+					<style>{`
+						.exhuma-marquee-fade-left, .exhuma-marquee-fade-right {
+							--exhuma-fade-color: var(--fade-light, ${fadeEdgeColor || '#ffffff'});
+						}
+						:is(.dark, [data-theme='dark']) :is(.exhuma-marquee-fade-left, .exhuma-marquee-fade-right),
+						:is(.dark, [data-theme='dark']).exhuma-marquee-fade-left,
+						:is(.dark, [data-theme='dark']).exhuma-marquee-fade-right {
+							--exhuma-fade-color: var(--fade-dark, ${fadeEdgeColorDark || fadeEdgeColor || '#09090b'});
+						}
+						@media (prefers-color-scheme: dark) {
+							:root:not(.light) :is(.exhuma-marquee-fade-left, .exhuma-marquee-fade-right) {
+								--exhuma-fade-color: var(--fade-dark, ${fadeEdgeColorDark || fadeEdgeColor || '#09090b'});
+							}
+						}
+					`}</style>
 					<div
 						aria-hidden='true'
-						className='pointer-events-none absolute inset-y-0 left-0 z-10'
+						className='exhuma-marquee-fade-left pointer-events-none absolute inset-y-0 left-0 z-10'
 						style={{
 							width: `${fadeWidth}px`,
-							background: `linear-gradient(to right, ${resolvedFadeColor}, transparent)`,
+							['--fade-light' as string]: fadeEdgeColor,
+							['--fade-dark' as string]: fadeEdgeColorDark || fadeEdgeColor,
+							background: 'linear-gradient(to right, var(--exhuma-fade-color, var(--fade-light)), transparent)',
 						}}
 					/>
 					<div
 						aria-hidden='true'
-						className='pointer-events-none absolute inset-y-0 right-0 z-10'
+						className='exhuma-marquee-fade-right pointer-events-none absolute inset-y-0 right-0 z-10'
 						style={{
 							width: `${fadeWidth}px`,
-							background: `linear-gradient(to left, ${resolvedFadeColor}, transparent)`,
+							['--fade-light' as string]: fadeEdgeColor,
+							['--fade-dark' as string]: fadeEdgeColorDark || fadeEdgeColor,
+							background: 'linear-gradient(to left, var(--exhuma-fade-color, var(--fade-light)), transparent)',
 						}}
 					/>
 				</>
