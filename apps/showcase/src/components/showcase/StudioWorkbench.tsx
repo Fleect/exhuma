@@ -1855,7 +1855,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 			const collisionPadding = Number(propValues.collisionPadding ?? 12);
 
 			return (
-				<div className='flex w-full flex-col items-center justify-center p-6 md:p-12'>
+				<div className='flex w-full flex-col items-center justify-center px-2 py-6 sm:px-6 md:p-12'>
 					<CursorTooltip
 						content={content}
 						springDamping={springDamping}
@@ -1864,7 +1864,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 						offsetY={offsetY}
 						variant={variant}
 						collisionPadding={collisionPadding}
-						className='border-border bg-card/80 hover:border-primary group relative w-full max-w-lg cursor-pointer overflow-hidden rounded-2xl border p-8 text-center shadow-xl transition-all duration-300 md:p-12'
+						className='border-border bg-card/80 hover:border-primary group relative w-full max-w-lg cursor-pointer overflow-hidden rounded-2xl border p-5 text-center shadow-xl transition-all duration-300 sm:p-8 md:p-12'
 					>
 						<div className='bg-radial-gradient from-primary/5 pointer-events-none absolute inset-0 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100' />
 						<div className='bg-primary/10 border-primary/20 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs font-medium'>
@@ -1875,7 +1875,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 						<p className='text-muted-foreground mt-2 text-xs leading-relaxed md:text-sm'>
 							Move your pointer freely across this sandbox. The tooltip trails your cursor using high-performance exponential decay math with viewport collision clamping.
 						</p>
-						<div className='border-border/50 text-3xs text-muted-foreground mt-6 flex items-center justify-between border-t pt-4 font-mono'>
+						<div className='border-border/50 text-3xs text-muted-foreground mt-6 flex flex-wrap items-center justify-between gap-2 border-t pt-4 font-mono'>
 							<span>DAMPING: {springDamping}</span>
 							<span>DIR: {String(direction).toUpperCase()}</span>
 							<span>
