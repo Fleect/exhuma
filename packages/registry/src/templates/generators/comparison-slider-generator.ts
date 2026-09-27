@@ -1306,7 +1306,7 @@ export function initComparisonSlider(containerSelector = '[data-comparison-slide
 				{
 					filename: 'render.php',
 					language: 'php',
-					description: 'WordPress Gutenberg block dynamic render template.',
+					description: 'WordPress Gutenberg block dynamic render template with sub-pixel polygon clipping and kinetic pointer controller.',
 					code: `<?php
 /**
  * Comparison Slider Block Template
@@ -1331,12 +1331,124 @@ $clip = $is_vertical
     aria-valuenow="<?php echo esc_attr(round($pos * 100)); ?>"
     aria-valuemin="0"
     aria-valuemax="100"
+    aria-orientation="<?php echo esc_attr($orientation); ?>"
     tabindex="0"
 >
+    <!-- After Layer (Full View) -->
     <div class="exhuma-cs-after absolute inset-0 size-full overflow-hidden">
-        <?php echo $content; ?>
+        <?php echo !empty($content) ? $content : '<div class="flex size-full items-center justify-center bg-zinc-900 text-zinc-400 font-mono text-xs">After View</div>'; ?>
+    </div>
+
+    <!-- Before Layer (Sub-pixel Clipped Polygon) -->
+    <div
+        class="exhuma-cs-before absolute inset-0 size-full overflow-hidden will-change-[clip-path]"
+        style="clip-path: <?php echo esc_attr($clip); ?>;"
+    >
+        <div class="flex size-full items-center justify-center bg-zinc-950 text-white font-mono text-xs">
+            Before View
+        </div>
+    </div>
+
+    <!-- Divider Rail & Handle -->
+    <div
+        class="exhuma-cs-handle absolute z-20 pointer-events-none bg-white shadow-lg <?php echo $is_vertical ? 'left-0 right-0 h-0.5 -translate-y-1/2' : 'top-0 bottom-0 w-0.5 -translate-x-1/2'; ?>"
+        style="<?php echo $is_vertical ? 'top: ' . esc_attr($pct) . '%;' : 'left: ' . esc_attr($pct) . '%;'; ?>"
+    >
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-8 rounded-full border border-border/80 bg-background/90 backdrop-blur-md shadow-md text-foreground text-xs font-bold">
+            <?php echo $is_vertical ? '↕' : '↔'; ?>
+        </div>
     </div>
 </div>
+
+<script>
+(function() {
+  function initWordPressSliders() {
+    document.querySelectorAll('.wp-block-exhuma-comparison-slider').forEach(function(slider) {
+      if (slider.__exhuma_init) return;
+      slider.__exhuma_init = true;
+
+      var isVertical = slider.dataset.orientation === 'vertical';
+      var step = parseFloat(slider.dataset.step || '0.05');
+      var pos = parseFloat(slider.dataset.position || '0.5');
+      var isDragging = false;
+      var rect = null;
+
+      var beforeEl = slider.querySelector('.exhuma-cs-before');
+      var handleEl = slider.querySelector('.exhuma-cs-handle');
+
+      function applyPos(val) {
+        pos = Math.max(0, Math.min(1, val));
+        var pct = (pos * 100).toFixed(3);
+        var clip = isVertical
+          ? 'polygon(0 0, 100% 0, 100% ' + pct + '%, 0 ' + pct + '%)'
+          : 'polygon(0 0, ' + pct + '% 0, ' + pct + '% 100%, 0 100%)';
+        if (beforeEl) beforeEl.style.clipPath = clip;
+        if (handleEl) {
+          if (isVertical) handleEl.style.top = pct + '%';
+          else handleEl.style.left = pct + '%';
+        }
+        slider.setAttribute('aria-valuenow', Math.round(pos * 100).toString());
+      }
+
+      function updatePointer(clientX, clientY) {
+        if (!rect) rect = slider.getBoundingClientRect();
+        var ratio = isVertical
+          ? (clientY - rect.top) / rect.height
+          : (clientX - rect.left) / rect.width;
+        applyPos(ratio);
+      }
+
+      slider.addEventListener('pointerdown', function(e) {
+        if (e.button !== 0) return;
+        isDragging = true;
+        rect = slider.getBoundingClientRect();
+        try { slider.setPointerCapture(e.pointerId); } catch(err) {}
+        updatePointer(e.clientX, e.clientY);
+      });
+
+      slider.addEventListener('pointermove', function(e) {
+        if (!isDragging) return;
+        if (e.pointerType === 'mouse' && e.buttons === 0) {
+          isDragging = false;
+          rect = null;
+          return;
+        }
+        updatePointer(e.clientX, e.clientY);
+      });
+
+      function onEnd(e) {
+        isDragging = false;
+        rect = null;
+        try { if (slider.hasPointerCapture(e.pointerId)) slider.releasePointerCapture(e.pointerId); } catch(err) {}
+      }
+
+      slider.addEventListener('pointerup', onEnd);
+      slider.addEventListener('pointercancel', onEnd);
+
+      slider.addEventListener('keydown', function(e) {
+        var delta = 0;
+        if (isVertical) {
+          if (e.key === 'ArrowUp') delta = -step;
+          else if (e.key === 'ArrowDown') delta = step;
+        } else {
+          if (e.key === 'ArrowLeft') delta = -step;
+          else if (e.key === 'ArrowRight') delta = step;
+        }
+        if (delta !== 0) {
+          e.preventDefault();
+          applyPos(pos + delta);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWordPressSliders);
+  } else {
+    initWordPressSliders();
+  }
+})();
+</script>
 `,
 				},
 			];

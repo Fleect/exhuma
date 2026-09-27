@@ -205,7 +205,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Split 25/75': { defaultPosition: 0.25, step: 0.05, orientation: 'horizontal' },
 		'Split 75/25': { defaultPosition: 0.75, step: 0.05, orientation: 'horizontal' },
 		'Micro Precision': { defaultPosition: 0.5, step: 0.01, orientation: 'horizontal' },
-		'Rapid Step': { defaultPosition: 0.5, step: 0.1, orientation: 'horizontal' },
 		'Vertical Split': { defaultPosition: 0.5, step: 0.05, orientation: 'vertical' },
 	},
 	'expandable-card': {
