@@ -16,7 +16,7 @@ export const borderBeamComponent: UniversalComponent = {
 			type: 'number',
 			defaultValue: 200,
 			min: 50,
-			max: 200,
+			max: 400,
 			step: 10,
 			description: 'Length/size of the perimeter laser trace.',
 		},

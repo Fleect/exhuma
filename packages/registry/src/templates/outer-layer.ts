@@ -9,6 +9,9 @@ import { getHorizontalScrollerOuterFiles } from './generators/horizontal-scrolle
 import { getBentoGridOuterFiles } from './generators/bento-grid-generator';
 import { getDiamondGridOuterFiles } from './generators/diamond-grid-generator';
 import { getMorphingTabsOuterFiles } from './generators/morphing-tabs-generator';
+import { getStackingCardsOuterFiles } from './generators/stacking-cards-generator';
+import { getSpotlightCardOuterFiles } from './generators/spotlight-card-generator';
+import { getBorderBeamOuterFiles } from './generators/border-beam-generator';
 
 export interface CompoundPart {
 	name: string;
@@ -41,6 +44,21 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 	} = spec;
 
 	const isEjected = options?.eject === true;
+
+	if (slug === 'stacking-cards') {
+		const files = getStackingCardsOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'spotlight-card') {
+		const files = getSpotlightCardOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'border-beam') {
+		const files = getBorderBeamOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
 
 	if (slug === 'comparison-slider') {
 		const files = getComparisonSliderOuterFiles(flavor, props, isEjected);
@@ -837,7 +855,7 @@ const endColor = computed(() => {
   return op <= 0 ? 'transparent' : op >= 1 ? props.colorTo : \`color-mix(in srgb, \${props.colorTo} \${Math.round(op * 100)}%, transparent)\`;
 });
 
-const pathRadius = computed(() => Math.min(props.size, 200));
+const pathRadius = computed(() => Math.max(0, props.borderRadius));
 </script>
 
 <template>
@@ -1601,7 +1619,7 @@ const props = withDefaults(defineProps<Props>(), {
         ? colorTo
         : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`
   );
-  const pathRadius = $derived(Math.min(size, 200));
+  const pathRadius = $derived(Math.max(0, borderRadius));
 </script>
 
 <div
@@ -2401,7 +2419,7 @@ export const BorderBeam: Component<BorderBeamProps> = (rawProps) => {
     const op = Math.max(0, Math.min(1, local.endOpacity));
     return op <= 0 ? 'transparent' : op >= 1 ? local.colorTo : \`color-mix(in srgb, \${local.colorTo} \${Math.round(op * 100)}%, transparent)\`;
   };
-  const pathRadius = () => Math.min(local.size, 200);
+  const pathRadius = () => Math.max(0, local.borderRadius);
 
   return (
     <div
@@ -3187,7 +3205,7 @@ export class ExhumaBorderBeamComponent {
   readonly borderRadius = input<number>(${borderRadius});
   readonly customClass = input<string>('');
 
-  readonly pathRadius = computed(() => Math.min(this.size(), 200));
+  readonly pathRadius = computed(() => Math.max(0, this.borderRadius()));
   readonly endColor = computed(() => {
     const op = Math.max(0, Math.min(1, this.endOpacity()));
     return op <= 0 ? 'transparent' : op >= 1 ? this.colorTo() : \`color-mix(in srgb, \${this.colorTo()} \${Math.round(op * 100)}%, transparent)\`;
@@ -3937,7 +3955,7 @@ const {
 
 const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
 const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-const pathRadius = Math.min(size, 200);
+const pathRadius = Math.max(0, borderRadius);
 ---
 
 <div
@@ -4615,7 +4633,7 @@ if (!customElements.get('exhuma-spotlight-card')) {
       document.head.appendChild(style);
     }
 
-    const pathRadius = Math.min(parseFloat(size) || 200, 200);
+    const pathRadius = Math.max(0, parseFloat(this.getAttribute('border-radius') || '${borderRadius}'));
     const sizeNum = parseFloat(size) || 200;
 
     this.innerHTML = \`
@@ -5201,7 +5219,7 @@ if (!customElements.get('exhuma-${slug}')) {
 
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-    const pathRadius = Math.min(size, 200);
+    const pathRadius = Math.max(0, borderRadius);
 
     const container = document.createElement('div');
     container.className = 'exhuma-border-beam';
@@ -5913,7 +5931,7 @@ $id = 'exhuma-spotlight-' . uniqid();
 @php
     $clampedEndOpacity = max(0, min(1, (float)$endOpacity));
     $endColor = $clampedEndOpacity <= 0 ? 'transparent' : ($clampedEndOpacity >= 1 ? $colorTo : "color-mix(in srgb, {$colorTo} " . round($clampedEndOpacity * 100) . "%, transparent)");
-    $pathRadius = min((int)$size, 200);
+    $pathRadius = max(0, (int)$borderRadius);
 @endphp
 
 <div
@@ -6301,7 +6319,7 @@ $borderWidth = $attributes['borderWidth'] ?? ${borderWidth};
 $colorFrom = $attributes['colorFrom'] ?? '${colorFrom}';
 $colorTo = $attributes['colorTo'] ?? '${colorTo}';
 $borderRadius = $attributes['borderRadius'] ?? ${borderRadius};
-$pathRadius = min((int)$size, 200);
+$pathRadius = max(0, (int)$borderRadius);
 ?>
 <div
   class="exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit]"
@@ -7977,7 +7995,7 @@ export const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(
   ) => {
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-    const pathRadius = Math.min(size, 200);
+    const pathRadius = Math.max(0, borderRadius);
 
     return (
       <div

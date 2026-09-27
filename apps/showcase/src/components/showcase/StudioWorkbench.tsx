@@ -84,6 +84,7 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Subtle Elegance': { topStart: 20, topIncrement: 16, cardGap: 24, scaleThreshold: 180, minScale: 0.94, reverseScale: true },
 		'Cinematic 3D': { topStart: 24, topIncrement: 36, cardGap: 28, scaleThreshold: 120, minScale: 0.85, reverseScale: true },
 		'Compact Deck': { topStart: 16, topIncrement: 14, cardGap: 12, scaleThreshold: 100, minScale: 0.92, reverseScale: false },
+		'Dramatic Cascade': { topStart: 28, topIncrement: 40, cardGap: 28, scaleThreshold: 110, minScale: 0.82, reverseScale: true },
 	},
 	'horizontal-scroller': {
 		Default: { itemGap: 28, speed: 1.0, cardWidth: 320, showProgress: true, showFadeEdges: true, fadeWidth: 48, fadeEdgeColor: '#ffffff', fadeEdgeColorDark: '#09090b', mobileMode: 'scroll' },
@@ -110,10 +111,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Hero Showcase': { minItemWidth: 360, gap: 28, mode: 'auto-fit', maxColumns: 3, alignItems: 'stretch' },
 	},
 	'spotlight-card': {
-		Default: { radius: 350, opacity: 0.8, color: '#6366f1', borderColor: '#818cf8', spread: 80, mode: 'both', smoothing: 0.2, disabled: false },
+		Default: { radius: 350, opacity: 0.85, color: '#6366f1', borderColor: '#818cf8', spread: 60, mode: 'both', smoothing: 0.2, disabled: false },
 		Subtle: { radius: 250, opacity: 0.4, color: '#94a3b8', borderColor: '#cbd5e1', spread: 70, mode: 'both', smoothing: 0.15, disabled: false },
 		Broad: { radius: 500, opacity: 0.95, color: '#10b981', borderColor: '#34d399', spread: 90, mode: 'both', smoothing: 0.25, disabled: false },
 		BorderOnly: { radius: 300, opacity: 0.85, color: '#6366f1', borderColor: '#a855f7', spread: 80, mode: 'border', smoothing: 0.2, disabled: false },
+		'Background Sheen': { radius: 420, opacity: 0.9, color: '#ec4899', borderColor: '#f43f5e', spread: 75, mode: 'background', smoothing: 0.18, disabled: false },
 	},
 	'morphing-tabs': {
 		Default: { springStiffness: 26, variant: 'pill', size: 'md' },
@@ -325,13 +327,20 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 	// Render interactive canvas preview according to selected component
 	const renderCanvasPreview = () => {
 		if (selectedSlug === 'stacking-cards') {
-			const topStart = Number(propValues.topStart ?? 20);
-			const topIncrement = Number(propValues.topIncrement ?? propValues.stackOffset ?? 28);
-			const cardGap = Number(propValues.cardGap ?? propValues.gap ?? 20);
-			const scaleThreshold = Number(propValues.scaleThreshold ?? 150);
-			const minScale = Number(propValues.minScale ?? 0.9);
+			const rawTopStart = Number(propValues.topStart ?? 20);
+			const rawTopIncrement = Number(propValues.topIncrement ?? propValues.stackOffset ?? 28);
+			const rawCardGap = Number(propValues.cardGap ?? propValues.gap ?? 20);
+			const rawScaleThreshold = Number(propValues.scaleThreshold ?? 150);
+			const rawMinScale = Number(propValues.minScale ?? 0.9);
 			const reverseScale = propValues.reverseScale !== undefined ? Boolean(propValues.reverseScale) : true;
-			const count = Number(propValues.cardCount ?? 4);
+			const rawCount = Number(propValues.cardCount ?? 4);
+
+			const topStart = Number.isFinite(rawTopStart) && rawTopStart >= 0 ? rawTopStart : 20;
+			const topIncrement = Number.isFinite(rawTopIncrement) && rawTopIncrement > 0 ? rawTopIncrement : 28;
+			const cardGap = Number.isFinite(rawCardGap) && rawCardGap >= 0 ? rawCardGap : 20;
+			const scaleThreshold = Number.isFinite(rawScaleThreshold) && rawScaleThreshold > 0 ? rawScaleThreshold : 150;
+			const minScale = Number.isFinite(rawMinScale) && rawMinScale > 0 && rawMinScale < 1 ? rawMinScale : 0.9;
+			const count = Number.isFinite(rawCount) && rawCount >= 1 ? Math.min(8, Math.round(rawCount)) : 4;
 
 			return (
 				<div ref={studioStackingRef} className='border-border bg-background/50 no-scrollbar relative mx-auto h-[31.25rem] w-full max-w-xl overflow-y-auto rounded-2xl border p-6 shadow-inner'>
@@ -874,14 +883,19 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		}
 
 		if (selectedSlug === 'spotlight-card') {
-			const radius = Number(propValues.radius ?? 350);
-			const opacity = Number(propValues.opacity ?? 0.8);
+			const rawRadius = Number(propValues.radius ?? 350);
+			const rawOpacity = Number(propValues.opacity ?? 0.85);
 			const color = String(propValues.color ?? '#6366f1');
 			const borderColor = String(propValues.borderColor ?? '#818cf8');
-			const spread = Number(propValues.spread ?? 80);
+			const rawSpread = Number(propValues.spread ?? 60);
 			const mode = (propValues.mode as 'both' | 'border' | 'background') ?? 'both';
-			const smoothing = Number(propValues.smoothing ?? 0.2);
+			const rawSmoothing = Number(propValues.smoothing ?? 0.2);
 			const disabled = Boolean(propValues.disabled ?? false);
+
+			const radius = Number.isFinite(rawRadius) && rawRadius > 0 ? rawRadius : 350;
+			const opacity = Math.max(0, Math.min(1, Number.isFinite(rawOpacity) ? rawOpacity : 0.85));
+			const spread = Math.max(0, Math.min(100, Number.isFinite(rawSpread) ? rawSpread : 60));
+			const smoothing = Math.max(0.05, Math.min(1, Number.isFinite(rawSmoothing) ? rawSmoothing : 0.2));
 
 			return (
 				<div className='flex items-center justify-center p-2 sm:p-6'>
@@ -1238,16 +1252,24 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		}
 
 		if (selectedSlug === 'border-beam') {
-			const size = Number(propValues.size ?? 200);
-			const duration = Number(propValues.duration ?? 8);
-			const borderWidth = Number(propValues.borderWidth ?? 2);
+			const rawSize = Number(propValues.size ?? 200);
+			const rawDuration = Number(propValues.duration ?? 8);
+			const rawBorderWidth = Number(propValues.borderWidth ?? 2);
 			const colorFrom = String(propValues.colorFrom ?? '#ffaa40');
 			const colorTo = String(propValues.colorTo ?? '#9c40ff');
 			const doubleBeam = Boolean(propValues.doubleBeam ?? false);
-			const endOpacity = Number(propValues.endOpacity ?? 0);
-			const opacity = Number(propValues.opacity ?? 1);
-			const blur = Number(propValues.blur ?? 0);
-			const borderRadius = Number(propValues.borderRadius ?? 16);
+			const rawEndOpacity = Number(propValues.endOpacity ?? 0);
+			const rawOpacity = Number(propValues.opacity ?? 1);
+			const rawBlur = Number(propValues.blur ?? 0);
+			const rawBorderRadius = Number(propValues.borderRadius ?? 16);
+
+			const size = Number.isFinite(rawSize) && rawSize > 0 ? rawSize : 200;
+			const duration = Number.isFinite(rawDuration) && rawDuration > 0 ? rawDuration : 8;
+			const borderWidth = Number.isFinite(rawBorderWidth) && rawBorderWidth >= 0 ? rawBorderWidth : 2;
+			const borderRadius = Number.isFinite(rawBorderRadius) && rawBorderRadius >= 0 ? rawBorderRadius : 16;
+			const endOpacity = Math.max(0, Math.min(1, Number.isFinite(rawEndOpacity) ? rawEndOpacity : 0));
+			const opacity = Math.max(0, Math.min(1, Number.isFinite(rawOpacity) ? rawOpacity : 1));
+			const blur = Math.max(0, Number.isFinite(rawBlur) ? rawBlur : 0);
 
 			return (
 				<div
@@ -1274,7 +1296,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 						<div className='text-muted-foreground text-3xs font-mono tracking-wider uppercase'>Kinetic Orbital Vector</div>
 						<div className='text-foreground mt-1 flex items-baseline gap-2 text-xl font-semibold tracking-tight sm:text-2xl'>
 							<span>
-								{duration > 0 ? (360 / duration).toFixed(0) : '0'} <span className='text-muted-foreground font-mono text-xs font-normal'>deg/s</span>
+								{(360 / duration).toFixed(0)} <span className='text-muted-foreground font-mono text-xs font-normal'>deg/s</span>
 							</span>
 							<span className='font-mono text-xs font-medium text-emerald-500'>• {doubleBeam ? 'Dual Phase (180°)' : 'Single Phase'}</span>
 						</div>

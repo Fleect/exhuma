@@ -20,7 +20,7 @@ describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
 
 		const sizeProp = borderBeamComponent.props.find((p) => p.name === 'size');
 		expect(sizeProp?.min).toBe(50);
-		expect(sizeProp?.max).toBe(200);
+		expect(sizeProp?.max).toBe(400);
 		expect(sizeProp?.step).toBe(10);
 
 		const colorFromProp = borderBeamComponent.props.find((p) => p.name === 'colorFrom');
@@ -65,7 +65,7 @@ describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
 		expect(code).toContain("maskComposite: 'exclude'");
 		// Center point math based on size
 		expect(code).toContain('offsetAnchor: `${size / 2}px ${size / 2}px`');
-		expect(code).toContain('pathRadius = Math.min(size, 200)');
+		expect(code).toContain('pathRadius = Math.max(0, borderRadius)');
 		// Opposing dual beam rotates in the same direction with 180° phase offset (no reverse)
 		expect(code).toContain('duration / 2');
 		expect(code).not.toContain('reverse');

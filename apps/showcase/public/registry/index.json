@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T04:09:50.600Z",
+	"generatedAt": "2026-09-27T05:05:11.505Z",
 	"components": [
 		{
 			"name": "Stacking Cards",
@@ -637,7 +637,7 @@
 			"description": "Zero-runtime CSS perimeter laser trace with hardware mask clipping and sub-pixel compositing.",
 			"version": "1.0.0",
 			"props": [
-				{ "name": "size", "label": "Beam Length (px)", "type": "number", "defaultValue": 200, "min": 50, "max": 200, "step": 10, "description": "Length/size of the perimeter laser trace." },
+				{ "name": "size", "label": "Beam Length (px)", "type": "number", "defaultValue": 200, "min": 50, "max": 400, "step": 10, "description": "Length/size of the perimeter laser trace." },
 				{ "name": "duration", "label": "Duration (s)", "type": "number", "defaultValue": 8, "min": 2, "max": 30, "step": 1, "description": "Loop duration for one full border sweep." },
 				{ "name": "borderWidth", "label": "Border Width (px)", "type": "number", "defaultValue": 2, "min": 1, "max": 8, "step": 0.5, "description": "Perimeter border stroke width." },
 				{ "name": "colorFrom", "label": "Color From", "type": "color", "defaultValue": "#ffaa40", "description": "Starting gradient color." },

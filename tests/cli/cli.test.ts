@@ -178,6 +178,70 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('TabsRoot');
   });
 
+  it('installs real Stacking Cards component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add stacking-cards --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/StackingCards.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('StackingCards');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Stacking Cards component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add stacking-cards --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/StackingCards.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('StackingCards');
+    expect(code).toContain('smoothstep');
+    expect(code).toContain('getReverseScale');
+    expect(code).toContain('Float64Array');
+  });
+
+  it('installs real Spotlight Card component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add spotlight-card --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/SpotlightCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('SpotlightCard');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Spotlight Card component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add spotlight-card --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/SpotlightCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('SpotlightCard');
+    expect(code).toContain('--exhuma-spotlight-x');
+    expect(code).toContain('handlePointerMove');
+  });
+
+  it('installs real Border Beam component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add border-beam --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/BorderBeam.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('BorderBeam');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Border Beam component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add border-beam --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/BorderBeam.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('BorderBeam');
+    expect(code).toContain('offsetPath');
+    expect(code).toContain('doubleBeam');
+  });
+
   it('executes exhuma build to generate static registry JSON', () => {
     const buildOut = resolve(TEST_DIR, 'dist-registry');
     execSync(`node "${CLI_BIN}" build --output="${buildOut}"`, { cwd: TEST_DIR });
