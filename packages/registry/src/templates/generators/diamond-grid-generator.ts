@@ -400,9 +400,9 @@ const gapVal = computed(() => (typeof props.gap === 'number' ? \`\${props.gap}px
 				{
 					filename: 'DiamondGrid.svelte',
 					language: 'svelte',
-					description: 'Svelte 5 Native Diamond Grid component with runes and container query collapse.',
+					description: 'Svelte 5 Native Diamond Grid component with authentic rhombic column partitioning and container query collapse.',
 					code: `<script lang="ts">
-  import type { Snippet } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
 
   export type DiamondGridMode = 'rhombic' | 'isometric';
 
@@ -424,16 +424,52 @@ const gapVal = computed(() => (typeof props.gap === 'number' ? \`\${props.gap}px
     children
   }: Props = $props();
 
+  const DIAMOND_PATTERN = [1, 2, 3, 4, 3, 2, 1];
   const gapVal = $derived(typeof gap === 'number' ? \`\${gap}px\` : gap);
+  let containerRef: HTMLDivElement | undefined = $state();
+  let desktopRef: HTMLDivElement | undefined = $state();
+
+  function partitionChildren() {
+    if (!desktopRef) return;
+    const directChildren = Array.from(desktopRef.children).filter(
+      (el) => !el.classList.contains('exhuma-diamond-column')
+    );
+    if (directChildren.length === 0) return;
+
+    desktopRef.innerHTML = '';
+    let idx = 0;
+    for (let c = 0; c < DIAMOND_PATTERN.length && idx < directChildren.length; c++) {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+      colDiv.style.gridColumn = String(c + 1);
+      colDiv.style.gap = gapVal;
+
+      const count = DIAMOND_PATTERN[c];
+      for (let i = 0; i < count && idx < directChildren.length; i++) {
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'exhuma-diamond-item';
+        itemWrap.appendChild(directChildren[idx]);
+        colDiv.appendChild(itemWrap);
+        idx++;
+      }
+      desktopRef.appendChild(colDiv);
+    }
+  }
+
+  onMount(() => {
+    partitionChildren();
+  });
 </script>
 
 <div
+  bind:this={containerRef}
   class="exhuma-diamond-container flex w-full flex-col gap-4 {className}"
   style={responsive ? 'container-type: inline-size;' : undefined}
 >
   <div
-    class={responsive ? 'exhuma-diamond-grid-responsive w-full' : 'w-full'}
-    style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: {gapVal}; align-items: center; justify-content: center;"
+    bind:this={desktopRef}
+    class={responsive ? 'exhuma-diamond-desktop w-full' : 'w-full'}
+    style="display: {responsive ? undefined : 'grid'}; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: {gapVal}; align-items: center; justify-content: center;"
   >
     {#if children}
       {@render children()}
@@ -441,15 +477,20 @@ const gapVal = computed(() => (typeof props.gap === 'number' ? \`\${props.gap}px
   </div>
 </div>
 
-{#if responsive}
 <style>
-  @container (max-width: 420px) {
-    .exhuma-diamond-grid-responsive {
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .exhuma-diamond-desktop {
+    display: none;
+  }
+  @container (min-width: 420px) {
+    .exhuma-diamond-desktop {
+      display: grid !important;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
   }
 </style>
-{/if}
 `,
 				},
 			];
@@ -460,8 +501,8 @@ const gapVal = computed(() => (typeof props.gap === 'number' ? \`\${props.gap}px
 				{
 					filename: 'DiamondGrid.tsx',
 					language: 'tsx',
-					description: 'SolidJS Native Diamond Grid component with fine-grained reactivity.',
-					code: `import { Component, JSX, splitProps, createMemo } from 'solid-js';
+					description: 'SolidJS Native Diamond Grid component with fine-grained reactivity and rhombic column partitioning.',
+					code: `import { Component, JSX, splitProps, createMemo, onMount } from 'solid-js';
 
 export type DiamondLayoutVariant = 'large' | 'medium' | 'small' | 'auto';
 export type DiamondGridMode = 'rhombic' | 'isometric';
@@ -473,10 +514,41 @@ export interface DiamondGridProps extends JSX.HTMLAttributes<HTMLDivElement> {
   responsive?: boolean;
 }
 
+const DIAMOND_PATTERN = [1, 2, 3, 4, 3, 2, 1];
+
 export const DiamondGrid: Component<DiamondGridProps> = (props) => {
   const [local, others] = splitProps(props, ['gap', 'layout', 'mode', 'responsive', 'class', 'children']);
-  const gapVal = createMemo(() => typeof local.gap === 'number' ? \`\${local.gap}px\` : (local.gap || '${gap}px'));
+  const gapVal = createMemo(() => (typeof local.gap === 'number' ? \`\${local.gap}px\` : (local.gap || '${gap}px')));
   const isResponsive = createMemo(() => Boolean(local.responsive ?? ${responsive}));
+
+  let desktopRef: HTMLDivElement | undefined;
+
+  onMount(() => {
+    if (!desktopRef) return;
+    const directChildren = Array.from(desktopRef.children).filter(
+      (el) => !el.classList.contains('exhuma-diamond-column')
+    );
+    if (directChildren.length === 0) return;
+
+    desktopRef.innerHTML = '';
+    let idx = 0;
+    for (let c = 0; c < DIAMOND_PATTERN.length && idx < directChildren.length; c++) {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+      colDiv.style.gridColumn = String(c + 1);
+      colDiv.style.gap = gapVal();
+
+      const count = DIAMOND_PATTERN[c];
+      for (let i = 0; i < count && idx < directChildren.length; i++) {
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'exhuma-diamond-item';
+        itemWrap.appendChild(directChildren[idx]);
+        colDiv.appendChild(itemWrap);
+        idx++;
+      }
+      desktopRef.appendChild(colDiv);
+    }
+  });
 
   return (
     <div
@@ -485,8 +557,15 @@ export const DiamondGrid: Component<DiamondGridProps> = (props) => {
       {...others}
     >
       <div
-        class={isResponsive() ? 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 items-center justify-center w-full' : 'grid grid-cols-7 items-center justify-center w-full'}
-        style={{ gap: gapVal() }}
+        ref={desktopRef}
+        class={isResponsive() ? 'exhuma-diamond-desktop w-full' : 'w-full'}
+        style={{
+          display: isResponsive() ? undefined : 'grid',
+          'grid-template-columns': 'repeat(7, minmax(0, 1fr))',
+          gap: gapVal(),
+          'align-items': 'center',
+          'justify-content': 'center',
+        }}
       >
         {local.children}
       </div>
@@ -503,8 +582,8 @@ export const DiamondGrid: Component<DiamondGridProps> = (props) => {
 				{
 					filename: 'diamond-grid.component.ts',
 					language: 'typescript',
-					description: 'Angular 18+ standalone Diamond Grid component with container query layout.',
-					code: `import { Component, input, computed } from '@angular/core';
+					description: 'Angular 18+ standalone Diamond Grid component with authentic rhombic column partitioning.',
+					code: `import { Component, input, computed, ElementRef, AfterViewInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -517,7 +596,10 @@ import { CommonModule } from '@angular/common';
       [style.containerType]="responsive() ? 'inline-size' : undefined"
     >
       <div
-        [class]="responsive() ? 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 items-center justify-center w-full' : 'grid grid-cols-7 items-center justify-center w-full'"
+        #desktopGrid
+        [class]="responsive() ? 'exhuma-diamond-desktop w-full' : 'w-full'"
+        [style.display]="responsive() ? null : 'grid'"
+        style="grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: center; justify-content: center; width: 100%;"
         [style.gap]="gapValue()"
       >
         <ng-content></ng-content>
@@ -526,19 +608,60 @@ import { CommonModule } from '@angular/common';
   \`,
   styles: [\`
     :host { display: block; width: 100%; }
+    .exhuma-diamond-desktop { display: none; }
+    @container (min-width: 420px) {
+      .exhuma-diamond-desktop {
+        display: grid !important;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+    }
   \`]
 })
-export class ExhumaDiamondGridComponent {
+export class ExhumaDiamondGridComponent implements AfterViewInit {
   readonly gap = input<number | string>(${gap});
   readonly layout = input<string>('${layout}');
   readonly mode = input<'rhombic' | 'isometric'>('${mode}');
   readonly responsive = input<boolean>(${responsive});
   readonly customClass = input<string>('');
 
+  readonly desktopGrid = viewChild<ElementRef<HTMLDivElement>>('desktopGrid');
+
   gapValue = computed(() => {
     const g = this.gap();
     return typeof g === 'number' ? \`\${g}px\` : g;
   });
+
+  ngAfterViewInit() {
+    const gridEl = this.desktopGrid()?.nativeElement;
+    if (!gridEl) return;
+    const directChildren = Array.from(gridEl.children).filter(
+      (el) => !el.classList.contains('exhuma-diamond-column')
+    );
+    if (directChildren.length === 0) return;
+
+    const pattern = [1, 2, 3, 4, 3, 2, 1];
+    gridEl.innerHTML = '';
+    let idx = 0;
+    for (let c = 0; c < pattern.length && idx < directChildren.length; c++) {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+      colDiv.style.gridColumn = String(c + 1);
+      colDiv.style.gap = String(this.gapValue());
+
+      const count = pattern[c];
+      for (let i = 0; i < count && idx < directChildren.length; i++) {
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'exhuma-diamond-item';
+        itemWrap.appendChild(directChildren[idx]);
+        colDiv.appendChild(itemWrap);
+        idx++;
+      }
+      gridEl.appendChild(colDiv);
+    }
+  }
 }
 `,
 				},
@@ -550,7 +673,7 @@ export class ExhumaDiamondGridComponent {
 				{
 					filename: 'DiamondGrid.astro',
 					language: 'astro',
-					description: 'Astro Native Diamond Grid component with container-query responsive collapse.',
+					description: 'Astro Native Diamond Grid component with authentic rhombic column partitioning.',
 					code: `---
 interface Props {
   gap?: number | string;
@@ -576,15 +699,67 @@ const gapVal = typeof gap === 'number' ? \`\${gap}px\` : gap;
   style={responsive ? "container-type: inline-size;" : undefined}
 >
   <div
-    class:list={[
-      "items-center justify-center w-full",
-      responsive ? "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7" : "grid grid-cols-7"
-    ]}
-    style={{ gap: gapVal }}
+    class:list={["exhuma-diamond-desktop w-full", !responsive && "grid-active"]}
+    data-gap={gapVal}
+    style={{
+      gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+      gap: gapVal,
+      alignItems: "center",
+      justifyContent: "center",
+    }}
   >
     <slot />
   </div>
 </div>
+
+<script>
+  function partitionAstroDiamond() {
+    document.querySelectorAll('.exhuma-diamond-desktop').forEach((grid) => {
+      const children = Array.from(grid.children).filter(
+        (el) => !el.classList.contains('exhuma-diamond-column')
+      );
+      if (children.length === 0) return;
+      const pattern = [1, 2, 3, 4, 3, 2, 1];
+      const gap = (grid as HTMLElement).dataset.gap || '${gap}px';
+      grid.innerHTML = '';
+      let idx = 0;
+      for (let c = 0; c < pattern.length && idx < children.length; c++) {
+        const col = document.createElement('div');
+        col.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+        col.style.gridColumn = String(c + 1);
+        col.style.gap = gap;
+        for (let i = 0; i < pattern[c] && idx < children.length; i++) {
+          const itemWrap = document.createElement('div');
+          itemWrap.className = 'exhuma-diamond-item';
+          itemWrap.appendChild(children[idx]);
+          col.appendChild(itemWrap);
+          idx++;
+        }
+        grid.appendChild(col);
+      }
+    });
+  }
+  partitionAstroDiamond();
+  document.addEventListener('astro:page-load', partitionAstroDiamond);
+</script>
+
+<style>
+  .exhuma-diamond-desktop.grid-active {
+    display: grid !important;
+  }
+  .exhuma-diamond-desktop:not(.grid-active) {
+    display: none;
+  }
+  @container (min-width: 420px) {
+    .exhuma-diamond-desktop {
+      display: grid !important;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>
 `,
 				},
 			];
@@ -595,7 +770,7 @@ const gapVal = typeof gap === 'number' ? \`\${gap}px\` : gap;
 				{
 					filename: 'diamond-grid.blade.php',
 					language: 'php',
-					description: 'Laravel Blade component for Diamond Grid.',
+					description: 'Laravel Blade component for Diamond Grid with rhombic column distribution.',
 					code: `@props([
     'gap' => ${gap},
     'layout' => '${layout}',
@@ -605,15 +780,44 @@ const gapVal = typeof gap === 'number' ? \`\${gap}px\` : gap;
 
 @php
 $gapVal = is_numeric($gap) ? "{$gap}px" : $gap;
-$gridClass = $responsive ? 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 items-center justify-center w-full' : 'grid grid-cols-7 items-center justify-center w-full';
 $containerStyle = $responsive ? 'container-type: inline-size;' : '';
+$uniqueId = 'diamond_' . uniqid();
 @endphp
 
-<div {{ $attributes->merge(['class' => 'exhuma-diamond-container flex w-full flex-col gap-4']) }} style="{{ $containerStyle }}">
-    <div class="{{ $gridClass }}" style="gap: {{ $gapVal }};">
+<div {{ $attributes->merge(['class' => 'exhuma-diamond-container flex w-full flex-col gap-4']) }} style="{{ $containerStyle }}" id="{{ $uniqueId }}">
+    <div class="exhuma-diamond-desktop w-full" style="display: {{ $responsive ? 'none' : 'grid' }}; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: {{ $gapVal }}; align-items: center; justify-content: center;" data-gap="{{ $gapVal }}">
         {{ $slot }}
     </div>
 </div>
+
+<script>
+(function() {
+    var container = document.getElementById('{{ $uniqueId }}');
+    if (!container) return;
+    var grid = container.querySelector('.exhuma-diamond-desktop');
+    if (!grid) return;
+    var children = Array.from(grid.children).filter(function(el) { return !el.classList.contains('exhuma-diamond-column'); });
+    if (children.length === 0) return;
+    var pattern = [1, 2, 3, 4, 3, 2, 1];
+    var gap = grid.getAttribute('data-gap') || '{{ $gapVal }}';
+    grid.innerHTML = '';
+    var idx = 0;
+    for (var c = 0; c < pattern.length && idx < children.length; c++) {
+        var col = document.createElement('div');
+        col.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+        col.style.gridColumn = String(c + 1);
+        col.style.gap = gap;
+        for (var i = 0; i < pattern[c] && idx < children.length; i++) {
+            var itemWrap = document.createElement('div');
+            itemWrap.className = 'exhuma-diamond-item';
+            itemWrap.appendChild(children[idx]);
+            col.appendChild(itemWrap);
+            idx++;
+        }
+        grid.appendChild(col);
+    }
+})();
+</script>
 `,
 				},
 			];
@@ -631,24 +835,56 @@ $containerStyle = $responsive ? 'container-type: inline-size;' : '';
 
   elements.forEach((grid) => {
     const gap = options.gap || grid.getAttribute('data-gap') || '${gap}px';
+    const gapVal = typeof gap === 'number' ? gap + 'px' : gap;
     const responsive = options.responsive !== undefined ? options.responsive : grid.getAttribute('data-responsive') === 'true';
     const mode = options.mode || grid.getAttribute('data-mode') || '${mode}';
 
+    const rawChildren = Array.from(grid.children).filter(
+      (el) => !el.classList.contains('exhuma-diamond-column')
+    );
+    if (rawChildren.length === 0) return;
+
+    const pattern = [1, 2, 3, 4, 3, 2, 1];
+    const columns = 7;
+
+    grid.innerHTML = '';
     grid.style.display = 'grid';
-    grid.style.gap = typeof gap === 'number' ? gap + 'px' : gap;
+    grid.style.gridTemplateColumns = \`repeat(\${columns}, minmax(0, 1fr))\`;
+    grid.style.gap = gapVal;
     grid.style.alignItems = 'center';
     grid.style.justifyContent = 'center';
     grid.style.width = '100%';
 
     if (responsive) {
       grid.style.containerType = 'inline-size';
-      grid.classList.add('grid', 'grid-cols-2', 'sm:grid-cols-4', 'md:grid-cols-7');
-    } else {
-      grid.classList.add('grid', 'grid-cols-7');
     }
 
-    if (mode === 'isometric') {
-      grid.classList.add('exhuma-diamond-isometric');
+    let idx = 0;
+    for (let c = 0; c < pattern.length && idx < rawChildren.length; c++) {
+      const col = document.createElement('div');
+      col.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+      col.style.gridColumn = String(c + 1);
+      col.style.gap = gapVal;
+
+      const count = pattern[c];
+      for (let i = 0; i < count && idx < rawChildren.length; i++) {
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'exhuma-diamond-item';
+
+        if (mode === 'isometric') {
+          itemWrap.className += ' group relative flex aspect-square w-12 items-center justify-center rotate-45 rounded-xl border border-border/80 bg-card/80 p-2 text-center shadow-md backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-primary';
+          const inner = document.createElement('div');
+          inner.className = '-rotate-45 flex flex-col items-center justify-center';
+          inner.appendChild(rawChildren[idx]);
+          itemWrap.appendChild(inner);
+        } else {
+          itemWrap.appendChild(rawChildren[idx]);
+        }
+
+        col.appendChild(itemWrap);
+        idx++;
+      }
+      grid.appendChild(col);
     }
 
     instances.push(grid);
@@ -691,7 +927,7 @@ $containerStyle = $responsive ? 'container-type: inline-size;' : '';
 				{
 					filename: 'render.php',
 					language: 'php',
-					description: 'WordPress render template for Diamond Grid.',
+					description: 'WordPress render template for Diamond Grid with rhombic column partitioning.',
 					code: `<?php
 /**
  * Exhuma Diamond Grid Block Render Template
@@ -700,21 +936,51 @@ $gap = isset($attributes['gap']) ? $attributes['gap'] : ${gap};
 $gap_val = is_numeric($gap) ? "{$gap}px" : $gap;
 $responsive = isset($attributes['responsive']) ? (bool) $attributes['responsive'] : ${responsive ? 'true' : 'false'};
 $mode = isset($attributes['mode']) ? $attributes['mode'] : '${mode}';
+$unique_id = 'wp_diamond_' . wp_unique_id();
 
-$grid_cols = $responsive ? 'grid-cols-2 sm:grid-cols-4 md:grid-cols-7' : 'grid-cols-7';
 $container_style = $responsive ? 'container-type: inline-size;' : '';
 
 $wrapper_attributes = get_block_wrapper_attributes([
     'class' => 'exhuma-diamond-container flex w-full flex-col gap-4',
+    'id' => $unique_id,
     'style' => $container_style,
 ]);
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="grid <?php echo esc_attr($grid_cols); ?> items-center justify-center w-full" style="gap: <?php echo esc_attr($gap_val); ?>;">
+    <div class="exhuma-diamond-desktop w-full" data-gap="<?php echo esc_attr($gap_val); ?>" data-mode="<?php echo esc_attr($mode); ?>" style="display: <?php echo $responsive ? 'none' : 'grid'; ?>; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: <?php echo esc_attr($gap_val); ?>; align-items: center; justify-content: center;">
         <?php echo $content; ?>
     </div>
 </div>
+
+<script>
+(function() {
+    var container = document.getElementById('<?php echo esc_js($unique_id); ?>');
+    if (!container) return;
+    var grid = container.querySelector('.exhuma-diamond-desktop');
+    if (!grid) return;
+    var children = Array.from(grid.children).filter(function(el) { return !el.classList.contains('exhuma-diamond-column'); });
+    if (children.length === 0) return;
+    var pattern = [1, 2, 3, 4, 3, 2, 1];
+    var gap = grid.getAttribute('data-gap') || '<?php echo esc_js($gap_val); ?>';
+    grid.innerHTML = '';
+    var idx = 0;
+    for (var c = 0; c < pattern.length && idx < children.length; c++) {
+        var col = document.createElement('div');
+        col.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+        col.style.gridColumn = String(c + 1);
+        col.style.gap = gap;
+        for (var i = 0; i < pattern[c] && idx < children.length; i++) {
+            var itemWrap = document.createElement('div');
+            itemWrap.className = 'exhuma-diamond-item';
+            itemWrap.appendChild(children[idx]);
+            col.appendChild(itemWrap);
+            idx++;
+        }
+        grid.appendChild(col);
+    }
+})();
+</script>
 `,
 				},
 			];
@@ -725,22 +991,57 @@ $wrapper_attributes = get_block_wrapper_attributes([
 				{
 					filename: 'exhuma-diamond-grid.js',
 					language: 'javascript',
-					description: 'Autonomous Custom Element (<exhuma-diamond-grid>) with responsive container styling.',
+					description: 'Autonomous Custom Element (<exhuma-diamond-grid>) with authentic rhombic column partitioning.',
 					code: `class ExhumaDiamondGrid extends HTMLElement {
   connectedCallback() {
     const gap = this.getAttribute('gap') || '${gap}px';
+    const gapVal = typeof gap === 'number' ? gap + 'px' : gap;
     const responsive = this.hasAttribute('responsive') && this.getAttribute('responsive') !== 'false';
     const mode = this.getAttribute('mode') || '${mode}';
 
+    const children = Array.from(this.children).filter(
+      (el) => !el.classList.contains('exhuma-diamond-column')
+    );
+    if (children.length === 0) return;
+
     this.style.display = 'grid';
-    this.style.gridTemplateColumns = responsive ? 'repeat(auto-fit, minmax(80px, 1fr))' : 'repeat(7, minmax(0, 1fr))';
-    this.style.gap = typeof gap === 'number' ? gap + 'px' : gap;
+    this.style.gridTemplateColumns = 'repeat(7, minmax(0, 1fr))';
+    this.style.gap = gapVal;
     this.style.width = '100%';
     this.style.alignItems = 'center';
     this.style.justifyContent = 'center';
 
     if (responsive) {
       this.style.containerType = 'inline-size';
+    }
+
+    const pattern = [1, 2, 3, 4, 3, 2, 1];
+    this.innerHTML = '';
+    let idx = 0;
+
+    for (let c = 0; c < pattern.length && idx < children.length; c++) {
+      const col = document.createElement('div');
+      col.className = 'exhuma-diamond-column flex flex-col items-center justify-center';
+      col.style.gridColumn = String(c + 1);
+      col.style.gap = gapVal;
+
+      const count = pattern[c];
+      for (let i = 0; i < count && idx < children.length; i++) {
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'exhuma-diamond-item';
+        if (mode === 'isometric') {
+          itemWrap.className += ' group relative flex aspect-square w-12 items-center justify-center rotate-45 rounded-xl border border-border/80 bg-card/80 p-2 text-center shadow-md backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-primary';
+          const inner = document.createElement('div');
+          inner.className = '-rotate-45 flex flex-col items-center justify-center';
+          inner.appendChild(children[idx]);
+          itemWrap.appendChild(inner);
+        } else {
+          itemWrap.appendChild(children[idx]);
+        }
+        col.appendChild(itemWrap);
+        idx++;
+      }
+      this.appendChild(col);
     }
   }
 }
@@ -758,8 +1059,8 @@ if (!customElements.get('exhuma-diamond-grid')) {
 				{
 					filename: 'DiamondGrid.tsx',
 					language: 'tsx',
-					description: 'React Native Diamond Grid layout container.',
-					code: `import React from 'react';
+					description: 'React Native Diamond Grid layout container with authentic rhombic column distribution.',
+					code: `import React, { useMemo } from 'react';
 import { View, StyleSheet, type ViewProps } from 'react-native';
 
 export type DiamondGridMode = 'rhombic' | 'isometric';
@@ -770,6 +1071,8 @@ export interface DiamondGridProps extends ViewProps {
   responsive?: boolean;
 }
 
+const DIAMOND_PATTERN = [1, 2, 3, 4, 3, 2, 1];
+
 export const DiamondGrid: React.FC<DiamondGridProps> = ({
   gap = ${gap},
   mode = '${mode}' as DiamondGridMode,
@@ -777,19 +1080,51 @@ export const DiamondGrid: React.FC<DiamondGridProps> = ({
   style,
   children,
   ...props
-}) => (
-  <View style={[styles.container, { gap }, style]} {...props}>
-    {children}
-  </View>
-);
+}) => {
+  const childrenArray = useMemo(() => React.Children.toArray(children), [children]);
+
+  const columnGroups = useMemo(() => {
+    const cols: React.ReactNode[][] = Array.from({ length: 7 }, () => []);
+    let idx = 0;
+    for (let c = 0; c < DIAMOND_PATTERN.length && idx < childrenArray.length; c++) {
+      const count = DIAMOND_PATTERN[c];
+      for (let i = 0; i < count && idx < childrenArray.length; i++) {
+        cols[c].push(childrenArray[idx++]);
+      }
+    }
+    return cols;
+  }, [childrenArray]);
+
+  return (
+    <View style={[styles.container, { gap }, style]} {...props}>
+      {columnGroups.map((colItems, colIdx) => (
+        <View key={colIdx} style={[styles.column, { gap }]}>
+          {colItems.map((child, itemIdx) => (
+            <View key={itemIdx} style={styles.itemWrapper}>
+              {child}
+            </View>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+  },
+  column: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 `,
@@ -802,7 +1137,7 @@ const styles = StyleSheet.create({
 				{
 					filename: 'diamond_grid.dart',
 					language: 'dart',
-					description: 'Flutter Diamond Grid layout widget.',
+					description: 'Flutter Diamond Grid layout widget with authentic rhombic column distribution.',
 					code: `import 'package:flutter/material.dart';
 
 class ExhumaDiamondGrid extends StatelessWidget {
@@ -810,6 +1145,8 @@ class ExhumaDiamondGrid extends StatelessWidget {
   final double gap;
   final String mode;
   final bool responsive;
+
+  static const List<int> diamondPattern = [1, 2, 3, 4, 3, 2, 1];
 
   const ExhumaDiamondGrid({
     super.key,
@@ -819,15 +1156,46 @@ class ExhumaDiamondGrid extends StatelessWidget {
     this.responsive = ${responsive},
   });
 
+  List<List<Widget>> _partitionChildren() {
+    final List<List<Widget>> cols = List.generate(7, (_) => []);
+    int idx = 0;
+    for (int c = 0; c < diamondPattern.length && idx < children.length; c++) {
+      final count = diamondPattern[c];
+      for (int i = 0; i < count && idx < children.length; i++) {
+        cols[c].add(children[idx++]);
+      }
+    }
+    return cols;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final columnGroups = _partitionChildren();
+
     return Center(
-      child: Wrap(
-        spacing: gap,
-        runSpacing: gap,
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: children,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            for (int colIdx = 0; colIdx < columnGroups.length; colIdx++) ...[
+              if (colIdx > 0) SizedBox(width: gap),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  for (int itemIdx = 0; itemIdx < columnGroups[colIdx].length; itemIdx++) ...[
+                    if (itemIdx > 0) SizedBox(height: gap),
+                    columnGroups[colIdx][itemIdx],
+                  ],
+                ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

@@ -138,13 +138,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Spacious: { cols: 2, gap: 24, rowHeight: 200 },
 	},
 	'diamond-grid': {
-		'Classic Rhombic': { mode: 'rhombic', gap: 16, layout: 'auto', responsive: false },
-		'Isometric Crystalline': { mode: 'isometric', gap: 20, layout: 'large', responsive: false },
-		'Dense Symmetrical': { mode: 'rhombic', gap: 8, layout: 'large', responsive: false },
-		'Spacious Gallery': { mode: 'rhombic', gap: 24, layout: 'large', responsive: false },
-		'Compact Apex (5-Col)': { mode: 'rhombic', gap: 12, layout: 'medium', responsive: false },
-		'Isometric Mosaic': { mode: 'isometric', gap: 14, layout: 'medium', responsive: false },
-		'Mobile Responsive': { mode: 'rhombic', gap: 16, layout: 'auto', responsive: true },
+		Default: { mode: 'rhombic', gap: 16, layout: 'auto', responsive: false },
+		Isometric: { mode: 'isometric', gap: 20, layout: 'large', responsive: false },
+		Dense: { mode: 'rhombic', gap: 8, layout: 'large', responsive: false },
+		Spacious: { mode: 'rhombic', gap: 24, layout: 'large', responsive: false },
+		Compact: { mode: 'rhombic', gap: 12, layout: 'medium', responsive: false },
 	},
 	'scroll-timeline': {
 		Default: { curveWidth: 24, curveHeight: 40, accentColor: '#6366f1' },
@@ -245,7 +243,11 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 
 	// Presets
 	const presets = COMPONENT_PRESETS[selectedSlug] || {};
-	const [activePreset, setActivePreset] = useState<string>('Default');
+	const getInitialPreset = (slug: string) => {
+		const keys = Object.keys(COMPONENT_PRESETS[slug] || {});
+		return keys.includes('Default') ? 'Default' : keys[0] || 'Default';
+	};
+	const [activePreset, setActivePreset] = useState<string>(() => getInitialPreset(selectedSlug));
 
 	// Synchronize with query parameter when navigating from docs / showcase
 	useEffect(() => {
@@ -254,7 +256,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 			const newComp = COMPONENT_REGISTRY[querySlug];
 			if (newComp) {
 				setPropValues({ ...newComp.defaultProps });
-				setActivePreset('Default');
+				setActivePreset(getInitialPreset(querySlug));
 			}
 		}
 	}, [querySlug, selectedSlug]);
@@ -264,7 +266,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		const newComp = COMPONENT_REGISTRY[slug];
 		if (newComp) {
 			setPropValues({ ...newComp.defaultProps });
-			setActivePreset('Default');
+			setActivePreset(getInitialPreset(slug));
 		}
 	};
 
@@ -283,7 +285,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 
 	const resetProps = () => {
 		setPropValues({ ...component.defaultProps });
-		setActivePreset('Default');
+		setActivePreset(getInitialPreset(selectedSlug));
 	};
 
 	// Generate code
