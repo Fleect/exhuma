@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T19:20:16.508Z",
+	"generatedAt": "2026-09-27T20:08:38.920Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -713,7 +713,9 @@
 				{ "name": "value", "label": "Target Value", "type": "number", "defaultValue": 1000, "description": "The target numerical value to count towards." },
 				{ "name": "initialValue", "label": "Initial Value", "type": "number", "defaultValue": 0, "description": "Starting number at inception." },
 				{ "name": "duration", "label": "Duration (s)", "type": "number", "defaultValue": 1.5, "min": 0.5, "max": 5, "step": 0.25, "description": "Time in seconds to reach the target number." },
-				{ "name": "decimalPlaces", "label": "Decimals", "type": "number", "defaultValue": 0, "min": 0, "max": 3, "step": 1, "description": "Decimal precision to format." }
+				{ "name": "decimalPlaces", "label": "Decimals", "type": "number", "defaultValue": 0, "min": 0, "max": 3, "step": 1, "description": "Decimal precision to format." },
+				{ "name": "prefix", "label": "Prefix", "type": "string", "defaultValue": "", "description": "Leading currency or symbol (e.g. \"$\", \"+\", \"€\")." },
+				{ "name": "suffix", "label": "Suffix", "type": "string", "defaultValue": "", "description": "Trailing unit identifier (e.g. \"%\", \"ms\", \"k\", \"M\")." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],

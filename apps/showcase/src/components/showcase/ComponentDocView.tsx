@@ -164,9 +164,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Neon Emerald': { size: 200, duration: 6, borderWidth: 2, colorFrom: '#10b981', colorTo: '#06b6d4', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
 	},
 	'number-ticker': {
-		Default: { value: 1000, decimalPlaces: 0 },
-		Precision: { value: 98.65, decimalPlaces: 2 },
-		Large: { value: 1000000, decimalPlaces: 0 },
+		Default: { value: 1250, initialValue: 0, duration: 1.5, decimalPlaces: 0, prefix: '', suffix: '' },
+		'Currency ARR': { value: 148500, initialValue: 0, duration: 2.0, decimalPlaces: 0, prefix: '$', suffix: '' },
+		'Conversion Rate': { value: 99.94, initialValue: 0, duration: 1.8, decimalPlaces: 2, prefix: '', suffix: '%' },
+		'Sub-ms Latency': { value: 0.04, initialValue: 4.5, duration: 1.2, decimalPlaces: 2, prefix: '', suffix: 'ms' },
+		'Global Volume': { value: 24.8, initialValue: 0, duration: 2.2, decimalPlaces: 1, prefix: '+', suffix: 'M' },
 	},
 	'magnetic-button': {
 		Default: { strength: 0.35, radius: 120, springDamping: 18 },
@@ -291,6 +293,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 	const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 	const [cardSwipeResetKey, setCardSwipeResetKey] = React.useState<number>(0);
 	const [dockIconSet, setDockIconSet] = React.useState<'app' | 'social'>('app');
+	const [tickerResetKey, setTickerResetKey] = React.useState<number>(0);
 
 	// Presets
 	const presets = COMPONENT_PRESETS[component.slug] || {};
@@ -1715,15 +1718,48 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		// 18. Number Ticker
 		if (component.slug === 'number-ticker') {
 			const value = Number(propValues.value ?? 1000);
+			const initialValue = Number(propValues.initialValue ?? 0);
+			const duration = Number(propValues.duration ?? 1.5);
 			const decimalPlaces = Number(propValues.decimalPlaces ?? 0);
+			const prefix = String(propValues.prefix ?? '');
+			const suffix = String(propValues.suffix ?? '');
 
 			return (
-				<div className='border-border/80 bg-card mx-auto flex max-w-sm flex-col items-center justify-center rounded-2xl border p-8 text-center shadow-lg'>
-					<span className='kbd border-border bg-background/80 text-foreground text-3xs mb-2 font-mono font-bold uppercase'>ANALYTICAL EASING (rAF)</span>
-					<div className='text-foreground font-mono text-6xl font-black tracking-tight'>
-						$<NumberTicker value={value} decimalPlaces={decimalPlaces} />
+				<div className='border-border/80 bg-card/95 relative mx-auto flex max-w-sm flex-col items-center justify-center overflow-hidden rounded-2xl border p-4 text-center shadow-xl backdrop-blur-md sm:p-6 md:p-8'>
+					<div className='mb-3 flex w-full items-center justify-between'>
+						<span className='kbd border-border/70 bg-background/80 text-primary text-3xs font-mono font-bold tracking-wider uppercase'>ANALYTICAL EASING (rAF)</span>
+						<button
+							type='button'
+							onClick={() => setTickerResetKey((k) => k + 1)}
+							className='text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-pointer rounded-md p-1 transition-colors'
+							title='Re-run counter animation'
+						>
+							<RefreshCw className='size-3.5' />
+						</button>
 					</div>
-					<p className='text-muted-foreground mt-3 font-mono text-xs'>Continuous ease-out exponential ticker with zero Framer Motion dependencies.</p>
+
+					<div className='text-foreground my-2 font-mono text-4xl font-black tracking-tight sm:text-5xl md:text-6xl'>
+						<NumberTicker
+							key={`${tickerResetKey}-${value}-${initialValue}-${duration}-${decimalPlaces}-${prefix}-${suffix}`}
+							value={value}
+							initialValue={initialValue}
+							duration={duration}
+							decimalPlaces={decimalPlaces}
+							prefix={prefix}
+							suffix={suffix}
+							triggerOnScroll={false}
+						/>
+					</div>
+
+					<p className='text-muted-foreground mt-3 font-mono text-xs leading-relaxed'>Closed-form easeOutExpo with direct DOM manipulation and zero VDOM re-rendering.</p>
+
+					<div className='border-border/60 text-muted-foreground text-3xs mt-4 flex w-full items-center justify-between border-t pt-3 font-mono'>
+						<div className='flex items-center gap-1.5'>
+							<span className='size-1.5 animate-pulse rounded-full bg-emerald-500' />
+							<span>120 FPS DIRECT DOM</span>
+						</div>
+						<span className='text-foreground/80 font-medium'>{duration}s • 1-2^(-10t)</span>
+					</div>
 				</div>
 			);
 		}

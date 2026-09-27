@@ -44,12 +44,28 @@ export const numberTickerComponent: UniversalComponent = {
 			step: 1,
 			description: 'Decimal precision to format.',
 		},
+		{
+			name: 'prefix',
+			label: 'Prefix',
+			type: 'string',
+			defaultValue: '',
+			description: 'Leading currency or symbol (e.g. "$", "+", "€").',
+		},
+		{
+			name: 'suffix',
+			label: 'Suffix',
+			type: 'string',
+			defaultValue: '',
+			description: 'Trailing unit identifier (e.g. "%", "ms", "k", "M").',
+		},
 	],
 	defaultProps: {
 		value: 1000,
 		initialValue: 0,
 		duration: 1.5,
 		decimalPlaces: 0,
+		prefix: '',
+		suffix: '',
 	},
 	dependencies: CORE_COMPONENT_DEPENDENCIES,
 	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {

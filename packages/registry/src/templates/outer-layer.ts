@@ -11,6 +11,7 @@ import { getDiamondGridOuterFiles } from './generators/diamond-grid-generator';
 import { getMorphingTabsOuterFiles } from './generators/morphing-tabs-generator';
 import { getFloatingDockOuterFiles } from './generators/floating-dock-generator';
 import { getAccordionOuterFiles } from './generators/accordion-generator';
+import { getNumberTickerOuterFiles } from './generators/number-ticker-generator';
 import { getStackingCardsOuterFiles } from './generators/stacking-cards-generator';
 import { getSpotlightCardOuterFiles } from './generators/spotlight-card-generator';
 import { getBorderBeamOuterFiles } from './generators/border-beam-generator';
@@ -119,6 +120,11 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 
 	if (slug === 'accordion') {
 		const files = getAccordionOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'number-ticker') {
+		const files = getNumberTickerOuterFiles(flavor, props, isEjected);
 		if (files) return files;
 	}
 

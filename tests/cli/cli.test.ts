@@ -269,6 +269,28 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('focus-visible:ring-primary');
   });
 
+  it('installs real Number Ticker component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add number-ticker --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/NumberTicker.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('NumberTicker');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Number Ticker component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add number-ticker --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/NumberTicker.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('NumberTicker');
+    expect(code).toContain('easeOutExpo');
+    expect(code).toContain('IntersectionObserver');
+    expect(code).toContain('textContent');
+  });
+
   it('executes exhuma build to generate static registry JSON', () => {
     const buildOut = resolve(TEST_DIR, 'dist-registry');
     execSync(`node "${CLI_BIN}" build --output="${buildOut}"`, { cwd: TEST_DIR });

@@ -7,6 +7,7 @@ import { getDiamondGridUsage } from './generators/diamond-grid-generator';
 import { getMorphingTabsUsage } from './generators/morphing-tabs-generator';
 import { getFloatingDockUsage } from './generators/floating-dock-generator';
 import { getAccordionUsage } from './generators/accordion-generator';
+import { getNumberTickerUsage } from './generators/number-ticker-generator';
 
 /**
  * Generates a complete, production-ready usage example for a component across all 13 supported ecosystems.
@@ -77,6 +78,10 @@ export function generateComponentUsage(component: UniversalComponent, flavor: Ec
 
 	if (slug === 'accordion') {
 		return getAccordionUsage(flavor, props);
+	}
+
+	if (slug === 'number-ticker') {
+		return getNumberTickerUsage(flavor, props);
 	}
 
 	return getGenericComponentUsage(component, flavor, props);
