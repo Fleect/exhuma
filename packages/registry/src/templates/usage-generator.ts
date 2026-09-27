@@ -4284,8 +4284,8 @@ import ExpandableCard from '@/components/ui/ExpandableCard.vue';
   <div class="flex min-h-screen items-center justify-center p-8 bg-background">
     <div class="w-full max-w-sm">
       <ExpandableCard :duration="${duration}">
-        <template #card>
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+        <template #trigger>
+          <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
             <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
             <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Architecture</h4>
             <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
@@ -4317,7 +4317,7 @@ import ExpandableCard from '@/components/ui/ExpandableCard.vue';
 <div class="flex min-h-screen items-center justify-center p-8 bg-background">
   <div class="w-full max-w-sm">
     <ExpandableCard duration={${duration}}>
-      {#snippet card()}
+      {#snippet trigger()}
         <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
           <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
           <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
@@ -4350,13 +4350,13 @@ export default function ExpandableDemo() {
       <div class="w-full max-w-sm">
         <ExpandableCard
           duration={${duration}}
-          cardContent={
+          trigger={
             <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
               <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
               <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
             </div>
           }
-          expandedContent={
+          expanded={
             <div class="space-y-4">
               <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
             </div>
@@ -4374,14 +4374,24 @@ export default function ExpandableDemo() {
 			return {
 				filename: 'ExpandableDemo.astro',
 				language: 'astro',
-				description: 'Astro island with client hydration.',
+				description: 'Astro native component using ExpandableCard.',
 				code: `---
-import { ExpandableCard } from '@/components/ui/ExpandableCard';
+import ExpandableCard from '@/components/ui/ExpandableCard.astro';
 ---
 
 <div class="flex min-h-screen items-center justify-center p-8 bg-background">
   <div class="w-full max-w-sm">
-    <ExpandableCard client:load duration={${duration}} />
+    <ExpandableCard duration={${duration}}>
+      <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+        <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+        <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+      </div>
+      <div slot="expanded" class="space-y-4">
+        <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+        <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+      </div>
+    </ExpandableCard>
   </div>
 </div>
 `,
@@ -4394,18 +4404,27 @@ import { ExpandableCard } from '@/components/ui/ExpandableCard';
 				language: 'typescript',
 				description: 'Angular standalone component using ExpandableCard.',
 				code: `import { Component } from '@angular/core';
-import { ExpandableCardComponent } from '@/components/ui/expandable-card.component';
+import { ExhumaExpandableCardComponent } from '@/components/ui/expandable-card.component';
 
 @Component({
   selector: 'app-expandable-demo',
   standalone: true,
-  imports: [ExpandableCardComponent],
+  imports: [ExhumaExpandableCardComponent],
   template: \`
     <div class="flex min-h-screen items-center justify-center p-8 bg-background">
       <exhuma-expandable-card
         [duration]="${duration}"
         class="w-full max-w-sm"
-      />
+      >
+        <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+          <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        </div>
+        <div slot="expanded" class="space-y-4">
+          <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+          <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+        </div>
+      </exhuma-expandable-card>
     </div>
   \`
 })
@@ -4422,7 +4441,16 @@ export class ExpandableDemoComponent {}
 				code: `<script type="module" src="./exhuma-expandable-card.js"></script>
 
 <div class="flex min-h-screen items-center justify-center p-8 bg-background">
-  <exhuma-expandable-card duration="${duration}" class="w-full max-w-sm"></exhuma-expandable-card>
+  <exhuma-expandable-card duration="${duration}" class="w-full max-w-sm">
+    <div slot="trigger">
+      <span style="font-family:monospace;font-size:0.75rem;font-weight:bold;color:#6366f1;">CLICK TO EXPAND</span>
+      <h4 style="margin-top:0.5rem;font-size:1.125rem;font-weight:bold;color:#fff;">FLIP Morphing Card</h4>
+    </div>
+    <div slot="expanded">
+      <h3 style="font-size:1.5rem;font-weight:bold;color:#fff;">Modal Dialog</h3>
+      <p style="font-size:0.875rem;color:#a1a1aa;">Morphing completed without layout shifts.</p>
+    </div>
+  </exhuma-expandable-card>
 </div>
 `,
 			};
@@ -4430,16 +4458,39 @@ export class ExpandableDemoComponent {}
 
 		case 'vanilla': {
 			return {
-				filename: 'main.js',
-				language: 'javascript',
+				filename: 'index.html',
+				language: 'html',
 				description: 'Vanilla JavaScript kinetic expandable card initialization.',
-				code: `import { initExpandableCard } from './expandable-card.vanilla.js';
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <div
+      data-expandable-card
+      data-duration="${duration}"
+      class="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm hover:shadow-md cursor-pointer select-none"
+    >
+      <span class="font-mono text-xs font-bold text-indigo-400">CLICK TO EXPAND</span>
+      <h4 class="mt-2 text-lg font-bold text-white">FLIP Morphing Card</h4>
+      <p class="mt-1 text-xs text-zinc-400 leading-relaxed">Pure CSS matrix morphing.</p>
 
-const container = document.getElementById('expandable-card');
+      <div data-expanded-content class="hidden space-y-4">
+        <h3 class="text-2xl font-bold text-white">Modal Dialog</h3>
+        <p class="text-sm text-zinc-400">Morphing completed without layout shifts.</p>
+      </div>
+    </div>
+  </div>
 
-initExpandableCard(container, {
-  duration: ${duration},
-});
+  <script type="module">
+    import { initExpandableCard } from './expandable-card.vanilla.js';
+    initExpandableCard('[data-expandable-card]');
+  </script>
+</body>
+</html>
 `,
 			};
 		}
@@ -4450,7 +4501,20 @@ initExpandableCard(container, {
 				language: 'php',
 				description: 'Laravel Blade directive integration.',
 				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-background">
-    <x-exhuma.expandable-card :duration="${duration}" class="w-full max-w-sm" />
+    <x-exhuma.expandable-card :duration="${duration}" class="w-full max-w-sm">
+        <x-slot:trigger>
+            <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+        </x-slot:trigger>
+
+        <x-slot:expanded>
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+                <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+            </div>
+        </x-slot:expanded>
+    </x-exhuma.expandable-card>
 </div>
 `,
 			};
@@ -4480,19 +4544,39 @@ $duration = $attributes['duration'] ?? ${duration};
 				language: 'tsx',
 				description: 'React Native / Expo expandable card modal.',
 				code: `import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { ExpandableCard } from '@/components/ui/ExpandableCard';
 
 export default function ExpandableDemo() {
   return (
     <View style={styles.container}>
-      <ExpandableCard duration={${duration}} />
+      <ExpandableCard
+        duration={${duration}}
+        cardContent={
+          <View>
+            <Text style={styles.tag}>CLICK TO EXPAND</Text>
+            <Text style={styles.title}>FLIP Morphing Card</Text>
+            <Text style={styles.desc}>Pure matrix morphing.</Text>
+          </View>
+        }
+        expandedContent={
+          <View style={styles.expandedContent}>
+            <Text style={styles.expandedTitle}>Modal Dialog</Text>
+            <Text style={styles.desc}>Hardware-accelerated layout transition.</Text>
+          </View>
+        }
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16, backgroundColor: '#09090b' },
+  tag: { fontFamily: 'monospace', fontSize: 12, fontWeight: 'bold', color: '#6366f1' },
+  title: { marginTop: 8, fontSize: 18, fontWeight: 'bold', color: '#ffffff' },
+  desc: { marginTop: 4, fontSize: 14, color: '#a1a1aa' },
+  expandedContent: { gap: 12 },
+  expandedTitle: { fontSize: 22, fontWeight: 'bold', color: '#ffffff' },
 });
 `,
 			};
@@ -4504,7 +4588,7 @@ const styles = StyleSheet.create({
 				language: 'dart',
 				description: 'Flutter expandable card modal.',
 				code: `import 'package:flutter/material.dart';
-import 'package:exhuma/components/expandable_card.dart';
+import 'expandable_card.dart';
 
 class ExpandableDemo extends StatelessWidget {
   const ExpandableDemo({super.key});
@@ -4516,8 +4600,28 @@ class ExpandableDemo extends StatelessWidget {
       body: Center(
         child: SizedBox(
           width: 380,
-          child: ExhumaExpandableCard(
+          child: ExpandableCard(
             duration: ${duration},
+            cardContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('CLICK TO EXPAND', style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 12)),
+                SizedBox(height: 8),
+                Text('FLIP Morphing Card', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                SizedBox(height: 4),
+                Text('Pure matrix morphing.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
+            expandedContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Modal Dialog', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+                SizedBox(height: 8),
+                Text('Hardware-accelerated layout transition.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
           ),
         ),
       ),

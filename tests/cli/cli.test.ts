@@ -124,6 +124,18 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('ExpandableCard');
+    expect(code).toContain('ExpandableTrigger');
+  });
+
+  it('installs real Expandable Card component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add expandable-card --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/ExpandableCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('ExpandableCard');
+    expect(code).toContain('translate3d');
+    expect(code).toContain('createPortal');
   });
 
   it('installs real Diamond Grid component via exhuma add with ejected mode', () => {

@@ -3,6 +3,10 @@
 @use './utilities.scss';
 @use './animations.scss';
 
+html {
+	scrollbar-gutter: stable;
+}
+
 * {
 	border-color: hsl(var(--border));
 }

@@ -22,6 +22,7 @@ export interface ExpandableCardProps extends React.HTMLAttributes<HTMLDivElement
   expandedContent: React.ReactNode;
   duration?: number;
   expandedClassName?: string;
+  portalContainer?: HTMLElement | null;
 }
 
 /**
@@ -38,6 +39,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
   duration = ${duration},
   className,
   expandedClassName = '',
+  portalContainer,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -74,6 +76,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
       setIsExpanded(false);
       setIsClosing(false);
       firstRectRef.current = null;
+      triggerRef.current?.focus();
     }, duration);
   };
 
@@ -87,13 +90,39 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isExpanded]);
 
+  // Lock body scroll with scrollbar compensation to eliminate layout jumps
+  React.useLayoutEffect(() => {
+    if (!isExpanded) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    if (scrollbarWidth > 0) {
+      const currentPadding = parseFloat(window.getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = \`\${currentPadding + scrollbarWidth}px\`;
+    }
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [isExpanded]);
+
   // FLIP open animation
   React.useLayoutEffect(() => {
     if (!isExpanded || isClosing || !modalRef.current || !firstRectRef.current) return;
 
     const modal = modalRef.current;
     const lastRect = modal.getBoundingClientRect();
-    const firstRect = firstRectRef.current;
+    const currentTrigger = triggerRef.current?.getBoundingClientRect();
+    const firstRect = currentTrigger && currentTrigger.width > 0 ? {
+      left: currentTrigger.left,
+      top: currentTrigger.top,
+      width: currentTrigger.width,
+      height: currentTrigger.height,
+    } : firstRectRef.current;
 
     const dx = firstRect.left - lastRect.left;
     const dy = firstRect.top - lastRect.top;
@@ -118,6 +147,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
         modal.style.transition = \`transform \${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(duration * 0.8)}ms ease\`;
         modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
         modal.style.opacity = '1';
+        modal.focus();
 
         if (backdropRef.current) {
           backdropRef.current.style.transition = \`opacity \${duration}ms ease\`;
@@ -145,6 +175,16 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
     <>
       <div
         ref={triggerRef}
+        role="button"
+        tabIndex={0}
+        aria-haspopup="dialog"
+        aria-expanded={isExpanded}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            open();
+          }
+        }}
         className={clsx(
           'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md cursor-pointer select-none',
           className
@@ -165,8 +205,9 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
             />
             <div
               ref={modalRef}
+              tabIndex={-1}
               className={clsx(
-                'relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform',
+                'relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform',
                 expandedClassName
               )}
             >
@@ -183,7 +224,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
               </div>
             </div>
           </div>,
-          document.body
+          portalContainer || document.body
         )}
     </>
   );
@@ -636,7 +677,7 @@ export const ExpandableCard: Component<ExpandableCardProps> = (props) => {
 					filename: 'expandable-card.component.ts',
 					language: 'typescript',
 					description: 'Angular 18+ Standalone Expandable Card with signals.',
-					code: `import { Component, input, signal, ElementRef, viewChild } from '@angular/core';
+					code: `import { Component, input, signal, ElementRef, viewChild, effect } from '@angular/core';
 
 @Component({
   selector: 'exhuma-expandable-card',
@@ -653,10 +694,11 @@ export const ExpandableCard: Component<ExpandableCardProps> = (props) => {
 
     @if (isExpanded()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" (click)="close()"></div>
+        <div #backdrop class="fixed inset-0 bg-black/60 backdrop-blur-sm" (click)="close()"></div>
         <div
           #modal
-          class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform {{ expandedClass() }}"
+          tabindex="-1"
+          class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform {{ expandedClass() }}"
         >
           <div class="relative">
             <button
@@ -680,16 +722,88 @@ export class ExhumaExpandableCardComponent {
 
   readonly trigger = viewChild<ElementRef<HTMLDivElement>>('trigger');
   readonly modal = viewChild<ElementRef<HTMLDivElement>>('modal');
+  readonly backdrop = viewChild<ElementRef<HTMLDivElement>>('backdrop');
 
   readonly isExpanded = signal<boolean>(false);
   readonly isClosing = signal<boolean>(false);
 
+  private firstRect: { left: number; top: number; width: number; height: number } | null = null;
+  private invertTransform = 'translate3d(0, 0, 0) scale(1, 1)';
+  private closeTimer: any = null;
+
+  constructor() {
+    effect(() => {
+      if (this.isExpanded() && !this.isClosing()) {
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          const modalEl = this.modal()?.nativeElement;
+          const backdropEl = this.backdrop()?.nativeElement;
+          if (!modalEl || !this.firstRect) return;
+
+          const lastRect = modalEl.getBoundingClientRect();
+          const dx = this.firstRect.left - lastRect.left;
+          const dy = this.firstRect.top - lastRect.top;
+          const scaleX = lastRect.width > 0 ? this.firstRect.width / lastRect.width : 1;
+          const scaleY = lastRect.height > 0 ? this.firstRect.height / lastRect.height : 1;
+
+          this.invertTransform = \`translate3d(\${dx.toFixed(2)}px, \${dy.toFixed(2)}px, 0) scale(\${scaleX.toFixed(4)}, \${scaleY.toFixed(4)})\`;
+          modalEl.style.transformOrigin = 'top left';
+          modalEl.style.transform = this.invertTransform;
+          modalEl.style.opacity = '0.7';
+
+          if (backdropEl) {
+            backdropEl.style.opacity = '0';
+          }
+
+          requestAnimationFrame(() => {
+            modalEl.style.transition = \`transform \${this.duration()}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(this.duration() * 0.8)}ms ease\`;
+            modalEl.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+            modalEl.style.opacity = '1';
+            modalEl.focus();
+
+            if (backdropEl) {
+              backdropEl.style.transition = \`opacity \${this.duration()}ms ease\`;
+              backdropEl.style.opacity = '1';
+            }
+          });
+        });
+      }
+    });
+  }
+
   open() {
+    const triggerEl = this.trigger()?.nativeElement;
+    if (triggerEl) {
+      const r = triggerEl.getBoundingClientRect();
+      this.firstRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+    }
+    this.isClosing.set(false);
     this.isExpanded.set(true);
   }
 
   close() {
-    this.isExpanded.set(false);
+    if (this.isClosing() || !this.isExpanded()) return;
+    this.isClosing.set(true);
+
+    const modalEl = this.modal()?.nativeElement;
+    const backdropEl = this.backdrop()?.nativeElement;
+    if (modalEl) {
+      modalEl.style.transition = \`transform \${this.duration()}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(this.duration() * 0.7)}ms ease\`;
+      modalEl.style.transform = this.invertTransform;
+      modalEl.style.opacity = '0';
+    }
+    if (backdropEl) {
+      backdropEl.style.transition = \`opacity \${this.duration()}ms ease\`;
+      backdropEl.style.opacity = '0';
+    }
+
+    this.closeTimer = setTimeout(() => {
+      this.isExpanded.set(false);
+      this.isClosing.set(false);
+      document.body.style.overflow = '';
+      this.firstRect = null;
+      this.trigger()?.nativeElement.focus();
+    }, this.duration());
   }
 }
 `,
@@ -975,24 +1089,65 @@ export function initExpandableCard(selector = '[data-expandable-card]') {
         isOpen: false,
         duration: {{ $duration }},
         firstRect: null,
+        invertTransform: 'translate3d(0, 0, 0) scale(1, 1)',
         open() {
-            this.firstRect = this.$refs.trigger.getBoundingClientRect();
+            const r = this.$refs.trigger.getBoundingClientRect();
+            this.firstRect = { left: r.left, top: r.top, width: r.width, height: r.height };
             this.isOpen = true;
+            document.body.style.overflow = 'hidden';
+
+            this.$nextTick(() => {
+                const modal = this.$refs.modal;
+                if (!modal || !this.firstRect) return;
+                const last = modal.getBoundingClientRect();
+                const dx = this.firstRect.left - last.left;
+                const dy = this.firstRect.top - last.top;
+                const sx = last.width > 0 ? this.firstRect.width / last.width : 1;
+                const sy = last.height > 0 ? this.firstRect.height / last.height : 1;
+
+                this.invertTransform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + sx.toFixed(4) + ', ' + sy.toFixed(4) + ')';
+                modal.style.transformOrigin = 'top left';
+                modal.style.transform = this.invertTransform;
+                modal.style.opacity = '0.7';
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        modal.style.transition = 'transform ' + this.duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(this.duration * 0.8) + 'ms ease';
+                        modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+                        modal.style.opacity = '1';
+                        modal.focus();
+                    });
+                });
+            });
         },
         close() {
-            this.isOpen = false;
+            const modal = this.$refs.modal;
+            if (modal) {
+                modal.style.transition = 'transform ' + this.duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(this.duration * 0.7) + 'ms ease';
+                modal.style.transform = this.invertTransform;
+                modal.style.opacity = '0';
+            }
+            setTimeout(() => {
+                this.isOpen = false;
+                document.body.style.overflow = '';
+                this.$refs.trigger?.focus();
+            }, this.duration);
         }
     }"
     class="relative inline-block w-full"
 >
     <div
         x-ref="trigger"
+        role="button"
+        tabindex="0"
         @click="open()"
+        @keydown.enter.prevent="open()"
+        @keydown.space.prevent="open()"
         {{ $attributes->merge([
             'class' => 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md cursor-pointer select-none',
         ]) }}
     >
-        {{ $trigger ?? '' }}
+        {{ $trigger ?? $slot }}
     </div>
 
     <template x-teleport="body">
@@ -1001,16 +1156,20 @@ export function initExpandableCard(selector = '[data-expandable-card]') {
             class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
             role="dialog"
             aria-modal="true"
+            @keydown.escape.window="close()"
         >
             <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="close()"></div>
             <div
-                class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl"
+                x-ref="modal"
+                tabindex="-1"
+                class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform"
             >
                 <div class="relative">
                     <button
                         type="button"
                         class="absolute top-0 right-0 flex size-8 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         @click="close()"
+                        aria-label="Close dialog"
                     >
                         ✕
                     </button>
@@ -1061,8 +1220,92 @@ $duration = isset($attributes['duration']) ? (int)$attributes['duration'] : ${du
     class="wp-block-exhuma-expandable-card relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm cursor-pointer select-none"
     data-duration="<?php echo esc_attr($duration); ?>"
 >
-    <?php echo $content; ?>
+    <?php echo !empty($content) ? $content : '<div class="space-y-2"><span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span><h4 class="text-lg font-bold">Expandable Card</h4></div>'; ?>
 </div>
+
+<template class="exhuma-modal-template">
+    <div class="exhuma-modal-portal fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+        <div class="exhuma-backdrop fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="exhuma-modal-content relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform">
+            <div class="relative">
+                <button type="button" class="exhuma-close-btn absolute top-0 right-0 flex size-8 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground transition-colors cursor-pointer" aria-label="Close dialog">
+                    ✕
+                </button>
+                <div class="exhuma-modal-body space-y-4">
+                    <h3 class="text-2xl font-bold">Modal Dialog</h3>
+                    <p class="text-sm text-muted-foreground">FLIP modal transition executed smoothly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+(function() {
+  function initWordPressExpandables() {
+    document.querySelectorAll('.wp-block-exhuma-expandable-card').forEach(function(card) {
+      if (card.__exhuma_init) return;
+      card.__exhuma_init = true;
+
+      var duration = parseInt(card.dataset.duration || '${duration}', 10);
+      var template = card.nextElementSibling;
+      while (template && !template.classList.contains('exhuma-modal-template')) {
+        template = template.nextElementSibling;
+      }
+      if (!template) return;
+
+      card.addEventListener('click', function() {
+        var firstRect = card.getBoundingClientRect();
+        var clone = template.content.cloneNode(true);
+        var portal = clone.querySelector('.exhuma-modal-portal');
+        var modal = clone.querySelector('.exhuma-modal-content');
+        var backdrop = clone.querySelector('.exhuma-backdrop');
+        var closeBtn = clone.querySelector('.exhuma-close-btn');
+
+        document.body.appendChild(portal);
+        document.body.style.overflow = 'hidden';
+
+        var lastRect = modal.getBoundingClientRect();
+        var dx = firstRect.left - lastRect.left;
+        var dy = firstRect.top - lastRect.top;
+        var scaleX = lastRect.width > 0 ? firstRect.width / lastRect.width : 1;
+        var scaleY = lastRect.height > 0 ? firstRect.height / lastRect.height : 1;
+
+        modal.style.transformOrigin = 'top left';
+        modal.style.transform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + scaleX.toFixed(4) + ', ' + scaleY.toFixed(4) + ')';
+        modal.style.opacity = '0.7';
+
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            modal.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(duration * 0.8) + 'ms ease';
+            modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+            modal.style.opacity = '1';
+          });
+        });
+
+        function dismiss() {
+          modal.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(duration * 0.7) + 'ms ease';
+          modal.style.transform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + scaleX.toFixed(4) + ', ' + scaleY.toFixed(4) + ')';
+          modal.style.opacity = '0';
+          setTimeout(function() {
+            portal.remove();
+            document.body.style.overflow = '';
+          }, duration);
+        }
+
+        backdrop.addEventListener('click', dismiss);
+        closeBtn.addEventListener('click', dismiss);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWordPressExpandables);
+  } else {
+    initWordPressExpandables();
+  }
+})();
+</script>
 `,
 				},
 			];

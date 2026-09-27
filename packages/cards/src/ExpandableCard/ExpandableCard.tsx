@@ -12,6 +12,7 @@ interface ExpandableContextValue {
 	close: () => void;
 	triggerRef: React.RefObject<HTMLDivElement | null>;
 	firstRectRef: React.MutableRefObject<DOMRectSnapshot | null>;
+	portalContainer?: HTMLElement | null;
 }
 
 const ExpandableContext = createContext<ExpandableContextValue | null>(null);
@@ -24,6 +25,7 @@ export interface ExpandableCardProps {
 	className?: string;
 	expandedClassName?: string;
 	onOpenChange?: (open: boolean) => void;
+	portalContainer?: HTMLElement | null;
 }
 
 /**
@@ -40,7 +42,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> & {
 	Trigger: typeof ExpandableTrigger;
 	Content: typeof ExpandableContent;
 	Close: typeof ExpandableClose;
-} = ({ children, cardContent, expandedContent, duration = 360, className = '', expandedClassName = '', onOpenChange }) => {
+} = ({ children, cardContent, expandedContent, duration = 360, className = '', expandedClassName = '', onOpenChange, portalContainer }) => {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 	const triggerRef = useRef<HTMLDivElement | null>(null);
@@ -91,7 +93,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> & {
 	// If using shorthand props
 	if (cardContent && expandedContent) {
 		return (
-			<ExpandableRoot isExpanded={isExpanded} isClosing={isClosing} duration={duration} open={open} close={close} triggerRef={triggerRef} firstRectRef={firstRectRef}>
+			<ExpandableRoot isExpanded={isExpanded} isClosing={isClosing} duration={duration} open={open} close={close} triggerRef={triggerRef} firstRectRef={firstRectRef} portalContainer={portalContainer}>
 				<ExpandableTrigger className={className}>{cardContent}</ExpandableTrigger>
 				<ExpandableContent className={expandedClassName}>
 					<div className='relative'>
@@ -104,7 +106,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> & {
 	}
 
 	return (
-		<ExpandableRoot isExpanded={isExpanded} isClosing={isClosing} duration={duration} open={open} close={close} triggerRef={triggerRef} firstRectRef={firstRectRef}>
+		<ExpandableRoot isExpanded={isExpanded} isClosing={isClosing} duration={duration} open={open} close={close} triggerRef={triggerRef} firstRectRef={firstRectRef} portalContainer={portalContainer}>
 			{children}
 		</ExpandableRoot>
 	);
@@ -119,6 +121,7 @@ export function ExpandableRoot({
 	close,
 	triggerRef,
 	firstRectRef,
+	portalContainer,
 }: {
 	children: ReactNode;
 	isExpanded: boolean;
@@ -128,8 +131,9 @@ export function ExpandableRoot({
 	close: () => void;
 	triggerRef: React.RefObject<HTMLDivElement | null>;
 	firstRectRef: React.MutableRefObject<DOMRectSnapshot | null>;
+	portalContainer?: HTMLElement | null;
 }) {
-	return <ExpandableContext.Provider value={{ isExpanded, isClosing, duration, open, close, triggerRef, firstRectRef }}>{children}</ExpandableContext.Provider>;
+	return <ExpandableContext.Provider value={{ isExpanded, isClosing, duration, open, close, triggerRef, firstRectRef, portalContainer }}>{children}</ExpandableContext.Provider>;
 }
 
 export const ExpandableTrigger = memo<React.HTMLAttributes<HTMLDivElement>>(({ children, className = '', onClick, ...props }) => {
@@ -186,6 +190,26 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 		return () => window.removeEventListener('keydown', onKeyDown);
 	}, [isExpanded, close]);
 
+	// Lock body scroll with scrollbar compensation to eliminate layout jumps
+	useLayoutEffect(() => {
+		if (!isExpanded) return;
+
+		const originalOverflow = document.body.style.overflow;
+		const originalPaddingRight = document.body.style.paddingRight;
+		const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+		if (scrollbarWidth > 0) {
+			const currentPadding = parseFloat(window.getComputedStyle(document.body).paddingRight) || 0;
+			document.body.style.paddingRight = `${currentPadding + scrollbarWidth}px`;
+		}
+		document.body.style.overflow = 'hidden';
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+			document.body.style.paddingRight = originalPaddingRight;
+		};
+	}, [isExpanded]);
+
 	// FLIP animation execution on open
 	useLayoutEffect(() => {
 		if (!ctx.isExpanded || isClosing || !modalRef.current || !ctx.firstRectRef.current) return;
@@ -193,7 +217,15 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 		const modal = modalRef.current;
 		const backdrop = backdropRef.current;
 		const lastRect = modal.getBoundingClientRect();
-		const firstRect = ctx.firstRectRef.current;
+
+		// Re-measure trigger dynamically after scroll lock to ensure 100% geometry coherence
+		const currentTrigger = ctx.triggerRef.current?.getBoundingClientRect();
+		const firstRect = currentTrigger && currentTrigger.width > 0 ? {
+			left: currentTrigger.left,
+			top: currentTrigger.top,
+			width: currentTrigger.width,
+			height: currentTrigger.height,
+		} : ctx.firstRectRef.current;
 
 		const delta = calculateFLIPDelta(firstRect, lastRect);
 		const invertTransform = generateInvertTransform(delta);
@@ -216,6 +248,7 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 				modal.style.transition = `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${Math.round(duration * 0.8)}ms ease`;
 				modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
 				modal.style.opacity = '1';
+				modal.focus();
 
 				if (backdrop) {
 					backdrop.style.transition = `opacity ${duration}ms ease`;
@@ -223,7 +256,7 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 				}
 			});
 		});
-	}, [ctx.isExpanded, isClosing, duration, ctx.firstRectRef]);
+	}, [ctx.isExpanded, isClosing, duration, ctx.firstRectRef, ctx.triggerRef]);
 
 	// Reverse FLIP animation on close
 	useEffect(() => {
@@ -250,11 +283,16 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 			<div ref={backdropRef} className='fixed inset-0 bg-black/60 backdrop-blur-sm' onClick={ctx.close} />
 
 			{/* Modal Container */}
-			<div ref={modalRef} className={`border-border bg-card relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border p-6 shadow-2xl will-change-transform ${className}`} {...props}>
+			<div
+				ref={modalRef}
+				tabIndex={-1}
+				className={`border-border bg-card relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border p-6 shadow-2xl outline-none will-change-transform ${className}`}
+				{...props}
+			>
 				{children}
 			</div>
 		</div>,
-		document.body
+		ctx.portalContainer || document.body
 	);
 });
 ExpandableContent.displayName = 'ExpandableContent';

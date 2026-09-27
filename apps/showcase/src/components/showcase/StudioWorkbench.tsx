@@ -203,8 +203,9 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 	'expandable-card': {
 		Default: { duration: 360 },
 		Snappy: { duration: 220 },
-		Cinematic: { duration: 480 },
+		Cinematic: { duration: 520 },
 		'Ultra Fast': { duration: 160 },
+		Smooth: { duration: 420 },
 	},
 	'cursor-tooltip': {
 		Default: { springDamping: 22 },

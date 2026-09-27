@@ -36,6 +36,12 @@ export const expandableCardComponent: UniversalComponent = {
 				snakeName: 'expandable_card',
 				description: 'Mathematical FLIP morphing card dialog with zero layout shifts.',
 				defaultTailwindClass: 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md cursor-pointer',
+				compoundParts: [
+					{ name: 'ExpandableRoot', primitiveExport: 'Root' },
+					{ name: 'ExpandableTrigger', primitiveExport: 'Trigger' },
+					{ name: 'ExpandableContent', primitiveExport: 'Content' },
+					{ name: 'ExpandableClose', primitiveExport: 'Close' },
+				],
 			},
 			flavor,
 			props,
