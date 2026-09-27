@@ -23,6 +23,29 @@ import { cursorTooltipComponent } from './components/cursor-tooltip';
 export * from './schema';
 export { generateComponentUsage } from './templates/usage-generator';
 
+export {
+	stackingCardsComponent,
+	horizontalScrollerComponent,
+	cssMasonryComponent,
+	autoGridComponent,
+	tiltCardComponent,
+	spotlightCardComponent,
+	morphingTabsComponent,
+	accordionComponent,
+	infiniteMarqueeComponent,
+	bentoGridComponent,
+	diamondGridComponent,
+	borderBeamComponent,
+	animatedSphereComponent,
+	floatingDockComponent,
+	numberTickerComponent,
+	magneticButtonComponent,
+	cardSwipeStackComponent,
+	comparisonSliderComponent,
+	expandableCardComponent,
+	cursorTooltipComponent,
+};
+
 export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'stacking-cards': stackingCardsComponent,
 	'horizontal-scroller': horizontalScrollerComponent,

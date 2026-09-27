@@ -220,12 +220,15 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 
 		// Re-measure trigger dynamically after scroll lock to ensure 100% geometry coherence
 		const currentTrigger = ctx.triggerRef.current?.getBoundingClientRect();
-		const firstRect = currentTrigger && currentTrigger.width > 0 ? {
-			left: currentTrigger.left,
-			top: currentTrigger.top,
-			width: currentTrigger.width,
-			height: currentTrigger.height,
-		} : ctx.firstRectRef.current;
+		const firstRect =
+			currentTrigger && currentTrigger.width > 0
+				? {
+						left: currentTrigger.left,
+						top: currentTrigger.top,
+						width: currentTrigger.width,
+						height: currentTrigger.height,
+					}
+				: ctx.firstRectRef.current;
 
 		const delta = calculateFLIPDelta(firstRect, lastRect);
 		const invertTransform = generateInvertTransform(delta);
@@ -286,7 +289,7 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 			<div
 				ref={modalRef}
 				tabIndex={-1}
-				className={`border-border bg-card relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border p-6 shadow-2xl outline-none will-change-transform ${className}`}
+				className={`border-border bg-card relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border p-6 shadow-2xl will-change-transform outline-none ${className}`}
 				{...props}
 			>
 				{children}

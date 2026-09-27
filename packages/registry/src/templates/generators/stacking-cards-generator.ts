@@ -1,10 +1,6 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
-export function getStackingCardsOuterFiles(
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	isEjected: boolean
-): ComponentFilePayload[] | null {
+export function getStackingCardsOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const topStart = Number(props.topStart ?? 20);
 	const topIncrement = Number(props.topIncrement ?? 28);
 	const cardGap = Number(props.cardGap ?? 20);

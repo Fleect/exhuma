@@ -1,10 +1,6 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
-export function getSpotlightCardOuterFiles(
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	isEjected: boolean
-): ComponentFilePayload[] | null {
+export function getSpotlightCardOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const radius = Number(props.radius ?? 350);
 	const color = String(props.color ?? '#6366f1');
 	const borderColor = String(props.borderColor ?? '#818cf8');
@@ -14,8 +10,7 @@ export function getSpotlightCardOuterFiles(
 	const smoothing = Number(props.smoothing ?? 0.2);
 	const disabled = Boolean(props.disabled ?? false);
 
-	const defaultClass =
-		'exhuma-spotlight-card group relative overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-900/5 transition-colors dark:border-neutral-800 dark:bg-neutral-900/40';
+	const defaultClass = 'exhuma-spotlight-card group relative overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-900/5 transition-colors dark:border-neutral-800 dark:bg-neutral-900/40';
 
 	switch (flavor) {
 		case 'react':

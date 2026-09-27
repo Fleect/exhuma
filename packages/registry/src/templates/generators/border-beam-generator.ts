@@ -1,10 +1,6 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
-export function getBorderBeamOuterFiles(
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	isEjected: boolean
-): ComponentFilePayload[] | null {
+export function getBorderBeamOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const size = Number(props.size ?? 200);
 	const duration = Number(props.duration ?? 8);
 	const borderWidth = Number(props.borderWidth ?? 2);
@@ -19,12 +15,7 @@ export function getBorderBeamOuterFiles(
 	const defaultClass = 'exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit]';
 
 	const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
-	const endColor =
-		clampedEndOpacity <= 0
-			? 'transparent'
-			: clampedEndOpacity >= 1
-				? colorTo
-				: `color-mix(in srgb, ${colorTo} ${Math.round(clampedEndOpacity * 100)}%, transparent)`;
+	const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : `color-mix(in srgb, ${colorTo} ${Math.round(clampedEndOpacity * 100)}%, transparent)`;
 	const pathRadius = Math.min(size, 200);
 
 	switch (flavor) {

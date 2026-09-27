@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T10:35:19.610Z",
+	"generatedAt": "2026-09-27T13:22:13.681Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -666,25 +666,42 @@
 			"name": "Floating Dock",
 			"slug": "floating-dock",
 			"category": "navigation",
-			"description": "macOS-style kinetic floating dock with continuous Gaussian proximity distribution and zero external animation libraries.",
+			"description": "High-performance kinetic floating application dock with continuous C1-cosine proximity distribution, multi-directional orientation, and zero layout thrashing.",
 			"version": "1.0.0",
 			"props": [
-				{ "name": "baseSize", "label": "Base Item Size (px)", "type": "number", "defaultValue": 44, "min": 32, "max": 64, "step": 2, "description": "Default width and height of dock items at rest." },
-				{ "name": "maxMagnification", "label": "Max Boost Factor", "type": "number", "defaultValue": 0.6, "min": 0.2, "max": 1, "step": 0.05, "description": "Maximum scale multiplier at zero distance." },
 				{
-					"name": "influenceRadius",
-					"label": "Influence Radius (px)",
-					"type": "number",
-					"defaultValue": 70,
-					"min": 40,
-					"max": 140,
-					"step": 5,
-					"description": "Standard deviation spread of the Gaussian proximity curve."
+					"name": "direction",
+					"label": "Dock Direction / Orientation",
+					"type": "select",
+					"defaultValue": "bottom",
+					"options": [
+						{ "label": "Bottom (Default)", "value": "bottom" },
+						{ "label": "Top Bar", "value": "top" },
+						{ "label": "Left Rail", "value": "left" },
+						{ "label": "Right Rail", "value": "right" }
+					],
+					"description": "Orientation and shelf alignment edge of the dock and tooltip positions."
+				},
+				{ "name": "baseSize", "label": "Base Item Size (px)", "type": "number", "defaultValue": 36, "min": 32, "max": 64, "step": 2, "description": "Default width and height of dock items at rest." },
+				{ "name": "maxMagnification", "label": "Max Boost Factor", "type": "number", "defaultValue": 0.75, "min": 0.1, "max": 1.2, "step": 0.05, "description": "Maximum scale multiplier at zero distance." },
+				{ "name": "influenceRadius", "label": "Influence Radius (px)", "type": "number", "defaultValue": 60, "min": 40, "max": 160, "step": 5, "description": "Influence spread of the Gaussian proximity curve." },
+				{ "name": "showLabels", "label": "Show App Labels", "type": "boolean", "defaultValue": true, "description": "Display macOS-style frosted tooltips on icon hover/focus." },
+				{
+					"name": "panelStyle",
+					"label": "Dock Panel Style",
+					"type": "select",
+					"defaultValue": "translucent",
+					"options": [
+						{ "label": "macOS Frosted Glass", "value": "glass" },
+						{ "label": "Dark Translucent", "value": "translucent" },
+						{ "label": "Frameless Minimal", "value": "minimal" }
+					],
+					"description": "Visual backing shelf styling of the dock."
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@exhuma/core", "clsx", "@tabler/icons-react"],
+				"nextjs": ["@exhuma/core", "clsx", "@tabler/icons-react"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],

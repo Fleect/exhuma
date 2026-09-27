@@ -19,6 +19,23 @@ import {
 	IconRefresh as RefreshCw,
 	IconArrowsMaximize as Maximize,
 	IconArrowsMinimize as Minimize,
+	IconLayoutDashboard,
+	IconChartBar,
+	IconFolders,
+	IconDatabase,
+	IconUsers,
+	IconSettings,
+	IconHome,
+	IconBook,
+	IconCreditCard,
+	IconMail,
+	IconBrandGithub,
+	IconBrandX,
+	IconBrandDiscord,
+	IconBrandLinkedin,
+	IconBrandYoutube,
+	IconShare,
+	IconSearch,
 } from '@tabler/icons-react';
 import { COMPONENT_REGISTRY, ALL_COMPONENTS, EcosystemFlavor, ECOSYSTEM_LABELS, generateComponentUsage } from '@/registry';
 import { ECOSYSTEM_COUNT, COMPONENT_COUNT } from '@/components/docs/docs-stats';
@@ -149,11 +166,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Rapid: { color: '#8b5cf6', speed: 2.0, radiusScale: 0.475 },
 		Subtle: { color: '#06b6d4', speed: 0.5, radiusScale: 0.4 },
 	},
-	'floating-dock': {
-		Default: { baseSize: 44, maxMagnification: 0.6, influenceRadius: 70 },
-		Compact: { baseSize: 36, maxMagnification: 0.5, influenceRadius: 55 },
-		Dramatic: { baseSize: 44, maxMagnification: 0.9, influenceRadius: 90 },
-	},
 	'number-ticker': {
 		Default: { value: 1000, decimalPlaces: 0 },
 		Precision: { value: 98.65, decimalPlaces: 2 },
@@ -189,6 +201,13 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Default: { springDamping: 22 },
 		Elastic: { springDamping: 14 },
 		Instant: { springDamping: 35 },
+	},
+	'floating-dock': {
+		Default: { direction: 'bottom', baseSize: 36, maxMagnification: 0.75, influenceRadius: 60, showLabels: true, panelStyle: 'translucent' },
+		'Social Share': { direction: 'bottom', baseSize: 42, maxMagnification: 0.6, influenceRadius: 80, showLabels: true, panelStyle: 'glass' },
+		'Compact Mobile': { direction: 'bottom', baseSize: 38, maxMagnification: 0.5, influenceRadius: 65, showLabels: true, panelStyle: 'glass' },
+		'Vertical Rail': { direction: 'right', baseSize: 40, maxMagnification: 0.7, influenceRadius: 75, showLabels: true, panelStyle: 'minimal' },
+		'Minimal Floating': { direction: 'bottom', baseSize: 44, maxMagnification: 0.85, influenceRadius: 90, showLabels: true, panelStyle: 'minimal' },
 	},
 };
 
@@ -274,6 +293,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 	const [zoomScale, setZoomScale] = React.useState<number>(100);
 	const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 	const [cardSwipeResetKey, setCardSwipeResetKey] = React.useState<number>(0);
+	const [dockIconSet, setDockIconSet] = React.useState<'app' | 'social'>('app');
 
 	// Presets
 	const presets = COMPONENT_PRESETS[component.slug] || {};
@@ -292,6 +312,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 	React.useEffect(() => {
 		setPropValues({ ...component.defaultProps });
 		setActivePreset(getInitialPreset(component.slug));
+		setDockIconSet('app');
 	}, [component]);
 
 	// Sticky dock elevation observer with exact header clearance offset (Big-Ω rAF batching)
@@ -343,6 +364,11 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 
 	const applyPreset = (presetName: string) => {
 		setActivePreset(presetName);
+		if (presetName === 'Social Share' || presetName === 'Vertical Rail') {
+			setDockIconSet('social');
+		} else {
+			setDockIconSet('app');
+		}
 		const presetValues = presets[presetName];
 		if (presetValues) {
 			setPropValues({ ...component.defaultProps, ...presetValues });
@@ -360,6 +386,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 	const resetProps = () => {
 		setPropValues({ ...component.defaultProps });
 		setActivePreset(getInitialPreset(component.slug));
+		setDockIconSet('app');
 	};
 
 	// 1. Synthesize Usage Example snippet for consumer application
@@ -1473,25 +1500,221 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 
 		// 16. Floating Dock
 		if (component.slug === 'floating-dock') {
+			const direction = (propValues.direction as any) || 'bottom';
 			const baseSize = Number(propValues.baseSize ?? 44);
-			const maxMagnification = Number(propValues.maxMagnification ?? 0.6);
-			const influenceRadius = Number(propValues.influenceRadius ?? 70);
+			const maxMagnification = Number(propValues.maxMagnification ?? 0.65);
+			const influenceRadius = Number(propValues.influenceRadius ?? 85);
+			const showLabels = propValues.showLabels !== false;
+			const panelStyle = (propValues.panelStyle as any) || 'glass';
+
+			const dockPositionClass =
+				direction === 'bottom'
+					? 'bottom-3.5 left-1/2 -translate-x-1/2'
+					: direction === 'top'
+						? 'top-14 left-1/2 -translate-x-1/2'
+						: direction === 'left'
+							? 'left-3.5 top-1/2 -translate-y-1/2'
+							: 'right-3.5 top-1/2 -translate-y-1/2';
+
+			const appDockItems = [
+				{
+					title: 'Dashboard',
+					icon: (
+						<div className='border-primary/30 bg-primary/10 text-primary flex size-full items-center justify-center rounded-xl border shadow-xs'>
+							<IconLayoutDashboard className='size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Projects',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconFolders className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Analytics',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconChartBar className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Database',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconDatabase className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'AI Copilot',
+					icon: (
+						<div className='flex size-full items-center justify-center rounded-xl border border-purple-500/25 bg-purple-500/10 text-purple-400 shadow-xs transition-colors hover:border-purple-500/50'>
+							<Sparkles className='size-[60%]' />
+						</div>
+					),
+				},
+				{
+					title: 'Terminal',
+					icon: (
+						<div className='flex size-full items-center justify-center rounded-xl border border-emerald-500/25 bg-emerald-500/10 text-emerald-400 shadow-xs transition-colors hover:border-emerald-500/50'>
+							<Terminal className='size-[60%]' stroke={2} />
+						</div>
+					),
+				},
+				{
+					title: 'Team',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconUsers className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Settings',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconSettings className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+			];
+
+			const socialItems = [
+				{
+					title: 'GitHub',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconBrandGithub className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'X / Twitter',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconBrandX className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Discord',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconBrandDiscord className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'LinkedIn',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconBrandLinkedin className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'YouTube',
+					icon: (
+						<div className='border-border/80 bg-card/90 hover:border-primary/40 hover:bg-accent/40 text-foreground flex size-full items-center justify-center rounded-xl border shadow-xs transition-colors'>
+							<IconBrandYoutube className='text-muted-foreground size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+				{
+					title: 'Share Link',
+					icon: (
+						<div className='border-primary/30 bg-primary/10 text-primary flex size-full items-center justify-center rounded-xl border shadow-xs'>
+							<IconShare className='size-[60%]' stroke={1.75} />
+						</div>
+					),
+				},
+			];
+
+			const isSocial = dockIconSet === 'social';
+			const isMobile = viewportMode === 'mobile' || activePreset === 'Compact Mobile';
+			const effectiveAppDockItems = isMobile ? [appDockItems[0], appDockItems[1], appDockItems[2], appDockItems[4], appDockItems[7]] : appDockItems;
+			const activeDockItems = isSocial ? socialItems : effectiveAppDockItems;
 
 			return (
-				<div className='mx-auto flex w-full max-w-md flex-col items-center justify-center py-12'>
-					<p className='text-muted-foreground mb-6 font-mono text-xs'>Hover over icons to experience Gaussian scale distribution</p>
-					<FloatingDock
-						baseSize={baseSize}
-						maxMagnification={maxMagnification}
-						influenceRadius={influenceRadius}
-						items={[
-							{ title: 'Terminal', icon: <Terminal className='h-5 w-5' /> },
-							{ title: 'Kinetics', icon: <Sliders className='h-5 w-5' /> },
-							{ title: 'Hardware', icon: <Cpu className='h-5 w-5' /> },
-							{ title: 'Shaders', icon: <Sparkles className='h-5 w-5' /> },
-							{ title: 'Security', icon: <ShieldCheck className='h-5 w-5' /> },
-						]}
-					/>
+				<div className='border-border/60 bg-card/40 relative mx-auto flex h-[440px] w-full max-w-4xl flex-col justify-between overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-2xl select-none sm:h-[480px]'>
+					{/* Responsive Application Shell Header */}
+					<div className='border-border/50 bg-background/50 z-20 flex h-10 w-full shrink-0 items-center justify-between border-b px-3 backdrop-blur-md sm:h-11 sm:px-4'>
+						<div className='flex min-w-0 items-center gap-2 sm:gap-2.5'>
+							<div className='border-primary/30 bg-primary/10 text-primary flex size-6 shrink-0 items-center justify-center rounded-lg border'>
+								<Sparkles className='size-3.5' />
+							</div>
+							<span className='text-foreground truncate text-xs font-semibold tracking-tight'>Exhuma Workspace</span>
+						</div>
+
+						<div className='flex items-center gap-2 font-mono text-xs'>
+							<div className='border-border/60 bg-muted/40 flex items-center rounded-lg border p-0.5 font-sans'>
+								<button
+									type='button'
+									onClick={() => setDockIconSet('app')}
+									className={cn(
+										'text-3xs cursor-pointer rounded-md px-2 py-0.5 font-medium transition-all',
+										dockIconSet === 'app' ? 'bg-background text-foreground font-semibold shadow-2xs' : 'text-muted-foreground hover:text-foreground'
+									)}
+								>
+									App Icons
+								</button>
+								<button
+									type='button'
+									onClick={() => setDockIconSet('social')}
+									className={cn(
+										'text-3xs cursor-pointer rounded-md px-2 py-0.5 font-medium transition-all',
+										dockIconSet === 'social' ? 'bg-background text-foreground font-semibold shadow-2xs' : 'text-muted-foreground hover:text-foreground'
+									)}
+								>
+									Social Icons
+								</button>
+							</div>
+							<span className='text-3xs inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-medium text-emerald-400'>
+								<span className='size-1.5 animate-pulse rounded-full bg-emerald-400' />
+								120 FPS NATIVE
+							</span>
+						</div>
+					</div>
+
+					{/* Responsive Application Status Body */}
+					<div className='pointer-events-none my-auto flex flex-col items-center justify-center p-4 text-center sm:p-6'>
+						<div className='mb-3 grid w-full max-w-lg grid-cols-2 gap-2 sm:mb-4 sm:grid-cols-3 sm:gap-3'>
+							<div className='border-border/60 bg-background/50 rounded-xl border p-2.5 text-left shadow-2xs backdrop-blur-xs sm:p-3'>
+								<span className='text-3xs text-muted-foreground font-mono tracking-wider uppercase'>Active Node</span>
+								<div className='text-foreground mt-0.5 font-mono text-sm font-bold sm:mt-1 sm:text-base'>2,840</div>
+								<span className='text-3xs font-mono font-medium text-emerald-400'>+12.4% live</span>
+							</div>
+							<div className='border-border/60 bg-background/50 rounded-xl border p-2.5 text-left shadow-2xs backdrop-blur-xs sm:p-3'>
+								<span className='text-3xs text-muted-foreground font-mono tracking-wider uppercase'>Compositor</span>
+								<div className='text-foreground mt-0.5 font-mono text-sm font-bold sm:mt-1 sm:text-base'>0.038ms</div>
+								<span className='text-primary text-3xs font-mono font-medium'>GPU Direct</span>
+							</div>
+							<div className='border-border/60 bg-background/50 col-span-2 rounded-xl border p-2.5 text-left shadow-2xs backdrop-blur-xs sm:col-span-1 sm:p-3'>
+								<span className='text-3xs text-muted-foreground font-mono tracking-wider uppercase'>Orientation</span>
+								<div className='text-foreground mt-0.5 font-mono text-sm font-bold uppercase sm:mt-1 sm:text-base'>{direction}</div>
+								<span className='text-muted-foreground text-3xs font-mono font-medium'>{baseSize}px Base</span>
+							</div>
+						</div>
+
+						<p className='text-muted-foreground max-w-xs text-xs leading-relaxed sm:max-w-sm'>Continuous Gaussian proximity magnification with zero layout shift and direction-aware popover tooltips.</p>
+					</div>
+
+					{/* Kinetic Application Dock Container */}
+					<div className={`absolute ${dockPositionClass} z-30`}>
+						<FloatingDock
+							direction={direction}
+							baseSize={baseSize}
+							maxMagnification={maxMagnification}
+							influenceRadius={influenceRadius}
+							showLabels={showLabels}
+							panelStyle={panelStyle}
+							items={activeDockItems}
+						/>
+					</div>
 				</div>
 			);
 		}

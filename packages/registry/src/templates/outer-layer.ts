@@ -9,6 +9,7 @@ import { getHorizontalScrollerOuterFiles } from './generators/horizontal-scrolle
 import { getBentoGridOuterFiles } from './generators/bento-grid-generator';
 import { getDiamondGridOuterFiles } from './generators/diamond-grid-generator';
 import { getMorphingTabsOuterFiles } from './generators/morphing-tabs-generator';
+import { getFloatingDockOuterFiles } from './generators/floating-dock-generator';
 import { getStackingCardsOuterFiles } from './generators/stacking-cards-generator';
 import { getSpotlightCardOuterFiles } from './generators/spotlight-card-generator';
 import { getBorderBeamOuterFiles } from './generators/border-beam-generator';
@@ -107,6 +108,11 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 
 	if (slug === 'morphing-tabs') {
 		const files = getMorphingTabsOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'floating-dock') {
+		const files = getFloatingDockOuterFiles(flavor, props, isEjected);
 		if (files) return files;
 	}
 

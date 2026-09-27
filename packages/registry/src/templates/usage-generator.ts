@@ -5,6 +5,7 @@ import { getInfiniteMarqueeUsage } from './generators/infinite-marquee-generator
 import { getBentoGridUsage } from './generators/bento-grid-generator';
 import { getDiamondGridUsage } from './generators/diamond-grid-generator';
 import { getMorphingTabsUsage } from './generators/morphing-tabs-generator';
+import { getFloatingDockUsage } from './generators/floating-dock-generator';
 
 /**
  * Generates a complete, production-ready usage example for a component across all 13 supported ecosystems.
@@ -67,6 +68,10 @@ export function generateComponentUsage(component: UniversalComponent, flavor: Ec
 
 	if (slug === 'morphing-tabs') {
 		return getMorphingTabsUsage(flavor, props);
+	}
+
+	if (slug === 'floating-dock') {
+		return getFloatingDockUsage(flavor, props);
 	}
 
 	return getGenericComponentUsage(component, flavor, props);

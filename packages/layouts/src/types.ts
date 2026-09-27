@@ -273,4 +273,3 @@ export interface DiamondItemProps extends React.HTMLAttributes<HTMLDivElement> {
 	 */
 	diamond?: boolean;
 }
-
