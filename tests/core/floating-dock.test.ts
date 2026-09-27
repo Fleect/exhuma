@@ -8,6 +8,7 @@ import {
 	calculateGaussianScale,
 	calculateDockItemSize,
 	lerpDockScale,
+	dampDockScale,
 	type DockDirection,
 } from '@exhuma/core';
 import { floatingDockComponent } from '@exhuma/registry';
@@ -29,6 +30,7 @@ describe('@exhuma/core — FloatingDock Physics & Parity Engine', () => {
 		expect(calculateGaussianScale).toBeDefined();
 		expect(calculateDockItemSize).toBeDefined();
 		expect(lerpDockScale).toBeDefined();
+		expect(dampDockScale).toBeDefined();
 	});
 
 	describe('calculateDockScale (C1 Continuous Cosine Bell)', () => {
@@ -111,6 +113,29 @@ describe('@exhuma/core — FloatingDock Physics & Parity Engine', () => {
 
 		it('snaps to target when within threshold delta (< 0.002)', () => {
 			const snapped = lerpDockScale(1.649, 1.65, 0.2);
+			expect(snapped).toBe(1.65);
+		});
+	});
+
+	describe('dampDockScale (Delta-t aware decay)', () => {
+		it('smoothly dampens current towards target based on dt', () => {
+			const current = 1.0;
+			const target = 1.65;
+			const next = dampDockScale(current, target, 24, 0.016);
+			expect(next).toBeGreaterThan(1.0);
+			expect(next).toBeLessThan(1.65);
+		});
+
+		it('achieves frame-rate independence by decaying more on longer frame times', () => {
+			const current = 1.0;
+			const target = 1.65;
+			const at60Hz = dampDockScale(current, target, 24, 1 / 60);
+			const at30Hz = dampDockScale(current, target, 24, 1 / 30);
+			expect(at30Hz).toBeGreaterThan(at60Hz);
+		});
+
+		it('snaps to target when within threshold delta (< 0.002)', () => {
+			const snapped = dampDockScale(1.649, 1.65, 24, 0.016);
 			expect(snapped).toBe(1.65);
 		});
 	});

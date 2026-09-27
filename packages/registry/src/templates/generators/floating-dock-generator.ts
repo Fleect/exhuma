@@ -125,7 +125,10 @@ interface DockContextValue {
   maxMagnification: number;
   influenceRadius: number;
   showLabels: boolean;
+  activeFocusIndex: number;
+  setActiveFocusIndex: (idx: number) => void;
   registerItem: (el: HTMLElement) => () => void;
+  getItemIndex: (el: HTMLElement | null) => number;
 }
 
 const DockContext = React.createContext<DockContextValue | null>(null);
@@ -166,6 +169,12 @@ export const FloatingDock: React.FC<FloatingDockProps> = ({
   const itemsRef = React.useRef<HTMLElement[]>([]);
   const currentSizesRef = React.useRef<Map<HTMLElement, number>>(new Map());
   const rafIdRef = React.useRef<number | null>(null);
+  const [activeFocusIndex, setActiveFocusIndex] = React.useState<number>(0);
+
+  const getItemIndex = React.useCallback((el: HTMLElement | null) => {
+    if (!el) return -1;
+    return itemsRef.current.indexOf(el);
+  }, []);
 
   const registerItem = React.useCallback(
     (el: HTMLElement) => {
@@ -296,6 +305,38 @@ export const FloatingDock: React.FC<FloatingDockProps> = ({
     ...style,
   };
 
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const elements = itemsRef.current;
+      if (elements.length === 0) return;
+      const focusedIndex = elements.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
+      if (focusedIndex === -1) return;
+
+      let nextIndex = focusedIndex;
+      const isHorizontal = direction === 'bottom' || direction === 'top';
+
+      if ((isHorizontal && e.key === 'ArrowRight') || (!isHorizontal && e.key === 'ArrowDown')) {
+        e.preventDefault();
+        nextIndex = (focusedIndex + 1) % elements.length;
+      } else if ((isHorizontal && e.key === 'ArrowLeft') || (!isHorizontal && e.key === 'ArrowUp')) {
+        e.preventDefault();
+        nextIndex = (focusedIndex - 1 + elements.length) % elements.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        nextIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        nextIndex = elements.length - 1;
+      }
+
+      if (nextIndex !== focusedIndex) {
+        setActiveFocusIndex(nextIndex);
+        elements[nextIndex]?.focus();
+      }
+    },
+    [direction]
+  );
+
   return (
     <DockContext.Provider
       value={{
@@ -304,7 +345,10 @@ export const FloatingDock: React.FC<FloatingDockProps> = ({
         maxMagnification,
         influenceRadius,
         showLabels,
+        activeFocusIndex,
+        setActiveFocusIndex,
         registerItem,
+        getItemIndex,
       }}
     >
       <div
@@ -312,6 +356,7 @@ export const FloatingDock: React.FC<FloatingDockProps> = ({
         onPointerEnter={handlePointerEnter}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
+        onKeyDown={handleKeyDown}
         className={\`exhuma-dock-root relative inline-flex gap-2 sm:gap-2.5 max-w-[calc(100vw-24px)] select-none touch-none \${directionLayoutClasses} \${panelStyleClasses} \${className}\`}
         style={mergedStyle}
         role="toolbar"
@@ -362,15 +407,27 @@ export const DockItem: React.FC<{
 
   const showTooltip = Boolean(showLabels && title && (hovered || focused));
 
+  const itemIndex = ctx?.getItemIndex(itemRef.current) ?? -1;
+  const isCurrentFocus = itemIndex === -1 ? true : itemIndex === (ctx?.activeFocusIndex ?? 0);
+  const tabIndexValue = isCurrentFocus ? 0 : -1;
+
+  const handleFocus = () => {
+    setFocused(true);
+    const idx = ctx?.getItemIndex(itemRef.current);
+    if (idx !== undefined && idx !== -1) {
+      ctx?.setActiveFocusIndex(idx);
+    }
+  };
+
   const content = (
     <div
       ref={itemRef}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
+      onFocus={handleFocus}
       onBlur={() => setFocused(false)}
       onClick={onClick}
-      tabIndex={href ? undefined : 0}
+      tabIndex={href ? undefined : tabIndexValue}
       role={href ? undefined : 'button'}
       aria-label={title}
       className={\`exhuma-dock-item relative flex shrink-0 items-center justify-center rounded-full transition-shadow duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer \${className}\`}
@@ -399,6 +456,9 @@ export const DockItem: React.FC<{
     return (
       <a
         href={href}
+        tabIndex={tabIndexValue}
+        onFocus={handleFocus}
+        onBlur={() => setFocused(false)}
         className="inline-block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         aria-label={title}
       >

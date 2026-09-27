@@ -33,7 +33,10 @@ interface DockContextValue {
 	maxMagnification: number;
 	influenceRadius: number;
 	showLabels: boolean;
+	activeFocusIndex: number;
+	setActiveFocusIndex: (idx: number) => void;
 	registerItem: (el: HTMLElement) => () => void;
+	getItemIndex: (el: HTMLElement | null) => number;
 }
 
 const DockContext = createContext<DockContextValue | null>(null);
@@ -65,6 +68,12 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 	const currentSizesRef = useRef<Map<HTMLElement, number>>(new Map());
 	const rafIdRef = useRef<number | null>(null);
 	const lastTimeRef = useRef<number>(0);
+	const [activeFocusIndex, setActiveFocusIndex] = useState<number>(0);
+
+	const getItemIndex = useCallback((el: HTMLElement | null) => {
+		if (!el) return -1;
+		return itemsRef.current.indexOf(el);
+	}, []);
 
 	const registerItem = useCallback(
 		(el: HTMLElement) => {
@@ -244,6 +253,7 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 			}
 
 			if (nextIndex !== focusedIndex) {
+				setActiveFocusIndex(nextIndex);
 				elements[nextIndex]?.focus();
 			}
 		},
@@ -258,7 +268,10 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 				maxMagnification,
 				influenceRadius,
 				showLabels,
+				activeFocusIndex,
+				setActiveFocusIndex,
 				registerItem,
+				getItemIndex,
 			}}
 		>
 			<div
@@ -321,15 +334,27 @@ export const DockItem: React.FC<{
 	// Active running app indicator dot position along the shelf edge
 	const showTooltip = Boolean(showLabels && title && (hovered || focused));
 
+	const itemIndex = ctx?.getItemIndex(itemRef.current) ?? -1;
+	const isCurrentFocus = itemIndex === -1 ? true : itemIndex === (ctx?.activeFocusIndex ?? 0);
+	const tabIndexValue = isCurrentFocus ? 0 : -1;
+
+	const handleFocus = () => {
+		setFocused(true);
+		const idx = ctx?.getItemIndex(itemRef.current);
+		if (idx !== undefined && idx !== -1) {
+			ctx?.setActiveFocusIndex(idx);
+		}
+	};
+
 	const content = (
 		<div
 			ref={itemRef}
 			onPointerEnter={() => setHovered(true)}
 			onPointerLeave={() => setHovered(false)}
-			onFocus={() => setFocused(true)}
+			onFocus={handleFocus}
 			onBlur={() => setFocused(false)}
 			onClick={onClick}
-			tabIndex={href ? undefined : 0}
+			tabIndex={href ? undefined : tabIndexValue}
 			role={href ? undefined : 'button'}
 			aria-label={title}
 			aria-describedby={showTooltip ? tooltipId : undefined}
@@ -358,7 +383,15 @@ export const DockItem: React.FC<{
 
 	if (href) {
 		return (
-			<a href={href} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} className='focus-visible:ring-primary/40 inline-block rounded-2xl outline-none focus-visible:ring-2' aria-label={title} aria-describedby={showTooltip ? tooltipId : undefined}>
+			<a
+				href={href}
+				tabIndex={tabIndexValue}
+				onFocus={handleFocus}
+				onBlur={() => setFocused(false)}
+				className='focus-visible:ring-primary/40 inline-block rounded-2xl outline-none focus-visible:ring-2'
+				aria-label={title}
+				aria-describedby={showTooltip ? tooltipId : undefined}
+			>
 				{content}
 			</a>
 		);
