@@ -15,6 +15,7 @@ import { getNumberTickerOuterFiles } from './generators/number-ticker-generator'
 import { getStackingCardsOuterFiles } from './generators/stacking-cards-generator';
 import { getSpotlightCardOuterFiles } from './generators/spotlight-card-generator';
 import { getBorderBeamOuterFiles } from './generators/border-beam-generator';
+import { getMagneticButtonOuterFiles } from './generators/magnetic-button-generator';
 
 export interface CompoundPart {
 	name: string;
@@ -125,6 +126,11 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 
 	if (slug === 'number-ticker') {
 		const files = getNumberTickerOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'magnetic-button') {
+		const files = getMagneticButtonOuterFiles(flavor, props, isEjected);
 		if (files) return files;
 	}
 

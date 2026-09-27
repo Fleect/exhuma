@@ -19,18 +19,40 @@ export interface MagneticCoordinates {
  * When pointer is within radius R of center:
  *   displacement = (pointer - center) * strength * (1 - distance / R)
  */
-export function calculateMagneticPull(pointerX: number, pointerY: number, centerX: number, centerY: number, radius: number, strength: number = 0.4): MagneticCoordinates {
+export function calculateMagneticPull(
+	pointerX: number,
+	pointerY: number,
+	centerX: number,
+	centerY: number,
+	radius: number,
+	strength: number = 0.4,
+	maxDisplacement: number = 40
+): MagneticCoordinates {
+	if (!Number.isFinite(pointerX) || !Number.isFinite(pointerY) || !Number.isFinite(centerX) || !Number.isFinite(centerY) || radius <= 0) {
+		return { x: 0, y: 0, distance: 0, isInside: false };
+	}
+
 	const dx = pointerX - centerX;
 	const dy = pointerY - centerY;
 	const distance = Math.hypot(dx, dy);
 
-	if (distance > radius || radius <= 0) {
+	if (distance > radius) {
 		return { x: 0, y: 0, distance, isInside: false };
 	}
 
+	const safeStrength = Number.isFinite(strength) ? strength : 0.4;
 	const attenuation = 1 - distance / radius;
-	const pullX = dx * strength * attenuation;
-	const pullY = dy * strength * attenuation;
+	let pullX = dx * safeStrength * attenuation;
+	let pullY = dy * safeStrength * attenuation;
+
+	if (maxDisplacement > 0) {
+		const pullDist = Math.hypot(pullX, pullY);
+		if (pullDist > maxDisplacement) {
+			const scale = maxDisplacement / pullDist;
+			pullX *= scale;
+			pullY *= scale;
+		}
+	}
 
 	return {
 		x: pullX,
@@ -39,3 +61,4 @@ export function calculateMagneticPull(pointerX: number, pointerY: number, center
 		isInside: true,
 	};
 }
+
