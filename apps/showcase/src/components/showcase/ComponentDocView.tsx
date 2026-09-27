@@ -1961,13 +1961,13 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 					className={cn(
 						'relative flex flex-col gap-2.5 overflow-hidden rounded-2xl transition-all duration-300 sm:flex-row sm:items-center sm:justify-between sm:gap-3',
 						isDockSticky
-							? 'border-primary/50 shadow-sticky-dock ring-primary/20 bg-card/95 supports-[backdrop-filter]:bg-background/90 scale-[1.01] border-2 p-2.5 shadow-2xl ring-2 backdrop-blur-2xl sm:p-3'
+							? 'border-primary/25 shadow-sticky-dock ring-primary/10 bg-card/60 supports-[backdrop-filter]:bg-background/60 scale-[1.01] border-2 p-2.5 shadow-xl ring-2 backdrop-blur-sm sm:p-3'
 							: 'border-border/60 bg-muted/20 hover:border-border/80 border p-2.5 backdrop-blur-xs sm:p-3'
 					)}
 				>
 					{/* Active laser accent beam across top edge: only appears when sticky */}
-					{isDockSticky && <div className='via-primary/50 absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent to-transparent' />}
-					{isDockSticky && <div className='via-primary/50 absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent to-transparent' />}
+					{isDockSticky && <div className='via-primary/25 absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent to-transparent' />}
+					{isDockSticky && <div className='via-primary/25 absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent to-transparent' />}
 
 					{/* Left: Icon & Label */}
 					<div className='flex min-w-0 items-center justify-between gap-2.5 sm:justify-start sm:gap-3'>
