@@ -133,9 +133,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Neon Glow': { springStiffness: 32, variant: 'glow', size: 'md' },
 	},
 	accordion: {
-		Default: { mode: 'single', duration: 300 },
-		Multiple: { mode: 'multiple', duration: 300 },
-		Fast: { mode: 'single', duration: 200 },
+		Default: { mode: 'single', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Multiple FAQ': { mode: 'multiple', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Compact List': { mode: 'single', collapsible: true, gap: 6, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 250 },
+		'Flat Minimal': { mode: 'single', collapsible: true, gap: 8, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 180 },
+		'Clean Disclosure': { mode: 'single', collapsible: true, gap: 16, bordered: false, shadow: false, showNumbers: false, showIcon: true, duration: 240 },
 	},
 	'infinite-marquee': {
 		Default: { speed: 40, direction: 'left', pauseOnHover: true, gap: 24, showFadeEdges: true, fadeWidth: 48, fadeEdgeColor: '#ffffff', fadeEdgeColorDark: '#09090b' },
@@ -1154,29 +1156,38 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		// 8. Accordion
 		if (component.slug === 'accordion') {
 			const mode = (propValues.mode === 'multiple' ? 'multiple' : 'single') as 'single' | 'multiple';
+			const collapsible = propValues.collapsible !== false;
+			const gap = Number(propValues.gap ?? 12);
+			const duration = Number(propValues.duration ?? 300);
+			const showIcon = propValues.showIcon !== false;
+			const showNumbers = propValues.showNumbers !== false;
+			const bordered = propValues.bordered !== false;
+			const shadow = propValues.shadow !== false;
 
 			return (
 				<div className='mx-auto w-full max-w-lg p-4'>
-					<Accordion.Root mode={mode} defaultValue='faq-1'>
+					<Accordion.Root
+						key={`${mode}-${collapsible}-${gap}-${duration}-${showIcon}-${showNumbers}-${bordered}-${shadow}`}
+						mode={mode}
+						collapsible={collapsible}
+						gap={gap}
+						duration={duration}
+						showIcon={showIcon}
+						showNumbers={showNumbers}
+						bordered={bordered}
+						shadow={shadow}
+						defaultValue='faq-1'
+					>
 						<Accordion.Item value='faq-1'>
-							<Accordion.Trigger>
-								<span className='font-medium'>How does Exhuma eliminate animation jank?</span>
-								<Accordion.Icon />
-							</Accordion.Trigger>
-							<Accordion.Content>Exhuma uses modern CSS Grid 0fr to 1fr interpolation with exact analytical spring differential equations, eliminating layout reflows.</Accordion.Content>
+							<Accordion.Trigger>How does Exhuma eliminate animation jank?</Accordion.Trigger>
+							<Accordion.Content>Exhuma uses modern CSS Grid 0fr to 1fr interpolation with exact analytical spring differential equations, eliminating layout reflows and DOM thrashing.</Accordion.Content>
 						</Accordion.Item>
 						<Accordion.Item value='faq-2'>
-							<Accordion.Trigger>
-								<span className='font-medium'>Does this require Framer Motion or GSAP?</span>
-								<Accordion.Icon />
-							</Accordion.Trigger>
+							<Accordion.Trigger>Does this require Framer Motion or GSAP?</Accordion.Trigger>
 							<Accordion.Content>Zero external dependencies. Every component is 100% handcrafted with pure mathematics and native browser APIs.</Accordion.Content>
 						</Accordion.Item>
 						<Accordion.Item value='faq-3'>
-							<Accordion.Trigger>
-								<span className='font-medium'>Which platforms are supported?</span>
-								<Accordion.Icon />
-							</Accordion.Trigger>
+							<Accordion.Trigger>Which platforms are supported?</Accordion.Trigger>
 							<Accordion.Content>
 								All 13 major ecosystems including React, Next.js, Vue 3, Svelte 5, Angular 18+, SolidJS, Astro, Blade, Vanilla, Gutenberg, Web Components, React Native, and Flutter.
 							</Accordion.Content>

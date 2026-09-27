@@ -108,7 +108,11 @@ export const floatingDockComponent: UniversalComponent = {
 				description: 'High-performance kinetic floating application dock with continuous C1-cosine proximity distribution.',
 				defaultTailwindClass: 'relative inline-flex items-end gap-2.5 rounded-2xl border border-border/80 bg-background/80 dark:bg-card/80 p-2.5 shadow-2xl backdrop-blur-xl',
 				compoundParts: [
-					{ name: 'Root', primitiveExport: 'FloatingDock', defaultClass: 'relative inline-flex items-end gap-2.5 rounded-2xl border border-border/80 bg-background/80 dark:bg-card/80 p-2.5 shadow-2xl backdrop-blur-xl' },
+					{
+						name: 'Root',
+						primitiveExport: 'FloatingDock',
+						defaultClass: 'relative inline-flex items-end gap-2.5 rounded-2xl border border-border/80 bg-background/80 dark:bg-card/80 p-2.5 shadow-2xl backdrop-blur-xl',
+					},
 					{ name: 'Item', primitiveExport: 'DockItem', defaultClass: 'relative flex shrink-0 items-center justify-center rounded-xl border border-border/70 bg-card/80 shadow-md backdrop-blur-md' },
 					{ name: 'Icon', primitiveExport: 'DockIcon', defaultClass: 'flex size-full items-center justify-center' },
 					{ name: 'Label', primitiveExport: 'DockLabel', defaultClass: 'text-xs font-semibold' },

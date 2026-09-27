@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T17:15:23.460Z",
+	"generatedAt": "2026-09-27T19:20:16.508Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -417,7 +417,7 @@
 			"name": "Accordion",
 			"slug": "accordion",
 			"category": "primitives",
-			"description": "Zero-jank dynamic height disclosure using CSS Grid 0fr to 1fr interpolation with morphing plus/minus icon and animated gradient border glow.",
+			"description": "Zero-jank dynamic height disclosure using CSS Grid 0fr to 1fr interpolation with morphing plus/minus icon and clean theme elevation.",
 			"version": "1.0.0",
 			"props": [
 				{
@@ -429,9 +429,24 @@
 						{ "label": "Single Expand", "value": "single" },
 						{ "label": "Multiple Expand", "value": "multiple" }
 					],
-					"description": "Single auto-collapses other items; multiple allows independent toggles."
+					"description": "Single auto-collapses previous items; multiple allows independent toggles."
 				},
-				{ "name": "duration", "label": "Transition Duration (ms)", "type": "number", "defaultValue": 300, "min": 150, "max": 600, "step": 50, "description": "CSS Grid height transition speed." }
+				{ "name": "collapsible", "label": "Collapsible", "type": "boolean", "defaultValue": true, "description": "In single mode, allows closing the currently expanded item." },
+				{ "name": "gap", "label": "Item Gap (px)", "type": "number", "defaultValue": 12, "min": 0, "max": 32, "step": 4, "description": "Spacing between accordion items. 0 forms a seamless connected panel." },
+				{ "name": "bordered", "label": "Bordered", "type": "boolean", "defaultValue": true, "description": "Render items with crisp theme borders and active accent rings." },
+				{ "name": "shadow", "label": "Shadow Elevation", "type": "boolean", "defaultValue": true, "description": "Apply subtle depth shadow and hover elevation." },
+				{ "name": "showNumbers", "label": "Index Badges", "type": "boolean", "defaultValue": true, "description": "Display leading monospace index numbers (01, 02) before titles." },
+				{ "name": "showIcon", "label": "Morphing Icon", "type": "boolean", "defaultValue": true, "description": "Signature dual-bar kinetic plus/minus counter-rotating icon." },
+				{
+					"name": "duration",
+					"label": "Duration (ms)",
+					"type": "number",
+					"defaultValue": 300,
+					"min": 150,
+					"max": 600,
+					"step": 50,
+					"description": "CSS Grid height and icon rotation transition speed in milliseconds."
+				}
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],

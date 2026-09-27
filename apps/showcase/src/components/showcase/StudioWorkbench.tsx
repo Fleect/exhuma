@@ -125,9 +125,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		'Neon Glow': { springStiffness: 32, variant: 'glow', size: 'md' },
 	},
 	accordion: {
-		Default: { mode: 'single', duration: 300 },
-		Multiple: { mode: 'multiple', duration: 300 },
-		Fast: { mode: 'single', duration: 200 },
+		Default: { mode: 'single', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Multiple FAQ': { mode: 'multiple', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Compact List': { mode: 'single', collapsible: true, gap: 6, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 250 },
+		'Flat Minimal': { mode: 'single', collapsible: true, gap: 8, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 180 },
+		'Clean Disclosure': { mode: 'single', collapsible: true, gap: 16, bordered: false, shadow: false, showNumbers: false, showIcon: true, duration: 240 },
 	},
 	'infinite-marquee': {
 		Default: { speed: 40, direction: 'left', pauseOnHover: true, gap: 24, showFadeEdges: true, fadeWidth: 48, fadeEdgeColor: '#ffffff', fadeEdgeColorDark: '#09090b' },
@@ -969,23 +971,43 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 
 		if (selectedSlug === 'accordion') {
 			const mode = (propValues.mode === 'multiple' ? 'multiple' : 'single') as 'single' | 'multiple';
+			const collapsible = propValues.collapsible !== false;
+			const gap = Number(propValues.gap ?? 12);
+			const duration = Number(propValues.duration ?? 300);
+			const showIcon = propValues.showIcon !== false;
+			const showNumbers = propValues.showNumbers !== false;
+			const bordered = propValues.bordered !== false;
+			const shadow = propValues.shadow !== false;
 
 			return (
-				<div className='mx-auto w-full max-w-md p-4'>
-					<Accordion.Root mode={mode} defaultValue='s-1'>
-						<Accordion.Item value='s-1'>
-							<Accordion.Trigger>
-								<span>Dynamic Height Interpolation</span>
-								<Accordion.Icon />
-							</Accordion.Trigger>
-							<Accordion.Content>Using modern CSS Grid (0fr to 1fr) with zero layout reflows and zero-dependency morphing icon.</Accordion.Content>
+				<div className='mx-auto w-full max-w-lg p-4'>
+					<Accordion.Root
+						key={`${mode}-${collapsible}-${gap}-${duration}-${showIcon}-${showNumbers}-${bordered}-${shadow}`}
+						mode={mode}
+						collapsible={collapsible}
+						gap={gap}
+						duration={duration}
+						showIcon={showIcon}
+						showNumbers={showNumbers}
+						bordered={bordered}
+						shadow={shadow}
+						defaultValue='faq-1'
+					>
+						<Accordion.Item value='faq-1'>
+							<Accordion.Trigger>How does Exhuma eliminate animation jank?</Accordion.Trigger>
+							<Accordion.Content>Exhuma uses modern CSS Grid 0fr to 1fr interpolation with exact analytical spring differential equations, eliminating layout reflows and DOM thrashing.</Accordion.Content>
 						</Accordion.Item>
-						<Accordion.Item value='s-2'>
-							<Accordion.Trigger>
-								<span>WAI-ARIA Accessibility Standards</span>
-								<Accordion.Icon />
-							</Accordion.Trigger>
-							<Accordion.Content>Full roving arrow keys, aria-expanded, aria-controls, and single/multiple expansion mode.</Accordion.Content>
+						<Accordion.Item value='faq-2'>
+							<Accordion.Trigger>Does this require Framer Motion or GSAP?</Accordion.Trigger>
+							<Accordion.Content>
+								Zero external animation libraries. Exhuma disclosures run entirely on GPU-composited CSS Grid and native browser transform matrices for 120Hz ProMotion smoothness.
+							</Accordion.Content>
+						</Accordion.Item>
+						<Accordion.Item value='faq-3'>
+							<Accordion.Trigger>Is it fully WAI-ARIA accessible?</Accordion.Trigger>
+							<Accordion.Content>
+								Yes. Complies with the W3C WAI-ARIA Accordion Pattern including roving arrow-key navigation (ArrowDown, ArrowUp, Home, End), aria-expanded, and aria-controls.
+							</Accordion.Content>
 						</Accordion.Item>
 					</Accordion.Root>
 				</div>

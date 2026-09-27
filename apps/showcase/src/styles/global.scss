@@ -3,6 +3,8 @@
 @use './utilities.scss';
 @use './animations.scss';
 
+@source '../../../../packages';
+
 html {
 	scrollbar-gutter: stable;
 }

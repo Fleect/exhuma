@@ -96,7 +96,7 @@ export const TabsRoot: React.FC<TabsRootProps> = ({ children, defaultValue, valu
 
 	useEffect(() => {
 		// Run measureActive after browser layout reflow (handles dynamic size/variant switching)
-		let rafId: number | null = requestAnimationFrame(measureActive);
+		const rafId: number | null = requestAnimationFrame(measureActive);
 
 		const handleResize = () => {
 			measureActive();

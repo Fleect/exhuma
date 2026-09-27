@@ -57,18 +57,7 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 	Item: typeof DockItem;
 	Icon: typeof DockIcon;
 	Label: typeof DockLabel;
-} = ({
-	items = [],
-	children,
-	direction = 'bottom',
-	baseSize = 36,
-	maxMagnification = 0.75,
-	influenceRadius = 60,
-	showLabels = true,
-	panelStyle = 'translucent',
-	className = '',
-	style,
-}) => {
+} = ({ items = [], children, direction = 'bottom', baseSize = 36, maxMagnification = 0.75, influenceRadius = 60, showLabels = true, panelStyle = 'translucent', className = '', style }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const pointerCoord = useRef<number>(-9999);
 	const isHoveredRef = useRef<boolean>(false);
@@ -212,10 +201,8 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 
 	// Backing shelf glass visual styling — ultra-blurry, smooth frosted panel
 	const panelStyleClasses = {
-		glass:
-			'border border-white/20 bg-background/60 dark:border-white/10 dark:bg-card/50 shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.35)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150 rounded-2xl',
-		translucent:
-			'border border-border/50 bg-background/80 dark:bg-card/75 shadow-xl backdrop-blur-2xl rounded-2xl',
+		glass: 'border border-white/20 bg-background/60 dark:border-white/10 dark:bg-card/50 shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.35)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150 rounded-2xl',
+		translucent: 'border border-border/50 bg-background/80 dark:bg-card/75 shadow-xl backdrop-blur-2xl rounded-2xl',
 		minimal: 'border-transparent bg-transparent shadow-none',
 	}[panelStyle];
 
@@ -243,21 +230,14 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 				onPointerDown={handlePointerDown}
 				onPointerUp={handlePointerUp}
 				onPointerCancel={handlePointerUp}
-				className={`exhuma-dock-root relative inline-flex gap-2 sm:gap-2.5 max-w-[calc(100vw-24px)] select-none touch-none ${directionLayoutClasses} ${panelStyleClasses} ${className}`}
+				className={`exhuma-dock-root relative inline-flex max-w-[calc(100vw-24px)] touch-none gap-2 select-none sm:gap-2.5 ${directionLayoutClasses} ${panelStyleClasses} ${className}`}
 				style={mergedStyle}
 				role='toolbar'
 				aria-label='Application Dock'
 			>
 				{items.length > 0
 					? items.map((item) => (
-							<DockItem
-								key={item.title}
-								title={item.title}
-								href={item.href}
-								onClick={item.onClick}
-								active={item.active}
-								className={item.className}
-							>
+							<DockItem key={item.title} title={item.title} href={item.href} onClick={item.onClick} active={item.active} className={item.className}>
 								{item.icon}
 							</DockItem>
 						))
@@ -311,7 +291,7 @@ export const DockItem: React.FC<{
 			tabIndex={href ? undefined : 0}
 			role={href ? undefined : 'button'}
 			aria-label={title}
-			className={`exhuma-dock-item relative flex shrink-0 items-center justify-center rounded-2xl will-change-[width,height] outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer ${className}`}
+			className={`exhuma-dock-item focus-visible:ring-primary/50 relative flex shrink-0 cursor-pointer items-center justify-center rounded-2xl will-change-[width,height] outline-none focus-visible:ring-2 ${className}`}
 			style={{
 				width: `${baseSize}px`,
 				height: `${baseSize}px`,
@@ -322,28 +302,20 @@ export const DockItem: React.FC<{
 				<div
 					role='tooltip'
 					aria-hidden={!showTooltip}
-					className={`pointer-events-none absolute z-50 rounded-lg border border-border/70 bg-popover/95 px-2.5 py-1 font-sans text-xs font-medium text-popover-foreground shadow-lg backdrop-blur-xl whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-100 ${tooltipDirectionClasses}`}
+					className={`border-border/70 bg-popover/95 text-popover-foreground animate-in fade-in zoom-in-95 pointer-events-none absolute z-50 rounded-lg border px-2.5 py-1 font-sans text-xs font-medium whitespace-nowrap shadow-lg backdrop-blur-xl duration-100 select-none ${tooltipDirectionClasses}`}
 				>
 					{title}
 				</div>
 			)}
 
 			{/* Icon Content Container — allows child shadows and badges without clipping */}
-			<div className='relative z-10 flex size-full items-center justify-center'>
-				{children}
-			</div>
+			<div className='relative z-10 flex size-full items-center justify-center'>{children}</div>
 		</div>
 	);
 
 	if (href) {
 		return (
-			<a
-				href={href}
-				onFocus={() => setFocused(true)}
-				onBlur={() => setFocused(false)}
-				className='inline-block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-primary/40'
-				aria-label={title}
-			>
+			<a href={href} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} className='focus-visible:ring-primary/40 inline-block rounded-2xl outline-none focus-visible:ring-2' aria-label={title}>
 				{content}
 			</a>
 		);
@@ -353,12 +325,8 @@ export const DockItem: React.FC<{
 };
 
 const DockRoot = FloatingDock;
-const DockIcon: React.FC<{ children: ReactNode; className?: string }> = ({ children, className = '' }) => (
-	<div className={`exhuma-dock-icon flex size-full items-center justify-center ${className}`}>{children}</div>
-);
-const DockLabel: React.FC<{ children: ReactNode; className?: string }> = ({ children, className = '' }) => (
-	<div className={`exhuma-dock-label text-xs font-semibold ${className}`}>{children}</div>
-);
+const DockIcon: React.FC<{ children: ReactNode; className?: string }> = ({ children, className = '' }) => <div className={`exhuma-dock-icon flex size-full items-center justify-center ${className}`}>{children}</div>;
+const DockLabel: React.FC<{ children: ReactNode; className?: string }> = ({ children, className = '' }) => <div className={`exhuma-dock-label text-xs font-semibold ${className}`}>{children}</div>;
 
 FloatingDock.Root = DockRoot;
 FloatingDock.Item = DockItem;

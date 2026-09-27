@@ -242,6 +242,33 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('doubleBeam');
   });
 
+  it('installs real Accordion component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add accordion --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/Accordion.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('Accordion');
+    expect(code).toContain('AccordionRoot');
+    expect(code).toContain('AccordionTrigger');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Accordion component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add accordion --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/Accordion.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('Accordion');
+    expect(code).toContain('grid-rows-[1fr]');
+    expect(code).toContain('grid-rows-[0fr]');
+    expect(code).toContain('rotate-0');
+    expect(code).toContain('-rotate-180');
+    expect(code).toContain('-rotate-90');
+    expect(code).toContain('focus-visible:ring-primary');
+  });
+
   it('executes exhuma build to generate static registry JSON', () => {
     const buildOut = resolve(TEST_DIR, 'dist-registry');
     execSync(`node "${CLI_BIN}" build --output="${buildOut}"`, { cwd: TEST_DIR });
