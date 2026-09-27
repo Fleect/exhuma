@@ -25,7 +25,7 @@ export function getBorderBeamOuterFiles(
 			: clampedEndOpacity >= 1
 				? colorTo
 				: `color-mix(in srgb, ${colorTo} ${Math.round(clampedEndOpacity * 100)}%, transparent)`;
-	const pathRadius = Math.max(0, borderRadius);
+	const pathRadius = Math.min(size, 200);
 
 	switch (flavor) {
 		case 'react':
@@ -80,7 +80,7 @@ export const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(
   ) => {
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-    const pathRadius = Math.max(0, borderRadius);
+    const pathRadius = Math.min(size, 200);
 
     return (
       <div
@@ -197,7 +197,7 @@ const endColor = computed(() => {
   return \`color-mix(in srgb, \${props.colorTo} \${Math.round(clamped * 100)}%, transparent)\`;
 });
 
-const pathRadius = computed(() => Math.max(0, props.borderRadius));
+const pathRadius = computed(() => Math.min(props.size, 200));
 </script>
 
 <template>
@@ -307,7 +307,7 @@ const pathRadius = computed(() => Math.max(0, props.borderRadius));
         ? colorTo
         : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`
   );
-  const pathRadius = $derived(Math.max(0, borderRadius));
+  const pathRadius = $derived(Math.min(size, 200));
 </script>
 
 <div
@@ -403,7 +403,7 @@ export const BorderBeam: Component<BorderBeamProps> = (props) => {
     return \`color-mix(in srgb, \${colorTo()} \${Math.round(clamped * 100)}%, transparent)\`;
   };
 
-  const pathRadius = () => Math.max(0, borderRadius());
+  const pathRadius = () => Math.min(local.size, 200);
 
   return (
     <div
@@ -544,7 +544,7 @@ export class ExhumaBorderBeamComponent {
     return \`color-mix(in srgb, \${this.colorTo()} \${Math.round(clamped * 100)}%, transparent)\`;
   });
 
-  readonly pathRadius = computed(() => Math.max(0, this.borderRadius()));
+  readonly pathRadius = computed(() => Math.min(this.size(), 200));
 }
 `,
 				},
@@ -590,7 +590,7 @@ const {
 
 const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
 const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-const pathRadius = Math.max(0, borderRadius);
+const pathRadius = Math.min(size, 200);
 ---
 
 <div
@@ -659,8 +659,8 @@ const pathRadius = Math.max(0, borderRadius);
 
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : 'color-mix(in srgb, ' + colorTo + ' ' + Math.round(clampedEndOpacity * 100) + '%, transparent)';
-    const pathRadius = Math.max(0, borderRadius);
     const sizeNum = parseFloat(size);
+    const pathRadius = Math.min(sizeNum, 200);
 
     this.style.border = borderWidth + 'px solid transparent';
     this.style.webkitMask = 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)';
@@ -746,7 +746,7 @@ if (!customElements.get('exhuma-border-beam')) {
 
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : 'color-mix(in srgb, ' + colorTo + ' ' + Math.round(clampedEndOpacity * 100) + '%, transparent)';
-    const pathRadius = Math.max(0, borderRadius);
+    const pathRadius = Math.min(size, 200);
 
     container.className = 'exhuma-border-beam';
     container.style.pointerEvents = 'none';
@@ -822,7 +822,7 @@ if (!customElements.get('exhuma-border-beam')) {
 @php
     $clampedEndOpacity = max(0, min(1, (float)$endOpacity));
     $endColor = $clampedEndOpacity <= 0 ? 'transparent' : ($clampedEndOpacity >= 1 ? $colorTo : "color-mix(in srgb, {$colorTo} " . round($clampedEndOpacity * 100) . "%, transparent)");
-    $pathRadius = max(0, (int)$borderRadius);
+    $pathRadius = min((int)$size, 200);
 @endphp
 
 <div
@@ -912,7 +912,7 @@ $blur = isset($attributes['blur']) ? (float)$attributes['blur'] : ${blur};
 
 $clampedEndOpacity = max(0, min(1, $endOpacity));
 $endColor = $clampedEndOpacity <= 0 ? 'transparent' : ($clampedEndOpacity >= 1 ? $colorTo : "color-mix(in srgb, {$colorTo} " . round($clampedEndOpacity * 100) . "%, transparent)");
-$pathRadius = max(0, (int)$borderRadius);
+$pathRadius = min((int)$size, 200);
 ?>
 <div
   class="exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit]"

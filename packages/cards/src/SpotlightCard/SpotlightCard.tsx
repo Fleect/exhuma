@@ -151,6 +151,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 	const handlePointerMove = useCallback(
 		(e: React.PointerEvent<HTMLDivElement>) => {
 			if (disabled || isReducedMotionRef.current) return;
+			isHoveredRef.current = true;
 			if (!rectRef.current) measureRect();
 			const rect = rectRef.current;
 			if (!rect) return;
@@ -160,6 +161,12 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 			targetX.current = coords.x;
 			targetY.current = coords.y;
 			targetOpacity.current = Math.max(0, Math.min(1, opacity));
+
+			// Snap on move if uninitialized to prevent flying animation from offscreen
+			if (currentX.current < -1000) {
+				currentX.current = coords.x;
+				currentY.current = coords.y;
+			}
 
 			scheduleUpdate();
 		},
@@ -189,9 +196,10 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 		return () => {
 			if (rafIdRef.current !== null) {
 				cancelAnimationFrame(rafIdRef.current);
+				rafIdRef.current = null;
 			}
 		};
-	}, [radius, color, borderColor, spread, disabled]);
+	}, [radius, color, borderColor, spread, disabled, opacity]);
 
 	const showBorder = mode === 'both' || mode === 'border';
 	const showSheen = mode === 'both' || mode === 'background';
@@ -217,7 +225,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 			{showBorder && (
 				<div
 					aria-hidden='true'
-					className='pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300'
+					className='pointer-events-none absolute inset-0 z-10 rounded-[inherit]'
 					style={{
 						opacity: 'var(--exhuma-spotlight-opacity, 0)',
 						border: '1.5px solid transparent',
@@ -234,9 +242,9 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 			{showSheen && (
 				<div
 					aria-hidden='true'
-					className='pointer-events-none absolute inset-0 z-0 transition-opacity duration-300'
+					className='pointer-events-none absolute inset-0 z-0'
 					style={{
-						opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+						opacity: mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
 						background: `radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))`,
 					}}
 				/>

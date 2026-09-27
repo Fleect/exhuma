@@ -182,6 +182,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
     const handlePointerMove = React.useCallback(
       (e: React.PointerEvent<HTMLDivElement>) => {
         if (disabled || isReducedMotionRef.current) return;
+        isHoveredRef.current = true;
         if (!rectRef.current) measureRect();
         const rect = rectRef.current;
         if (!rect) return;
@@ -189,6 +190,11 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         targetX.current = e.clientX - rect.left;
         targetY.current = e.clientY - rect.top;
         targetOpacity.current = Math.max(0, Math.min(1, opacity));
+
+        if (currentX.current < -1000) {
+          currentX.current = targetX.current;
+          currentY.current = targetY.current;
+        }
 
         scheduleUpdate();
       },
@@ -217,9 +223,10 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
       return () => {
         if (rafIdRef.current !== null) {
           cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
         }
       };
-    }, [cardRef, radius, color, borderColor, spread, disabled]);
+    }, [cardRef, radius, color, borderColor, spread, disabled, opacity]);
 
     const showBorder = mode === 'both' || mode === 'border';
     const showSheen = mode === 'both' || mode === 'background';
@@ -245,7 +252,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         {showBorder && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
             style={{
               opacity: 'var(--exhuma-spotlight-opacity, 0)',
               border: '1.5px solid transparent',
@@ -262,9 +269,9 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         {showSheen && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-0"
             style={{
-              opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+              opacity: mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
               background: 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))',
             }}
           />
@@ -382,11 +389,16 @@ const onPointerEnter = (e: PointerEvent) => {
 
 const onPointerMove = (e: PointerEvent) => {
   if (props.disabled) return;
+  isHovered = true;
   if (!rect) measureRect();
   if (!rect) return;
   targetX = e.clientX - rect.left;
   targetY = e.clientY - rect.top;
   targetOpacity = Math.max(0, Math.min(1, props.opacity));
+  if (currentX < -1000) {
+    currentX = targetX;
+    currentY = targetY;
+  }
   scheduleUpdate();
 };
 
@@ -408,7 +420,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (rafId !== null) cancelAnimationFrame(rafId);
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
   window.removeEventListener('resize', measureRect);
   window.removeEventListener('scroll', measureRect);
 });
@@ -426,7 +441,7 @@ onUnmounted(() => {
     <div
       v-if="props.mode === 'both' || props.mode === 'border'"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     />
 
@@ -434,8 +449,11 @@ onUnmounted(() => {
     <div
       v-if="props.mode === 'both' || props.mode === 'background'"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="pointer-events-none absolute inset-0 z-0"
+      :style="{
+        opacity: props.mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
+        background: 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))'
+      }"
     />
 
     <div class="relative z-20">
@@ -560,11 +578,16 @@ onUnmounted(() => {
 
     const onPointerMove = (e: PointerEvent) => {
       if (disabled) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = Math.max(0, Math.min(1, opacity));
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleUpdate();
     };
 
@@ -581,7 +604,10 @@ onUnmounted(() => {
     window.addEventListener('scroll', measureRect, { passive: true });
 
     return () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       cardRef?.removeEventListener('pointerenter', onPointerEnter);
       cardRef?.removeEventListener('pointermove', onPointerMove);
       cardRef?.removeEventListener('pointerleave', onPointerLeave);
@@ -599,7 +625,7 @@ onUnmounted(() => {
   {#if mode === 'both' || mode === 'border'}
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     ></div>
   {/if}
@@ -607,8 +633,8 @@ onUnmounted(() => {
   {#if mode === 'both' || mode === 'background'}
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="pointer-events-none absolute inset-0 z-0"
+      style="opacity: {mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'}; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
     ></div>
   {/if}
 
@@ -737,11 +763,16 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
 
     const onPointerMove = (e: PointerEvent) => {
       if (disabled()) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = Math.max(0, Math.min(1, opacity()));
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleUpdate();
     };
 
@@ -758,7 +789,10 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
     window.addEventListener('scroll', measureRect, { passive: true });
 
     onCleanup(() => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       cardRef?.removeEventListener('pointerenter', onPointerEnter);
       cardRef?.removeEventListener('pointermove', onPointerMove);
       cardRef?.removeEventListener('pointerleave', onPointerLeave);
@@ -770,13 +804,13 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
   return (
     <div
       ref={cardRef}
-      class={\`${defaultClass} \${local.class ?? ''}\`}
+      class={'${defaultClass} ' + (local.class ?? '')}
       {...others}
     >
       {(mode() === 'both' || mode() === 'border') && (
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
           style={{
             opacity: 'var(--exhuma-spotlight-opacity, 0)',
             border: '1.5px solid transparent',
@@ -792,9 +826,9 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
       {(mode() === 'both' || mode() === 'background') && (
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+          class="pointer-events-none absolute inset-0 z-0"
           style={{
-            opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+            opacity: mode() === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
             background: 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))',
           }}
         />
@@ -831,16 +865,17 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
       @if (mode() === 'both' || mode() === 'border') {
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
-          style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
+          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
+          style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
         ></div>
       }
 
       @if (mode() === 'both' || mode() === 'background') {
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-          style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+          class="pointer-events-none absolute inset-0 z-0"
+          [style.opacity]="mode() === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'"
+          style="background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
         ></div>
       }
 
@@ -894,7 +929,10 @@ export class ExhumaSpotlightCardComponent {
       window.addEventListener('scroll', onResize, { passive: true });
 
       this.destroyRef.onDestroy(() => {
-        if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+        if (this.rafId !== null) {
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
+        }
         window.removeEventListener('resize', onResize);
         window.removeEventListener('scroll', onResize);
       });
@@ -956,6 +994,7 @@ export class ExhumaSpotlightCardComponent {
 
   onPointerMove(e: PointerEvent) {
     if (this.disabled()) return;
+    this.isHovered = true;
     if (!this.rect && this.cardRef()?.nativeElement) {
       this.rect = this.cardRef()!.nativeElement.getBoundingClientRect();
     }
@@ -963,6 +1002,10 @@ export class ExhumaSpotlightCardComponent {
     this.targetX = e.clientX - this.rect.left;
     this.targetY = e.clientY - this.rect.top;
     this.targetOpacity = Math.max(0, Math.min(1, this.opacity()));
+    if (this.currentX < -1000) {
+      this.currentX = this.targetX;
+      this.currentY = this.targetY;
+    }
     this.scheduleUpdate();
   }
 
@@ -1009,6 +1052,8 @@ const {
   class: className = '',
   ...props
 } = Astro.props;
+
+const sheenOpacity = mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)';
 ---
 
 <div
@@ -1021,13 +1066,13 @@ const {
   data-mode={mode}
   data-smoothing={smoothing}
   data-disabled={disabled.toString()}
-  class={\`${defaultClass} \${className}\`}
+  class={'${defaultClass} ' + className}
   {...props}
 >
   {(mode === 'both' || mode === 'border') && (
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     />
   )}
@@ -1035,8 +1080,11 @@ const {
   {(mode === 'both' || mode === 'background') && (
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="pointer-events-none absolute inset-0 z-0"
+      style={{
+        opacity: sheenOpacity,
+        background: 'radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%))',
+      }}
     />
   )}
 
@@ -1125,11 +1173,16 @@ const {
 
       card.addEventListener('pointermove', (e) => {
         if (disabled) return;
+        isHovered = true;
         if (!rect) measureRect();
         if (!rect) return;
         targetX = e.clientX - rect.left;
         targetY = e.clientY - rect.top;
         targetOpacity = Math.max(0, Math.min(1, opacity));
+        if (currentX < -1000) {
+          currentX = targetX;
+          currentY = targetY;
+        }
         scheduleUpdate();
       });
 
@@ -1143,7 +1196,10 @@ const {
       window.addEventListener('scroll', measureRect, { passive: true });
 
       document.addEventListener('astro:before-swap', () => {
-        if (rafId !== null) cancelAnimationFrame(rafId);
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
         window.removeEventListener('resize', measureRect);
         window.removeEventListener('scroll', measureRect);
       });
@@ -1250,11 +1306,16 @@ const {
 
     this._onPointerMove = (e) => {
       if (disabled) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = Math.max(0, Math.min(1, opacity));
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleUpdate();
     };
 
@@ -1270,7 +1331,10 @@ const {
   }
 
   disconnectedCallback() {
-    if (this._rafId !== null) cancelAnimationFrame(this._rafId);
+    if (this._rafId !== null) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
     this.removeEventListener('pointerenter', this._onPointerEnter);
     this.removeEventListener('pointermove', this._onPointerMove);
     this.removeEventListener('pointerleave', this._onPointerLeave);
@@ -1372,11 +1436,16 @@ if (!customElements.get('exhuma-spotlight-card')) {
 
     const onPointerMove = (e) => {
       if (disabled) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = Math.max(0, Math.min(1, opacity));
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleUpdate();
     };
 
@@ -1393,7 +1462,10 @@ if (!customElements.get('exhuma-spotlight-card')) {
     window.addEventListener('scroll', measureRect, { passive: true });
 
     cleanups.push(() => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       card.removeEventListener('pointerenter', onPointerEnter);
       card.removeEventListener('pointermove', onPointerMove);
       card.removeEventListener('pointerleave', onPointerLeave);
@@ -1446,7 +1518,7 @@ if (!customElements.get('exhuma-spotlight-card')) {
     @if ($mode === 'both' || $mode === 'border')
         <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+            class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
             style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
         ></div>
     @endif
@@ -1454,8 +1526,8 @@ if (!customElements.get('exhuma-spotlight-card')) {
     @if ($mode === 'both' || $mode === 'background')
         <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-            style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+            class="pointer-events-none absolute inset-0 z-0"
+            style="opacity: {{ $mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)' }}; background: radial-gradient(var(--exhuma-spotlight-radius, 350px) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
         ></div>
     @endif
 
@@ -1524,10 +1596,12 @@ if (!customElements.get('exhuma-spotlight-card')) {
 
             card.addEventListener('pointermove', function(e) {
                 if (disabled) return;
+                isHovered = true;
                 if (!rect) rect = card.getBoundingClientRect();
                 targetX = e.clientX - rect.left;
                 targetY = e.clientY - rect.top;
                 targetOpacity = opacity;
+                if (currentX < -1000) { currentX = targetX; currentY = targetY; }
                 if (!rafId) rafId = requestAnimationFrame(update);
             });
 
@@ -1620,14 +1694,14 @@ $disabled = (isset($attributes['disabled']) && $attributes['disabled']) ? 'true'
   <?php if ($mode === 'both' || $mode === 'background'): ?>
     <div
       aria-hidden="true"
-      class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0"
+      style="opacity: <?php echo ($mode === 'background') ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'; ?>; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
     ></div>
   <?php endif; ?>
   <?php if ($mode === 'both' || $mode === 'border'): ?>
     <div
       aria-hidden="true"
-      class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     ></div>
   <?php endif; ?>
@@ -1697,10 +1771,12 @@ $disabled = (isset($attributes['disabled']) && $attributes['disabled']) ? 'true'
 
       card.addEventListener('pointermove', function(e) {
         if (disabled) return;
+        isHovered = true;
         if (!rect) rect = card.getBoundingClientRect();
         targetX = e.clientX - rect.left;
         targetY = e.clientY - rect.top;
         targetOpacity = opacity;
+        if (currentX < -1000) { currentX = targetX; currentY = targetY; }
         if (!rafId) rafId = requestAnimationFrame(update);
       });
 

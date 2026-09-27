@@ -731,11 +731,16 @@ const onPointerEnter = (e: PointerEvent) => {
 
 const onPointerMove = (e: PointerEvent) => {
   if (props.disabled || isReducedMotion) return;
+  isHovered = true;
   if (!rect) measureRect();
   if (!rect) return;
   targetX = e.clientX - rect.left;
   targetY = e.clientY - rect.top;
   targetOpacity = props.opacity;
+  if (currentX < -1000) {
+    currentX = targetX;
+    currentY = targetY;
+  }
   scheduleRaf();
 };
 
@@ -754,7 +759,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (rafId !== null) cancelAnimationFrame(rafId);
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', measureRect);
     window.removeEventListener('scroll', measureRect);
@@ -781,7 +789,7 @@ onUnmounted(() => {
     <div
       v-if="props.mode === 'both' || props.mode === 'border'"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     />
 
@@ -789,8 +797,11 @@ onUnmounted(() => {
     <div
       v-if="props.mode === 'both' || props.mode === 'background'"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="pointer-events-none absolute inset-0 z-0"
+      :style="{
+        opacity: props.mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
+        background: 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))'
+      }"
     />
 
     <div class="relative z-20">
@@ -855,7 +866,7 @@ const endColor = computed(() => {
   return op <= 0 ? 'transparent' : op >= 1 ? props.colorTo : \`color-mix(in srgb, \${props.colorTo} \${Math.round(op * 100)}%, transparent)\`;
 });
 
-const pathRadius = computed(() => Math.max(0, props.borderRadius));
+const pathRadius = computed(() => Math.min(props.size, 200));
 </script>
 
 <template>
@@ -1158,7 +1169,7 @@ const props = withDefaults(defineProps<Props>(), {
       cards = Array.from(container.children) as HTMLElement[];
       total = cards.length;
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -1178,7 +1189,7 @@ const props = withDefaults(defineProps<Props>(), {
       }
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
         const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
         cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -1499,11 +1510,16 @@ const props = withDefaults(defineProps<Props>(), {
 
   const onPointerMove = (e: PointerEvent) => {
     if (disabled || isReducedMotion) return;
+    isHovered = true;
     if (!rect) measureRect();
     if (!rect) return;
     targetX = e.clientX - rect.left;
     targetY = e.clientY - rect.top;
     targetOpacity = opacity;
+    if (currentX < -1000) {
+      currentX = targetX;
+      currentY = targetY;
+    }
     scheduleRaf();
   };
 
@@ -1521,7 +1537,10 @@ const props = withDefaults(defineProps<Props>(), {
     }
 
     return () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', measureRect);
         window.removeEventListener('scroll', measureRect);
@@ -1542,7 +1561,7 @@ const props = withDefaults(defineProps<Props>(), {
   {#if mode === 'both' || mode === 'border'}
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     ></div>
   {/if}
@@ -1550,8 +1569,8 @@ const props = withDefaults(defineProps<Props>(), {
   {#if mode === 'both' || mode === 'background'}
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="pointer-events-none absolute inset-0 z-0"
+      style="opacity: {mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'}; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
     ></div>
   {/if}
 
@@ -1619,7 +1638,7 @@ const props = withDefaults(defineProps<Props>(), {
         ? colorTo
         : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`
   );
-  const pathRadius = $derived(Math.max(0, borderRadius));
+  const pathRadius = $derived(Math.min(size, 200));
 </script>
 
 <div
@@ -1912,7 +1931,7 @@ export const ${pascalName}: Component<${pascalName}Props> = (props) => {
       cards = Array.from(containerRef.children) as HTMLElement[];
       total = cards.length;
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale() && i === total - 1 ? topStart() : topStart() + i * topIncrement();
+        const stickyTop = reverseScale() && i === total - 1 ? topStart() + Math.max(0, total - 2) * topIncrement() : topStart() + i * topIncrement();
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -1932,7 +1951,7 @@ export const ${pascalName}: Component<${pascalName}Props> = (props) => {
       }
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
-        const stickyTop = reverseScale() && i === total - 1 ? topStart() : topStart() + i * topIncrement();
+        const stickyTop = reverseScale() && i === total - 1 ? topStart() + Math.max(0, total - 2) * topIncrement() : topStart() + i * topIncrement();
         const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold()));
         const targetScale = minScale() + (1 - minScale()) * smoothstep(1 - progress);
         cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -2269,11 +2288,16 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
 
   const onPointerMove = (e: PointerEvent) => {
     if (disabled() || isReducedMotion) return;
+    isHovered = true;
     if (!rect) measureRect();
     if (!rect) return;
     targetX = e.clientX - rect.left;
     targetY = e.clientY - rect.top;
     targetOpacity = opacity();
+    if (currentX < -1000) {
+      currentX = targetX;
+      currentY = targetY;
+    }
     scheduleRaf();
   };
 
@@ -2292,7 +2316,10 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
   });
 
   onCleanup(() => {
-    if (rafId !== null) cancelAnimationFrame(rafId);
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', measureRect);
       window.removeEventListener('scroll', measureRect);
@@ -2318,7 +2345,7 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
       {(mode() === 'both' || mode() === 'border') && (
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
           style={{
             opacity: 'var(--exhuma-spotlight-opacity, 0)',
             border: '1.5px solid transparent',
@@ -2334,9 +2361,9 @@ export const SpotlightCard: Component<SpotlightCardProps> = (props) => {
       {(mode() === 'both' || mode() === 'background') && (
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+          class="pointer-events-none absolute inset-0 z-0"
           style={{
-            opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+            opacity: mode() === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
             background: \`radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))\`,
           }}
         />
@@ -2419,7 +2446,7 @@ export const BorderBeam: Component<BorderBeamProps> = (rawProps) => {
     const op = Math.max(0, Math.min(1, local.endOpacity));
     return op <= 0 ? 'transparent' : op >= 1 ? local.colorTo : \`color-mix(in srgb, \${local.colorTo} \${Math.round(op * 100)}%, transparent)\`;
   };
-  const pathRadius = () => Math.max(0, local.borderRadius);
+  const pathRadius = () => Math.min(local.size, 200);
 
   return (
     <div
@@ -2963,15 +2990,16 @@ import { CommonModule } from '@angular/common';
       @if (mode() === 'both' || mode() === 'border') {
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+          class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
           style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
         ></div>
       }
       @if (mode() === 'both' || mode() === 'background') {
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-          style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+          class="pointer-events-none absolute inset-0 z-0"
+          [style.opacity]="mode() === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'"
+          style="background: radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
         ></div>
       }
       <div class="relative z-20">
@@ -3074,11 +3102,16 @@ export class ExhumaSpotlightCardComponent implements OnInit, OnDestroy {
 
       const onPointerMove = (e: PointerEvent) => {
         if (this.disabled() || isReducedMotion) return;
+        isHovered = true;
         if (!rect) measureRect();
         if (!rect) return;
         targetX = e.clientX - rect.left;
         targetY = e.clientY - rect.top;
         targetOpacity = this.opacity();
+        if (currentX < -1000) {
+          currentX = targetX;
+          currentY = targetY;
+        }
         scheduleRaf();
       };
 
@@ -3109,7 +3142,10 @@ export class ExhumaSpotlightCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.rafId !== null) window.cancelAnimationFrame(this.rafId);
+    if (this.rafId !== null) {
+      window.cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
     this.cleanups.forEach((cleanup) => cleanup());
   }
 }
@@ -3205,7 +3241,7 @@ export class ExhumaBorderBeamComponent {
   readonly borderRadius = input<number>(${borderRadius});
   readonly customClass = input<string>('');
 
-  readonly pathRadius = computed(() => Math.max(0, this.borderRadius()));
+  readonly pathRadius = computed(() => Math.min(this.size(), 200));
   readonly endColor = computed(() => {
     const op = Math.max(0, Math.min(1, this.endOpacity()));
     return op <= 0 ? 'transparent' : op >= 1 ? this.colorTo() : \`color-mix(in srgb, \${this.colorTo()} \${Math.round(op * 100)}%, transparent)\`;
@@ -3447,7 +3483,7 @@ const {
 
       // Init once: set static CSS on each card — no layout thrashing in scroll loop
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -3473,7 +3509,7 @@ const {
         }
         // Ω(1) Phase 2: batch write transforms only
         for (let i = 0; i < total; i++) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           (cards[i] as HTMLElement).style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -3758,7 +3794,7 @@ const cardId = 'exhuma-spotlight-' + Math.random().toString(36).substring(2, 9);
   {(mode === 'both' || mode === 'border') && (
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
       style={{
         opacity: 'var(--exhuma-spotlight-opacity, 0)',
         border: '1.5px solid transparent',
@@ -3774,9 +3810,9 @@ const cardId = 'exhuma-spotlight-' + Math.random().toString(36).substring(2, 9);
   {(mode === 'both' || mode === 'background') && (
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+      class="pointer-events-none absolute inset-0 z-0"
       style={{
-        opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+        opacity: mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
         background: \`radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))\`,
       }}
     />
@@ -3865,11 +3901,16 @@ const cardId = 'exhuma-spotlight-' + Math.random().toString(36).substring(2, 9);
 
       const onPointerMove = (e: PointerEvent) => {
         if (disabled || isReducedMotion) return;
+        isHovered = true;
         if (!rect) measureRect();
         if (!rect) return;
         targetX = e.clientX - rect.left;
         targetY = e.clientY - rect.top;
         targetOpacity = opacity;
+        if (currentX < -1000) {
+          currentX = targetX;
+          currentY = targetY;
+        }
         scheduleRaf();
       };
 
@@ -3890,7 +3931,10 @@ const cardId = 'exhuma-spotlight-' + Math.random().toString(36).substring(2, 9);
       window.addEventListener('resize', onScrollOrResize, { passive: true });
 
       document.addEventListener('astro:before-swap', () => {
-        if (rafId !== null) cancelAnimationFrame(rafId);
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
         card.removeEventListener('pointerenter', onPointerEnter);
         card.removeEventListener('pointermove', onPointerMove);
         card.removeEventListener('pointerleave', onPointerLeave);
@@ -3955,7 +3999,7 @@ const {
 
 const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
 const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-const pathRadius = Math.max(0, borderRadius);
+const pathRadius = Math.min(size, 200);
 ---
 
 <div
@@ -4162,7 +4206,7 @@ if (!customElements.get('exhuma-horizontal-scroller')) {
     // Init once: set static CSS on each card — no layout thrashing in scroll loop
     cards.forEach((card, i) => {
       if (card instanceof HTMLElement) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -4192,7 +4236,7 @@ if (!customElements.get('exhuma-horizontal-scroller')) {
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
         if (cards[i] instanceof HTMLElement) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           (cards[i] as HTMLElement).style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -4431,7 +4475,6 @@ if (!customElements.get('exhuma-tilt-card')) {
       borderEl.style.inset = '0';
       borderEl.style.borderRadius = 'inherit';
       borderEl.style.pointerEvents = 'none';
-      borderEl.style.transition = 'opacity 300ms';
       borderEl.style.border = '1.5px solid transparent';
       borderEl.style.opacity = 'var(--exhuma-spotlight-opacity, 0)';
       borderEl.style.background = 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box';
@@ -4450,8 +4493,7 @@ if (!customElements.get('exhuma-tilt-card')) {
       sheenEl.style.position = 'absolute';
       sheenEl.style.inset = '0';
       sheenEl.style.pointerEvents = 'none';
-      sheenEl.style.transition = 'opacity 300ms';
-      sheenEl.style.opacity = 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)';
+      sheenEl.style.opacity = mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)';
       sheenEl.style.background = 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))';
       this.insertBefore(sheenEl, this.firstChild);
     }
@@ -4523,11 +4565,16 @@ if (!customElements.get('exhuma-tilt-card')) {
 
     const onPointerMove = (e) => {
       if (disabled || isReducedMotion) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = opacity;
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleRaf();
     };
 
@@ -4548,7 +4595,10 @@ if (!customElements.get('exhuma-tilt-card')) {
     window.addEventListener('resize', onScrollOrResize, { passive: true });
 
     this._cleanup = () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       this.removeEventListener('pointerenter', onPointerEnter);
       this.removeEventListener('pointermove', onPointerMove);
       this.removeEventListener('pointerleave', onPointerLeave);
@@ -4633,7 +4683,7 @@ if (!customElements.get('exhuma-spotlight-card')) {
       document.head.appendChild(style);
     }
 
-    const pathRadius = Math.max(0, parseFloat(this.getAttribute('border-radius') || '${borderRadius}'));
+    const pathRadius = Math.min(parseFloat(size) || 200, 200);
     const sizeNum = parseFloat(size) || 200;
 
     this.innerHTML = \`
@@ -4793,7 +4843,7 @@ if (!customElements.get('exhuma-${slug}')) {
     // Init once: set static CSS on each card — no layout thrashing in scroll loop
     cards.forEach((card, i) => {
       if (card instanceof HTMLElement) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -4818,7 +4868,7 @@ if (!customElements.get('exhuma-${slug}')) {
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
         if (cards[i] instanceof HTMLElement) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           (cards[i] as HTMLElement).style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -5012,10 +5062,10 @@ if (!customElements.get('exhuma-${slug}')) {
 
     const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let rect = null;
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
+    let targetX = -9999;
+    let targetY = -9999;
+    let currentX = -9999;
+    let currentY = -9999;
     let targetOpacity = 0;
     let currentOpacity = 0;
     let isHovered = false;
@@ -5036,7 +5086,6 @@ if (!customElements.get('exhuma-${slug}')) {
       borderEl.style.inset = '0';
       borderEl.style.borderRadius = 'inherit';
       borderEl.style.pointerEvents = 'none';
-      borderEl.style.transition = 'opacity 300ms';
       borderEl.style.border = '1.5px solid transparent';
       borderEl.style.opacity = 'var(--exhuma-spotlight-opacity, 0)';
       borderEl.style.background = 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box';
@@ -5055,8 +5104,7 @@ if (!customElements.get('exhuma-${slug}')) {
       sheenEl.style.position = 'absolute';
       sheenEl.style.inset = '0';
       sheenEl.style.pointerEvents = 'none';
-      sheenEl.style.transition = 'opacity 300ms';
-      sheenEl.style.opacity = 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)';
+      sheenEl.style.opacity = mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)';
       sheenEl.style.background = 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))';
       card.insertBefore(sheenEl, card.firstChild);
     }
@@ -5113,19 +5161,26 @@ if (!customElements.get('exhuma-${slug}')) {
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
-      currentX = targetX;
-      currentY = targetY;
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       targetOpacity = opacity;
       scheduleRaf();
     };
 
     const onPointerMove = (e) => {
       if (disabled || isReducedMotion) return;
+      isHovered = true;
       if (!rect) measureRect();
       if (!rect) return;
       targetX = e.clientX - rect.left;
       targetY = e.clientY - rect.top;
       targetOpacity = opacity;
+      if (currentX < -1000) {
+        currentX = targetX;
+        currentY = targetY;
+      }
       scheduleRaf();
     };
 
@@ -5146,7 +5201,10 @@ if (!customElements.get('exhuma-${slug}')) {
     window.addEventListener('resize', onScrollOrResize, { passive: true });
 
     cleanups.push(() => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       card.removeEventListener('pointerenter', onPointerEnter);
       card.removeEventListener('pointermove', onPointerMove);
       card.removeEventListener('pointerleave', onPointerLeave);
@@ -5219,7 +5277,7 @@ if (!customElements.get('exhuma-${slug}')) {
 
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-    const pathRadius = Math.max(0, borderRadius);
+    const pathRadius = Math.min(size, 200);
 
     const container = document.createElement('div');
     container.className = 'exhuma-border-beam';
@@ -5475,7 +5533,7 @@ if (!customElements.get('exhuma-${slug}')) {
 
             // Init once: set static CSS — no layout thrashing in scroll loop
             cards.forEach(function(card, i) {
-                var stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+                var stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
                 card.style.position = 'sticky';
                 card.style.top = stickyTop + 'px';
                 card.style.zIndex = i + 1;
@@ -5496,7 +5554,7 @@ if (!customElements.get('exhuma-${slug}')) {
                 }
                 // Ω(1) Phase 2: batch write transforms only
                 for (var k = 0; k < total; k++) {
-                    var stickyTop = reverseScale && k === total - 1 ? topStart : topStart + k * topIncrement;
+                    var stickyTop = reverseScale && k === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + k * topIncrement;
                     var progress = Math.max(0, Math.min(1, (tops[k] - stickyTop) / scaleThreshold));
                     var targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
                     cards[k].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -5749,15 +5807,15 @@ $id = 'exhuma-spotlight-' . uniqid();
     @if($mode === 'both' || $mode === 'background')
         <div
             aria-hidden="true"
-            class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-            style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+            class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0"
+            style="opacity: {{ $mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)' }}; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
         ></div>
     @endif
 
     @if($mode === 'both' || $mode === 'border')
         <div
             aria-hidden="true"
-            class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+            class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
             style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
         ></div>
     @endif
@@ -5786,7 +5844,7 @@ $id = 'exhuma-spotlight-' . uniqid();
         var isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var rect = null;
 
-        var targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+        var targetX = -9999, targetY = -9999, currentX = -9999, currentY = -9999;
         var targetOpacity = 0, currentOpacity = 0;
         var isHovered = false;
         var rafId = null;
@@ -5843,19 +5901,26 @@ $id = 'exhuma-spotlight-' . uniqid();
             if (!rect) return;
             targetX = e.clientX - rect.left;
             targetY = e.clientY - rect.top;
-            currentX = targetX;
-            currentY = targetY;
+            if (currentX < -1000) {
+                currentX = targetX;
+                currentY = targetY;
+            }
             targetOpacity = opacity;
             scheduleRaf();
         }
 
         function onPointerMove(e) {
             if (disabled || isReducedMotion) return;
+            isHovered = true;
             if (!rect) measureRect();
             if (!rect) return;
             targetX = e.clientX - rect.left;
             targetY = e.clientY - rect.top;
             targetOpacity = opacity;
+            if (currentX < -1000) {
+                currentX = targetX;
+                currentY = targetY;
+            }
             scheduleRaf();
         }
 
@@ -5876,7 +5941,10 @@ $id = 'exhuma-spotlight-' . uniqid();
         window.addEventListener('resize', onScrollOrResize, { passive: true });
 
         window.addEventListener('pagehide', function cleanup() {
-            if (rafId !== null) window.cancelAnimationFrame(rafId);
+            if (rafId !== null) {
+                window.cancelAnimationFrame(rafId);
+                rafId = null;
+            }
             card.removeEventListener('pointerenter', onPointerEnter);
             card.removeEventListener('pointermove', onPointerMove);
             card.removeEventListener('pointerleave', onPointerLeave);
@@ -5931,7 +5999,7 @@ $id = 'exhuma-spotlight-' . uniqid();
 @php
     $clampedEndOpacity = max(0, min(1, (float)$endOpacity));
     $endColor = $clampedEndOpacity <= 0 ? 'transparent' : ($clampedEndOpacity >= 1 ? $colorTo : "color-mix(in srgb, {$colorTo} " . round($clampedEndOpacity * 100) . "%, transparent)");
-    $pathRadius = max(0, (int)$borderRadius);
+    $pathRadius = min((int)$size, 200);
 @endphp
 
 <div
@@ -6250,15 +6318,15 @@ $disabled = ($attributes['disabled'] ?? false) ? 'true' : 'false';
   <?php if ($mode === 'both' || $mode === 'background'): ?>
     <div
       aria-hidden="true"
-      class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
-      style="opacity: calc(var(--exhuma-spotlight-opacity, 0) * 0.25); background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, 0px) var(--exhuma-spotlight-y, 0px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
+      class="exhuma-spotlight-glow pointer-events-none absolute inset-0 z-0"
+      style="opacity: <?php echo $mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)'; ?>; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color, #6366f1) 0%, transparent var(--exhuma-spotlight-spread, 60%));"
     ></div>
   <?php endif; ?>
   <?php if ($mode === 'both' || $mode === 'border'): ?>
     <div
       aria-hidden="true"
-      class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
-      style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, 0px) var(--exhuma-spotlight-y, 0px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
+      class="exhuma-spotlight-border pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
+      style="opacity: var(--exhuma-spotlight-opacity, 0); border: 1.5px solid transparent; background: radial-gradient(circle var(--exhuma-spotlight-radius, 350px) at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-border-color, #818cf8) 0%, transparent var(--exhuma-spotlight-spread, 60%)) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
     ></div>
   <?php endif; ?>
   <div class="relative z-20">
@@ -6319,7 +6387,7 @@ $borderWidth = $attributes['borderWidth'] ?? ${borderWidth};
 $colorFrom = $attributes['colorFrom'] ?? '${colorFrom}';
 $colorTo = $attributes['colorTo'] ?? '${colorTo}';
 $borderRadius = $attributes['borderRadius'] ?? ${borderRadius};
-$pathRadius = max(0, (int)$borderRadius);
+$pathRadius = min((int)$size, 200);
 ?>
 <div
   class="exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit]"
@@ -6495,13 +6563,13 @@ export function ${pascalName}({
 
       // Phase 1+2: compute and set scale per card (native driver handles GPU layer)
       for (let i = 0; i < total; i++) {
-        const stickyTop = topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         const progress = Math.max(0, Math.min(1, (SCREEN_HEIGHT - stickyTop - y * 0.3) / scaleThreshold));
         const targetScale = minScale + (1 - minScale) * smoothstep(progress);
         scaleAnims[i].setValue(targetScale);
       }
     },
-    [total, topStart, topIncrement, scaleThreshold, minScale, scaleAnims, scrollY]
+    [total, topStart, topIncrement, scaleThreshold, minScale, scaleAnims, scrollY, reverseScale]
   );
 
   return (
@@ -6513,7 +6581,7 @@ export function ${pascalName}({
       {...props}
     >
       {childArray.map((child, index) => {
-        const stickyTop = reverseScale && index === total - 1 ? topStart : topStart + index * topIncrement;
+        const stickyTop = reverseScale && index === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + index * topIncrement;
         return (
           <Animated.View
             key={index}
@@ -7068,7 +7136,7 @@ class _Exhuma${pascalName}State extends State<Exhuma${pascalName}> {
           final index = entry.key;
           final child = entry.value;
           final stickyTop = widget.reverseScale && index == total - 1
-              ? widget.topStart
+              ? widget.topStart + (total > 1 ? total - 2 : 0) * widget.topIncrement
               : widget.topStart + index * widget.topIncrement;
 
           final rawProgress = (offset - (index * widget.scaleThreshold)) / widget.scaleThreshold;
@@ -7848,6 +7916,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
     const handlePointerMove = React.useCallback(
       (e: React.PointerEvent<HTMLDivElement>) => {
         if (disabled || isReducedMotionRef.current) return;
+        isHoveredRef.current = true;
         if (!rectRef.current) measureRect();
         const rect = rectRef.current;
         if (!rect) return;
@@ -7855,6 +7924,11 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         targetX.current = e.clientX - rect.left;
         targetY.current = e.clientY - rect.top;
         targetOpacity.current = Math.max(0, Math.min(1, opacity));
+
+        if (currentX.current < -1000) {
+          currentX.current = targetX.current;
+          currentY.current = targetY.current;
+        }
 
         scheduleUpdate();
       },
@@ -7883,9 +7957,10 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
       return () => {
         if (rafIdRef.current !== null) {
           cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
         }
       };
-    }, [cardRef, radius, color, borderColor, spread, disabled]);
+    }, [cardRef, radius, color, borderColor, spread, disabled, opacity]);
 
     const showBorder = mode === 'both' || mode === 'border';
     const showSheen = mode === 'both' || mode === 'background';
@@ -7911,7 +7986,7 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         {showBorder && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
             style={{
               opacity: 'var(--exhuma-spotlight-opacity, 0)',
               border: '1.5px solid transparent',
@@ -7928,9 +8003,9 @@ export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps
         {showSheen && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+            className="pointer-events-none absolute inset-0 z-0"
             style={{
-              opacity: 'calc(var(--exhuma-spotlight-opacity, 0) * 0.25)',
+              opacity: mode === 'background' ? 'var(--exhuma-spotlight-opacity, 0)' : 'calc(var(--exhuma-spotlight-opacity, 0) * 0.35)',
               background: 'radial-gradient(var(--exhuma-spotlight-radius) circle at var(--exhuma-spotlight-x, -9999px) var(--exhuma-spotlight-y, -9999px), var(--exhuma-spotlight-color) 0%, transparent var(--exhuma-spotlight-spread, 60%))',
             }}
           />
@@ -7995,7 +8070,7 @@ export const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(
   ) => {
     const clampedEndOpacity = Math.max(0, Math.min(1, endOpacity));
     const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : \`color-mix(in srgb, \${colorTo} \${Math.round(clampedEndOpacity * 100)}%, transparent)\`;
-    const pathRadius = Math.max(0, borderRadius);
+    const pathRadius = Math.min(size, 200);
 
     return (
       <div
@@ -8462,7 +8537,7 @@ export const StackingCards = React.memo(
       >
         {childArray.map((child, index) => {
           const isLast = totalCards > 1 && index === totalCards - 1;
-          const stickyTop = isReverseScaleEnabled && isLast ? topStart : topStart + index * topIncrement;
+          const stickyTop = isReverseScaleEnabled && isLast ? topStart + Math.max(0, totalCards - 2) * topIncrement : topStart + index * topIncrement;
           return (
             <div
               key={index}

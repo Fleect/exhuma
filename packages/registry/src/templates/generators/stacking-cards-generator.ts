@@ -319,7 +319,7 @@ export const StackingCards = React.memo(
       >
         {childArray.map((child, index) => {
           const isLast = totalCards > 1 && index === totalCards - 1;
-          const stickyTop = isReverseScaleEnabled && isLast ? topStart : topStart + index * topIncrement;
+          const stickyTop = isReverseScaleEnabled && isLast ? topStart + Math.max(0, totalCards - 2) * topIncrement : topStart + index * topIncrement;
           return (
             <div
               key={index}
@@ -406,7 +406,7 @@ const initCards = () => {
   // Set static styles once — no layout thrashing in scroll loop
   cards.forEach((card, i) => {
     const stickyTop = props.reverseScale && i === total - 1
-      ? props.topStart
+      ? props.topStart + Math.max(0, total - 2) * props.topIncrement
       : props.topStart + i * props.topIncrement;
     card.style.position = 'sticky';
     card.style.top = stickyTop + 'px';
@@ -428,7 +428,7 @@ const updateStack = () => {
   // Ω(1) Phase 2: batch write transforms only
   for (let i = 0; i < total; i++) {
     const stickyTop = props.reverseScale && i === total - 1
-      ? props.topStart
+      ? props.topStart + Math.max(0, total - 2) * props.topIncrement
       : props.topStart + i * props.topIncrement;
     const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / props.scaleThreshold));
     const targetScale = props.minScale + (1 - props.minScale) * smoothstep(1 - progress);
@@ -529,7 +529,7 @@ onUnmounted(() => {
       cards = Array.from(container.children) as HTMLElement[];
       total = cards.length;
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -549,7 +549,7 @@ onUnmounted(() => {
       }
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
         const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
         cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -649,7 +649,7 @@ export const StackingCards: Component<StackingCardsProps> = (props) => {
       cards = Array.from(containerRef.children) as HTMLElement[];
       total = cards.length;
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale() && i === total - 1 ? topStart() : topStart() + i * topIncrement();
+        const stickyTop = reverseScale() && i === total - 1 ? topStart() + Math.max(0, total - 2) * topIncrement() : topStart() + i * topIncrement();
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -669,7 +669,7 @@ export const StackingCards: Component<StackingCardsProps> = (props) => {
       }
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
-        const stickyTop = reverseScale() && i === total - 1 ? topStart() : topStart() + i * topIncrement();
+        const stickyTop = reverseScale() && i === total - 1 ? topStart() + Math.max(0, total - 2) * topIncrement() : topStart() + i * topIncrement();
         const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold()));
         const targetScale = minScale() + (1 - minScale()) * smoothstep(1 - progress);
         cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -769,7 +769,7 @@ export class ExhumaStackingCardsComponent {
         total = cards.length;
         cards.forEach((card, i) => {
           const stickyTop = this.reverseScale() && i === total - 1
-            ? this.topStart()
+            ? this.topStart() + Math.max(0, total - 2) * this.topIncrement()
             : this.topStart() + i * this.topIncrement();
           card.style.position = 'sticky';
           card.style.top = stickyTop + 'px';
@@ -791,7 +791,7 @@ export class ExhumaStackingCardsComponent {
         // Ω(1) Phase 2: batch write transforms only
         for (let i = 0; i < total; i++) {
           const stickyTop = this.reverseScale() && i === total - 1
-            ? this.topStart()
+            ? this.topStart() + Math.max(0, total - 2) * this.topIncrement()
             : this.topStart() + i * this.topIncrement();
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / this.scaleThreshold()));
           const targetScale = this.minScale() + (1 - this.minScale()) * smoothstep(1 - progress);
@@ -889,7 +889,7 @@ const {
 
       // Init once: set static CSS on each card — no layout thrashing in scroll loop
       cards.forEach((card, i) => {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -915,7 +915,7 @@ const {
         }
         // Ω(1) Phase 2: batch write transforms only
         for (let i = 0; i < total; i++) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -984,7 +984,7 @@ const {
     // Init once: set static CSS on each card — no layout thrashing in scroll loop
     cards.forEach((card, i) => {
       if (card instanceof HTMLElement) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -1014,7 +1014,7 @@ const {
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
         if (cards[i] instanceof HTMLElement) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -1088,7 +1088,7 @@ if (!customElements.get('exhuma-stacking-cards')) {
     // Init once: set static CSS on each card — no layout thrashing in scroll loop
     cards.forEach((card, i) => {
       if (card instanceof HTMLElement) {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -1113,7 +1113,7 @@ if (!customElements.get('exhuma-stacking-cards')) {
       // Ω(1) Phase 2: batch write transforms only
       for (let i = 0; i < total; i++) {
         if (cards[i] instanceof HTMLElement) {
-          const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+          const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
           const progress = Math.max(0, Math.min(1, (tops[i] - stickyTop) / scaleThreshold));
           const targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           cards[i].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -1207,7 +1207,7 @@ if (!customElements.get('exhuma-stacking-cards')) {
 
             // Init once: set static CSS — no layout thrashing in scroll loop
             cards.forEach(function(card, i) {
-                var stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+                var stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
                 card.style.position = 'sticky';
                 card.style.top = stickyTop + 'px';
                 card.style.zIndex = i + 1;
@@ -1226,7 +1226,7 @@ if (!customElements.get('exhuma-stacking-cards')) {
                     tops[i] = cards[i].getBoundingClientRect().top;
                 }
                 for (var j = 0; j < total; j++) {
-                    var stickyTop = reverseScale && j === total - 1 ? topStart : topStart + j * topIncrement;
+                    var stickyTop = reverseScale && j === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + j * topIncrement;
                     var progress = Math.max(0, Math.min(1, (tops[j] - stickyTop) / scaleThreshold));
                     var targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
                     cards[j].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -1346,7 +1346,7 @@ $reverse_scale = (isset($attributes['reverseScale']) ? (bool)$attributes['revers
       if (total <= 1) return;
 
       cards.forEach(function(card, i) {
-        var stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        var stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         card.style.position = 'sticky';
         card.style.top = stickyTop + 'px';
         card.style.zIndex = (i + 1).toString();
@@ -1370,7 +1370,7 @@ $reverse_scale = (isset($attributes['reverseScale']) ? (bool)$attributes['revers
           tops[i] = cards[i].getBoundingClientRect().top;
         }
         for (var j = 0; j < total; j++) {
-          var stickyTop = reverseScale && j === total - 1 ? topStart : topStart + j * topIncrement;
+          var stickyTop = reverseScale && j === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + j * topIncrement;
           var progress = Math.max(0, Math.min(1, (tops[j] - stickyTop) / scaleThreshold));
           var targetScale = minScale + (1 - minScale) * smoothstep(1 - progress);
           cards[j].style.transform = 'scale(' + targetScale.toFixed(4) + ')';
@@ -1469,13 +1469,13 @@ export function StackingCards({
 
       // Phase 1+2: compute and set scale per card (native driver handles GPU layer)
       for (let i = 0; i < total; i++) {
-        const stickyTop = topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         const progress = Math.max(0, Math.min(1, (SCREEN_HEIGHT - stickyTop - y * 0.3) / scaleThreshold));
         const targetScale = minScale + (1 - minScale) * smoothstep(progress);
         scaleAnims[i].setValue(targetScale);
       }
     },
-    [total, topStart, topIncrement, scaleThreshold, minScale, scaleAnims, scrollY]
+    [total, topStart, topIncrement, scaleThreshold, minScale, scaleAnims, scrollY, reverseScale]
   );
 
   return (
@@ -1488,7 +1488,7 @@ export function StackingCards({
       {...props}
     >
       {childArray.map((child, i) => {
-        const stickyTop = reverseScale && i === total - 1 ? topStart : topStart + i * topIncrement;
+        const stickyTop = reverseScale && i === total - 1 ? topStart + Math.max(0, total - 2) * topIncrement : topStart + i * topIncrement;
         return (
           <Animated.View
             key={i}
@@ -1596,7 +1596,7 @@ class _ExhumaStackingCardsState extends State<ExhumaStackingCards> {
           final child = entry.value;
 
           final stickyTop = widget.reverseScale && index == total - 1
-              ? widget.topStart
+              ? widget.topStart + (total > 1 ? total - 2 : 0) * widget.topIncrement
               : widget.topStart + index * widget.topIncrement;
 
           final scrollDistance = (offset - (index * 80.0)).clamp(0.0, widget.scaleThreshold);

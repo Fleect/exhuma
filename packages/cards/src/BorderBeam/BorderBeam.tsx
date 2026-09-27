@@ -33,6 +33,7 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 	const clampedOpacity = Math.max(0, Math.min(1, Number.isFinite(opacity) ? opacity : 1));
 	const safeBlur = Number.isFinite(blur) && blur >= 0 ? blur : 0;
 	const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : `color-mix(in srgb, ${colorTo} ${Math.round(clampedEndOpacity * 100)}%, transparent)`;
+	const pathRadius = Math.min(safeSize, 200);
 
 	return (
 		<div
@@ -58,7 +59,7 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 					position: 'absolute',
 					aspectRatio: '1 / 1',
 					width: `${safeSize}px`,
-					offsetPath: `rect(0 auto auto 0 round ${safeBorderRadius}px)`,
+					offsetPath: `rect(0 auto auto 0 round ${pathRadius}px)`,
 					offsetAnchor: `${safeSize / 2}px ${safeSize / 2}px`,
 					background: `linear-gradient(to left, ${colorFrom}, ${colorTo}, ${endColor})`,
 					animation: `exhuma-border-beam ${safeDuration}s linear infinite`,
@@ -73,7 +74,7 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 						position: 'absolute',
 						aspectRatio: '1 / 1',
 						width: `${safeSize}px`,
-						offsetPath: `rect(0 auto auto 0 round ${safeBorderRadius}px)`,
+						offsetPath: `rect(0 auto auto 0 round ${pathRadius}px)`,
 						offsetAnchor: `${safeSize / 2}px ${safeSize / 2}px`,
 						background: `linear-gradient(to left, ${colorFrom}, ${colorTo}, ${endColor})`,
 						animation: `exhuma-border-beam ${safeDuration}s linear infinite`,
