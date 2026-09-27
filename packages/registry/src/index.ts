@@ -11,7 +11,6 @@ import { infiniteMarqueeComponent } from './components/infinite-marquee';
 import { bentoGridComponent } from './components/bento-grid';
 import { diamondGridComponent } from './components/diamond-grid';
 import { borderBeamComponent } from './components/border-beam';
-import { animatedSphereComponent } from './components/animated-sphere';
 import { floatingDockComponent } from './components/floating-dock';
 import { numberTickerComponent } from './components/number-ticker';
 import { magneticButtonComponent } from './components/magnetic-button';
@@ -36,7 +35,6 @@ export {
 	bentoGridComponent,
 	diamondGridComponent,
 	borderBeamComponent,
-	animatedSphereComponent,
 	floatingDockComponent,
 	numberTickerComponent,
 	magneticButtonComponent,
@@ -59,7 +57,6 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'bento-grid': bentoGridComponent,
 	'diamond-grid': diamondGridComponent,
 	'border-beam': borderBeamComponent,
-	'animated-sphere': animatedSphereComponent,
 	'floating-dock': floatingDockComponent,
 	'number-ticker': numberTickerComponent,
 	'magnetic-button': magneticButtonComponent,

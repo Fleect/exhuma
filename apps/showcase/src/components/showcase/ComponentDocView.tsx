@@ -55,7 +55,7 @@ import { DocsTable, docsTableHeadClass } from '@/components/docs/DocsTable';
 import { cn } from '@/lib/utils';
 import { StackingCards, HorizontalScroller, TiltCard, SpotlightCard, BorderBeam, CardSwipeStack, ComparisonSlider, ExpandableCard } from '@exhuma/cards';
 import { CssMasonry, CssMasonryItem, AutoGrid, AutoGridItem, InfiniteMarquee, BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual, DiamondGrid } from '@exhuma/layouts';
-import { MorphingTabs, Accordion, AnimatedSphere, FloatingDock, NumberTicker, MagneticButton, CursorTooltip } from '@exhuma/core';
+import { MorphingTabs, Accordion, FloatingDock, NumberTicker, MagneticButton, CursorTooltip } from '@exhuma/core';
 
 const COLOR_PRESETS = [
 	{ label: 'Indigo', value: '#6366f1' },
@@ -160,11 +160,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Hyperdrive: { size: 180, duration: 4, borderWidth: 2.5, colorFrom: '#ec4899', colorTo: '#8b5cf6', doubleBeam: true, endOpacity: 0.05, opacity: 1, blur: 1, borderRadius: 16 },
 		'Subtle Glow': { size: 180, duration: 12, borderWidth: 1.5, colorFrom: '#6366f1', colorTo: '#a855f7', doubleBeam: false, endOpacity: 0, opacity: 0.85, blur: 0, borderRadius: 16 },
 		'Neon Emerald': { size: 200, duration: 6, borderWidth: 2, colorFrom: '#10b981', colorTo: '#06b6d4', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
-	},
-	'animated-sphere': {
-		Default: { color: '#6366f1', speed: 1.0, radiusScale: 0.475 },
-		Rapid: { color: '#8b5cf6', speed: 2.0, radiusScale: 0.475 },
-		Subtle: { color: '#06b6d4', speed: 0.5, radiusScale: 0.4 },
 	},
 	'number-ticker': {
 		Default: { value: 1000, decimalPlaces: 0 },
@@ -1485,20 +1480,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 			);
 		}
 
-		// 15. Animated Sphere
-		if (component.slug === 'animated-sphere') {
-			const color = String(propValues.color ?? '#6366f1');
-			const speed = Number(propValues.speed ?? 1.0);
-			const radiusScale = Number(propValues.radiusScale ?? 0.475);
-
-			return (
-				<div className='flex flex-col items-center justify-center p-4'>
-					<AnimatedSphere color={color} speed={speed} radiusScale={radiusScale} className='border-border/80 h-64 w-64 rounded-2xl border bg-black/60 shadow-2xl backdrop-blur-md' />
-				</div>
-			);
-		}
-
-		// 16. Floating Dock
+		// Floating Dock
 		if (component.slug === 'floating-dock') {
 			const direction = (propValues.direction as any) || 'bottom';
 			const baseSize = Number(propValues.baseSize ?? 44);

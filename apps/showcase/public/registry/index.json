@@ -1,12 +1,12 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T13:22:13.681Z",
+	"generatedAt": "2026-09-27T17:15:23.460Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
 		{ "id": "navigation", "label": "Navigation & Rails", "count": 2 },
-		{ "id": "primitives", "label": "Kinetic Primitives & Disclosures", "count": 5 }
+		{ "id": "primitives", "label": "Kinetic Primitives & Disclosures", "count": 4 }
 	],
 	"components": [
 		{
@@ -616,34 +616,6 @@
 				{ "name": "opacity", "label": "Opacity", "type": "number", "defaultValue": 1, "min": 0, "max": 1, "step": 0.05, "description": "Overall opacity of the border beam trace." },
 				{ "name": "blur", "label": "Glow Blur (px)", "type": "number", "defaultValue": 0, "min": 0, "max": 12, "step": 1, "description": "Specular diffuse blur applied to the perimeter laser trace." },
 				{ "name": "borderRadius", "label": "Corner Radius (px)", "type": "number", "defaultValue": 16, "min": 0, "max": 48, "step": 2, "description": "Corner radius of the perimeter path matching card borders." }
-			],
-			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
-				"vue": ["clsx"],
-				"svelte": ["clsx"],
-				"solid": ["clsx"],
-				"angular": [],
-				"astro": [],
-				"blade": [],
-				"vanilla": [],
-				"wordpress": [],
-				"webcomponent": [],
-				"react-native": [],
-				"flutter": []
-			},
-			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
-		},
-		{
-			"name": "Animated Sphere",
-			"slug": "animated-sphere",
-			"category": "primitives",
-			"description": "Handcrafted 3D spherical trigonometry on HTML5 2D Canvas with depth sorting and zero Three.js.",
-			"version": "1.0.0",
-			"props": [
-				{ "name": "color", "label": "Sphere Color", "type": "string", "defaultValue": "#6366f1", "description": "Foreground raster color (hex or CSS color string)." },
-				{ "name": "speed", "label": "Rotation Speed", "type": "number", "defaultValue": 1, "min": 0.2, "max": 3, "step": 0.1, "description": "Multiplier for 3D rotation speed." },
-				{ "name": "radiusScale", "label": "Radius Scale", "type": "number", "defaultValue": 0.475, "min": 0.2, "max": 0.5, "step": 0.025, "description": "Radius relative to canvas dimension." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],

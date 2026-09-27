@@ -54,5 +54,22 @@ A sub-pixel vector background grid pattern featuring pointer-proximity square il
 
 ---
 
+## 4. Animated Sphere (`animated-sphere`)
+
+### Overview
+A sub-pixel 3D spherical particle system rendered via trigonometric polar coordinates and Euler rotation matrices onto an HTML5 2D Canvas buffer, with dynamic depth sorting and ambient particle illumination.
+
+### Planned Capabilities
+* **3D Spherical Trigonometry Kernel**: Native continuous polar-to-Cartesian coordinate transforms ($x = r \sin\theta \cos\phi, y = r \sin\theta \sin\phi, z = r \cos\theta$) with 3D Euler matrix rotation ($\mathbf{R}_x(\alpha) \cdot \mathbf{R}_y(\beta)$).
+* **Depth-Sorted Particle Density**: Real-time Z-buffer depth sorting mapping character opacity and scaling dynamically from back-face to front-face.
+* **Dual Rendering Backends**: Lightweight Canvas 2D ASCII character field mode and hardware-accelerated WebGL / Three.js particle mesh mode.
+
+### Why Deferred from Beta
+1. **Graphics Runtime Fragmentation**: Delivering identical 3D spherical particle mathematics across 13 diverse ecosystem targets (especially static server environments like Laravel Blade, WordPress Gutenberg, and native runtimes like Flutter `CustomPainter` and React Native Skia) requires dedicated headless graphics kernel abstractions.
+2. **Mobile Thermal & GPU Battery Protection**: Continuous high-frequency canvas rasterization loops on mobile devices require strict intersection gating, reduced-motion frame throttling, and worker-offloaded math to protect battery life and prevent thermal throttling on entry-level mobile hardware.
+3. **Core Library Scope Alignment**: Exhuma v1.0 Beta focuses on high-impact tactile cards, interactive layout engines, and kinetic navigation disclosures. 3D procedural particle simulations are slated for the Exhuma Creative / FX expansion suite.
+
+---
+
 ## Target Release Horizon
-These components are scheduled for **Exhuma v1.1+** once the core 14 components have established baseline stability in production environments.
+These components are scheduled for **Exhuma v1.1+** once the core components have established baseline stability in production environments.
