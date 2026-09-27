@@ -7,6 +7,7 @@ export function getCursorTooltipOuterFiles(
 ): ComponentFilePayload[] | null {
 	const content = String(props.content ?? 'Explore Showcase');
 	const springDamping = Number(props.springDamping ?? 20);
+	const direction = String(props.direction ?? 'bottom-right');
 	const offsetX = Number(props.offsetX ?? 16);
 	const offsetY = Number(props.offsetY ?? 16);
 	const variant = String(props.variant ?? 'frosted');
@@ -58,6 +59,7 @@ export const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps
     {
       content = '${content}',
       springDamping = ${springDamping},
+      direction = '${direction}',
       offsetX = ${offsetX},
       offsetY = ${offsetY},
       variant = '${variant}',
@@ -72,6 +74,7 @@ export const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps
       <CoreCursorTooltip
         content={content}
         springDamping={springDamping}
+        direction={direction as any}
         offsetX={offsetX}
         offsetY={offsetY}
         variant={variant as CursorTooltipVariant}
@@ -101,10 +104,21 @@ import { createPortal } from 'react-dom';
 
 export type CursorTooltipVariant = 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
 
+export type CursorTooltipDirection =
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top-right'
+  | 'top-left'
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right';
+
 export interface CursorTooltipProps {
   children: React.ReactNode;
   content?: React.ReactNode;
   springDamping?: number;
+  direction?: CursorTooltipDirection;
   offsetX?: number;
   offsetY?: number;
   variant?: CursorTooltipVariant;
@@ -130,6 +144,36 @@ function dampCursorCoordinate(current: number, target: number, lambda: number, d
   return current + diff * (1 - Math.exp(-lambda * dt));
 }
 
+function calculateTargetPosition(
+  clientX: number,
+  clientY: number,
+  offsetX: number,
+  offsetY: number,
+  direction: CursorTooltipDirection,
+  width: number = 0,
+  height: number = 0
+) {
+  switch (direction) {
+    case 'top':
+      return { x: clientX - width / 2, y: clientY - offsetY - height };
+    case 'bottom':
+      return { x: clientX - width / 2, y: clientY + offsetY };
+    case 'left':
+      return { x: clientX - offsetX - width, y: clientY - height / 2 };
+    case 'right':
+      return { x: clientX + offsetX, y: clientY - height / 2 };
+    case 'top-left':
+      return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+    case 'top-right':
+      return { x: clientX + offsetX, y: clientY - offsetY - height };
+    case 'bottom-left':
+      return { x: clientX - offsetX - width, y: clientY + offsetY };
+    case 'bottom-right':
+    default:
+      return { x: clientX + offsetX, y: clientY + offsetY };
+  }
+}
+
 function clampTooltipToViewport(
   targetX: number,
   targetY: number,
@@ -152,6 +196,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   children,
   content = '${content}',
   springDamping = ${springDamping},
+  direction = '${direction}',
   offsetX = ${offsetX},
   offsetY = ${offsetY},
   variant = '${variant}',
@@ -161,6 +206,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
 }) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const mousePosRef = React.useRef({ x: -9999, y: -9999 });
   const targetPosRef = React.useRef({ x: -9999, y: -9999 });
   const currentPosRef = React.useRef({ x: -9999, y: -9999 });
   const tooltipElRef = React.useRef<HTMLDivElement | null>(null);
@@ -181,6 +227,20 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
       const target = targetPosRef.current;
 
       const isReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (tooltipElRef.current && mousePosRef.current.x >= 0) {
+        const el = tooltipElRef.current;
+        const rect = el.getBoundingClientRect();
+        targetPosRef.current = calculateTargetPosition(
+          mousePosRef.current.x,
+          mousePosRef.current.y,
+          offsetX,
+          offsetY,
+          direction,
+          rect.width,
+          rect.height
+        );
+      }
+
       if (isReduced) {
         cur.x = target.x;
         cur.y = target.y;
@@ -217,29 +277,33 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   const handlePointerEnter = React.useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.pointerType === 'touch') return;
-      const targetX = e.clientX + offsetX;
-      const targetY = e.clientY + offsetY;
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+      const rect = tooltipElRef.current?.getBoundingClientRect();
+      const target = calculateTargetPosition(e.clientX, e.clientY, offsetX, offsetY, direction, rect?.width ?? 0, rect?.height ?? 0);
       if (currentPosRef.current.x < 0) {
-        currentPosRef.current = { x: targetX, y: targetY };
+        currentPosRef.current = { ...target };
       }
-      targetPosRef.current = { x: targetX, y: targetY };
+      targetPosRef.current = target;
       setIsVisible(true);
       startRaf();
     },
-    [offsetX, offsetY, startRaf]
+    [direction, offsetX, offsetY, startRaf]
   );
 
   const handlePointerMove = React.useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.pointerType === 'touch') return;
-      targetPosRef.current = { x: e.clientX + offsetX, y: e.clientY + offsetY };
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+      const rect = tooltipElRef.current?.getBoundingClientRect();
+      targetPosRef.current = calculateTargetPosition(e.clientX, e.clientY, offsetX, offsetY, direction, rect?.width ?? 0, rect?.height ?? 0);
       startRaf();
     },
-    [offsetX, offsetY, startRaf]
+    [direction, offsetX, offsetY, startRaf]
   );
 
   const handlePointerLeave = React.useCallback(() => {
     setIsVisible(false);
+    mousePosRef.current = { x: -9999, y: -9999 };
     currentPosRef.current = { x: -9999, y: -9999 };
     targetPosRef.current = { x: -9999, y: -9999 };
     if (rafIdRef.current) {
@@ -305,6 +369,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 export interface CursorTooltipProps {
   content?: string;
   springDamping?: number;
+  direction?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'top' | 'bottom' | 'left' | 'right';
   offsetX?: number;
   offsetY?: number;
   variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
@@ -315,6 +380,7 @@ export interface CursorTooltipProps {
 const props = withDefaults(defineProps<CursorTooltipProps>(), {
   content: '${content}',
   springDamping: ${springDamping},
+  direction: '${direction}',
   offsetX: ${offsetX},
   offsetY: ${offsetY},
   variant: '${variant}',
@@ -456,6 +522,7 @@ onUnmounted(() => {
   interface Props {
     content?: string;
     springDamping?: number;
+    direction?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'top' | 'bottom' | 'left' | 'right';
     offsetX?: number;
     offsetY?: number;
     variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
@@ -467,6 +534,7 @@ onUnmounted(() => {
   let {
     content = '${content}',
     springDamping = ${springDamping},
+    direction = '${direction}',
     offsetX = ${offsetX},
     offsetY = ${offsetY},
     variant = '${variant}',
@@ -632,6 +700,7 @@ import { CommonModule } from '@angular/common';
 export class ExhumaCursorTooltipComponent implements OnInit, OnDestroy {
   readonly content = input<string>('${content}');
   readonly springDamping = input<number>(${springDamping});
+  readonly direction = input<string>('${direction}');
   readonly offsetX = input<number>(${offsetX});
   readonly offsetY = input<number>(${offsetY});
   readonly variant = input<'frosted' | 'accent' | 'dark' | 'minimal' | 'glow'>('${variant}');
@@ -778,6 +847,7 @@ import { Portal } from 'solid-js/web';
 export interface CursorTooltipProps extends JSX.HTMLAttributes<HTMLDivElement> {
   content?: string;
   springDamping?: number;
+  direction?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'top' | 'bottom' | 'left' | 'right';
   offsetX?: number;
   offsetY?: number;
   variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
@@ -791,6 +861,7 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
     {
       content: '${content}',
       springDamping: ${springDamping},
+      direction: '${direction}',
       offsetX: ${offsetX},
       offsetY: ${offsetY},
       variant: '${variant}',
@@ -802,6 +873,7 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
   const [local, others] = splitProps(props, [
     'content',
     'springDamping',
+    'direction',
     'offsetX',
     'offsetY',
     'variant',
@@ -941,6 +1013,7 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
 interface Props {
   content?: string;
   springDamping?: number;
+  direction?: string;
   offsetX?: number;
   offsetY?: number;
   variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
@@ -951,6 +1024,7 @@ interface Props {
 const {
   content = '${content}',
   springDamping = ${springDamping},
+  direction = '${direction}',
   offsetX = ${offsetX},
   offsetY = ${offsetY},
   variant = '${variant}',
@@ -974,6 +1048,7 @@ const badgeClass = variantClasses[variant] || variantClasses.frosted;
   data-exhuma-cursor-tooltip
   data-content={content}
   data-damping={springDamping}
+  data-direction={direction}
   data-offset-x={offsetX}
   data-offset-y={offsetY}
   data-padding={collisionPadding}
@@ -1094,6 +1169,7 @@ const badgeClass = variantClasses[variant] || variantClasses.frosted;
 					code: `@props([
     'content' => '${content}',
     'springDamping' => ${springDamping},
+    'direction' => '${direction}',
     'offsetX' => ${offsetX},
     'offsetY' => ${offsetY},
     'variant' => '${variant}',
@@ -1118,6 +1194,7 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
         'data-exhuma-cursor-tooltip' => '',
         'data-content' => $content,
         'data-damping' => $springDamping,
+        'data-direction' => $direction,
         'data-offset-x' => $offsetX,
         'data-offset-y' => $offsetY,
         'data-padding' => $collisionPadding,
@@ -1241,6 +1318,7 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
   const defaults = {
     content: '${content}',
     springDamping: ${springDamping},
+    direction: '${direction}',
     offsetX: ${offsetX},
     offsetY: ${offsetY},
     variant: '${variant}',
@@ -1379,6 +1457,7 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
   "attributes": {
     "content": { "type": "string", "default": "${content}" },
     "springDamping": { "type": "number", "default": ${springDamping} },
+    "direction": { "type": "string", "default": "${direction}" },
     "offsetX": { "type": "number", "default": ${offsetX} },
     "offsetY": { "type": "number", "default": ${offsetY} },
     "variant": { "type": "string", "default": "${variant}" },
@@ -1396,6 +1475,7 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
 					code: `<?php
 $content = $attributes['content'] ?? '${content}';
 $springDamping = $attributes['springDamping'] ?? ${springDamping};
+$direction = $attributes['direction'] ?? '${direction}';
 $offsetX = $attributes['offsetX'] ?? ${offsetX};
 $offsetY = $attributes['offsetY'] ?? ${offsetY};
 $variant = $attributes['variant'] ?? '${variant}';
@@ -1414,6 +1494,7 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
     class="wp-block-exhuma-cursor-tooltip relative inline-block cursor-pointer"
     data-content="<?php echo esc_attr($content); ?>"
     data-damping="<?php echo esc_attr($springDamping); ?>"
+    data-direction="<?php echo esc_attr($direction); ?>"
     data-offset-x="<?php echo esc_attr($offsetX); ?>"
     data-offset-y="<?php echo esc_attr($offsetY); ?>"
     data-padding="<?php echo esc_attr($collisionPadding); ?>"
@@ -1524,6 +1605,7 @@ class ExhumaCursorTooltipElement extends HTMLElement {
   connectedCallback() {
     this.content = this.getAttribute('content') || '${content}';
     this.springDamping = parseFloat(this.getAttribute('spring-damping') || '${springDamping}');
+    this.direction = this.getAttribute('direction') || '${direction}';
     this.offsetX = parseFloat(this.getAttribute('offset-x') || '${offsetX}');
     this.offsetY = parseFloat(this.getAttribute('offset-y') || '${offsetY}');
     this.collisionPadding = parseFloat(this.getAttribute('collision-padding') || '${collisionPadding}');
@@ -1650,6 +1732,7 @@ import { View, Text, StyleSheet, Animated, PanResponder, type ViewStyle } from '
 export interface CursorTooltipProps {
   content?: string;
   springDamping?: number;
+  direction?: string;
   offsetX?: number;
   offsetY?: number;
   variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
@@ -1660,6 +1743,7 @@ export interface CursorTooltipProps {
 export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   content = '${content}',
   springDamping = ${springDamping},
+  direction = '${direction}',
   offsetX = ${offsetX},
   offsetY = ${offsetY},
   variant = '${variant}',
@@ -1759,6 +1843,7 @@ class ExhumaCursorTooltip extends StatefulWidget {
   final Widget child;
   final String content;
   final double springDamping;
+  final String direction;
   final double offsetX;
   final double offsetY;
   final String variant;
@@ -1769,6 +1854,7 @@ class ExhumaCursorTooltip extends StatefulWidget {
     required this.child,
     this.content = '${content}',
     this.springDamping = ${toDartDouble(springDamping)},
+    this.direction = '${direction}',
     this.offsetX = ${toDartDouble(offsetX)},
     this.offsetY = ${toDartDouble(offsetY)},
     this.variant = '${variant}',
@@ -1894,6 +1980,7 @@ class _ExhumaCursorTooltipState extends State<ExhumaCursorTooltip> with SingleTi
 export function getCursorTooltipUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
 	const content = String(props.content ?? 'Explore Showcase');
 	const springDamping = Number(props.springDamping ?? 20);
+	const direction = String(props.direction ?? 'bottom-right');
 	const offsetX = Number(props.offsetX ?? 16);
 	const offsetY = Number(props.offsetY ?? 16);
 	const variant = String(props.variant ?? 'frosted');
@@ -1922,6 +2009,7 @@ export default function CursorTooltipDemo() {
       <CursorTooltip
         content="${content}"
         springDamping={${springDamping}}
+        direction="${direction}"
         offsetX={${offsetX}}
         offsetY={${offsetY}}
         variant="${variant}"
@@ -1953,6 +2041,7 @@ import CursorTooltip from './CursorTooltip.vue';
     <CursorTooltip
       content="${content}"
       :springDamping="${springDamping}"
+      direction="${direction}"
       :offsetX="${offsetX}"
       :offsetY="${offsetY}"
       variant="${variant}"
@@ -1982,6 +2071,7 @@ import CursorTooltip from './CursorTooltip.vue';
   <CursorTooltip
     content="${content}"
     springDamping={${springDamping}}
+    direction="${direction}"
     offsetX={${offsetX}}
     offsetY={${offsetY}}
     variant="${variant}"
@@ -2014,6 +2104,7 @@ import { ExhumaCursorTooltipComponent } from './cursor-tooltip.component';
       <exhuma-cursor-tooltip
         content="${content}"
         [springDamping]="${springDamping}"
+        direction="${direction}"
         [offsetX]="${offsetX}"
         [offsetY]="${offsetY}"
         variant="${variant}"
@@ -2046,6 +2137,7 @@ export const CursorTooltipDemo: Component = () => {
       <CursorTooltip
         content="${content}"
         springDamping={${springDamping}}
+        direction="${direction}"
         offsetX={${offsetX}}
         offsetY={${offsetY}}
         variant="${variant}"
@@ -2076,6 +2168,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
   <CursorTooltip
     content="${content}"
     springDamping={${springDamping}}
+    direction="${direction}"
     offsetX={${offsetX}}
     offsetY={${offsetY}}
     variant="${variant}"
@@ -2100,6 +2193,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
     <x-cursor-tooltip
         content="${content}"
         :springDamping="${springDamping}"
+        direction="${direction}"
         :offsetX="${offsetX}"
         :offsetY="${offsetY}"
         variant="${variant}"
@@ -2143,6 +2237,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
     initCursorTooltip('[data-exhuma-cursor-tooltip]', {
       content: '${content}',
       springDamping: ${springDamping},
+      direction: '${direction}',
       offsetX: ${offsetX},
       offsetY: ${offsetY},
       variant: '${variant}',
@@ -2163,6 +2258,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
 				code: `<!-- wp:exhuma/cursor-tooltip {
   "content": "${content}",
   "springDamping": ${springDamping},
+  "direction": "${direction}",
   "offsetX": ${offsetX},
   "offsetY": ${offsetY},
   "variant": "${variant}",
@@ -2195,6 +2291,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
   <exhuma-cursor-tooltip
     content="${content}"
     spring-damping="${springDamping}"
+    direction="${direction}"
     offset-x="${offsetX}"
     offset-y="${offsetY}"
     variant="${variant}"
@@ -2225,6 +2322,7 @@ export default function CursorTooltipDemo() {
       <CursorTooltip
         content="${content}"
         springDamping={${springDamping}}
+        direction="${direction}"
         offsetX={${offsetX}}
         offsetY={${offsetY}}
         variant="${variant}"
@@ -2293,6 +2391,7 @@ class MyApp extends StatelessWidget {
           child: ExhumaCursorTooltip(
             content: '${content}',
             springDamping: ${toDartDouble(springDamping)},
+            direction: '${direction}',
             offsetX: ${toDartDouble(offsetX)},
             offsetY: ${toDartDouble(offsetY)},
             variant: '${variant}',

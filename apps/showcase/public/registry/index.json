@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T22:17:39.103Z",
+	"generatedAt": "2026-09-27T22:30:10.581Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -940,6 +940,23 @@
 						{ "label": "Emerald Glow", "value": "glow" }
 					],
 					"description": "Visual token styling of the floating tooltip badge."
+				},
+				{
+					"name": "direction",
+					"label": "Direction",
+					"type": "select",
+					"defaultValue": "bottom-right",
+					"options": [
+						{ "label": "Bottom Right", "value": "bottom-right" },
+						{ "label": "Bottom Left", "value": "bottom-left" },
+						{ "label": "Top Right", "value": "top-right" },
+						{ "label": "Top Left", "value": "top-left" },
+						{ "label": "Top", "value": "top" },
+						{ "label": "Bottom", "value": "bottom" },
+						{ "label": "Left", "value": "left" },
+						{ "label": "Right", "value": "right" }
+					],
+					"description": "Directional orientation and quadrant placement relative to cursor pointer."
 				},
 				{
 					"name": "collisionPadding",

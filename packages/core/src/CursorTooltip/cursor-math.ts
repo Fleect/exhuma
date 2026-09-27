@@ -15,6 +15,16 @@ export interface CursorPosition {
 
 export type CursorTooltipVariant = 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
 
+export type CursorTooltipDirection =
+	| 'bottom-right'
+	| 'bottom-left'
+	| 'top-right'
+	| 'top-left'
+	| 'top'
+	| 'bottom'
+	| 'left'
+	| 'right';
+
 /**
  * Calculates element center coordinates.
  */
@@ -26,13 +36,60 @@ export function calculateElementCenter(rect: { left: number; top: number; width:
 }
 
 /**
- * Computes offset target position from client cursor coordinates.
+ * Computes directional offset target position from client cursor coordinates.
  */
-export function calculateTargetPosition(clientX: number, clientY: number, offsetX: number = 16, offsetY: number = 16): CursorPosition {
-	return {
-		x: clientX + offsetX,
-		y: clientY + offsetY,
-	};
+export function calculateTargetPosition(
+	clientX: number,
+	clientY: number,
+	offsetX: number = 16,
+	offsetY: number = 16,
+	direction: CursorTooltipDirection = 'bottom-right',
+	width: number = 0,
+	height: number = 0
+): CursorPosition {
+	switch (direction) {
+		case 'top':
+			return {
+				x: clientX - width / 2,
+				y: clientY - offsetY - height,
+			};
+		case 'bottom':
+			return {
+				x: clientX - width / 2,
+				y: clientY + offsetY,
+			};
+		case 'left':
+			return {
+				x: clientX - offsetX - width,
+				y: clientY - height / 2,
+			};
+		case 'right':
+			return {
+				x: clientX + offsetX,
+				y: clientY - height / 2,
+			};
+		case 'top-left':
+			return {
+				x: clientX - offsetX - width,
+				y: clientY - offsetY - height,
+			};
+		case 'top-right':
+			return {
+				x: clientX + offsetX,
+				y: clientY - offsetY - height,
+			};
+		case 'bottom-left':
+			return {
+				x: clientX - offsetX - width,
+				y: clientY + offsetY,
+			};
+		case 'bottom-right':
+		default:
+			return {
+				x: clientX + offsetX,
+				y: clientY + offsetY,
+			};
+	}
 }
 
 /**

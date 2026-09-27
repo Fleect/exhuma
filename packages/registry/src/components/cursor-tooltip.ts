@@ -62,6 +62,23 @@ export const cursorTooltipComponent: UniversalComponent = {
 			description: 'Visual token styling of the floating tooltip badge.',
 		},
 		{
+			name: 'direction',
+			label: 'Direction',
+			type: 'select',
+			defaultValue: 'bottom-right',
+			options: [
+				{ label: 'Bottom Right', value: 'bottom-right' },
+				{ label: 'Bottom Left', value: 'bottom-left' },
+				{ label: 'Top Right', value: 'top-right' },
+				{ label: 'Top Left', value: 'top-left' },
+				{ label: 'Top', value: 'top' },
+				{ label: 'Bottom', value: 'bottom' },
+				{ label: 'Left', value: 'left' },
+				{ label: 'Right', value: 'right' },
+			],
+			description: 'Directional orientation and quadrant placement relative to cursor pointer.',
+		},
+		{
 			name: 'collisionPadding',
 			label: 'Collision Padding (px)',
 			type: 'number',
@@ -75,6 +92,7 @@ export const cursorTooltipComponent: UniversalComponent = {
 	defaultProps: {
 		content: 'Explore Showcase',
 		springDamping: 20,
+		direction: 'bottom-right',
 		offsetX: 16,
 		offsetY: 16,
 		variant: 'frosted',

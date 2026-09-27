@@ -3,9 +3,15 @@
 import React, { useRef, useState, useCallback, useEffect, createContext, useContext, memo, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { damp } from '../physics/lerp';
-import { calculateElementCenter, clampTooltipToViewport, type CursorTooltipVariant } from './cursor-math';
+import {
+	calculateElementCenter,
+	calculateTargetPosition,
+	clampTooltipToViewport,
+	type CursorTooltipVariant,
+	type CursorTooltipDirection,
+} from './cursor-math';
 
-export type { CursorTooltipVariant };
+export type { CursorTooltipVariant, CursorTooltipDirection };
 
 interface CursorTooltipContextValue {
 	isVisible: boolean;
@@ -17,6 +23,7 @@ interface CursorTooltipContextValue {
 	offset: { x: number; y: number };
 	springDamping: number;
 	variant: CursorTooltipVariant;
+	direction: CursorTooltipDirection;
 	collisionPadding: number;
 }
 
@@ -26,6 +33,7 @@ export interface CursorTooltipProps {
 	children: ReactNode;
 	content?: ReactNode;
 	springDamping?: number;
+	direction?: CursorTooltipDirection;
 	offsetX?: number;
 	offsetY?: number;
 	offset?: { x: number; y: number };
@@ -60,6 +68,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 	children,
 	content,
 	springDamping = 20,
+	direction = 'bottom-right',
 	offsetX,
 	offsetY,
 	offset,
@@ -70,6 +79,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 }) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [contentNode, setContentNode] = useState<ReactNode>(content);
+	const mousePosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const targetPosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const currentPosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const tooltipElRef = useRef<HTMLDivElement | null>(null);
@@ -99,6 +109,22 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			lastTimeRef.current = timestamp;
 
 			const cur = currentPosRef.current;
+
+			if (tooltipElRef.current && mousePosRef.current.x >= 0) {
+				const el = tooltipElRef.current;
+				const rect = el.getBoundingClientRect();
+				const target = calculateTargetPosition(
+					mousePosRef.current.x,
+					mousePosRef.current.y,
+					effectiveOffset.x,
+					effectiveOffset.y,
+					direction,
+					rect.width,
+					rect.height
+				);
+				targetPosRef.current = target;
+			}
+
 			const target = targetPosRef.current;
 
 			const isReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -126,7 +152,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 				lastTimeRef.current = 0;
 			}
 		},
-		[springDamping, collisionPadding, isVisible]
+		[springDamping, direction, effectiveOffset.x, effectiveOffset.y, collisionPadding, isVisible]
 	);
 
 	const startRafIfNeeded = useCallback(() => {
@@ -138,8 +164,17 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 
 	const show = useCallback(
 		(e: React.MouseEvent<HTMLElement>) => {
-			const targetX = e.clientX + effectiveOffset.x;
-			const targetY = e.clientY + effectiveOffset.y;
+			mousePosRef.current = { x: e.clientX, y: e.clientY };
+			const rect = tooltipElRef.current?.getBoundingClientRect();
+			const target = calculateTargetPosition(
+				e.clientX,
+				e.clientY,
+				effectiveOffset.x,
+				effectiveOffset.y,
+				direction,
+				rect?.width ?? 0,
+				rect?.height ?? 0
+			);
 
 			// Initialize position at element center if first appearance
 			if (currentPosRef.current.x < 0) {
@@ -147,15 +182,16 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 				currentPosRef.current = { x: center.x, y: center.y };
 			}
 
-			targetPosRef.current = { x: targetX, y: targetY };
+			targetPosRef.current = target;
 			setIsVisible(true);
 			startRafIfNeeded();
 		},
-		[effectiveOffset.x, effectiveOffset.y, startRafIfNeeded]
+		[effectiveOffset.x, effectiveOffset.y, direction, startRafIfNeeded]
 	);
 
 	const hide = useCallback(() => {
 		setIsVisible(false);
+		mousePosRef.current = { x: -9999, y: -9999 };
 		currentPosRef.current = { x: -9999, y: -9999 };
 		targetPosRef.current = { x: -9999, y: -9999 };
 		if (rafIdRef.current) {
@@ -166,11 +202,21 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 
 	const update = useCallback(
 		(e: React.MouseEvent<HTMLElement>) => {
-			targetPosRef.current.x = e.clientX + effectiveOffset.x;
-			targetPosRef.current.y = e.clientY + effectiveOffset.y;
+			mousePosRef.current = { x: e.clientX, y: e.clientY };
+			const rect = tooltipElRef.current?.getBoundingClientRect();
+			const target = calculateTargetPosition(
+				e.clientX,
+				e.clientY,
+				effectiveOffset.x,
+				effectiveOffset.y,
+				direction,
+				rect?.width ?? 0,
+				rect?.height ?? 0
+			);
+			targetPosRef.current = target;
 			startRafIfNeeded();
 		},
-		[effectiveOffset.x, effectiveOffset.y, startRafIfNeeded]
+		[effectiveOffset.x, effectiveOffset.y, direction, startRafIfNeeded]
 	);
 
 	useEffect(() => {
@@ -193,6 +239,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 				offset: effectiveOffset,
 				springDamping,
 				variant,
+				direction,
 				collisionPadding,
 			}}
 		>

@@ -81,6 +81,24 @@ describe('CursorTooltip — Mathematical Foundations & Vector Kinetics', () => {
 		expect(topOver.x).toBe(padding);
 		expect(topOver.y).toBe(padding);
 	});
+
+	it('calculates target positions across all 8 directions accurately', () => {
+		const cx = 500;
+		const cy = 300;
+		const ox = 16;
+		const oy = 16;
+		const w = 120;
+		const h = 40;
+
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'bottom-right', w, h)).toEqual({ x: 516, y: 316 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'bottom-left', w, h)).toEqual({ x: 500 - 16 - 120, y: 316 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'top-right', w, h)).toEqual({ x: 516, y: 300 - 16 - 40 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'top-left', w, h)).toEqual({ x: 500 - 16 - 120, y: 300 - 16 - 40 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'top', w, h)).toEqual({ x: 500 - 60, y: 300 - 16 - 40 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'bottom', w, h)).toEqual({ x: 500 - 60, y: 316 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'left', w, h)).toEqual({ x: 500 - 16 - 120, y: 300 - 20 });
+		expect(calculateTargetPosition(cx, cy, ox, oy, 'right', w, h)).toEqual({ x: 516, y: 300 - 20 });
+	});
 });
 
 describe('CursorTooltip — 13 Ecosystems Code Generation & Packaging', () => {
@@ -90,6 +108,7 @@ describe('CursorTooltip — 13 Ecosystems Code Generation & Packaging', () => {
 		expect(component?.slug).toBe('cursor-tooltip');
 		expect(component?.props.some((p) => p.name === 'content')).toBe(true);
 		expect(component?.props.some((p) => p.name === 'springDamping')).toBe(true);
+		expect(component?.props.some((p) => p.name === 'direction')).toBe(true);
 		expect(component?.props.some((p) => p.name === 'offsetX')).toBe(true);
 		expect(component?.props.some((p) => p.name === 'offsetY')).toBe(true);
 		expect(component?.props.some((p) => p.name === 'variant')).toBe(true);
@@ -99,6 +118,7 @@ describe('CursorTooltip — 13 Ecosystems Code Generation & Packaging', () => {
 	const customProps = {
 		content: 'Live Inspector Active',
 		springDamping: 24,
+		direction: 'top-right',
 		offsetX: 18,
 		offsetY: 18,
 		variant: 'glow',
@@ -146,6 +166,7 @@ describe('CursorTooltip — Canonical JSON Synchronization', () => {
 		expect(publicData.slug).toBe('cursor-tooltip');
 		expect(publicData.props.some((p: { name: string }) => p.name === 'content')).toBe(true);
 		expect(publicData.props.some((p: { name: string }) => p.name === 'springDamping')).toBe(true);
+		expect(publicData.props.some((p: { name: string }) => p.name === 'direction')).toBe(true);
 		expect(publicData.props.some((p: { name: string }) => p.name === 'variant')).toBe(true);
 
 		for (const flavor of SUPPORTED_ECOSYSTEMS) {

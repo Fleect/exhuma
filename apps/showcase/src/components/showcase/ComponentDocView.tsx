@@ -200,11 +200,11 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Smooth: { duration: 420 },
 	},
 	'cursor-tooltip': {
-		'Default Smooth': { content: 'Explore Showcase', springDamping: 20, offsetX: 16, offsetY: 16, variant: 'frosted', collisionPadding: 12 },
-		'Snappy Pill': { content: 'Click to Inspect', springDamping: 32, offsetX: 12, offsetY: 14, variant: 'accent', collisionPadding: 8 },
-		'Elastic Lag': { content: 'Kinetic Physics', springDamping: 10, offsetX: 22, offsetY: 22, variant: 'dark', collisionPadding: 16 },
-		'Minimal Direct': { content: 'Target Active', springDamping: 38, offsetX: 8, offsetY: 10, variant: 'minimal', collisionPadding: 8 },
-		'Glow Badge': { content: '120 FPS GPU', springDamping: 18, offsetX: 18, offsetY: 18, variant: 'glow', collisionPadding: 14 },
+		'Default Smooth': { content: 'Explore Showcase', springDamping: 20, direction: 'bottom-right', offsetX: 16, offsetY: 16, variant: 'frosted', collisionPadding: 12 },
+		'Snappy Pill': { content: 'Click to Inspect', springDamping: 32, direction: 'top-right', offsetX: 12, offsetY: 14, variant: 'accent', collisionPadding: 8 },
+		'Elastic Lag': { content: 'Kinetic Physics', springDamping: 10, direction: 'bottom-left', offsetX: 22, offsetY: 22, variant: 'dark', collisionPadding: 16 },
+		'Minimal Direct': { content: 'Target Active', springDamping: 38, direction: 'top', offsetX: 8, offsetY: 10, variant: 'minimal', collisionPadding: 8 },
+		'Glow Badge': { content: '120 FPS GPU', springDamping: 18, direction: 'right', offsetX: 18, offsetY: 18, variant: 'glow', collisionPadding: 14 },
 	},
 	'floating-dock': {
 		Default: { direction: 'bottom', baseSize: 36, maxMagnification: 0.75, influenceRadius: 60, showLabels: true, panelStyle: 'translucent' },
@@ -2038,6 +2038,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		if (component.slug === 'cursor-tooltip') {
 			const content = String(propValues.content ?? 'Explore Showcase');
 			const springDamping = Number(propValues.springDamping ?? 20);
+			const direction = (propValues.direction as any) ?? 'bottom-right';
 			const offsetX = Number(propValues.offsetX ?? 16);
 			const offsetY = Number(propValues.offsetY ?? 16);
 			const variant = (propValues.variant as any) ?? 'frosted';
@@ -2048,6 +2049,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 					<CursorTooltip
 						content={content}
 						springDamping={springDamping}
+						direction={direction}
 						offsetX={offsetX}
 						offsetY={offsetY}
 						variant={variant}
@@ -2065,6 +2067,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 						</p>
 						<div className='border-border/50 text-3xs text-muted-foreground mt-6 flex items-center justify-between border-t pt-4 font-mono'>
 							<span>DAMPING: {springDamping}</span>
+							<span>DIR: {String(direction).toUpperCase()}</span>
 							<span>
 								OFFSET: ({offsetX}px, {offsetY}px)
 							</span>
