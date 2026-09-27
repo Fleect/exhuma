@@ -21,6 +21,7 @@ import {
 	IconArrowsMinimize as Minimize,
 } from '@tabler/icons-react';
 import { COMPONENT_REGISTRY, ALL_COMPONENTS, EcosystemFlavor, ECOSYSTEM_LABELS, generateComponentUsage } from '@/registry';
+import { ECOSYSTEM_COUNT, COMPONENT_COUNT } from '@/components/docs/docs-stats';
 import { CodeBlock } from './CodeBlock';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,26 +35,9 @@ import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection } from '@/components/docs/DocsSection';
 import { DocsSpecCard } from '@/components/docs/DocsSpecCard';
 import { DocsTable, docsTableHeadClass } from '@/components/docs/DocsTable';
-import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 import { cn } from '@/lib/utils';
 import { StackingCards, HorizontalScroller, TiltCard, SpotlightCard, BorderBeam, CardSwipeStack, ComparisonSlider, ExpandableCard } from '@exhuma/cards';
-import {
-	CssMasonry,
-	CssMasonryItem,
-	AutoGrid,
-	AutoGridItem,
-	InfiniteMarquee,
-	BentoGrid,
-	BentoCard,
-	BentoHeader,
-	BentoContent,
-	BentoVisual,
-	DiamondGrid,
-	ScrollTimeline,
-	StickyParallaxScroll,
-	ParallaxLayer,
-	InteractiveGridPattern,
-} from '@exhuma/layouts';
+import { CssMasonry, CssMasonryItem, AutoGrid, AutoGridItem, InfiniteMarquee, BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual, DiamondGrid } from '@exhuma/layouts';
 import { MorphingTabs, Accordion, AnimatedSphere, FloatingDock, NumberTicker, MagneticButton, CursorTooltip } from '@exhuma/core';
 
 const COLOR_PRESETS = [
@@ -153,16 +137,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Spacious: { mode: 'rhombic', gap: 24, layout: 'large', responsive: false },
 		Compact: { mode: 'rhombic', gap: 12, layout: 'medium', responsive: false },
 	},
-	'scroll-timeline': {
-		Default: { curveWidth: 24, curveHeight: 40, accentColor: '#6366f1' },
-		Wider: { curveWidth: 36, curveHeight: 50, accentColor: '#8b5cf6' },
-		Subtle: { curveWidth: 16, curveHeight: 30, accentColor: '#06b6d4' },
-	},
-	'sticky-parallax': {
-		Default: { trackHeight: '250vh' },
-		Short: { trackHeight: '180vh' },
-		Deep: { trackHeight: '350vh' },
-	},
 	'border-beam': {
 		Default: { size: 200, duration: 8, borderWidth: 2, colorFrom: '#ffaa40', colorTo: '#9c40ff', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
 		'Dual Orbital': { size: 200, duration: 8, borderWidth: 2, colorFrom: '#06b6d4', colorTo: '#3b82f6', doubleBeam: true, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
@@ -179,11 +153,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Default: { baseSize: 44, maxMagnification: 0.6, influenceRadius: 70 },
 		Compact: { baseSize: 36, maxMagnification: 0.5, influenceRadius: 55 },
 		Dramatic: { baseSize: 44, maxMagnification: 0.9, influenceRadius: 90 },
-	},
-	'interactive-grid': {
-		Default: { width: 32, height: 32 },
-		Dense: { width: 20, height: 20 },
-		Spacious: { width: 48, height: 48 },
 	},
 	'number-ticker': {
 		Default: { value: 1000, decimalPlaces: 0 },
@@ -487,7 +456,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		return 'tsx';
 	};
 
-	// Render interactive canvas preview with real-time prop tweaking across all 23 components
+	// Render interactive canvas preview with real-time prop tweaking across all canonical components
 	const renderCanvasPreview = () => {
 		// 1. Stacking Cards
 		if (component.slug === 'stacking-cards') {
@@ -863,7 +832,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 									</div>
 								</div>
 								<div className='border-border/60 text-muted-foreground text-3xs relative z-10 mt-2.5 flex flex-wrap items-center justify-between gap-1 border-t pt-2 font-mono'>
-									<span className='font-semibold text-pink-400'>13 Ecosystems</span>
+									<span className='font-semibold text-pink-400'>{ECOSYSTEM_COUNT} Ecosystems</span>
 									<span className='truncate'>Universal Native</span>
 								</div>
 							</div>
@@ -1022,7 +991,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 					title: 'Cross-Ecosystem Universal Grid',
 					desc: 'Zero-runtime pure CSS grid templates compiled for Vue, Svelte, Angular, Solid, and modern web frameworks.',
 					tag: 'UNIVERSAL',
-					metric: '13 Flavors',
+					metric: `${ECOSYSTEM_COUNT} Flavors`,
 					colSpan: 1,
 				},
 				{
@@ -1334,7 +1303,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 									<span className='kbd border-border bg-background/80 text-3xs font-mono font-bold text-amber-500 uppercase'>UNIVERSAL</span>
 									<span className='text-3xs text-muted-foreground font-mono'>#05</span>
 								</div>
-								<h4 className='text-foreground text-base font-bold'>13 Ecosystems</h4>
+								<h4 className='text-foreground text-base font-bold'>{ECOSYSTEM_COUNT} Ecosystems</h4>
 							</BentoHeader>
 							<BentoVisual>
 								<div className='flex flex-wrap justify-center gap-1.5'>
@@ -1403,68 +1372,6 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 							)
 						)}
 					</DiamondGrid>
-				</div>
-			);
-		}
-
-		// 12. Scroll Timeline
-		if (component.slug === 'scroll-timeline') {
-			return (
-				<div
-					tabIndex={0}
-					role='region'
-					aria-label={`${component.name} scroll demo`}
-					className='border-border/80 bg-background/50 no-scrollbar focus-visible:ring-foreground/50 relative mx-auto h-[28.75rem] w-full max-w-md overflow-y-auto rounded-2xl border p-6 shadow-inner outline-none focus-visible:ring-1'
-				>
-					<ScrollTimeline
-						items={[
-							{
-								date: 'Phase 01',
-								title: 'Mathematical Invariants',
-								subtitle: 'Big-Omega Foundation',
-								description: 'Codified analytical spring ODEs and zero-allocation ring buffers.',
-							},
-							{
-								date: 'Phase 02',
-								title: `${ECOSYSTEM_COUNT}-Ecosystem Compilers`,
-								subtitle: 'Universal Code Generation',
-								description: 'Deterministic AST compilation to React, Vue, Svelte, Angular, and more.',
-							},
-							{
-								date: 'Phase 03',
-								title: 'Kinetic Layout Engines',
-								subtitle: 'Responsive Matrix',
-								description: 'Pure native SVG serpentine curves and continuous momentum translations.',
-							},
-						]}
-					/>
-				</div>
-			);
-		}
-
-		// 13. Sticky Parallax Scroll
-		if (component.slug === 'sticky-parallax') {
-			return (
-				<div
-					tabIndex={0}
-					role='region'
-					aria-label={`${component.name} scroll demo`}
-					className='border-border/80 bg-background/50 no-scrollbar focus-visible:ring-foreground/50 relative mx-auto h-[28.75rem] w-full max-w-md overflow-y-auto rounded-2xl border shadow-inner outline-none focus-visible:ring-1'
-				>
-					<StickyParallaxScroll trackHeight='800px'>
-						<div className='relative flex size-full items-center justify-center'>
-							<ParallaxLayer speed={-0.4}>
-								<div className='text-foreground/15 text-4xl font-black select-none'>BACKGROUND</div>
-							</ParallaxLayer>
-							<ParallaxLayer speed={0.8}>
-								<div className='border-border/80 bg-card/90 rounded-2xl border p-6 text-center shadow-2xl backdrop-blur-md'>
-									<span className='kbd border-border bg-background/90 text-foreground text-3xs font-mono font-bold uppercase'>DIFFERENTIAL MOMENTUM</span>
-									<h4 className='text-foreground mt-1 text-lg font-bold'>Multi-Speed Layers</h4>
-									<p className='text-muted-foreground mt-1 text-xs'>Scroll inside stage to observe parallax</p>
-								</div>
-							</ParallaxLayer>
-						</div>
-					</StickyParallaxScroll>
 				</div>
 			);
 		}
@@ -1585,23 +1492,6 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 							{ title: 'Security', icon: <ShieldCheck className='h-5 w-5' /> },
 						]}
 					/>
-				</div>
-			);
-		}
-
-		// 17. Interactive Grid Pattern
-		if (component.slug === 'interactive-grid') {
-			const width = Number(propValues.width ?? 32);
-			const height = Number(propValues.height ?? 32);
-
-			return (
-				<div className='border-border/80 bg-background relative mx-auto flex h-[23.75rem] w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-2xl border p-8 shadow-inner'>
-					<InteractiveGridPattern width={width} height={height} squares={[24, 16]} className='mask-[radial-gradient(400px_circle_at_center,white,transparent)] opacity-70' />
-					<div className='z-10 flex flex-col items-center text-center'>
-						<span className='kbd border-border bg-background/90 text-foreground text-3xs font-mono font-bold uppercase'>VECTOR KINETICS</span>
-						<h4 className='text-foreground mt-1 text-xl font-bold'>Interactive Grid</h4>
-						<p className='text-muted-foreground mt-1 max-w-xs text-xs'>Hover over grid squares to trigger hardware-accelerated kinetic active states.</p>
-					</div>
 				</div>
 			);
 		}

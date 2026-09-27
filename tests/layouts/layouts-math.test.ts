@@ -8,10 +8,6 @@ import {
 	getDiamondLayoutConfig,
 	partitionDiamondItems,
 } from '../../packages/layouts/src/DiamondGrid/diamond-layout';
-import {
-	generateTimelinePath,
-	checkTimelineDirection,
-} from '../../packages/layouts/src/ScrollTimeline/timeline-path';
 
 describe('Exhuma Kinetic Methodology — Marquee Mathematical Kernel', () => {
 	it('translates leftward and wraps with modulo arithmetic when offset exceeds width', () => {
@@ -141,27 +137,3 @@ describe('Exhuma Kinetic Methodology — Diamond Grid Mathematical Partitioning'
 	});
 });
 
-describe('Exhuma Kinetic Methodology — Serpentine Timeline Bezier Kernel', () => {
-	it('returns empty path string when nodes are fewer than 2', () => {
-		expect(generateTimelinePath([])).toBe('');
-		expect(generateTimelinePath([100])).toBe('');
-	});
-
-	it('generates continuous cubic bezier SVG path connecting alternating nodes', () => {
-		const heights = [50, 150, 250, 350];
-		const path = generateTimelinePath(heights, 42, 20, 40);
-
-		expect(path.startsWith('M 0,92')).toBe(true);
-		expect(path).toContain('C 0,');
-		expect(path).toContain('L 0,192');
-		expect(path).toContain('L 0,292');
-		expect(path).toContain('L 0,392');
-	});
-
-	it('alternates direction correctly for even and odd indices', () => {
-		expect(checkTimelineDirection(0)).toBe(false); // right
-		expect(checkTimelineDirection(1)).toBe(true);  // left
-		expect(checkTimelineDirection(2)).toBe(false); // right
-		expect(checkTimelineDirection(3)).toBe(true);  // left
-	});
-});

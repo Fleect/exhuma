@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconFileCode as FileCode, IconStack2 as Layers, IconCpu as Cpu } from '@tabler/icons-react';
 import { Badge } from '@/components/ui/badge';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 interface EcosystemCapability {
 	id: string;
@@ -140,7 +141,7 @@ export function CapabilityMatrix() {
 					<Cpu className='text-foreground/70 h-3.5 w-3.5 shrink-0' />
 					<span>Universal Architecture Matrix</span>
 				</div>
-				<h3 className='text-foreground text-xl font-bold tracking-tight'>The 13-Ecosystem Engineering Contract</h3>
+				<h3 className='text-foreground text-xl font-bold tracking-tight'>The {ECOSYSTEM_COUNT}-Ecosystem Engineering Contract</h3>
 				<p className='text-muted-foreground mt-1 max-w-2xl text-xs leading-relaxed'>
 					Every Exhuma canonical component is re-authored from fundamental mathematical principles for each target framework. No polyfills, no cross-compilation overhead, no memory leaks.
 				</p>

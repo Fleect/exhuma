@@ -10,6 +10,7 @@ Welcome to the central documentation for **Exhuma**, a modern developer monorepo
 - [Cards Deep Dive](cards.md) — Complete guide to `StackingCards` and `HorizontalScroller`.
 - [Layout Engines](layouts.md) — Understanding `CssMasonry`, `MacyMasonry`, and `AutoGrid`.
 - [Router Framework](router.md) — Utilizing `LandingLayout`, `AuthLayout`, and `DashboardLayout`.
+- [Future Components](future-components.md) — Post-beta roadmap and architecture for deferred kinetic primitives.
 
 ---
 

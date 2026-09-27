@@ -1,17 +1,24 @@
 'use client';
 
 import * as React from 'react';
-import { ALL_COMPONENTS } from '@/registry';
+import { ALL_COMPONENTS, CATEGORIES as REGISTRY_CATEGORIES } from '@/registry';
 import { ComponentCard } from './ComponentCard';
 import { cn } from '@/lib/utils';
 
+const CATEGORY_DISPLAY_LABELS: Record<string, string> = {
+	cards: 'Cards & Depth',
+	layouts: 'Layout Engines',
+	primitives: 'Kinetic Primitives',
+	navigation: 'Navigation',
+};
+
 const CATEGORIES = [
 	{ id: 'all', label: 'All Components' },
-	{ id: 'cards', label: 'Cards & Depth' },
-	{ id: 'layouts', label: 'Layout Engines' },
-	{ id: 'primitives', label: 'Kinetic Primitives' },
-	{ id: 'navigation', label: 'Navigation' },
-] as const;
+	...REGISTRY_CATEGORIES.map((cat) => ({
+		id: cat.id,
+		label: CATEGORY_DISPLAY_LABELS[cat.id] ?? cat.label,
+	})),
+];
 
 export function ComponentCatalog() {
 	const [activeCategory, setActiveCategory] = React.useState<string>('all');
@@ -23,9 +30,9 @@ export function ComponentCatalog() {
 	}, [activeCategory]);
 
 	return (
-		<div className='space-y-8'>
+		<div className='space-y-4 sm:space-y-6'>
 			{/* Category Pill Tabs */}
-			<div className='no-scrollbar -my-1 flex items-center gap-1.5 overflow-x-auto py-1'>
+			<div className='no-scrollbar flex items-center gap-1.5 overflow-x-auto py-1'>
 				{CATEGORIES.map((cat) => {
 					const isSelected = activeCategory === cat.id;
 					const count = cat.id === 'all' ? ALL_COMPONENTS.length : ALL_COMPONENTS.filter((c) => c.category === cat.id).length;

@@ -8,6 +8,7 @@ import { GlobalFooter } from '@/components/layout/GlobalFooter';
 import { FooterVisibility } from '@/components/layout/FooterVisibility';
 import { CommandPalette } from '@/components/command/CommandPalette';
 import { ECOSYSTEM_LABELS } from '@/registry';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 const bricolageGrotesque = Bricolage_Grotesque({
 	subsets: ['latin'],
@@ -21,7 +22,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://exhuma.vercel.app';
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
 	title: {
-		default: 'Exhuma — Universal Component Architecture for 13 Ecosystems',
+		default: `Exhuma — Universal Component Architecture for ${ECOSYSTEM_COUNT} Ecosystems`,
 		template: '%s — Exhuma',
 	},
 	description:
@@ -65,21 +66,21 @@ export const metadata: Metadata = {
 		locale: 'en_US',
 		url: siteUrl,
 		siteName: 'Exhuma',
-		title: 'Exhuma — Universal Component Architecture for 13 Ecosystems',
-		description: 'Autonomous tactile interactions, dynamic layout engines, and zero-runtime-dependency physics components adapted natively across 13 frontend ecosystems.',
+		title: `Exhuma — Universal Component Architecture for ${ECOSYSTEM_COUNT} Ecosystems`,
+		description: `Autonomous tactile interactions, dynamic layout engines, and zero-runtime-dependency physics components adapted natively across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
 		images: [
 			{
 				url: '/og.png',
 				width: 1200,
 				height: 630,
-				alt: 'Exhuma — Universal Component Architecture for 13 Ecosystems',
+				alt: `Exhuma — Universal Component Architecture for ${ECOSYSTEM_COUNT} Ecosystems`,
 			},
 		],
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: 'Exhuma — Universal Component Architecture for 13 Ecosystems',
-		description: 'Autonomous tactile interactions, dynamic layout engines, and zero-runtime-dependency physics components adapted natively across 13 frontend ecosystems.',
+		title: `Exhuma — Universal Component Architecture for ${ECOSYSTEM_COUNT} Ecosystems`,
+		description: `Autonomous tactile interactions, dynamic layout engines, and zero-runtime-dependency physics components adapted natively across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
 		images: ['/og.png'],
 		creator: '@sapanmozammel',
 	},

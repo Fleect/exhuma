@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ALL_COMPONENTS, COMPONENT_REGISTRY, EcosystemFlavor, ECOSYSTEM_LABELS, CATEGORIES, UniversalComponent, PropDescriptor, ComponentFilePayload } from '@/registry';
+import { ECOSYSTEM_COUNT, COMPONENT_COUNT } from '@/components/docs/docs-stats';
 import { CodeBlock } from './CodeBlock';
 
 import { Button } from '@/components/ui/button';
@@ -30,23 +31,7 @@ import {
 } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { StackingCards, HorizontalScroller, TiltCard, SpotlightCard, BorderBeam, CardSwipeStack, ComparisonSlider, ExpandableCard } from '@exhuma/cards';
-import {
-	CssMasonry,
-	CssMasonryItem,
-	AutoGrid,
-	AutoGridItem,
-	InfiniteMarquee,
-	BentoGrid,
-	BentoCard,
-	BentoHeader,
-	BentoContent,
-	BentoVisual,
-	DiamondGrid,
-	ScrollTimeline,
-	StickyParallaxScroll,
-	ParallaxLayer,
-	InteractiveGridPattern,
-} from '@exhuma/layouts';
+import { CssMasonry, CssMasonryItem, AutoGrid, AutoGridItem, InfiniteMarquee, BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual, DiamondGrid } from '@exhuma/layouts';
 import { MorphingTabs, Accordion, AnimatedSphere, FloatingDock, NumberTicker, MagneticButton, CursorTooltip } from '@exhuma/core';
 
 const COLOR_PRESETS = [
@@ -146,16 +131,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Spacious: { mode: 'rhombic', gap: 24, layout: 'large', responsive: false },
 		Compact: { mode: 'rhombic', gap: 12, layout: 'medium', responsive: false },
 	},
-	'scroll-timeline': {
-		Default: { curveWidth: 24, curveHeight: 40, accentColor: '#6366f1' },
-		Wider: { curveWidth: 36, curveHeight: 50, accentColor: '#8b5cf6' },
-		Subtle: { curveWidth: 16, curveHeight: 30, accentColor: '#06b6d4' },
-	},
-	'sticky-parallax': {
-		Default: { trackHeight: '250vh' },
-		Short: { trackHeight: '180vh' },
-		Deep: { trackHeight: '350vh' },
-	},
 	'border-beam': {
 		Default: { size: 200, duration: 8, borderWidth: 2, colorFrom: '#ffaa40', colorTo: '#9c40ff', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
 		'Dual Orbital': { size: 200, duration: 8, borderWidth: 2, colorFrom: '#06b6d4', colorTo: '#3b82f6', doubleBeam: true, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
@@ -172,11 +147,6 @@ const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>>
 		Default: { baseSize: 44, maxMagnification: 0.6, influenceRadius: 70 },
 		Compact: { baseSize: 36, maxMagnification: 0.5, influenceRadius: 55 },
 		Dramatic: { baseSize: 44, maxMagnification: 0.9, influenceRadius: 90 },
-	},
-	'interactive-grid': {
-		Default: { width: 32, height: 32 },
-		Dense: { width: 20, height: 20 },
-		Spacious: { width: 48, height: 48 },
 	},
 	'number-ticker': {
 		Default: { value: 1000, decimalPlaces: 0 },
@@ -682,7 +652,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 									</div>
 								</div>
 								<div className='border-border/60 text-muted-foreground text-3xs relative z-10 mt-2.5 flex flex-wrap items-center justify-between gap-1 border-t pt-2 font-mono'>
-									<span className='font-semibold text-pink-400'>13 Ecosystems</span>
+									<span className='font-semibold text-pink-400'>{ECOSYSTEM_COUNT} Ecosystems</span>
 									<span className='truncate'>Universal Native</span>
 								</div>
 							</div>
@@ -840,7 +810,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 					title: 'Cross-Ecosystem Universal Grid',
 					desc: 'Zero-runtime pure CSS grid templates compiled for Vue, Svelte, Angular, Solid, and modern web frameworks.',
 					tag: 'UNIVERSAL',
-					metric: '13 Flavors',
+					metric: `${ECOSYSTEM_COUNT} Flavors`,
 					colSpan: 1,
 				},
 				{
@@ -1028,7 +998,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							{ label: 'Zero External Animation Deps', tag: 'Pure', status: 'Locked' },
 							{ label: 'Pure rAF Translation', tag: 'Engine', status: 'Ω(1)' },
 							{ label: 'Modulo Wrapping Seam', tag: 'Math', status: 'C0/C1' },
-							{ label: '13 Ecosystems Native', tag: 'Universal', status: '13/13' },
+							{ label: `${ECOSYSTEM_COUNT} Ecosystems Native`, tag: 'Universal', status: `${ECOSYSTEM_COUNT}/${ECOSYSTEM_COUNT}` },
 						].map((item, idx) => (
 							<div
 								key={idx}
@@ -1138,7 +1108,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 									<span className='kbd border-border bg-background/80 text-3xs font-mono font-bold text-amber-500 uppercase'>UNIVERSAL</span>
 									<span className='text-3xs text-muted-foreground font-mono'>#05</span>
 								</div>
-								<h4 className='text-foreground text-base font-bold'>13 Ecosystems</h4>
+								<h4 className='text-foreground text-base font-bold'>{ECOSYSTEM_COUNT} Ecosystems</h4>
 							</BentoHeader>
 							<BentoVisual>
 								<div className='flex flex-wrap justify-center gap-1.5'>
@@ -1206,47 +1176,6 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							)
 						)}
 					</DiamondGrid>
-				</div>
-			);
-		}
-
-		if (selectedSlug === 'scroll-timeline') {
-			return (
-				<div className='border-border bg-background/50 no-scrollbar relative mx-auto h-[28.75rem] w-full max-w-md overflow-y-auto rounded-2xl border p-6 shadow-inner'>
-					<ScrollTimeline
-						items={[
-							{
-								date: 'Phase 01',
-								title: 'Mathematical Invariants',
-								description: 'Analytical spring ODEs and zero-allocation ring buffers.',
-							},
-							{
-								date: 'Phase 02',
-								title: '13-Ecosystem Compilers',
-								description: 'Deterministic AST compilation to React, Vue, Svelte, Angular, and more.',
-							},
-						]}
-					/>
-				</div>
-			);
-		}
-
-		if (selectedSlug === 'sticky-parallax') {
-			return (
-				<div className='border-border bg-background/50 no-scrollbar relative mx-auto h-[28.75rem] w-full max-w-md overflow-y-auto rounded-2xl border shadow-inner'>
-					<StickyParallaxScroll trackHeight='800px'>
-						<div className='relative flex size-full items-center justify-center'>
-							<ParallaxLayer speed={-0.4}>
-								<div className='text-foreground/20 text-4xl font-extrabold select-none'>BACKGROUND</div>
-							</ParallaxLayer>
-							<ParallaxLayer speed={0.8}>
-								<div className='border-primary/40 bg-card rounded-2xl border p-6 text-center shadow-2xl backdrop-blur-md'>
-									<span className='kbd text-primary text-3xs'>PARALLAX</span>
-									<h4 className='text-foreground mt-1 text-lg font-bold'>Differential Layers</h4>
-								</div>
-							</ParallaxLayer>
-						</div>
-					</StickyParallaxScroll>
 				</div>
 			);
 		}
@@ -1366,21 +1295,6 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 			);
 		}
 
-		if (selectedSlug === 'interactive-grid') {
-			const width = Number(propValues.width ?? 32);
-			const height = Number(propValues.height ?? 32);
-			return (
-				<div className='border-border bg-background relative mx-auto flex h-[23.75rem] w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-2xl border p-8 shadow-inner'>
-					<InteractiveGridPattern width={width} height={height} squares={[24, 16]} className='mask-[radial-gradient(400px_circle_at_center,white,transparent)] opacity-70' />
-					<div className='z-10 flex flex-col items-center text-center'>
-						<span className='kbd text-primary text-3xs'>VECTOR KINETICS</span>
-						<h4 className='text-foreground mt-1 text-xl font-bold'>Interactive Grid</h4>
-						<p className='text-muted-foreground mt-1 max-w-xs text-xs'>Hover over grid squares to trigger hardware-accelerated kinetic active states.</p>
-					</div>
-				</div>
-			);
-		}
-
 		if (selectedSlug === 'number-ticker') {
 			const value = Number(propValues.value ?? 1000);
 			const decimalPlaces = Number(propValues.decimalPlaces ?? 0);
@@ -1445,7 +1359,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							className='w-full max-w-sm'
 							items={[
 								{ id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz.' },
-								{ id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 ecosystems.' },
+								{ id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: `Pure AST universal generation targeting ${ECOSYSTEM_COUNT} ecosystems.` },
 								{ id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d writes bypassing virtual DOM reconciliation.' },
 							]}
 							renderCard={(item) => (
@@ -1613,7 +1527,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							<Badge variant='ecosystem' className='text-primary text-3xs font-bold uppercase'>
 								{component.category}
 							</Badge>
-							<span className='text-muted-foreground text-xs'>· 13 Native Idioms</span>
+							<span className='text-muted-foreground text-xs'>· {ECOSYSTEM_COUNT} Native Idioms</span>
 						</div>
 					</div>
 				</div>

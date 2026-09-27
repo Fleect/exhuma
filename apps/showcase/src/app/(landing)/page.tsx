@@ -12,6 +12,7 @@ import {
 	IconShieldCheck as ShieldCheck,
 } from '@tabler/icons-react';
 import { ALL_COMPONENTS, ECOSYSTEM_LABELS } from '@/registry';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 import { PackageManagerTabs, StepCodeBlock } from '@/components/showcase/PackageManagerTabs';
 import { StatStrip } from '@/components/showcase/StatStrip';
 import { HeroBackdrop } from '@/components/showcase/HeroBackdrop';
@@ -28,13 +29,13 @@ export const metadata: Metadata = {
 	description: 'Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership. Native implementations for React, Next.js, Vue, Svelte, Angular, Solid, Astro, and more.',
 	openGraph: {
 		title: 'Exhuma — Universal Kinetic Primitives & Layout Engines',
-		description: 'Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across 13 frontend ecosystems.',
+		description: `Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
 		type: 'website',
 	},
 	twitter: {
 		card: 'summary_large_image',
 		title: 'Exhuma — Universal Kinetic Primitives & Layout Engines',
-		description: 'Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across 13 frontend ecosystems.',
+		description: `Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
 	},
 };
 
@@ -329,7 +330,7 @@ export default function HomePage() {
 						<span>·</span>
 						<span className='tracking-wider uppercase'>CROSS-FRAMEWORK COMPILATION MATRIX</span>
 					</span>
-					<span className='hidden sm:inline-block'>13 NATIVE TARGETS</span>
+					<span className='hidden sm:inline-block'>{ecosystemCount} NATIVE TARGETS</span>
 				</div>
 				<Reveal>
 					<CapabilityMatrix />

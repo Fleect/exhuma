@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { format } from 'prettier';
-import { ALL_COMPONENTS } from '../../packages/registry/src/index';
+import { ALL_COMPONENTS, CATEGORIES } from '../../packages/registry/src/index';
 import { EcosystemFlavorSchema, type ComponentFilePayload, type EcosystemFlavor } from '../../packages/registry/src/schema';
 
 const FLAVORS: EcosystemFlavor[] = EcosystemFlavorSchema.options;
@@ -27,6 +27,7 @@ export async function buildRegistry(rootDir: string = process.cwd()): Promise<vo
 		$schema: 'https://exhuma.dev/schema/registry-index.json',
 		version: '1.0.0',
 		generatedAt: new Date().toISOString(),
+		categories: CATEGORIES,
 		components: ALL_COMPONENTS.map((comp) => ({
 			name: comp.name,
 			slug: comp.slug,

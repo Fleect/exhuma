@@ -9,7 +9,7 @@ import {
 	IconTerminal2 as Terminal,
 	type Icon,
 } from '@tabler/icons-react';
-import { ALL_COMPONENTS } from '@/registry';
+import { ALL_COMPONENTS, CATEGORIES } from '@/registry';
 
 export interface DocsNavItem {
 	href: string;
@@ -56,7 +56,7 @@ export const DOCS_NAV: DocsNavSection[] = [
 	},
 ];
 
-const COMPONENT_CATEGORIES = ['cards', 'layouts', 'navigation', 'primitives'] as const;
+const COMPONENT_CATEGORIES = CATEGORIES.map((cat) => cat.id);
 
 const ORDERED_COMPONENTS = COMPONENT_CATEGORIES.flatMap((category) => ALL_COMPONENTS.filter((comp) => comp.category === category));
 

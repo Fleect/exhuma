@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IconChevronRight as ChevronRight } from '@tabler/icons-react';
-import { ALL_COMPONENTS } from '@/registry';
+import { ALL_COMPONENTS, CATEGORIES } from '@/registry';
 import { cn } from '@/lib/utils';
 import { DOCS_NAV } from './docs-nav';
 
@@ -16,12 +16,10 @@ const linkClass = (active: boolean) =>
 
 const sectionLabelClass = 'text-foreground text-2xs px-3 font-mono font-bold tracking-wider uppercase';
 
-const COMPONENT_CATEGORIES = [
-	{ id: 'cards', label: 'Cards' },
-	{ id: 'layouts', label: 'Layouts' },
-	{ id: 'navigation', label: 'Navigation' },
-	{ id: 'primitives', label: 'Primitives' },
-] as const;
+const COMPONENT_CATEGORIES = CATEGORIES.map((cat) => ({
+	id: cat.id,
+	label: cat.id.charAt(0).toUpperCase() + cat.id.slice(1),
+}));
 
 /**
  * Docs navigation shared by the desktop sidebar and the mobile drawer.

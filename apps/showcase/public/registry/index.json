@@ -1,7 +1,13 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-27T06:26:17.004Z",
+	"generatedAt": "2026-09-27T10:35:19.610Z",
+	"categories": [
+		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
+		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
+		{ "id": "navigation", "label": "Navigation & Rails", "count": 2 },
+		{ "id": "primitives", "label": "Kinetic Primitives & Disclosures", "count": 5 }
+	],
 	"components": [
 		{
 			"name": "Stacking Cards",
@@ -579,58 +585,6 @@
 			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
 		},
 		{
-			"name": "Scroll Timeline",
-			"slug": "scroll-timeline",
-			"category": "layouts",
-			"description": "Organic serpentine cubic bezier SVG timeline with pure native rAF progress beam and zero external animation libraries.",
-			"version": "1.0.0",
-			"props": [
-				{ "name": "curveWidth", "label": "Curve Swing (px)", "type": "number", "defaultValue": 24, "min": 10, "max": 60, "step": 2, "description": "Horizontal amplitude of bezier swing." },
-				{ "name": "curveHeight", "label": "Curve Height (px)", "type": "number", "defaultValue": 40, "min": 20, "max": 80, "step": 5, "description": "Vertical transition height of bezier curves." },
-				{ "name": "accentColor", "label": "Accent Color", "type": "string", "defaultValue": "#6366f1", "description": "Color of the active kinetic progress beam." }
-			],
-			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
-				"vue": ["clsx"],
-				"svelte": ["clsx"],
-				"solid": ["clsx"],
-				"angular": [],
-				"astro": [],
-				"blade": [],
-				"vanilla": [],
-				"wordpress": [],
-				"webcomponent": [],
-				"react-native": [],
-				"flutter": []
-			},
-			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
-		},
-		{
-			"name": "Sticky Parallax Scroll",
-			"slug": "sticky-parallax",
-			"category": "layouts",
-			"description": "Sticky viewport rail with multi-speed differential layer transformations driven by scroll delta.",
-			"version": "1.0.0",
-			"props": [{ "name": "trackHeight", "label": "Track Height", "type": "string", "defaultValue": "250vh", "description": "Total scroll track height controlling scroll duration." }],
-			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
-				"vue": ["clsx"],
-				"svelte": ["clsx"],
-				"solid": ["clsx"],
-				"angular": [],
-				"astro": [],
-				"blade": [],
-				"vanilla": [],
-				"wordpress": [],
-				"webcomponent": [],
-				"react-native": [],
-				"flutter": []
-			},
-			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
-		},
-		{
 			"name": "Border Beam",
 			"slug": "border-beam",
 			"category": "cards",
@@ -727,33 +681,6 @@
 					"step": 5,
 					"description": "Standard deviation spread of the Gaussian proximity curve."
 				}
-			],
-			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
-				"vue": ["clsx"],
-				"svelte": ["clsx"],
-				"solid": ["clsx"],
-				"angular": [],
-				"astro": [],
-				"blade": [],
-				"vanilla": [],
-				"wordpress": [],
-				"webcomponent": [],
-				"react-native": [],
-				"flutter": []
-			},
-			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
-		},
-		{
-			"name": "Interactive Grid Pattern",
-			"slug": "interactive-grid",
-			"category": "layouts",
-			"description": "Sub-pixel SVG background grid pattern with hover activation and hardware-accelerated color transitions.",
-			"version": "1.0.0",
-			"props": [
-				{ "name": "width", "label": "Square Width (px)", "type": "number", "defaultValue": 40, "min": 20, "max": 80, "step": 5, "description": "Width of each individual grid square." },
-				{ "name": "height", "label": "Square Height (px)", "type": "number", "defaultValue": 40, "min": 20, "max": 80, "step": 5, "description": "Height of each individual grid square." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],
