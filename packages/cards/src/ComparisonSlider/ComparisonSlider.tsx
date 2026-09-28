@@ -240,7 +240,7 @@ export const ComparisonSlider = memo<ComparisonSliderProps>(
 				onPointerCancel={handlePointerUp}
 				onLostPointerCapture={handlePointerUp}
 				onKeyDown={handleKeyDown}
-				className={`border-border focus-visible:ring-primary relative overflow-hidden rounded-2xl border select-none focus:outline-none focus-visible:ring-2 ${
+				className={`border-border focus-visible:ring-primary relative overflow-hidden rounded-2xl border select-none touch-none focus:outline-none focus-visible:ring-2 ${
 					disabled ? 'cursor-not-allowed opacity-60' : isVertical ? 'cursor-ns-resize' : 'cursor-ew-resize'
 				} ${className}`}
 				style={{ aspectRatio }}

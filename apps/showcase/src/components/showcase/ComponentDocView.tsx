@@ -19,6 +19,7 @@ import {
 	IconRefresh as RefreshCw,
 	IconArrowsMaximize as Maximize,
 	IconArrowsMinimize as Minimize,
+	IconStack2 as Layers,
 	IconLayoutDashboard,
 	IconChartBar,
 	IconFolders,
@@ -1760,14 +1761,6 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 				<div className='border-border/80 bg-card/95 relative mx-auto flex max-w-sm flex-col items-center justify-center overflow-hidden rounded-2xl border p-4 text-center shadow-xl backdrop-blur-md sm:p-6 md:p-8'>
 					<div className='mb-3 flex w-full items-center justify-between'>
 						<span className='kbd border-border/70 bg-background/80 text-primary text-3xs font-mono font-bold tracking-wider uppercase'>ANALYTICAL EASING (rAF)</span>
-						<button
-							type='button'
-							onClick={() => setTickerResetKey((k) => k + 1)}
-							className='text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-pointer rounded-md p-1 transition-colors'
-							title='Re-run counter animation'
-						>
-							<RefreshCw className='size-3.5' />
-						</button>
 					</div>
 
 					<div className='text-foreground my-2 font-mono text-4xl font-black tracking-tight sm:text-5xl md:text-6xl'>
@@ -1919,17 +1912,10 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 							emptyState={
 								<div className='border-border bg-card/80 flex flex-col items-center justify-center rounded-2xl border p-6 text-center shadow-xl backdrop-blur-md'>
 									<div className='bg-primary/10 text-primary mb-2 flex size-9 items-center justify-center rounded-full'>
-										<RefreshCw className='size-4' />
+										<Layers className='size-4' />
 									</div>
 									<h4 className='text-foreground text-sm font-semibold'>Stack Completed</h4>
 									<p className='text-muted-foreground mt-0.5 text-xs'>All cards have been swiped away.</p>
-									<button
-										type='button'
-										onClick={() => setCardSwipeResetKey((k) => k + 1)}
-										className='bg-primary text-primary-foreground hover:bg-primary/90 mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors'
-									>
-										<RefreshCw className='size-3.5' /> Reset Stack
-									</button>
 								</div>
 							}
 						/>
@@ -2513,24 +2499,25 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 											) : propDef.type === 'number' ? (
 												(() => {
 													const parsed = typeof val === 'number' ? val : parseFloat(String(val));
+													const hasRange = propDef.min !== undefined && propDef.max !== undefined;
 													const min = propDef.min ?? 0;
 													const max = propDef.max ?? 100;
 													const step = propDef.step ?? 1;
 													const num = Number.isFinite(parsed) ? parsed : min;
 													return (
 														<div className='flex items-center gap-2 pt-0.5'>
-															<Slider min={min} max={max} step={step} value={[num]} onValueChange={(vals) => handlePropChange(propDef.name, vals[0])} className='flex-1' />
+															{hasRange && <Slider min={min} max={max} step={step} value={[num]} onValueChange={(vals) => handlePropChange(propDef.name, vals[0])} className='flex-1' />}
 															<Input
 																type='number'
-																min={min}
-																max={max}
-																step={step}
+																min={propDef.min}
+																max={propDef.max}
+																step={propDef.step}
 																value={Number.isFinite(parsed) ? parsed : ''}
 																onChange={(e) => {
 																	const parsedVal = parseFloat(e.target.value);
-																	handlePropChange(propDef.name, Number.isFinite(parsedVal) ? parsedVal : min);
+																	handlePropChange(propDef.name, Number.isFinite(parsedVal) ? parsedVal : 0);
 																}}
-																className='text-3xs h-6 w-14 px-1 py-0 text-right font-mono'
+																className={cn('text-3xs h-6 px-1 py-0 text-right font-mono', hasRange ? 'w-14' : 'w-full')}
 															/>
 														</div>
 													);

@@ -225,6 +225,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 
 	const [selectedFlavor, setSelectedFlavor] = useState<EcosystemFlavor>('react');
 	const [selectedFileIdx, setSelectedFileIdx] = useState(0);
+	const [codeMode, setCodeMode] = useState<'clean' | 'ejected'>('clean');
 	const [viewportMode, setViewportMode] = useState<'desktop' | 'laptop' | 'tablet' | 'mobile'>('desktop');
 	const [zoomScale, setZoomScale] = useState<number>(100);
 	const [copiedCli, setCopiedCli] = useState(false);
@@ -291,10 +292,24 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		setDockIconSet('app');
 	};
 
-	// Generate code
-	const generatedFiles = useMemo(() => {
-		return component.generateCode(selectedFlavor, propValues);
+	// Generate code (Clean vs Standalone Ejected Engine)
+	const cleanFiles = useMemo(() => {
+		return component.generateCode(selectedFlavor, propValues, { eject: false });
 	}, [component, selectedFlavor, propValues]);
+
+	const ejectedFiles = useMemo(() => {
+		return component.generateCode(selectedFlavor, propValues, { eject: true });
+	}, [component, selectedFlavor, propValues]);
+
+	const hasEjectedDifference = useMemo(() => {
+		if (cleanFiles.length !== ejectedFiles.length) return true;
+		return cleanFiles.some((cf, i) => {
+			const ef = ejectedFiles[i];
+			return !ef || cf.code !== ef.code || cf.filename !== ef.filename;
+		});
+	}, [cleanFiles, ejectedFiles]);
+
+	const generatedFiles = hasEjectedDifference && codeMode === 'ejected' ? ejectedFiles : cleanFiles;
 
 	const activeFile = generatedFiles[selectedFileIdx] || generatedFiles[0] || { filename: 'component.tsx', code: '' };
 
@@ -1571,14 +1586,6 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 				<div className='border-border/80 bg-card/95 relative mx-auto flex max-w-sm flex-col items-center justify-center overflow-hidden rounded-2xl border p-4 text-center shadow-xl backdrop-blur-md sm:p-6 md:p-8'>
 					<div className='mb-3 flex w-full items-center justify-between'>
 						<span className='kbd border-border/70 bg-background/80 text-primary text-3xs font-mono font-bold tracking-wider uppercase'>ANALYTICAL EASING (rAF)</span>
-						<button
-							type='button'
-							onClick={() => setTickerResetKey((k) => k + 1)}
-							className='text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-pointer rounded-md p-1 transition-colors'
-							title='Re-run counter animation'
-						>
-							<RefreshCw className='size-3.5' />
-						</button>
 					</div>
 
 					<div className='text-foreground my-2 font-mono text-4xl font-black tracking-tight sm:text-5xl md:text-6xl'>
@@ -1733,17 +1740,10 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							emptyState={
 								<div className='border-border bg-card/80 flex flex-col items-center justify-center rounded-2xl border p-6 text-center shadow-xl backdrop-blur-md'>
 									<div className='bg-primary/10 text-primary mb-2 flex size-9 items-center justify-center rounded-full'>
-										<RefreshCw className='size-4' />
+										<Layers className='size-4' />
 									</div>
 									<h4 className='text-foreground text-sm font-semibold'>Stack Completed</h4>
 									<p className='text-muted-foreground mt-0.5 text-xs'>All cards have been swiped away.</p>
-									<button
-										type='button'
-										onClick={() => setCardSwipeResetKey((k) => k + 1)}
-										className='bg-primary text-primary-foreground hover:bg-primary/90 mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors'
-									>
-										<RefreshCw className='size-3.5' /> Reset Stack
-									</button>
 								</div>
 							}
 						/>
@@ -2071,7 +2071,14 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 								<button type='button' onClick={() => setZoomScale((z) => Math.max(50, z - 25))} className='hover:bg-accent hover:text-foreground cursor-pointer rounded-sm p-1' title='Zoom out'>
 									<ZoomOut className='h-3.5 w-3.5' />
 								</button>
-								<span className='w-8 text-center'>{zoomScale}%</span>
+								<button
+									type='button'
+									onClick={() => setZoomScale(100)}
+									className='hover:text-foreground text-3xs text-muted-foreground w-9 cursor-pointer text-center font-mono transition-colors'
+									title='Reset zoom to 100%'
+								>
+									{zoomScale}%
+								</button>
 								<button type='button' onClick={() => setZoomScale((z) => Math.min(150, z + 25))} className='hover:bg-accent hover:text-foreground cursor-pointer rounded-sm p-1' title='Zoom in'>
 									<ZoomIn className='h-3.5 w-3.5' />
 								</button>
@@ -2090,7 +2097,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 							className={cn('w-full transition-all duration-300', viewportWidth)}
 							style={{
 								transform: `scale(${zoomScale / 100})`,
-								transformOrigin: 'center',
+								transformOrigin: 'top center',
 							}}
 						>
 							{renderCanvasPreview()}
@@ -2160,33 +2167,36 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 										/* Slider + Numerical Input Sync (Big-Ω NaN-immune) */
 										(() => {
 											const parsed = typeof val === 'number' ? val : parseFloat(String(val));
+											const hasRange = propDef.min !== undefined && propDef.max !== undefined;
 											const min = propDef.min ?? 0;
 											const max = propDef.max ?? 100;
 											const step = propDef.step ?? 1;
 											const num = Number.isFinite(parsed) ? parsed : min;
 											return (
 												<div className='flex items-center gap-2 pt-0.5'>
-													<input
-														type='range'
-														id={`prop-${propDef.name}`}
-														min={min}
-														max={max}
-														step={step}
-														value={num}
-														onChange={(e) => handlePropChange(propDef.name, Number(e.target.value))}
-														className='accent-primary h-1 flex-1 cursor-pointer'
-													/>
+													{hasRange && (
+														<input
+															type='range'
+															id={`prop-${propDef.name}`}
+															min={min}
+															max={max}
+															step={step}
+															value={num}
+															onChange={(e) => handlePropChange(propDef.name, Number(e.target.value))}
+															className='accent-primary h-1 flex-1 cursor-pointer'
+														/>
+													)}
 													<input
 														type='number'
-														min={min}
-														max={max}
-														step={step}
+														min={propDef.min}
+														max={propDef.max}
+														step={propDef.step}
 														value={Number.isFinite(parsed) ? parsed : ''}
 														onChange={(e) => {
 															const parsedVal = parseFloat(e.target.value);
-															handlePropChange(propDef.name, Number.isFinite(parsedVal) ? parsedVal : min);
+															handlePropChange(propDef.name, Number.isFinite(parsedVal) ? parsedVal : 0);
 														}}
-														className='border-input bg-background text-foreground text-3xs w-12 rounded-sm border px-1 py-0.5 text-right font-mono'
+														className={cn('border-input bg-background text-foreground text-3xs rounded-sm border px-1 py-0.5 text-right font-mono', hasRange ? 'w-12' : 'w-full')}
 													/>
 												</div>
 											);
@@ -2261,6 +2271,38 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 					</div>
 
 					<div className='flex items-center gap-2'>
+						{hasEjectedDifference && (
+							<div className='border-border/80 bg-background/80 flex items-center rounded-lg border p-0.5 shadow-2xs'>
+								<button
+									type='button'
+									onClick={() => {
+										setCodeMode('clean');
+										setSelectedFileIdx(0);
+									}}
+									className={cn(
+										'text-3xs cursor-pointer rounded-md px-2.5 py-1 font-mono transition-colors',
+										codeMode === 'clean' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'text-muted-foreground hover:text-foreground'
+									)}
+									title='Clean Shadcn-style wrapper'
+								>
+									Clean
+								</button>
+								<button
+									type='button'
+									onClick={() => {
+										setCodeMode('ejected');
+										setSelectedFileIdx(0);
+									}}
+									className={cn(
+										'text-3xs cursor-pointer rounded-md px-2.5 py-1 font-mono transition-colors',
+										codeMode === 'ejected' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'text-muted-foreground hover:text-foreground'
+									)}
+									title='Standalone zero-dependency code with raw math/physics inlined'
+								>
+									Ejected Engine
+								</button>
+							</div>
+						)}
 						<button
 							type='button'
 							onClick={downloadFile}

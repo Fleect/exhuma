@@ -14,7 +14,7 @@ export const numberTickerComponent: UniversalComponent = {
 			name: 'value',
 			label: 'Target Value',
 			type: 'number',
-			defaultValue: 1000,
+			defaultValue: 1250,
 			description: 'The target numerical value to count towards.',
 		},
 		{
@@ -60,7 +60,7 @@ export const numberTickerComponent: UniversalComponent = {
 		},
 	],
 	defaultProps: {
-		value: 1000,
+		value: 1250,
 		initialValue: 0,
 		duration: 1.5,
 		decimalPlaces: 0,
