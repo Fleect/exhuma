@@ -206,6 +206,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
 }) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const isVisibleRef = React.useRef(false);
   const mousePosRef = React.useRef({ x: -9999, y: -9999 });
   const targetPosRef = React.useRef({ x: -9999, y: -9999 });
   const currentPosRef = React.useRef({ x: -9999, y: -9999 });
@@ -257,14 +258,14 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
       }
 
       const dist = Math.hypot(target.x - cur.x, target.y - cur.y);
-      if (dist > 0.2 && isVisible) {
+      if (dist > 0.2 && isVisibleRef.current) {
         rafIdRef.current = requestAnimationFrame(updateRaf);
       } else {
         rafIdRef.current = null;
         lastTimeRef.current = 0;
       }
     },
-    [collisionPadding, isVisible, springDamping]
+    [collisionPadding, springDamping, offsetX, offsetY, direction]
   );
 
   const startRaf = React.useCallback(() => {
@@ -277,6 +278,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   const handlePointerEnter = React.useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.pointerType === 'touch') return;
+      isVisibleRef.current = true;
       mousePosRef.current = { x: e.clientX, y: e.clientY };
       const rect = tooltipElRef.current?.getBoundingClientRect();
       const target = calculateTargetPosition(e.clientX, e.clientY, offsetX, offsetY, direction, rect?.width ?? 0, rect?.height ?? 0);
@@ -302,6 +304,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   );
 
   const handlePointerLeave = React.useCallback(() => {
+    isVisibleRef.current = false;
     setIsVisible(false);
     mousePosRef.current = { x: -9999, y: -9999 };
     currentPosRef.current = { x: -9999, y: -9999 };
@@ -340,7 +343,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
             }}
             className={\`pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform \${contentClassName}\`}
             style={{
-              transform: \`translate3d(\${targetPosRef.current.x}px, \${targetPosRef.current.y}px, 0)\`,
+              transform: \`translate3d(\${currentPosRef.current.x >= 0 ? currentPosRef.current.x : targetPosRef.current.x}px, \${currentPosRef.current.y >= 0 ? currentPosRef.current.y : targetPosRef.current.y}px, 0)\`,
             }}
           >
             <div className={\`px-3 py-1.5 text-xs font-semibold \${badgeClass}\`}>
@@ -439,6 +442,36 @@ function updateLoop(timestamp: number) {
   }
 }
 
+function calculateTargetPosition(
+  clientX: number,
+  clientY: number,
+  offsetX: number,
+  offsetY: number,
+  direction: string,
+  width = 0,
+  height = 0
+) {
+  switch (direction) {
+    case 'top':
+      return { x: clientX - width / 2, y: clientY - offsetY - height };
+    case 'bottom':
+      return { x: clientX - width / 2, y: clientY + offsetY };
+    case 'left':
+      return { x: clientX - offsetX - width, y: clientY - height / 2 };
+    case 'right':
+      return { x: clientX + offsetX, y: clientY - height / 2 };
+    case 'top-left':
+      return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+    case 'top-right':
+      return { x: clientX + offsetX, y: clientY - offsetY - height };
+    case 'bottom-left':
+      return { x: clientX - offsetX - width, y: clientY + offsetY };
+    case 'bottom-right':
+    default:
+      return { x: clientX + offsetX, y: clientY + offsetY };
+  }
+}
+
 function startRaf() {
   if (!rafId) {
     lastTime = 0;
@@ -448,11 +481,21 @@ function startRaf() {
 
 function onPointerEnter(e: PointerEvent) {
   if (e.pointerType === 'touch') return;
-  targetPos.x = e.clientX + props.offsetX;
-  targetPos.y = e.clientY + props.offsetY;
+  const rect = tooltipEl.value?.getBoundingClientRect();
+  const target = calculateTargetPosition(
+    e.clientX,
+    e.clientY,
+    props.offsetX,
+    props.offsetY,
+    props.direction,
+    rect?.width ?? 0,
+    rect?.height ?? 0
+  );
+  targetPos.x = target.x;
+  targetPos.y = target.y;
   if (currentPos.x < 0) {
-    currentPos.x = targetPos.x;
-    currentPos.y = targetPos.y;
+    currentPos.x = target.x;
+    currentPos.y = target.y;
   }
   isVisible.value = true;
   startRaf();
@@ -460,8 +503,18 @@ function onPointerEnter(e: PointerEvent) {
 
 function onPointerMove(e: PointerEvent) {
   if (e.pointerType === 'touch') return;
-  targetPos.x = e.clientX + props.offsetX;
-  targetPos.y = e.clientY + props.offsetY;
+  const rect = tooltipEl.value?.getBoundingClientRect();
+  const target = calculateTargetPosition(
+    e.clientX,
+    e.clientY,
+    props.offsetX,
+    props.offsetY,
+    props.direction,
+    rect?.width ?? 0,
+    rect?.height ?? 0
+  );
+  targetPos.x = target.x;
+  targetPos.y = target.y;
   startRaf();
 }
 
@@ -595,6 +648,36 @@ onUnmounted(() => {
     }
   }
 
+  function calculateTargetPosition(
+    clientX: number,
+    clientY: number,
+    offsetX: number,
+    offsetY: number,
+    direction: string,
+    width = 0,
+    height = 0
+  ) {
+    switch (direction) {
+      case 'top':
+        return { x: clientX - width / 2, y: clientY - offsetY - height };
+      case 'bottom':
+        return { x: clientX - width / 2, y: clientY + offsetY };
+      case 'left':
+        return { x: clientX - offsetX - width, y: clientY - height / 2 };
+      case 'right':
+        return { x: clientX + offsetX, y: clientY - height / 2 };
+      case 'top-left':
+        return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+      case 'top-right':
+        return { x: clientX + offsetX, y: clientY - offsetY - height };
+      case 'bottom-left':
+        return { x: clientX - offsetX - width, y: clientY + offsetY };
+      case 'bottom-right':
+      default:
+        return { x: clientX + offsetX, y: clientY + offsetY };
+    }
+  }
+
   function startRaf() {
     if (!rafId) {
       lastTime = 0;
@@ -604,8 +687,10 @@ onUnmounted(() => {
 
   function onPointerEnter(e: PointerEvent) {
     if (e.pointerType === 'touch') return;
-    targetX = e.clientX + offsetX;
-    targetY = e.clientY + offsetY;
+    const rect = tooltipEl?.getBoundingClientRect();
+    const target = calculateTargetPosition(e.clientX, e.clientY, offsetX, offsetY, direction, rect?.width ?? 0, rect?.height ?? 0);
+    targetX = target.x;
+    targetY = target.y;
     if (currentX < 0) {
       currentX = targetX;
       currentY = targetY;
@@ -616,8 +701,10 @@ onUnmounted(() => {
 
   function onPointerMove(e: PointerEvent) {
     if (e.pointerType === 'touch') return;
-    targetX = e.clientX + offsetX;
-    targetY = e.clientY + offsetY;
+    const rect = tooltipEl?.getBoundingClientRect();
+    const target = calculateTargetPosition(e.clientX, e.clientY, offsetX, offsetY, direction, rect?.width ?? 0, rect?.height ?? 0);
+    targetX = target.x;
+    targetY = target.y;
     startRaf();
   }
 
@@ -669,7 +756,7 @@ onUnmounted(() => {
 					filename: 'cursor-tooltip.component.ts',
 					language: 'typescript',
 					description: 'Cursor Tooltip — Angular 18+ Standalone component running rAF loops outside Zone.js with boundary clamping.',
-					code: `import { Component, ElementRef, NgZone, OnInit, OnDestroy, input, viewChild } from '@angular/core';
+					code: `import { Component, ElementRef, NgZone, AfterViewInit, OnDestroy, input, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -697,7 +784,7 @@ import { CommonModule } from '@angular/common';
     }
   \`,
 })
-export class ExhumaCursorTooltipComponent implements OnInit, OnDestroy {
+export class ExhumaCursorTooltipComponent implements AfterViewInit, OnDestroy {
   readonly content = input<string>('${content}');
   readonly springDamping = input<number>(${springDamping});
   readonly direction = input<string>('${direction}');
@@ -732,10 +819,40 @@ export class ExhumaCursorTooltipComponent implements OnInit, OnDestroy {
     return map[this.variant()] || map.frosted;
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
       const el = this.targetEl()?.nativeElement;
       if (!el) return;
+
+      const calculateTargetPosition = (
+        clientX: number,
+        clientY: number,
+        offsetX: number,
+        offsetY: number,
+        direction: string,
+        width = 0,
+        height = 0
+      ) => {
+        switch (direction) {
+          case 'top':
+            return { x: clientX - width / 2, y: clientY - offsetY - height };
+          case 'bottom':
+            return { x: clientX - width / 2, y: clientY + offsetY };
+          case 'left':
+            return { x: clientX - offsetX - width, y: clientY - height / 2 };
+          case 'right':
+            return { x: clientX + offsetX, y: clientY - height / 2 };
+          case 'top-left':
+            return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+          case 'top-right':
+            return { x: clientX + offsetX, y: clientY - offsetY - height };
+          case 'bottom-left':
+            return { x: clientX - offsetX - width, y: clientY + offsetY };
+          case 'bottom-right':
+          default:
+            return { x: clientX + offsetX, y: clientY + offsetY };
+        }
+      };
 
       const damp = (cur: number, tar: number, lambda: number, dt: number): number => {
         const diff = tar - cur;
@@ -780,8 +897,19 @@ export class ExhumaCursorTooltipComponent implements OnInit, OnDestroy {
 
       const onPointerEnter = (e: PointerEvent) => {
         if (e.pointerType === 'touch') return;
-        this.targetX = e.clientX + this.offsetX();
-        this.targetY = e.clientY + this.offsetY();
+        const badge = this.floatingEl()?.nativeElement;
+        const rect = badge?.getBoundingClientRect();
+        const target = calculateTargetPosition(
+          e.clientX,
+          e.clientY,
+          this.offsetX(),
+          this.offsetY(),
+          this.direction(),
+          rect?.width ?? 0,
+          rect?.height ?? 0
+        );
+        this.targetX = target.x;
+        this.targetY = target.y;
         if (this.currentX < 0) {
           this.currentX = this.targetX;
           this.currentY = this.targetY;
@@ -794,8 +922,19 @@ export class ExhumaCursorTooltipComponent implements OnInit, OnDestroy {
 
       const onPointerMove = (e: PointerEvent) => {
         if (e.pointerType === 'touch') return;
-        this.targetX = e.clientX + this.offsetX();
-        this.targetY = e.clientY + this.offsetY();
+        const badge = this.floatingEl()?.nativeElement;
+        const rect = badge?.getBoundingClientRect();
+        const target = calculateTargetPosition(
+          e.clientX,
+          e.clientY,
+          this.offsetX(),
+          this.offsetY(),
+          this.direction(),
+          rect?.width ?? 0,
+          rect?.height ?? 0
+        );
+        this.targetX = target.x;
+        this.targetY = target.y;
         startRaf();
       };
 
@@ -934,6 +1073,36 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
     }
   }
 
+  function calculateTargetPosition(
+    clientX: number,
+    clientY: number,
+    offsetX: number,
+    offsetY: number,
+    direction: string,
+    width = 0,
+    height = 0
+  ) {
+    switch (direction) {
+      case 'top':
+        return { x: clientX - width / 2, y: clientY - offsetY - height };
+      case 'bottom':
+        return { x: clientX - width / 2, y: clientY + offsetY };
+      case 'left':
+        return { x: clientX - offsetX - width, y: clientY - height / 2 };
+      case 'right':
+        return { x: clientX + offsetX, y: clientY - height / 2 };
+      case 'top-left':
+        return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+      case 'top-right':
+        return { x: clientX + offsetX, y: clientY - offsetY - height };
+      case 'bottom-left':
+        return { x: clientX - offsetX - width, y: clientY + offsetY };
+      case 'bottom-right':
+      default:
+        return { x: clientX + offsetX, y: clientY + offsetY };
+    }
+  }
+
   function startRaf() {
     if (!rafId) {
       lastTime = 0;
@@ -950,8 +1119,10 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
       <div
         onPointerEnter={(e) => {
           if (e.pointerType === 'touch') return;
-          targetX = e.clientX + local.offsetX;
-          targetY = e.clientY + local.offsetY;
+          const rect = tooltipEl?.getBoundingClientRect();
+          const target = calculateTargetPosition(e.clientX, e.clientY, local.offsetX, local.offsetY, local.direction, rect?.width ?? 0, rect?.height ?? 0);
+          targetX = target.x;
+          targetY = target.y;
           if (currentX < 0) {
             currentX = targetX;
             currentY = targetY;
@@ -961,8 +1132,10 @@ export const CursorTooltip: Component<CursorTooltipProps> = (rawProps) => {
         }}
         onPointerMove={(e) => {
           if (e.pointerType === 'touch') return;
-          targetX = e.clientX + local.offsetX;
-          targetY = e.clientY + local.offsetY;
+          const rect = tooltipEl?.getBoundingClientRect();
+          const target = calculateTargetPosition(e.clientX, e.clientY, local.offsetX, local.offsetY, local.direction, rect?.width ?? 0, rect?.height ?? 0);
+          targetX = target.x;
+          targetY = target.y;
           startRaf();
         }}
         onPointerLeave={() => {
@@ -1081,6 +1254,36 @@ const badgeClass = variantClasses[variant] || variantClasses.frosted;
       let rafId: number | null = null;
       let lastTime = 0;
 
+      function calculateTargetPosition(
+        clientX: number,
+        clientY: number,
+        offsetX: number,
+        offsetY: number,
+        direction: string,
+        width = 0,
+        height = 0
+      ) {
+        switch (direction) {
+          case 'top':
+            return { x: clientX - width / 2, y: clientY - offsetY - height };
+          case 'bottom':
+            return { x: clientX - width / 2, y: clientY + offsetY };
+          case 'left':
+            return { x: clientX - offsetX - width, y: clientY - height / 2 };
+          case 'right':
+            return { x: clientX + offsetX, y: clientY - height / 2 };
+          case 'top-left':
+            return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+          case 'top-right':
+            return { x: clientX + offsetX, y: clientY - offsetY - height };
+          case 'bottom-left':
+            return { x: clientX - offsetX - width, y: clientY + offsetY };
+          case 'bottom-right':
+          default:
+            return { x: clientX + offsetX, y: clientY + offsetY };
+        }
+      }
+
       function damp(c: number, t: number, dt: number) {
         const diff = t - c;
         if (Math.abs(diff) < 0.01) return t;
@@ -1114,16 +1317,23 @@ const badgeClass = variantClasses[variant] || variantClasses.frosted;
 
       el.addEventListener('pointerenter', (e) => {
         if (e.pointerType === 'touch') return;
-        targetX = e.clientX + offX;
-        targetY = e.clientY + offY;
-        curX = targetX;
-        curY = targetY;
+        const dir = el.dataset.direction || 'bottom-right';
 
         badge = document.createElement('div');
         badge.className = 'pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform';
-        badge.innerHTML = \`<div class="px-3 py-1.5 text-xs font-semibold \${badgeCls}">\${text}</div>\`;
-        badge.style.transform = \`translate3d(\${targetX}px, \${targetY}px, 0)\`;
+        const inner = document.createElement('div');
+        inner.className = \`px-3 py-1.5 text-xs font-semibold \${badgeCls}\`;
+        inner.textContent = text;
+        badge.appendChild(inner);
         document.body.appendChild(badge);
+
+        const rect = badge.getBoundingClientRect();
+        const pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+        targetX = pos.x;
+        targetY = pos.y;
+        curX = targetX;
+        curY = targetY;
+        badge.style.transform = \`translate3d(\${targetX.toFixed(2)}px, \${targetY.toFixed(2)}px, 0)\`;
 
         lastTime = 0;
         rafId = requestAnimationFrame(update);
@@ -1131,8 +1341,11 @@ const badgeClass = variantClasses[variant] || variantClasses.frosted;
 
       el.addEventListener('pointermove', (e) => {
         if (e.pointerType === 'touch') return;
-        targetX = e.clientX + offX;
-        targetY = e.clientY + offY;
+        const dir = el.dataset.direction || 'bottom-right';
+        const rect = badge ? badge.getBoundingClientRect() : { width: 0, height: 0 };
+        const pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+        targetX = pos.x;
+        targetY = pos.y;
         if (!rafId) {
           lastTime = 0;
           rafId = requestAnimationFrame(update);
@@ -1224,6 +1437,30 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
             var rafId = null;
             var lastTime = 0;
 
+            function calculateTargetPosition(clientX, clientY, offsetX, offsetY, direction, width, height) {
+                width = width || 0;
+                height = height || 0;
+                switch (direction) {
+                    case 'top':
+                        return { x: clientX - width / 2, y: clientY - offsetY - height };
+                    case 'bottom':
+                        return { x: clientX - width / 2, y: clientY + offsetY };
+                    case 'left':
+                        return { x: clientX - offsetX - width, y: clientY - height / 2 };
+                    case 'right':
+                        return { x: clientX + offsetX, y: clientY - height / 2 };
+                    case 'top-left':
+                        return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+                    case 'top-right':
+                        return { x: clientX + offsetX, y: clientY - offsetY - height };
+                    case 'bottom-left':
+                        return { x: clientX - offsetX - width, y: clientY + offsetY };
+                    case 'bottom-right':
+                    default:
+                        return { x: clientX + offsetX, y: clientY + offsetY };
+                }
+            }
+
             function update(timestamp) {
                 if (!lastTime) lastTime = timestamp;
                 var dt = Math.min((timestamp - lastTime) / 1000, 0.05);
@@ -1251,16 +1488,23 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
 
             el.addEventListener('pointerenter', function(e) {
                 if (e.pointerType === 'touch') return;
-                targetX = e.clientX + offX;
-                targetY = e.clientY + offY;
-                curX = targetX;
-                curY = targetY;
+                var dir = el.dataset.direction || 'bottom-right';
 
                 badge = document.createElement('div');
                 badge.className = 'pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform';
-                badge.innerHTML = '<div class="px-3 py-1.5 text-xs font-semibold ' + badgeCls + '">' + text + '</div>';
-                badge.style.transform = 'translate3d(' + targetX + 'px, ' + targetY + 'px, 0)';
+                var inner = document.createElement('div');
+                inner.className = 'px-3 py-1.5 text-xs font-semibold ' + badgeCls;
+                inner.textContent = text;
+                badge.appendChild(inner);
                 document.body.appendChild(badge);
+
+                var rect = badge.getBoundingClientRect();
+                var pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+                targetX = pos.x;
+                targetY = pos.y;
+                curX = targetX;
+                curY = targetY;
+                badge.style.transform = 'translate3d(' + targetX.toFixed(2) + 'px, ' + targetY.toFixed(2) + 'px, 0)';
 
                 lastTime = 0;
                 rafId = requestAnimationFrame(update);
@@ -1268,8 +1512,11 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
 
             el.addEventListener('pointermove', function(e) {
                 if (e.pointerType === 'touch') return;
-                targetX = e.clientX + offX;
-                targetY = e.clientY + offY;
+                var dir = el.dataset.direction || 'bottom-right';
+                var rect = badge ? badge.getBoundingClientRect() : { width: 0, height: 0 };
+                var pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+                targetX = pos.x;
+                targetY = pos.y;
                 if (!rafId) {
                     lastTime = 0;
                     rafId = requestAnimationFrame(update);
@@ -1346,6 +1593,36 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
     let rafId = null;
     let lastTime = 0;
 
+    function calculateTargetPosition(
+      clientX,
+      clientY,
+      offsetX,
+      offsetY,
+      direction,
+      width = 0,
+      height = 0
+    ) {
+      switch (direction) {
+        case 'top':
+          return { x: clientX - width / 2, y: clientY - offsetY - height };
+        case 'bottom':
+          return { x: clientX - width / 2, y: clientY + offsetY };
+        case 'left':
+          return { x: clientX - offsetX - width, y: clientY - height / 2 };
+        case 'right':
+          return { x: clientX + offsetX, y: clientY - height / 2 };
+        case 'top-left':
+          return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+        case 'top-right':
+          return { x: clientX + offsetX, y: clientY - offsetY - height };
+        case 'bottom-left':
+          return { x: clientX - offsetX - width, y: clientY + offsetY };
+        case 'bottom-right':
+        default:
+          return { x: clientX + offsetX, y: clientY + offsetY };
+      }
+    }
+
     function damp(cur, tar, lambda, dt) {
       const diff = tar - cur;
       if (Math.abs(diff) < 0.01) return tar;
@@ -1380,16 +1657,21 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
 
     function onPointerEnter(e) {
       if (e.pointerType === 'touch') return;
-      targetX = e.clientX + config.offsetX;
-      targetY = e.clientY + config.offsetY;
-      currentX = targetX;
-      currentY = targetY;
-
       badge = document.createElement('div');
       badge.className = 'pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform';
-      badge.innerHTML = \`<div class="px-3 py-1.5 text-xs font-semibold \${badgeClass}">\${config.content}</div>\`;
-      badge.style.transform = \`translate3d(\${targetX}px, \${targetY}px, 0)\`;
+      const inner = document.createElement('div');
+      inner.className = \`px-3 py-1.5 text-xs font-semibold \${badgeClass}\`;
+      inner.textContent = config.content;
+      badge.appendChild(inner);
       document.body.appendChild(badge);
+
+      const rect = badge.getBoundingClientRect();
+      const pos = calculateTargetPosition(e.clientX, e.clientY, config.offsetX, config.offsetY, config.direction, rect.width, rect.height);
+      targetX = pos.x;
+      targetY = pos.y;
+      currentX = targetX;
+      currentY = targetY;
+      badge.style.transform = \`translate3d(\${targetX.toFixed(2)}px, \${targetY.toFixed(2)}px, 0)\`;
 
       lastTime = 0;
       rafId = requestAnimationFrame(update);
@@ -1397,8 +1679,10 @@ export function initCursorTooltip(selector = '[data-exhuma-cursor-tooltip]', opt
 
     function onPointerMove(e) {
       if (e.pointerType === 'touch') return;
-      targetX = e.clientX + config.offsetX;
-      targetY = e.clientY + config.offsetY;
+      const rect = badge ? badge.getBoundingClientRect() : { width: 0, height: 0 };
+      const pos = calculateTargetPosition(e.clientX, e.clientY, config.offsetX, config.offsetY, config.direction, rect.width, rect.height);
+      targetX = pos.x;
+      targetY = pos.y;
       if (!rafId) {
         lastTime = 0;
         rafId = requestAnimationFrame(update);
@@ -1523,6 +1807,36 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
     let rafId = null;
     let lastTime = 0;
 
+    function calculateTargetPosition(
+      clientX,
+      clientY,
+      offsetX,
+      offsetY,
+      direction,
+      width = 0,
+      height = 0
+    ) {
+      switch (direction) {
+        case 'top':
+          return { x: clientX - width / 2, y: clientY - offsetY - height };
+        case 'bottom':
+          return { x: clientX - width / 2, y: clientY + offsetY };
+        case 'left':
+          return { x: clientX - offsetX - width, y: clientY - height / 2 };
+        case 'right':
+          return { x: clientX + offsetX, y: clientY - height / 2 };
+        case 'top-left':
+          return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+        case 'top-right':
+          return { x: clientX + offsetX, y: clientY - offsetY - height };
+        case 'bottom-left':
+          return { x: clientX - offsetX - width, y: clientY + offsetY };
+        case 'bottom-right':
+        default:
+          return { x: clientX + offsetX, y: clientY + offsetY };
+      }
+    }
+
     function update(timestamp) {
       if (!lastTime) lastTime = timestamp;
       const dt = Math.min((timestamp - lastTime) / 1000, 0.05);
@@ -1550,16 +1864,23 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
 
     el.addEventListener('pointerenter', (e) => {
       if (e.pointerType === 'touch') return;
-      targetX = e.clientX + offX;
-      targetY = e.clientY + offY;
-      curX = targetX;
-      curY = targetY;
+      const dir = el.dataset.direction || 'bottom-right';
 
       badge = document.createElement('div');
       badge.className = 'pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform';
-      badge.innerHTML = \`<div class="px-3 py-1.5 text-xs font-semibold \${badgeCls}">\${text}</div>\`;
-      badge.style.transform = \`translate3d(\${targetX}px, \${targetY}px, 0)\`;
+      const inner = document.createElement('div');
+      inner.className = \`px-3 py-1.5 text-xs font-semibold \${badgeCls}\`;
+      inner.textContent = text;
+      badge.appendChild(inner);
       document.body.appendChild(badge);
+
+      const rect = badge.getBoundingClientRect();
+      const pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+      targetX = pos.x;
+      targetY = pos.y;
+      curX = targetX;
+      curY = targetY;
+      badge.style.transform = \`translate3d(\${targetX.toFixed(2)}px, \${targetY.toFixed(2)}px, 0)\`;
 
       lastTime = 0;
       rafId = requestAnimationFrame(update);
@@ -1567,8 +1888,11 @@ $badgeClass = $variantClasses[$variant] ?? $variantClasses['frosted'];
 
     el.addEventListener('pointermove', (e) => {
       if (e.pointerType === 'touch') return;
-      targetX = e.clientX + offX;
-      targetY = e.clientY + offY;
+      const dir = el.dataset.direction || 'bottom-right';
+      const rect = badge ? badge.getBoundingClientRect() : { width: 0, height: 0 };
+      const pos = calculateTargetPosition(e.clientX, e.clientY, offX, offY, dir, rect.width, rect.height);
+      targetX = pos.x;
+      targetY = pos.y;
       if (!rafId) {
         lastTime = 0;
         rafId = requestAnimationFrame(update);
@@ -1633,10 +1957,33 @@ class ExhumaCursorTooltipElement extends HTMLElement {
     this._onPointerEnter = this.onPointerEnter.bind(this);
     this._onPointerMove = this.onPointerMove.bind(this);
     this._onPointerLeave = this.onPointerLeave.bind(this);
+    this.update = this.update.bind(this);
 
     this.addEventListener('pointerenter', this._onPointerEnter);
     this.addEventListener('pointermove', this._onPointerMove);
     this.addEventListener('pointerleave', this._onPointerLeave);
+  }
+
+  calculateTargetPosition(clientX, clientY, offsetX, offsetY, direction, width = 0, height = 0) {
+    switch (direction) {
+      case 'top':
+        return { x: clientX - width / 2, y: clientY - offsetY - height };
+      case 'bottom':
+        return { x: clientX - width / 2, y: clientY + offsetY };
+      case 'left':
+        return { x: clientX - offsetX - width, y: clientY - height / 2 };
+      case 'right':
+        return { x: clientX + offsetX, y: clientY - height / 2 };
+      case 'top-left':
+        return { x: clientX - offsetX - width, y: clientY - offsetY - height };
+      case 'top-right':
+        return { x: clientX + offsetX, y: clientY - offsetY - height };
+      case 'bottom-left':
+        return { x: clientX - offsetX - width, y: clientY + offsetY };
+      case 'bottom-right':
+      default:
+        return { x: clientX + offsetX, y: clientY + offsetY };
+    }
   }
 
   update(timestamp) {
@@ -1658,7 +2005,7 @@ class ExhumaCursorTooltipElement extends HTMLElement {
     }
 
     if (Math.hypot(this.targetX - this.currentX, this.targetY - this.currentY) > 0.2 && this.badge) {
-      this.rafId = requestAnimationFrame(this.update.bind(this));
+      this.rafId = requestAnimationFrame(this.update);
     } else {
       this.rafId = null;
       this.lastTime = 0;
@@ -1667,28 +2014,35 @@ class ExhumaCursorTooltipElement extends HTMLElement {
 
   onPointerEnter(e) {
     if (e.pointerType === 'touch') return;
-    this.targetX = e.clientX + this.offsetX;
-    this.targetY = e.clientY + this.offsetY;
-    this.currentX = this.targetX;
-    this.currentY = this.targetY;
-
     this.badge = document.createElement('div');
     this.badge.className = 'pointer-events-none fixed top-0 left-0 z-50 select-none will-change-transform';
-    this.badge.innerHTML = \`<div class="px-3 py-1.5 text-xs font-semibold \${this.badgeClass}">\${this.content}</div>\`;
-    this.badge.style.transform = \`translate3d(\${this.targetX}px, \${this.targetY}px, 0)\`;
+    const inner = document.createElement('div');
+    inner.className = \`px-3 py-1.5 text-xs font-semibold \${this.badgeClass}\`;
+    inner.textContent = this.content;
+    this.badge.appendChild(inner);
     document.body.appendChild(this.badge);
 
+    const rect = this.badge.getBoundingClientRect();
+    const pos = this.calculateTargetPosition(e.clientX, e.clientY, this.offsetX, this.offsetY, this.direction, rect.width, rect.height);
+    this.targetX = pos.x;
+    this.targetY = pos.y;
+    this.currentX = this.targetX;
+    this.currentY = this.targetY;
+    this.badge.style.transform = \`translate3d(\${this.targetX.toFixed(2)}px, \${this.targetY.toFixed(2)}px, 0)\`;
+
     this.lastTime = 0;
-    this.rafId = requestAnimationFrame(this.update.bind(this));
+    this.rafId = requestAnimationFrame(this.update);
   }
 
   onPointerMove(e) {
     if (e.pointerType === 'touch') return;
-    this.targetX = e.clientX + this.offsetX;
-    this.targetY = e.clientY + this.offsetY;
+    const rect = this.badge ? this.badge.getBoundingClientRect() : { width: 0, height: 0 };
+    const pos = this.calculateTargetPosition(e.clientX, e.clientY, this.offsetX, this.offsetY, this.direction, rect.width, rect.height);
+    this.targetX = pos.x;
+    this.targetY = pos.y;
     if (!this.rafId) {
       this.lastTime = 0;
-      this.rafId = requestAnimationFrame(this.update.bind(this));
+      this.rafId = requestAnimationFrame(this.update);
     }
   }
 
@@ -1727,7 +2081,7 @@ if (!customElements.get('exhuma-cursor-tooltip')) {
 					language: 'tsx',
 					description: 'Cursor Tooltip — React Native component using Animated tracking and PanResponder coordinates.',
 					code: `import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Animated, PanResponder, type ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, Animated, PanResponder, type ViewStyle, type LayoutChangeEvent } from 'react-native';
 
 export interface CursorTooltipProps {
   content?: string;
@@ -1736,9 +2090,40 @@ export interface CursorTooltipProps {
   offsetX?: number;
   offsetY?: number;
   variant?: 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
+  collisionPadding?: number;
   style?: ViewStyle;
   children?: React.ReactNode;
 }
+
+const calculateTargetPosition = (
+  x: number,
+  y: number,
+  offsetX: number,
+  offsetY: number,
+  direction: string,
+  width = 0,
+  height = 0
+) => {
+  switch (direction) {
+    case 'top':
+      return { x: x - width / 2, y: y - offsetY - height };
+    case 'bottom':
+      return { x: x - width / 2, y: y + offsetY };
+    case 'left':
+      return { x: x - offsetX - width, y: y - height / 2 };
+    case 'right':
+      return { x: x + offsetX, y: y - height / 2 };
+    case 'top-left':
+      return { x: x - offsetX - width, y: y - offsetY - height };
+    case 'top-right':
+      return { x: x + offsetX, y: y - offsetY - height };
+    case 'bottom-left':
+      return { x: x - offsetX - width, y: y + offsetY };
+    case 'bottom-right':
+    default:
+      return { x: x + offsetX, y: y + offsetY };
+  }
+};
 
 export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   content = '${content}',
@@ -1747,22 +2132,43 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
   offsetX = ${offsetX},
   offsetY = ${offsetY},
   variant = '${variant}',
+  collisionPadding = ${collisionPadding},
   style,
   children,
 }) => {
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const [active, setActive] = useState(false);
+  const badgeSizeRef = useRef({ width: 0, height: 0 });
 
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt) => {
         setActive(true);
-        pan.setValue({ x: evt.nativeEvent.locationX + offsetX, y: evt.nativeEvent.locationY + offsetY });
+        const pos = calculateTargetPosition(
+          evt.nativeEvent.locationX,
+          evt.nativeEvent.locationY,
+          offsetX,
+          offsetY,
+          direction,
+          badgeSizeRef.current.width,
+          badgeSizeRef.current.height
+        );
+        pan.setValue(pos);
       },
       onPanResponderMove: (evt) => {
+        const pos = calculateTargetPosition(
+          evt.nativeEvent.locationX,
+          evt.nativeEvent.locationY,
+          offsetX,
+          offsetY,
+          direction,
+          badgeSizeRef.current.width,
+          badgeSizeRef.current.height
+        );
         Animated.spring(pan, {
-          toValue: { x: evt.nativeEvent.locationX + offsetX, y: evt.nativeEvent.locationY + offsetY },
+          toValue: pos,
           bounciness: 0,
           speed: springDamping,
           useNativeDriver: false,
@@ -1771,21 +2177,67 @@ export const CursorTooltip: React.FC<CursorTooltipProps> = ({
       onPanResponderRelease: () => {
         setActive(false);
       },
+      onPanResponderTerminate: () => {
+        setActive(false);
+      },
     })
   ).current;
+
+  const onBadgeLayout = (e: LayoutChangeEvent) => {
+    badgeSizeRef.current = {
+      width: e.nativeEvent.layout.width,
+      height: e.nativeEvent.layout.height,
+    };
+  };
+
+  const getBadgeStyle = () => {
+    switch (variant) {
+      case 'accent':
+        return styles.accentBadge;
+      case 'dark':
+        return styles.darkBadge;
+      case 'minimal':
+        return styles.minimalBadge;
+      case 'glow':
+        return styles.glowBadge;
+      case 'frosted':
+      default:
+        return styles.frostedBadge;
+    }
+  };
+
+  const getTextStyle = () => {
+    switch (variant) {
+      case 'accent':
+        return styles.accentText;
+      case 'dark':
+        return styles.darkText;
+      case 'minimal':
+        return styles.minimalText;
+      case 'glow':
+        return styles.glowText;
+      case 'frosted':
+      default:
+        return styles.frostedText;
+    }
+  };
 
   return (
     <View style={[styles.container, style]} {...panResponder.panHandlers}>
       {children}
       {active && (
         <Animated.View
+          onLayout={onBadgeLayout}
+          pointerEvents="none"
           style={[
             styles.badge,
-            variant === 'accent' ? styles.accentBadge : styles.frostedBadge,
-            { left: pan.x, top: pan.y },
+            getBadgeStyle(),
+            {
+              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+            },
           ]}
         >
-          <Text style={variant === 'accent' ? styles.accentText : styles.frostedText}>{content}</Text>
+          <Text style={getTextStyle()}>{content}</Text>
         </Animated.View>
       )}
     </View>
@@ -1798,6 +2250,8 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
+    top: 0,
+    left: 0,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
@@ -1805,6 +2259,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 4,
+    zIndex: 999,
   },
   frostedBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -1818,10 +2273,47 @@ const styles = StyleSheet.create({
   },
   accentBadge: {
     backgroundColor: '#6366f1',
+    borderRadius: 20,
   },
   accentText: {
     color: '#ffffff',
     fontSize: 12,
+    fontWeight: 'bold',
+  },
+  darkBadge: {
+    backgroundColor: '#09090b',
+    borderColor: '#27272a',
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  darkText: {
+    color: '#f4f4f5',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  minimalBadge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderColor: '#e4e4e7',
+    borderWidth: 1,
+    borderRadius: 6,
+  },
+  minimalText: {
+    color: '#18181b',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  glowBadge: {
+    backgroundColor: '#022c22',
+    borderColor: '#10b981',
+    borderWidth: 1,
+    shadowColor: '#10b981',
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+  },
+  glowText: {
+    color: '#34d399',
+    fontSize: 12,
+    fontFamily: 'Courier',
     fontWeight: 'bold',
   },
 });
@@ -1876,13 +2368,37 @@ class _ExhumaCursorTooltipState extends State<ExhumaCursorTooltip> with SingleTi
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 16),
     )..addListener(_tick);
+  }
+
+  Offset _calculateTarget(Offset localPos, double width, double height) {
+    final double ox = widget.offsetX;
+    final double oy = widget.offsetY;
+    switch (widget.direction) {
+      case 'top':
+        return Offset(localPos.dx - width / 2, localPos.dy - oy - height);
+      case 'bottom':
+        return Offset(localPos.dx - width / 2, localPos.dy + oy);
+      case 'left':
+        return Offset(localPos.dx - ox - width, localPos.dy - height / 2);
+      case 'right':
+        return Offset(localPos.dx + ox, localPos.dy - height / 2);
+      case 'top-left':
+        return Offset(localPos.dx - ox - width, localPos.dy - oy - height);
+      case 'top-right':
+        return Offset(localPos.dx + ox, localPos.dy - oy - height);
+      case 'bottom-left':
+        return Offset(localPos.dx - ox - width, localPos.dy + oy);
+      case 'bottom-right':
+      default:
+        return Offset(localPos.dx + ox, localPos.dy + oy);
+    }
   }
 
   void _tick() {
     if (!_isHovered) return;
-    final double dt = 0.016;
+    const double dt = 0.016;
     final double lambda = widget.springDamping;
     final double factor = 1.0 - math.exp(-lambda * dt);
 
@@ -1893,8 +2409,14 @@ class _ExhumaCursorTooltipState extends State<ExhumaCursorTooltip> with SingleTi
       _current = Offset(nextX, nextY);
     });
 
-    if ((_target - _current).distance > 0.2) {
-      _controller.forward(from: 0.0);
+    if ((_target - _current).distance <= 0.2) {
+      _controller.stop();
+    }
+  }
+
+  void _startLoop() {
+    if (!_controller.isAnimating) {
+      _controller.repeat();
     }
   }
 
@@ -1904,30 +2426,93 @@ class _ExhumaCursorTooltipState extends State<ExhumaCursorTooltip> with SingleTi
     super.dispose();
   }
 
+  BoxDecoration _getDecoration(BuildContext context) {
+    switch (widget.variant) {
+      case 'accent':
+        return BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        );
+      case 'dark':
+        return BoxDecoration(
+          color: const Color(0xFF09090B),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFF27272A)),
+          boxShadow: const [
+            BoxShadow(color: Colors.black54, blurRadius: 12, offset: Offset(0, 6)),
+          ],
+        );
+      case 'minimal':
+        return BoxDecoration(
+          color: const Color(0xF5FFFFFF),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: const Color(0xFFE4E4E7)),
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+          ],
+        );
+      case 'glow':
+        return BoxDecoration(
+          color: const Color(0xE6022C22),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0x8010B981)),
+          boxShadow: const [
+            BoxShadow(color: Color(0x4D10B981), blurRadius: 16, offset: Offset(0, 0)),
+          ],
+        );
+      case 'frosted':
+      default:
+        return BoxDecoration(
+          color: const Color(0xD918181B),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0x33FFFFFF)),
+          boxShadow: const [
+            BoxShadow(color: Colors.black38, blurRadius: 10, offset: Offset(0, 4)),
+          ],
+        );
+    }
+  }
+
+  TextStyle _getTextStyle() {
+    if (widget.variant == 'minimal') {
+      return const TextStyle(color: Color(0xFF18181B), fontSize: 12, fontWeight: FontWeight.w500);
+    }
+    if (widget.variant == 'glow') {
+      return const TextStyle(color: Color(0xFF34D399), fontSize: 12, fontFamily: 'monospace', fontWeight: FontWeight.bold);
+    }
+    return const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (event) {
         setState(() {
           _isHovered = true;
-          _target = event.localPosition + Offset(widget.offsetX, widget.offsetY);
+          _target = _calculateTarget(event.localPosition, 80.0, 32.0);
           _current = _target;
         });
-        _controller.forward(from: 0.0);
+        _startLoop();
       },
       onHover: (event) {
         setState(() {
-          _target = event.localPosition + Offset(widget.offsetX, widget.offsetY);
+          _target = _calculateTarget(event.localPosition, 80.0, 32.0);
         });
-        if (!_controller.isAnimating) {
-          _controller.forward(from: 0.0);
-        }
+        _startLoop();
       },
       onExit: (_) {
         setState(() {
           _isHovered = false;
           _target = const Offset(-9999, -9999);
         });
+        _controller.stop();
       },
       child: Stack(
         clipBehavior: Clip.none,
@@ -1940,24 +2525,10 @@ class _ExhumaCursorTooltipState extends State<ExhumaCursorTooltip> with SingleTi
               child: IgnorePointer(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: widget.variant == 'accent' ? Theme.of(context).primaryColor : Colors.black87,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
+                  decoration: _getDecoration(context),
                   child: Text(
                     widget.content,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: _getTextStyle(),
                   ),
                 ),
               ),
@@ -2016,7 +2587,7 @@ export default function CursorTooltipDemo() {
         collisionPadding={${collisionPadding}}
         className="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl hover:border-primary/50 transition-colors"
       >
-        <span className="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+        <span className="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
         <h3 className="text-lg font-bold text-foreground">Interactive Target Zone</h3>
         <p className="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
       </CursorTooltip>
@@ -2048,7 +2619,7 @@ import CursorTooltip from './CursorTooltip.vue';
       :collisionPadding="${collisionPadding}"
       class="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl hover:border-primary/50 transition-colors"
     >
-      <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+      <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
       <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
       <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
     </CursorTooltip>
@@ -2078,7 +2649,7 @@ import CursorTooltip from './CursorTooltip.vue';
     collisionPadding={${collisionPadding}}
     class="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl hover:border-primary/50 transition-colors"
   >
-    <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+    <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
     <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
     <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
   </CursorTooltip>
@@ -2111,7 +2682,7 @@ import { ExhumaCursorTooltipComponent } from './cursor-tooltip.component';
         [collisionPadding]="${collisionPadding}"
         customClass="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl"
       >
-        <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+        <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
         <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
         <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
       </exhuma-cursor-tooltip>
@@ -2144,7 +2715,7 @@ export const CursorTooltipDemo: Component = () => {
         collisionPadding={${collisionPadding}}
         class="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl"
       >
-        <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+        <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
         <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
         <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
       </CursorTooltip>
@@ -2175,7 +2746,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
     collisionPadding={${collisionPadding}}
     class="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl"
   >
-    <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+    <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
     <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
     <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
   </CursorTooltip>
@@ -2200,7 +2771,7 @@ import CursorTooltip from '../components/CursorTooltip.astro';
         :collisionPadding="${collisionPadding}"
         class="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-xl"
     >
-        <span class="text-3xs font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
+        <span class="text-[10px] font-mono font-bold uppercase text-primary mb-2 inline-block">Hover Sandbox</span>
         <h3 class="text-lg font-bold text-foreground">Interactive Target Zone</h3>
         <p class="mt-1 text-xs text-muted-foreground">Move pointer over this card to track trailing tooltip</p>
     </x-cursor-tooltip>
