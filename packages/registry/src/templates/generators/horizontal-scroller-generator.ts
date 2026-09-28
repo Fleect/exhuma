@@ -1999,3 +1999,698 @@ class ExhumaHorizontalScroller extends StatelessWidget {
 			return null;
 	}
 }
+
+export function getHorizontalScrollerUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const speed = Number(props.speed ?? 1);
+	const itemGap = Number(props.itemGap ?? 28);
+	const cardWidth = typeof props.cardWidth === 'number' ? props.cardWidth : Number(props.cardWidth ?? 320);
+	const showProgress = props.showProgress !== false;
+	const showFadeEdges = props.showFadeEdges !== false;
+	const fadeWidth = Number(props.fadeWidth ?? 48);
+	const fadeEdgeColor = String(props.fadeEdgeColor || '#ffffff');
+	const fadeEdgeColorDark = String(props.fadeEdgeColorDark || '#09090b');
+	const mobileMode = String(props.mobileMode ?? 'scroll');
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'page.tsx',
+				language: 'tsx',
+				description: 'Next.js 15 (App Router) features page with Brix-style HorizontalScroller.',
+				code: `'use client';
+
+import React from 'react';
+import { HorizontalScroller } from '@/components/ui/HorizontalScroller';
+
+const SERVICES = [
+  { num: '01', category: 'DESIGN', title: 'Web Design & UI', desc: 'High-conversion visual interfaces engineered to command attention.', cta: 'Explore', tag: 'STAGE // 01' },
+  { num: '02', category: 'DEV', title: 'Kinetic Engineering', desc: '120 FPS transitions, zero layout thrashing, and sub-pixel compositing.', cta: 'Explore', tag: 'STAGE // 02' },
+  { num: '03', category: 'BRAND', title: 'Brand Strategy', desc: 'Distinct typography and positioning frameworks that scale.', cta: 'Explore', tag: 'STAGE // 03' },
+  { num: '04', category: 'SCALE', title: 'Conversion Scale', desc: 'Data-driven landing pages and behavioral experimentation.', cta: 'Explore', tag: 'STAGE // 04' },
+  { num: '05', category: 'AI', title: 'AI Workflows', desc: 'Intelligent automation pipelines built for high leverage.', cta: 'Explore', tag: 'STAGE // 05' },
+];
+
+export default function ServicesPage() {
+  return (
+    <main className="min-h-[220vh] bg-background text-foreground py-20">
+      <div className="max-w-6xl mx-auto px-6 mb-12">
+        <span className="font-mono text-xs font-bold tracking-widest text-emerald-500 uppercase">
+          Brix-Engineered Rail
+        </span>
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mt-2">
+          Specialized Digital Services
+        </h1>
+        <p className="text-muted-foreground text-base mt-3 max-w-xl">
+          Scroll vertically to glide through our full suite of digital product capabilities.
+        </p>
+      </div>
+
+      <HorizontalScroller
+        speed={${speed}}
+        itemGap={${itemGap}}
+        cardWidth={${cardWidth}}
+        showProgress={${showProgress}}
+        showFadeEdges={${showFadeEdges}}
+        fadeWidth={${fadeWidth}}
+        fadeEdgeColor="${fadeEdgeColor}"
+        fadeEdgeColorDark="${fadeEdgeColorDark}"
+        mobileMode="${mobileMode}"
+        className="w-full"
+      >
+        {SERVICES.map((service, idx) => (
+          <div
+            key={idx}
+            className="group flex flex-col justify-between h-[210px] rounded-2xl border border-border/80 bg-card/95 p-5 backdrop-blur-md hover:border-foreground/40 transition-all duration-300"
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-emerald-500">{service.num}</span>
+                  <span className="font-mono text-3xs text-muted-foreground uppercase tracking-wider">{service.category}</span>
+                </div>
+                <span className="font-mono text-3xs rounded-full border border-border bg-background/60 px-2 py-0.5 text-muted-foreground">{service.tag}</span>
+              </div>
+              <h4 className="mt-3 text-base font-bold tracking-tight text-foreground">{service.title}</h4>
+              <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed line-clamp-2">{service.desc}</p>
+            </div>
+            <div className="pt-3 border-t border-border/40 flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground group-hover:text-emerald-400 transition-colors cursor-pointer">
+                {service.cta} &rarr;
+              </span>
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+          </div>
+        ))}
+      </HorizontalScroller>
+
+      {/* Subsequent Section (Unpinned Normal Flow) */}
+      <section className="border-t border-border/60 bg-muted/20 px-6 py-16 sm:px-12">
+        <div className="max-w-xl">
+          <div className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-emerald-500" />
+            <span className="font-mono text-3xs font-bold uppercase tracking-widest text-emerald-500">
+              Traversal Complete &bull; Normal Scroll Resumed
+            </span>
+          </div>
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Next Milestone: Delivery &amp; Scale
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Once horizontal card translation reaches 100%, the pinned camera seamlessly releases and natural vertical scrolling resumes.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'Vite / React 18+ application demonstrating HorizontalScroller.',
+				code: `import React from 'react';
+import { HorizontalScroller } from './components/ui/HorizontalScroller';
+
+const SERVICES = [
+  { num: '01', category: 'DESIGN', title: 'Web Design & Concept', desc: 'Crafting intuitive digital experiences that convert.', cta: 'Explore web design', badge: 'PROTOTYPING' },
+  { num: '02', category: 'ENGINEERING', title: 'Development & Motion', desc: '120 FPS kinetic transitions and zero layout thrash.', cta: 'Explore development', badge: '120 FPS' },
+  { num: '03', category: 'IDENTITY', title: 'Brand Strategy', desc: 'Distinct typography and strategic positioning.', cta: 'Explore branding', badge: 'STRATEGY' },
+  { num: '04', category: 'GROWTH', title: 'Conversion Optimization', desc: 'Data-driven landing pages and experimentation.', cta: 'Explore growth', badge: 'ANALYTICS' },
+];
+
+export default function App() {
+  return (
+    <div className="min-h-[200vh] bg-background text-foreground py-20">
+      <div className="max-w-6xl mx-auto px-6 mb-12">
+        <h1 className="text-4xl font-bold">Featured Capabilities</h1>
+      </div>
+
+      <HorizontalScroller
+        speed={${speed}}
+        itemGap={${itemGap}}
+        cardWidth={${cardWidth}}
+        showProgress={${showProgress}}
+        showFadeEdges={${showFadeEdges}}
+        fadeWidth={${fadeWidth}}
+        fadeEdgeColor="${fadeEdgeColor}"
+        fadeEdgeColorDark="${fadeEdgeColorDark}"
+        mobileMode="${mobileMode}"
+      >
+        {SERVICES.map((s, idx) => (
+          <div key={idx} className="flex flex-col md:flex-row h-full rounded-2xl border border-border bg-card p-6 min-h-[360px]">
+            <div className="flex-1 flex flex-col justify-between pr-4">
+              <div>
+                <span className="font-mono text-xs text-emerald-500 font-bold">{s.num} / {s.category}</span>
+                <h3 className="text-2xl font-bold mt-2">{s.title}</h3>
+                <p className="text-muted-foreground text-sm mt-2">{s.desc}</p>
+              </div>
+              <span className="text-xs font-semibold mt-4 text-foreground hover:text-emerald-400 cursor-pointer">{s.cta} &rarr;</span>
+            </div>
+            <div className="w-full md:w-1/2 bg-muted/20 rounded-xl p-4 flex items-center justify-center font-mono text-xs text-muted-foreground">
+              {s.badge} // EKM RAIL
+            </div>
+          </div>
+        ))}
+      </HorizontalScroller>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'App.vue',
+				language: 'vue',
+				description: 'Vue 3 SFC using HorizontalScroller component.',
+				code: `<script setup lang="ts">
+import HorizontalScroller from '@/components/ui/HorizontalScroller.vue';
+
+const services = [
+  { num: '01', category: 'DESIGN', title: 'Web Design & Direction', desc: 'Transforming visions into high-conversion interfaces.', cta: 'Explore web design' },
+  { num: '02', category: 'DEV', title: 'Kinetic Development', desc: '120 FPS kinetic transitions and zero layout thrash.', cta: 'Explore dev' },
+  { num: '03', category: 'BRAND', title: 'Brand Identity', desc: 'Distinct typography and strategic positioning.', cta: 'Explore branding' },
+  { num: '04', category: 'GROWTH', title: 'Growth Optimization', desc: 'Data-driven landing pages and experimentation.', cta: 'Explore growth' },
+];
+</script>
+
+<template>
+  <main class="min-h-[220vh] py-20 bg-background text-foreground">
+    <div class="max-w-5xl mx-auto px-6 mb-12">
+      <h1 class="text-3xl font-bold">Services Rail</h1>
+    </div>
+
+    <HorizontalScroller
+      :speed="${speed}"
+      :item-gap="${itemGap}"
+      :card-width="${cardWidth}"
+      :show-progress="${showProgress}"
+      :show-fade-edges="${showFadeEdges}"
+      :fade-width="${fadeWidth}"
+      fade-edge-color="${fadeEdgeColor}"
+      fade-edge-color-dark="${fadeEdgeColorDark}"
+      mobile-mode="${mobileMode}"
+    >
+      <div
+        v-for="(service, idx) in services"
+        :key="idx"
+        class="flex flex-col md:flex-row h-full rounded-2xl border border-border bg-card p-6 min-h-[360px]"
+      >
+        <div class="flex-1 flex flex-col justify-between pr-4">
+          <div>
+            <span class="font-mono text-xs text-emerald-500 font-bold">{{ service.num }} / {{ service.category }}</span>
+            <h3 class="text-2xl font-bold mt-2">{{ service.title }}</h3>
+            <p class="text-muted-foreground text-sm mt-2">{{ service.desc }}</p>
+          </div>
+          <span class="text-xs font-semibold mt-4 text-foreground">{{ service.cta }} &rarr;</span>
+        </div>
+        <div class="w-full md:w-1/2 bg-muted/20 rounded-xl p-4 flex items-center justify-center font-mono text-xs text-muted-foreground">
+          EKM RAIL // VUE 3
+        </div>
+      </div>
+    </HorizontalScroller>
+  </main>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'App.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 component with HorizontalScroller.',
+				code: `<script lang="ts">
+  import HorizontalScroller from '$lib/components/HorizontalScroller.svelte';
+
+  const services = [
+    { num: '01', category: 'DESIGN', title: 'Web Design & Direction', desc: 'High-conversion visual interfaces.' },
+    { num: '02', category: 'DEV', title: 'Kinetic Development', desc: '120 FPS transitions, zero layout thrash.' },
+    { num: '03', category: 'BRAND', title: 'Brand Identity', desc: 'Distinct typography and strategic positioning.' },
+    { num: '04', category: 'GROWTH', title: 'Growth Optimization', desc: 'Data-driven landing pages and experimentation.' }
+  ];
+</script>
+
+<main class="min-h-[220vh] py-20 bg-background text-foreground">
+  <HorizontalScroller
+    speed={${speed}}
+    itemGap={${itemGap}}
+    cardWidth={${cardWidth}}
+    showProgress={${showProgress}}
+    showFadeEdges={${showFadeEdges}}
+    fadeWidth={${fadeWidth}}
+    fadeEdgeColor="${fadeEdgeColor}"
+    fadeEdgeColorDark="${fadeEdgeColorDark}"
+    mobileMode="${mobileMode}"
+  >
+    {#each services as service, idx}
+      <div class="flex flex-col md:flex-row h-full rounded-2xl border border-border bg-card p-6 min-h-[360px]">
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <span class="font-mono text-xs text-emerald-500 font-bold">{service.num}</span>
+            <h3 class="text-2xl font-bold mt-2">{service.title}</h3>
+            <p class="text-muted-foreground text-sm mt-2">{service.desc}</p>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 bg-muted/20 rounded-xl p-4 flex items-center justify-center font-mono text-xs">
+          EKM RAIL // SVELTE 5
+        </div>
+      </div>
+    {/each}
+  </HorizontalScroller>
+</main>
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'horizontal-scroller-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular 18+ standalone component with HorizontalScroller.',
+				code: `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ExhumaHorizontalScrollerComponent } from './horizontal-scroller.component';
+
+@Component({
+  selector: 'app-horizontal-scroller-demo',
+  standalone: true,
+  imports: [CommonModule, ExhumaHorizontalScrollerComponent],
+  template: \`
+    <div class="services-container">
+      <exhuma-horizontal-scroller
+        [speed]="${speed}"
+        [itemGap]="${itemGap}"
+        [cardWidth]="${cardWidth}"
+        [showProgress]="${showProgress}"
+        [showFadeEdges]="${showFadeEdges}"
+        [fadeWidth]="${fadeWidth}"
+        fadeEdgeColor="${fadeEdgeColor}"
+        fadeEdgeColorDark="${fadeEdgeColorDark}"
+        mobileMode="${mobileMode}"
+      >
+        <div *ngFor="let s of services; let idx = index" class="service-card">
+          <div class="content">
+            <span class="num">{{ s.num }} // {{ s.category }}</span>
+            <h3>{{ s.title }}</h3>
+            <p>{{ s.desc }}</p>
+          </div>
+          <div class="preview">EKM RAIL // ANGULAR</div>
+        </div>
+      </exhuma-horizontal-scroller>
+    </div>
+  \`,
+  styles: [\`
+    .services-container { min-height: 220vh; padding: 5rem 1rem; background: #0a0a0a; color: #fff; }
+    .service-card { display: flex; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; background: #141414; padding: 1.5rem; min-height: 360px; }
+    .content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .num { font-family: monospace; font-size: 0.75rem; color: #10b981; }
+    .preview { width: 45%; background: rgba(255,255,255,0.04); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 0.75rem; }
+  \`]
+})
+export class HorizontalScrollerDemoComponent {
+  services = [
+    { num: '01', category: 'DESIGN', title: 'Web Design & Direction', desc: 'High-conversion visual interfaces.' },
+    { num: '02', category: 'DEV', title: 'Kinetic Development', desc: '120 FPS transitions, zero layout thrash.' },
+    { num: '03', category: 'BRAND', title: 'Brand Identity', desc: 'Distinct typography and strategic positioning.' },
+    { num: '04', category: 'GROWTH', title: 'Growth Optimization', desc: 'Data-driven landing pages and experimentation.' },
+  ];
+}
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with HorizontalScroller.',
+				code: `import { For } from 'solid-js';
+import { HorizontalScroller } from './components/HorizontalScroller';
+
+const SERVICES = [
+  { num: '01', category: 'DESIGN', title: 'Web Design & Direction', desc: 'High-conversion visual interfaces.' },
+  { num: '02', category: 'DEV', title: 'Kinetic Development', desc: '120 FPS transitions, zero layout thrash.' },
+  { num: '03', category: 'BRAND', title: 'Brand Identity', desc: 'Distinct typography and strategic positioning.' },
+  { num: '04', category: 'GROWTH', title: 'Growth Optimization', desc: 'Data-driven landing pages and experimentation.' },
+];
+
+export default function App() {
+  return (
+    <main class="min-h-[220vh] py-20 bg-background text-foreground">
+      <HorizontalScroller
+        speed={${speed}}
+        itemGap={${itemGap}}
+        cardWidth={${cardWidth}}
+        showProgress={${showProgress}}
+        showFadeEdges={${showFadeEdges}}
+        fadeWidth={${fadeWidth}}
+        fadeEdgeColor="${fadeEdgeColor}"
+        fadeEdgeColorDark="${fadeEdgeColorDark}"
+        mobileMode="${mobileMode}"
+      >
+        <For each={SERVICES}>
+          {(service) => (
+            <div class="flex flex-col md:flex-row h-full rounded-2xl border border-border bg-card p-6 min-h-[360px]">
+              <div class="flex-1 flex flex-col justify-between">
+                <div>
+                  <span class="font-mono text-xs text-emerald-500 font-bold">{service.num}</span>
+                  <h3 class="text-2xl font-bold mt-2">{service.title}</h3>
+                  <p class="text-muted-foreground text-sm mt-2">{service.desc}</p>
+                </div>
+              </div>
+              <div class="w-full md:w-1/2 bg-muted/20 rounded-xl p-4 flex items-center justify-center font-mono text-xs">
+                EKM RAIL // SOLID
+              </div>
+            </div>
+          )}
+        </For>
+      </HorizontalScroller>
+    </main>
+  );
+}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'index.astro',
+				language: 'astro',
+				description: 'Astro page using the native HorizontalScroller component.',
+				code: `---
+import HorizontalScroller from '@/components/ui/HorizontalScroller.astro';
+
+const services = [
+  { num: '01', title: 'Web Design', desc: 'Intuitive digital experiences.' },
+  { num: '02', title: 'Development', desc: '120 FPS kinetic transitions.' },
+  { num: '03', title: 'Branding', desc: 'Distinct typography and strategy.' },
+  { num: '04', title: 'Growth', desc: 'Data-driven experimentation.' },
+];
+---
+
+<html lang="en">
+  <body class="bg-black text-white min-h-[220vh] py-20">
+    <HorizontalScroller
+      speed={${speed}}
+      itemGap={${itemGap}}
+      cardWidth={${cardWidth}}
+      showProgress={${showProgress}}
+      showFadeEdges={${showFadeEdges}}
+      fadeWidth={${fadeWidth}}
+      fadeEdgeColor="${fadeEdgeColor}"
+      fadeEdgeColorDark="${fadeEdgeColorDark}"
+      mobileMode="${mobileMode}"
+    >
+      {services.map((s, idx) => (
+        <div class="flex rounded-2xl border border-white/10 bg-neutral-900 p-8 min-h-[360px]">
+          <div class="flex-1 flex flex-col justify-between">
+            <span class="text-xs font-mono text-emerald-400 font-bold">0{idx + 1}</span>
+            <h3 class="text-2xl font-bold">{s.title}</h3>
+            <p class="text-neutral-400 text-sm">{s.desc}</p>
+          </div>
+        </div>
+      ))}
+    </HorizontalScroller>
+  </body>
+</html>
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'services.blade.php',
+				language: 'php',
+				description: 'Laravel Blade template using HorizontalScroller component.',
+				code: `@php
+  $services = [
+    ['num' => '01', 'title' => 'Web Design', 'desc' => 'Intuitive digital experiences.'],
+    ['num' => '02', 'title' => 'Development', 'desc' => '120 FPS kinetic transitions.'],
+    ['num' => '03', 'title' => 'Branding', 'desc' => 'Distinct typography and strategy.'],
+    ['num' => '04', 'title' => 'Growth', 'desc' => 'Data-driven experimentation.'],
+  ];
+@endphp
+
+<div class="min-h-[220vh] py-20 bg-neutral-950 text-white">
+  <x-horizontal-scroller
+    :speed="${speed}"
+    :item-gap="${itemGap}"
+    :card-width="${cardWidth}"
+    :show-progress="${showProgress ? 'true' : 'false'}"
+    :show-fade-edges="${showFadeEdges ? 'true' : 'false'}"
+    :fade-width="${fadeWidth}"
+    fade-edge-color="${fadeEdgeColor}"
+    fade-edge-color-dark="${fadeEdgeColorDark}"
+    mobile-mode="${mobileMode}"
+  >
+    @foreach($services as $service)
+      <div class="flex flex-col md:flex-row h-full rounded-2xl border border-white/10 bg-neutral-900 p-6 min-h-[360px]">
+        <div class="flex-1 flex flex-col justify-between">
+          <span class="font-mono text-xs text-emerald-400 font-bold">{{ $service['num'] }}</span>
+          <h3 class="text-2xl font-bold mt-2">{{ $service['title'] }}</h3>
+          <p class="text-neutral-400 text-sm mt-2">{{ $service['desc'] }}</p>
+        </div>
+        <div class="w-full md:w-1/2 bg-white/5 rounded-xl p-4 flex items-center justify-center font-mono text-xs">
+          EKM RAIL // BLADE
+        </div>
+      </div>
+    @endforeach
+  </x-horizontal-scroller>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Vanilla HTML5 and JavaScript with HorizontalScroller engine.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Scroller</title>
+  <style>
+    body { margin: 0; background: #0a0a0a; color: #fff; font-family: sans-serif; min-height: 250vh; }
+    .exhuma-hs-outer { position: relative; width: 100%; min-height: 150vh; }
+    .exhuma-hs-camera { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+    .exhuma-hs-track { display: flex; align-items: stretch; will-change: transform; gap: ${itemGap}px; padding: 0 max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem)); }
+    .service-card { flex-shrink: 0; width: ${cardWidth}px; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; background: #141414; padding: 1.5rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; }
+    .progress-bar-container { position: absolute; bottom: 2rem; left: 2rem; right: 2rem; height: 4px; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden; }
+    .exhuma-hs-progress { height: 100%; width: 0%; background: #10b981; border-radius: 9999px; }
+  </style>
+</head>
+<body>
+  <div class="exhuma-hs-outer" data-exhuma-horizontal-scroller data-speed="${speed}" data-item-gap="${itemGap}" data-card-width="${cardWidth}">
+    <div class="exhuma-hs-camera">
+      <div class="exhuma-hs-track">
+        <div class="service-card"><span>01 / DESIGN</span><h3>Web Design &amp; UI</h3><p>High-conversion interfaces.</p></div>
+        <div class="service-card"><span>02 / DEV</span><h3>Kinetic Engineering</h3><p>120 FPS transitions.</p></div>
+        <div class="service-card"><span>03 / BRAND</span><h3>Brand Strategy</h3><p>Distinct typography.</p></div>
+        <div class="service-card"><span>04 / SCALE</span><h3>Conversion Scale</h3><p>Data-driven pages.</p></div>
+      </div>
+      <div class="progress-bar-container"><div class="exhuma-hs-progress"></div></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initHorizontalScroller } from './horizontal-scroller.vanilla.js';
+    initHorizontalScroller();
+  </script>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg block render template.',
+				code: `<?php
+/**
+ * Dynamic Block Render: Exhuma Horizontal Scroller
+ */
+$speed = ${speed};
+$item_gap = ${itemGap};
+$card_width = ${cardWidth};
+?>
+<div class="wp-block-exhuma-horizontal-scroller" data-speed="<?php echo esc_attr($speed); ?>" data-gap="<?php echo esc_attr($item_gap); ?>">
+  <div class="exhuma-hs-camera">
+    <div class="exhuma-hs-track">
+      <?php echo $content; ?>
+    </div>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Custom Web Component <exhuma-horizontal-scroller>.',
+				code: `<!-- Custom Web Component <exhuma-horizontal-scroller> -->
+<exhuma-horizontal-scroller
+  speed="${speed}"
+  item-gap="${itemGap}"
+  card-width="${cardWidth}"
+  show-progress="${showProgress}"
+  show-fade-edges="${showFadeEdges}"
+  fade-width="${fadeWidth}"
+  fade-edge-color="${fadeEdgeColor}"
+  fade-edge-color-dark="${fadeEdgeColorDark}"
+  mobile-mode="${mobileMode}"
+>
+  <div class="card"><h3>01 / Web Design</h3><p>Intuitive digital experiences.</p></div>
+  <div class="card"><h3>02 / Development</h3><p>120 FPS kinetic transitions.</p></div>
+  <div class="card"><h3>03 / Brand Identity</h3><p>Distinct typography and strategy.</p></div>
+  <div class="card"><h3>04 / Growth</h3><p>Data-driven experimentation.</p></div>
+</exhuma-horizontal-scroller>
+
+<!-- Load Universal Web Component Definition -->
+<script type="module" src="./exhuma-horizontal-scroller.js"></script>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'HorizontalScrollerScreen.tsx',
+				language: 'tsx',
+				description: 'React Native horizontal scroller screen.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { HorizontalScroller } from './components/HorizontalScroller';
+
+const SERVICES = [
+  { num: '01', title: 'Web Design', desc: 'Intuitive digital experiences.' },
+  { num: '02', title: 'Development', desc: '120 FPS kinetic transitions.' },
+  { num: '03', title: 'Brand Identity', desc: 'Strategic positioning.' },
+  { num: '04', title: 'Growth', desc: 'Data-driven experimentation.' },
+];
+
+export default function HorizontalScrollerScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Featured Services</Text>
+      <HorizontalScroller
+        itemGap={${itemGap}}
+        cardWidth={${cardWidth}}
+        data={SERVICES}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.num}>{item.num}</Text>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.desc}>{item.desc}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#090d16', paddingVertical: 60 },
+  header: { fontSize: 28, fontWeight: 'bold', color: '#fff', marginLeft: 20, marginBottom: 24 },
+  card: { backgroundColor: '#131c2e', borderRadius: 20, borderWidth: 1, borderColor: '#223252', padding: 24, height: 320, justifyContent: 'space-between' },
+  num: { color: '#10b981', fontFamily: 'monospace', fontSize: 12, fontWeight: 'bold' },
+  title: { color: '#fff', fontSize: 22, fontWeight: 'bold', marginTop: 8 },
+  desc: { color: '#94a3b8', fontSize: 14, marginTop: 8 },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'horizontal_scroller_screen.dart',
+				language: 'dart',
+				description: 'Flutter Dart screen implementing horizontal card rail.',
+				code: `import 'package:flutter/material.dart';
+import 'horizontal_scroller.dart';
+
+class HorizontalScrollerScreen extends StatelessWidget {
+  const HorizontalScrollerScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF090D16),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Text(
+                'Featured Services',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
+            ExhumaHorizontalScroller(
+              itemGap: ${itemGap}.0,
+              cardWidth: ${cardWidth}.0,
+              children: [
+                _buildCard('01', 'Web Design', 'Intuitive digital experiences.'),
+                _buildCard('02', 'Development', '120 FPS kinetic transitions.'),
+                _buildCard('03', 'Brand Identity', 'Strategic positioning.'),
+                _buildCard('04', 'Growth', 'Data-driven experimentation.'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard(String num, String title, String desc) {
+    return Container(
+      padding: const EdgeInsets.all(24.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131C2E),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF223252)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(num, style: const TextStyle(color: Color(0xFF10B981), fontFamily: 'monospace')),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Text(desc, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				description: 'Standard usage snippet.',
+				code: `import { HorizontalScroller } from '@/components/ui/HorizontalScroller';\n\nexport default function Example() {\n  return (\n    <HorizontalScroller speed={${speed}} itemGap={${itemGap}} cardWidth="${cardWidth}">\n      <div>Service 1</div>\n      <div>Service 2</div>\n    </HorizontalScroller>\n  );\n}`,
+			};
+		}
+	}
+}

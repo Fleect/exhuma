@@ -2020,3 +2020,572 @@ class _SpotlightBorderPainter extends CustomPainter {
 			return null;
 	}
 }
+
+export function getSpotlightCardUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const radius = Number(props.radius ?? 350);
+	const color = String(props.color ?? '#6366f1');
+	const borderColor = String(props.borderColor ?? '#818cf8');
+	const opacity = Number(props.opacity ?? 0.85);
+	const spread = Number(props.spread ?? 60);
+	const mode = (props.mode as string) ?? 'both';
+	const smoothing = Number(props.smoothing ?? 0.2);
+	const disabled = Boolean(props.disabled ?? false);
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'page.tsx',
+				language: 'tsx',
+				description: 'Next.js 15 (App Router) features page with SpotlightCard.',
+				code: `'use client';
+
+import React from 'react';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
+
+export default function FeaturesPage() {
+  return (
+    <main className="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full">
+        <SpotlightCard
+          radius={${radius}}
+          color="${color}"
+          borderColor="${borderColor}"
+          opacity={${opacity}}
+          spread={${spread}}
+          mode="${mode}"
+          smoothing={${smoothing}}
+          disabled={${disabled}}
+          className="border border-border bg-card p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className="font-mono text-xs font-bold text-primary uppercase tracking-wider">
+              HARDWARE ACCELERATED
+            </span>
+            <span className="text-xs text-muted-foreground font-mono">Radius: ${radius}px</span>
+          </div>
+          <h3 className="text-2xl font-black tracking-tight">Spotlight Card</h3>
+          <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Move cursor over this surface to experience hardware-accelerated 120 FPS sub-pixel radial illumination.
+          </p>
+          <div className="mt-6 pt-4 border-t border-border flex items-center justify-between font-mono text-xs text-muted-foreground">
+            <span>Falloff: ${spread}%</span>
+            <span className="text-emerald-500 font-semibold">120Hz rAF</span>
+          </div>
+        </SpotlightCard>
+      </div>
+    </main>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'React interactive showcase with SpotlightCard.',
+				code: `import React from 'react';
+import { SpotlightCard } from '@/components/ui/SpotlightCard';
+
+export default function App() {
+  return (
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+      <SpotlightCard
+        radius={${radius}}
+        color="${color}"
+        borderColor="${borderColor}"
+        opacity={${opacity}}
+        spread={${spread}}
+        mode="${mode}"
+        smoothing={${smoothing}}
+        disabled={${disabled}}
+        className="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+      >
+        <span className="font-mono text-xs font-bold text-primary uppercase">
+          RADIAL MASK
+        </span>
+        <h3 className="text-2xl font-black tracking-tight mt-2">Spotlight Primitive</h3>
+        <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+          Zero layout thrashing with cached bounding geometry and direct rAF CSS custom property injection.
+        </p>
+      </SpotlightCard>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'SpotlightCardDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 Single File Component featuring SpotlightCard with radial illumination.',
+				code: `<script setup lang="ts">
+import SpotlightCard from '@/components/ui/SpotlightCard.vue';
+</script>
+
+<template>
+  <main class="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+    <SpotlightCard
+      :radius="${radius}"
+      color="${color}"
+      border-color="${borderColor}"
+      :opacity="${opacity}"
+      :spread="${spread}"
+      mode="${mode}"
+      :smoothing="${smoothing}"
+      :disabled="${disabled}"
+      class="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-mono text-xs font-bold text-primary uppercase">VUE 3 NATIVE</span>
+        <span class="text-xs text-muted-foreground font-mono">120 FPS</span>
+      </div>
+      <h3 class="text-2xl font-black tracking-tight">Kinetic Spotlight Card</h3>
+      <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+        Interactive 2D cursor tracking with specular radial border mask and smooth exponential smoothing.
+      </p>
+    </SpotlightCard>
+  </main>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: '+page.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 page implementing native SpotlightCard physics.',
+				code: `<script lang="ts">
+  import SpotlightCard from '$lib/components/SpotlightCard.svelte';
+</script>
+
+<main class="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+  <SpotlightCard
+    radius={${radius}}
+    color="${color}"
+    borderColor="${borderColor}"
+    opacity={${opacity}}
+    spread={${spread}}
+    mode="${mode}"
+    smoothing={${smoothing}}
+    disabled={${disabled}}
+    class="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-mono text-xs font-bold text-primary uppercase">SVELTE 5 RUNES</span>
+      <span class="text-xs text-muted-foreground font-mono">${radius}px RADIUS</span>
+    </div>
+    <h3 class="text-2xl font-black tracking-tight">Kinetic Spotlight Card</h3>
+    <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+      Svelte 5 native reactive spotlight with zero layout thrashing and direct GPU custom property injection.
+    </p>
+  </SpotlightCard>
+</main>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'SolidJS high-performance fine-grained reactive SpotlightCard demo.',
+				code: `import { SpotlightCard } from './components/SpotlightCard';
+
+export default function App() {
+  return (
+    <div class="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+      <SpotlightCard
+        radius={${radius}}
+        color="${color}"
+        borderColor="${borderColor}"
+        opacity={${opacity}}
+        spread={${spread}}
+        mode="${mode}"
+        smoothing={${smoothing}}
+        disabled={${disabled}}
+        class="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+      >
+        <span class="font-mono text-xs font-bold text-primary uppercase">SOLID FINE-GRAINED</span>
+        <h3 class="text-2xl font-black tracking-tight mt-2">Kinetic Spotlight Card</h3>
+        <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+          Zero VDOM overhead with fine-grained DOM tracking and 120 FPS sub-pixel illumination.
+        </p>
+      </SpotlightCard>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'spotlight-card-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular 18+ standalone component integrating ExhumaSpotlightCardComponent.',
+				code: `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ExhumaSpotlightCardComponent } from './components/spotlight-card.component';
+
+@Component({
+  selector: 'app-spotlight-card-demo',
+  standalone: true,
+  imports: [CommonModule, ExhumaSpotlightCardComponent],
+  template: \`
+    <main class="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+      <exhuma-spotlight-card
+        [radius]="${radius}"
+        color="${color}"
+        borderColor="${borderColor}"
+        [opacity]="${opacity}"
+        [spread]="${spread}"
+        mode="${mode}"
+        [smoothing]="${smoothing}"
+        [disabled]="${disabled}"
+        class="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <span class="font-mono text-xs font-bold text-primary uppercase">ANGULAR 18+</span>
+          <span class="text-xs text-muted-foreground font-mono">STANDALONE</span>
+        </div>
+        <h3 class="text-2xl font-black tracking-tight">Kinetic Spotlight Card</h3>
+        <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+          Angular standalone component with out-of-zone rAF animation avoiding change detection ticks.
+        </p>
+      </exhuma-spotlight-card>
+    </main>
+  \`
+})
+export class SpotlightCardDemoComponent {}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'index.astro',
+				language: 'astro',
+				description: 'Astro page using zero-JS baseline SpotlightCard with client hydration.',
+				code: `---
+import SpotlightCard from '@/components/ui/SpotlightCard.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Astro Spotlight Card</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
+    <SpotlightCard
+      radius={${radius}}
+      color="${color}"
+      borderColor="${borderColor}"
+      opacity={${opacity}}
+      spread={${spread}}
+      mode="${mode}"
+      smoothing={${smoothing}}
+      disabled={${disabled}}
+      class="max-w-md w-full border border-border bg-card p-8 rounded-2xl shadow-2xl"
+    >
+      <span class="font-mono text-xs font-bold text-primary uppercase">ASTRO ISLAND</span>
+      <h3 class="text-2xl font-black tracking-tight mt-2">Kinetic Spotlight Card</h3>
+      <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+        Zero framework runtime overhead. Scoped client-side script coordinates 120 FPS cursor tracking.
+      </p>
+    </SpotlightCard>
+  </body>
+</html>
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'spotlight-card-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade template with kinetic Spotlight Card component.',
+				code: `<div class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-8">
+  <x-spotlight-card
+    :radius="${radius}"
+    color="${color}"
+    border-color="${borderColor}"
+    :opacity="${opacity}"
+    :spread="${spread}"
+    mode="${mode}"
+    :smoothing="${smoothing}"
+    :disabled="${disabled ? 'true' : 'false'}"
+    class="max-w-md w-full border border-slate-800 bg-slate-900 p-8 rounded-2xl shadow-2xl"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-mono text-xs font-bold text-indigo-400 uppercase">LARAVEL BLADE</span>
+      <span class="text-xs text-slate-400 font-mono">120 FPS</span>
+    </div>
+    <h3 class="text-2xl font-black tracking-tight">Kinetic Spotlight Card</h3>
+    <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+      Server-rendered Blade component with pure Vanilla JS requestAnimationFrame spotlight engine.
+    </p>
+  </x-spotlight-card>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Vanilla JS & HTML5 tactile spotlight card with zero runtime overhead.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kinetic Spotlight Card</title>
+  <style>
+    body { margin: 0; background: #090d16; color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
+    .spotlight-card { position: relative; width: 380px; padding: 32px; background: #131c2e; border: 1px solid #223252; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; cursor: pointer; }
+    .tag { font-family: monospace; font-size: 11px; font-weight: bold; color: #6366f1; text-transform: uppercase; }
+    h3 { margin: 12px 0 8px; font-size: 24px; font-weight: 900; }
+    p { margin: 0; font-size: 14px; color: #94a3b8; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div
+    class="spotlight-card"
+    data-exhuma-spotlight-card
+    data-radius="${radius}"
+    data-color="${color}"
+    data-border-color="${borderColor}"
+    data-opacity="${opacity}"
+    data-spread="${spread}"
+    data-mode="${mode}"
+    data-smoothing="${smoothing}"
+    data-disabled="${disabled}"
+  >
+    <div class="tag">VANILLA JS // 120 FPS</div>
+    <h3>Kinetic Spotlight Card</h3>
+    <p>Zero dependencies, zero layout thrashing, and sub-pixel composite radial border mask.</p>
+  </div>
+
+  <script type="module">
+    import { initSpotlightCard } from './spotlight-card.vanilla.js';
+    initSpotlightCard('.spotlight-card', {
+      radius: ${radius},
+      color: '${color}',
+      borderColor: '${borderColor}',
+      opacity: ${opacity},
+      spread: ${spread},
+      mode: '${mode}',
+      smoothing: ${smoothing},
+      disabled: ${disabled},
+    });
+  </script>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg block rendering dynamic spotlight card.',
+				code: `<?php
+/**
+ * SpotlightCard Block Render Template
+ */
+$radius = $attributes['radius'] ?? ${radius};
+$color = $attributes['color'] ?? '${color}';
+$border_color = $attributes['borderColor'] ?? '${borderColor}';
+$opacity = $attributes['opacity'] ?? ${opacity};
+$spread = $attributes['spread'] ?? ${spread};
+$mode = $attributes['mode'] ?? '${mode}';
+$smoothing = $attributes['smoothing'] ?? ${smoothing};
+$disabled = ($attributes['disabled'] ?? ${disabled}) ? 'true' : 'false';
+$wrapper_attributes = get_block_wrapper_attributes([
+    'class' => 'exhuma-spotlight-card',
+    'data-exhuma-spotlight-card' => '',
+    'data-radius' => $radius,
+    'data-color' => $color,
+    'data-border-color' => $border_color,
+    'data-opacity' => $opacity,
+    'data-spread' => $spread,
+    'data-mode' => $mode,
+    'data-smoothing' => $smoothing,
+    'data-disabled' => $disabled,
+]);
+?>
+<div <?php echo $wrapper_attributes; ?>>
+  <div class="exhuma-spotlight-card-content">
+    <?php echo $content; ?>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Framework-agnostic HTML implementing <exhuma-spotlight-card> custom element.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Universal Web Component: SpotlightCard</title>
+  <script type="module" src="./exhuma-spotlight-card.js"></script>
+  <style>
+    body { margin: 0; background: #090d16; color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
+    exhuma-spotlight-card { display: block; width: 380px; padding: 32px; background: #131c2e; border: 1px solid #223252; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); cursor: pointer; }
+    .tag { font-family: monospace; font-size: 11px; font-weight: bold; color: #6366f1; text-transform: uppercase; }
+    h3 { margin: 12px 0 8px; font-size: 24px; font-weight: 900; }
+    p { margin: 0; font-size: 14px; color: #94a3b8; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <exhuma-spotlight-card
+    radius="${radius}"
+    color="${color}"
+    border-color="${borderColor}"
+    opacity="${opacity}"
+    spread="${spread}"
+    mode="${mode}"
+    smoothing="${smoothing}"
+  >
+    <div class="tag">WEB COMPONENT // STANDALONE</div>
+    <h3>Kinetic Spotlight Card</h3>
+    <p>Works everywhere: React, Vue, Svelte, Angular, PHP, or plain static HTML pages.</p>
+  </exhuma-spotlight-card>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo screen with hardware-accelerated spotlight gesture physics.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { SpotlightCard } from './components/SpotlightCard';
+
+export default function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <SpotlightCard
+        radius={${radius}}
+        color="${color}"
+        borderColor="${borderColor}"
+        opacity={${opacity}}
+        spread={${spread}}
+        mode="${mode}"
+        smoothing={${smoothing}}
+        disabled={${disabled}}
+      >
+        <View style={styles.card}>
+          <Text style={styles.tag}>REACT NATIVE // EXPO</Text>
+          <Text style={styles.title}>Kinetic Spotlight Card</Text>
+          <Text style={styles.desc}>
+            Smooth pointer tracking and radial illumination driven by native gesture responder physics.
+          </Text>
+        </View>
+      </SpotlightCard>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#090d16', alignItems: 'center', justifyContent: 'center', padding: 20 },
+  card: { padding: 28, borderRadius: 20, backgroundColor: '#131c2e', borderWidth: 1, borderColor: '#223252', width: 340 },
+  tag: { fontSize: 11, fontFamily: 'monospace', color: '#6366f1', fontWeight: 'bold' },
+  title: { fontSize: 22, fontWeight: 'bold', color: '#fff', marginTop: 8 },
+  desc: { fontSize: 14, color: '#94a3b8', marginTop: 8, lineHeight: 20 },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'spotlight_card_screen.dart',
+				language: 'dart',
+				description: 'Flutter screen utilizing ExhumaSpotlightCard radial shader widget.',
+				code: `import 'package:flutter/material.dart';
+import 'spotlight_card.dart';
+
+class SpotlightCardScreen extends StatelessWidget {
+  const SpotlightCardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF090D16),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: ExhumaSpotlightCard(
+            radius: ${radius}.0,
+            color: const Color(0x406366F1),
+            borderColor: const Color(0x80818CF8),
+            opacity: ${opacity},
+            spread: ${spread}.0,
+            child: Container(
+              width: 360,
+              padding: const EdgeInsets.all(28.0),
+              decoration: BoxDecoration(
+                color: const Color(0xFF131C2E),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF223252)),
+                boxShadow: const [
+                  BoxShadow(blurRadius: 24, color: Colors.black54, offset: Offset(0, 12))
+                ],
+              ),
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'FLUTTER // 120 FPS',
+                    style: TextStyle(fontSize: 11, color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Kinetic Spotlight Card',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Sub-pixel radial illumination shader painted in real-time on hardware canvas.',
+                    style: TextStyle(fontSize: 14, color: Color(0xFF94A3B8), height: 1.5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				code: `import { SpotlightCard } from '@/components/ui/SpotlightCard';\n\nexport default function Example() {\n  return (\n    <SpotlightCard radius={${radius}} color="${color}">\n      <div>Spotlight Card Content</div>\n    </SpotlightCard>\n  );\n}`,
+			};
+		}
+	}
+}

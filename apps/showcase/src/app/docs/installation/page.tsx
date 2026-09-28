@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { CodeBlock } from '@/components/showcase/CodeBlock';
+import { CodeBlock } from '@/components/docs/CodeBlock';
 import { Callout } from '@/components/layout/Callout';
-import { PackageManagerTabs } from '@/components/showcase/PackageManagerTabs';
+import { PackageManagerTabs } from '@/components/docs/PackageManagerTabs';
 import { DocsPage } from '@/components/docs/DocsPage';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection, DocsProse } from '@/components/docs/DocsSection';

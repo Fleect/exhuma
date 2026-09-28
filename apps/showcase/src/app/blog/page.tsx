@@ -4,7 +4,7 @@ import { BLOG_POSTS } from '@/lib/blog-data';
 import { BlogFeed } from '@/components/blog/BlogFeed';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection } from '@/components/docs/DocsSection';
-import { StatStrip } from '@/components/showcase/StatStrip';
+import { StatStrip } from '@/components/landing/StatStrip';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export const metadata: Metadata = {

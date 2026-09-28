@@ -1469,3 +1469,469 @@ class ExpandableCard extends StatelessWidget {
 			return null;
 	}
 }
+
+export function getExpandableCardUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const duration = Number(props.duration ?? 360);
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'Next.js App Router client component featuring FLIP morphing ExpandableCard with reverse collapse.',
+				code: `'use client';
+
+import React from 'react';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          cardContent={
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all hover:border-primary/50">
+              <span className="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 className="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                Hardware-accelerated layout morphing with zero Framer Motion dependencies.
+              </p>
+            </div>
+          }
+          expandedContent={
+            <div className="space-y-4">
+              <span className="font-mono text-xs font-bold text-primary">EXPANDED MODAL DIALOG</span>
+              <h3 className="text-2xl font-black text-foreground">Analytical FLIP Kinetics</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The card measures its initial trigger geometry and smoothly morphs into a centered dialog before reversing seamlessly upon dismissal.
+              </p>
+              <div className="rounded-xl border border-border bg-muted/30 p-4 font-mono text-xs text-muted-foreground">
+                Press ESC or click the backdrop to close
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'React component featuring FLIP morphing ExpandableCard.',
+				code: `import React from 'react';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          cardContent={
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all hover:border-primary/50">
+              <span className="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 className="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                Hardware-accelerated layout morphing with zero Framer Motion dependencies.
+              </p>
+            </div>
+          }
+          expandedContent={
+            <div className="space-y-4">
+              <span className="font-mono text-xs font-bold text-primary">EXPANDED MODAL DIALOG</span>
+              <h3 className="text-2xl font-black text-foreground">Analytical FLIP Kinetics</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The card measures its initial trigger geometry and smoothly morphs into a centered dialog before reversing seamlessly upon dismissal.
+              </p>
+              <div className="rounded-xl border border-border bg-muted/30 p-4 font-mono text-xs text-muted-foreground">
+                Press ESC or click the backdrop to close
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'ExpandableDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 SFC using ExpandableCard.',
+				code: `<script setup lang="ts">
+import ExpandableCard from '@/components/ui/ExpandableCard.vue';
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <div class="w-full max-w-sm">
+      <ExpandableCard :duration="${duration}">
+        <template #trigger>
+          <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+            <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Architecture</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+          </div>
+        </template>
+        <template #expanded>
+          <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+            <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+          </div>
+        </template>
+      </ExpandableCard>
+    </div>
+  </div>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'ExpandableDemo.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 runes component using ExpandableCard.',
+				code: `<script lang="ts">
+  import ExpandableCard from '$lib/components/ExpandableCard.svelte';
+</script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <ExpandableCard duration={${duration}}>
+      {#snippet trigger()}
+        <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+          <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+          <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+        </div>
+      {/snippet}
+      {#snippet expanded()}
+        <div class="space-y-4">
+          <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+          <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+        </div>
+      {/snippet}
+    </ExpandableCard>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with fine-grained reactivity.',
+				code: `import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div class="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          trigger={
+            <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+              <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+            </div>
+          }
+          expanded={
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'ExpandableDemo.astro',
+				language: 'astro',
+				description: 'Astro native component using ExpandableCard.',
+				code: `---
+import ExpandableCard from '@/components/ui/ExpandableCard.astro';
+---
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <ExpandableCard duration={${duration}}>
+      <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+        <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+        <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+      </div>
+      <div slot="expanded" class="space-y-4">
+        <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+        <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+      </div>
+    </ExpandableCard>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'expandable-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular standalone component using ExpandableCard.',
+				code: `import { Component } from '@angular/core';
+import { ExhumaExpandableCardComponent } from '@/components/ui/expandable-card.component';
+
+@Component({
+  selector: 'app-expandable-demo',
+  standalone: true,
+  imports: [ExhumaExpandableCardComponent],
+  template: \`
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <exhuma-expandable-card
+        [duration]="${duration}"
+        class="w-full max-w-sm"
+      >
+        <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+          <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        </div>
+        <div slot="expanded" class="space-y-4">
+          <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+          <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+        </div>
+      </exhuma-expandable-card>
+    </div>
+  \`
+})
+export class ExpandableDemoComponent {}
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Standard Custom Element usage.',
+				code: `<script type="module" src="./exhuma-expandable-card.js"></script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <exhuma-expandable-card duration="${duration}" class="w-full max-w-sm">
+    <div slot="trigger">
+      <span style="font-family:monospace;font-size:0.75rem;font-weight:bold;color:#6366f1;">CLICK TO EXPAND</span>
+      <h4 style="margin-top:0.5rem;font-size:1.125rem;font-weight:bold;color:#fff;">FLIP Morphing Card</h4>
+    </div>
+    <div slot="expanded">
+      <h3 style="font-size:1.5rem;font-weight:bold;color:#fff;">Modal Dialog</h3>
+      <p style="font-size:0.875rem;color:#a1a1aa;">Morphing completed without layout shifts.</p>
+    </div>
+  </exhuma-expandable-card>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Vanilla JavaScript kinetic expandable card initialization.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <div
+      data-expandable-card
+      data-duration="${duration}"
+      class="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm hover:shadow-md cursor-pointer select-none"
+    >
+      <span class="font-mono text-xs font-bold text-indigo-400">CLICK TO EXPAND</span>
+      <h4 class="mt-2 text-lg font-bold text-white">FLIP Morphing Card</h4>
+      <p class="mt-1 text-xs text-zinc-400 leading-relaxed">Pure CSS matrix morphing.</p>
+
+      <div data-expanded-content class="hidden space-y-4">
+        <h3 class="text-2xl font-bold text-white">Modal Dialog</h3>
+        <p class="text-sm text-zinc-400">Morphing completed without layout shifts.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initExpandableCard } from './expandable-card.vanilla.js';
+    initExpandableCard('[data-expandable-card]');
+  </script>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'expandable-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade directive integration.',
+				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <x-exhuma.expandable-card :duration="${duration}" class="w-full max-w-sm">
+        <x-slot:trigger>
+            <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+        </x-slot:trigger>
+
+        <x-slot:expanded>
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+                <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+            </div>
+        </x-slot:expanded>
+    </x-exhuma.expandable-card>
+</div>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg Block render template.',
+				code: `<?php
+/**
+ * Exhuma Expandable Card Block
+ */
+$duration = $attributes['duration'] ?? ${duration};
+?>
+<div class="exhuma-expandable-card-block w-full max-w-sm" data-duration="<?php echo esc_attr($duration); ?>">
+    <?php echo $content; ?>
+</div>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'ExpandableDemo.native.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo expandable card modal.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <View style={styles.container}>
+      <ExpandableCard
+        duration={${duration}}
+        cardContent={
+          <View>
+            <Text style={styles.tag}>CLICK TO EXPAND</Text>
+            <Text style={styles.title}>FLIP Morphing Card</Text>
+            <Text style={styles.desc}>Pure matrix morphing.</Text>
+          </View>
+        }
+        expandedContent={
+          <View style={styles.expandedContent}>
+            <Text style={styles.expandedTitle}>Modal Dialog</Text>
+            <Text style={styles.desc}>Hardware-accelerated layout transition.</Text>
+          </View>
+        }
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16, backgroundColor: '#09090b' },
+  tag: { fontFamily: 'monospace', fontSize: 12, fontWeight: 'bold', color: '#6366f1' },
+  title: { marginTop: 8, fontSize: 18, fontWeight: 'bold', color: '#ffffff' },
+  desc: { marginTop: 4, fontSize: 14, color: '#a1a1aa' },
+  expandedContent: { gap: 12 },
+  expandedTitle: { fontSize: 22, fontWeight: 'bold', color: '#ffffff' },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'expandable_demo.dart',
+				language: 'dart',
+				description: 'Flutter expandable card modal.',
+				code: `import 'package:flutter/material.dart';
+import 'expandable_card.dart';
+
+class ExpandableDemo extends StatelessWidget {
+  const ExpandableDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
+      body: Center(
+        child: SizedBox(
+          width: 380,
+          child: ExpandableCard(
+            duration: ${duration},
+            cardContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('CLICK TO EXPAND', style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 12)),
+                SizedBox(height: 8),
+                Text('FLIP Morphing Card', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                SizedBox(height: 4),
+                Text('Pure matrix morphing.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
+            expandedContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Modal Dialog', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+                SizedBox(height: 8),
+                Text('Hardware-accelerated layout transition.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				description: 'ExpandableCard universal usage.',
+				code: `import { ExpandableCard } from '@/components/ui/ExpandableCard';\n\nexport default function Example() {\n  return <ExpandableCard duration={${duration}} />;\n}`,
+			};
+		}
+	}
+}

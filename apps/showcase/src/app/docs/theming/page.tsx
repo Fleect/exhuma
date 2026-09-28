@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { IconSun as Sun, IconMoon as Moon, IconDeviceLaptop as Laptop } from '@tabler/icons-react';
-import { CodeBlock } from '@/components/showcase/CodeBlock';
+import { CodeBlock } from '@/components/docs/CodeBlock';
 import { Callout } from '@/components/layout/Callout';
 import { DocsPage } from '@/components/docs/DocsPage';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';

@@ -1210,3 +1210,592 @@ class _BorderBeamPainter extends CustomPainter {
 			return null;
 	}
 }
+
+export function getBorderBeamUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const size = Number(props.size ?? 200);
+	const duration = Number(props.duration ?? 8);
+	const borderWidth = Number(props.borderWidth ?? 2);
+	const colorFrom = String(props.colorFrom ?? '#ffaa40');
+	const colorTo = String(props.colorTo ?? '#9c40ff');
+	const doubleBeam = Boolean(props.doubleBeam ?? false);
+	const endOpacity = Number(props.endOpacity ?? 0);
+	const opacity = Number(props.opacity ?? 1);
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'BorderBeamDemo.tsx',
+				language: 'tsx',
+				description: 'Next.js App Router client component with hardware-accelerated BorderBeam.',
+				code: `'use client';
+
+import React from 'react';
+import { BorderBeam } from '@/components/ui/BorderBeam';
+
+export default function BorderBeamDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+            ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+          </span>
+          <span className="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+        </div>
+        <h3 className="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+          Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+        </p>
+
+        <BorderBeam
+          size={${size}}
+          duration={${duration}}
+          borderWidth={${borderWidth}}
+          colorFrom="${colorFrom}"
+          colorTo="${colorTo}"
+          doubleBeam={${doubleBeam}}
+          endOpacity={${endOpacity}}
+          opacity={${opacity}}
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'BorderBeamDemo.tsx',
+				language: 'tsx',
+				description: 'React component showcasing perimeter laser trace overlay.',
+				code: `import React from 'react';
+import { BorderBeam } from '@/components/ui/BorderBeam';
+
+export default function BorderBeamDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+            ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+          </span>
+          <span className="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+        </div>
+        <h3 className="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+          Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+        </p>
+
+        <BorderBeam
+          size={${size}}
+          duration={${duration}}
+          borderWidth={${borderWidth}}
+          colorFrom="${colorFrom}"
+          colorTo="${colorTo}"
+          doubleBeam={${doubleBeam}}
+          endOpacity={${endOpacity}}
+          opacity={${opacity}}
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'BorderBeamDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 Single File Component utilizing native BorderBeam.',
+				code: `<script setup lang="ts">
+import BorderBeam from '@/components/ui/BorderBeam.vue';
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+    <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+          ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+        </span>
+        <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+      </div>
+      <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+      <p class="mt-2 text-sm leading-relaxed text-slate-400">
+        Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+      </p>
+
+      <BorderBeam
+        :size="${size}"
+        :duration="${duration}"
+        :border-width="${borderWidth}"
+        color-from="${colorFrom}"
+        color-to="${colorTo}"
+        :double-beam="${doubleBeam}"
+        :end-opacity="${endOpacity}"
+        :opacity="${opacity}"
+      />
+    </div>
+  </div>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'BorderBeamDemo.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 runes component embedding BorderBeam.',
+				code: `<script lang="ts">
+  import BorderBeam from '$lib/components/BorderBeam.svelte';
+</script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+  <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+        ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+      </span>
+      <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    </div>
+    <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+    <p class="mt-2 text-sm leading-relaxed text-slate-400">
+      Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+    </p>
+
+    <BorderBeam
+      size={${size}}
+      duration={${duration}}
+      borderWidth={${borderWidth}}
+      colorFrom="${colorFrom}"
+      colorTo="${colorTo}"
+      doubleBeam={${doubleBeam}}
+      endOpacity={${endOpacity}}
+      opacity={${opacity}}
+    />
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'BorderBeamDemo.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with fine-grained reactive BorderBeam.',
+				code: `import { Component } from 'solid-js';
+import { BorderBeam } from '@/components/ui/BorderBeam';
+
+export const BorderBeamDemo: Component = () => {
+  return (
+    <div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+      <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+            ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+          </span>
+          <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+        </div>
+        <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+        </p>
+
+        <BorderBeam
+          size={${size}}
+          duration={${duration}}
+          borderWidth={${borderWidth}}
+          colorFrom="${colorFrom}"
+          colorTo="${colorTo}"
+          doubleBeam={${doubleBeam}}
+          endOpacity={${endOpacity}}
+          opacity={${opacity}}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default BorderBeamDemo;
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'border-beam-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular 18+ standalone component importing ExhumaBorderBeamComponent.',
+				code: `import { Component } from '@angular/core';
+import { ExhumaBorderBeamComponent } from './components/BorderBeam.component';
+
+@Component({
+  selector: 'app-border-beam-demo',
+  standalone: true,
+  imports: [ExhumaBorderBeamComponent],
+  template: \`
+    <div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+      <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+            ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+          </span>
+          <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+          Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+        </p>
+
+        <exhuma-border-beam
+          [size]="${size}"
+          [duration]="${duration}"
+          [borderWidth]="${borderWidth}"
+          colorFrom="${colorFrom}"
+          colorTo="${colorTo}"
+          [doubleBeam]="${doubleBeam}"
+          [endOpacity]="${endOpacity}"
+          [opacity]="${opacity}"
+        />
+      </div>
+    </div>
+  \`,
+})
+export class BorderBeamDemoComponent {}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'BorderBeamDemo.astro',
+				language: 'astro',
+				description: 'Zero-JS Astro component leveraging pure CSS border beam trace.',
+				code: `---
+import BorderBeam from '@/components/ui/BorderBeam.astro';
+---
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+  <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+        ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+      </span>
+      <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    </div>
+    <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+    <p class="mt-2 text-sm leading-relaxed text-slate-400">
+      Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+    </p>
+
+    <BorderBeam
+      size={${size}}
+      duration={${duration}}
+      borderWidth={${borderWidth}}
+      colorFrom="${colorFrom}"
+      colorTo="${colorTo}"
+      doubleBeam={${doubleBeam}}
+      endOpacity={${endOpacity}}
+      opacity={${opacity}}
+    />
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'border-beam-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade component embedding x-border-beam.',
+				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-[#090d16]">
+  <div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+        ${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}
+      </span>
+      <span class="inline-flex size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    </div>
+    <h3 class="mt-3 text-xl font-bold text-white">Quantum Border Beam</h3>
+    <p class="mt-2 text-sm leading-relaxed text-slate-400">
+      Zero-runtime GPU perimeter laser trace with hardware mask clipping and sub-pixel composite.
+    </p>
+
+    <x-border-beam
+      :size="${size}"
+      :duration="${duration}"
+      :borderWidth="${borderWidth}"
+      colorFrom="${colorFrom}"
+      colorTo="${colorTo}"
+      :doubleBeam="${doubleBeam ? 'true' : 'false'}"
+      :endOpacity="${endOpacity}"
+      :opacity="${opacity}"
+    />
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Vanilla JavaScript and CSS border beam initialization.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exhuma Border Beam — Vanilla JS</title>
+  <style>
+    body { margin: 0; background: #090d16; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .beam-card { position: relative; width: 380px; padding: 28px; background: #131c2e; border: 1px solid #223252; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; }
+    .tag { font-size: 11px; font-family: monospace; color: #f59e0b; font-weight: bold; text-transform: uppercase; }
+    h3 { color: #fff; margin: 12px 0 8px; font-size: 20px; }
+    p { color: #94a3b8; font-size: 13px; line-height: 1.5; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="beam-card" data-exhuma-border-beam>
+    <div class="tag">${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}</div>
+    <h3>Quantum Border Beam</h3>
+    <p>Zero-runtime GPU perimeter laser trace with hardware mask clipping.</p>
+  </div>
+
+  <script type="module">
+    import { initBorderBeam } from './border-beam.vanilla.js';
+    initBorderBeam('[data-exhuma-border-beam]', {
+      size: ${size},
+      duration: ${duration},
+      borderWidth: ${borderWidth},
+      colorFrom: '${colorFrom}',
+      colorTo: '${colorTo}',
+      doubleBeam: ${doubleBeam},
+      endOpacity: ${endOpacity},
+      opacity: ${opacity},
+    });
+  </script>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg block render script.',
+				code: `<?php
+/**
+ * Exhuma Border Beam Block Render Template
+ */
+$size = $attributes['size'] ?? ${size};
+$duration = $attributes['duration'] ?? ${duration};
+$borderWidth = $attributes['borderWidth'] ?? ${borderWidth};
+$colorFrom = $attributes['colorFrom'] ?? '${colorFrom}';
+$colorTo = $attributes['colorTo'] ?? '${colorTo}';
+$doubleBeam = !empty($attributes['doubleBeam']);
+$endOpacity = $attributes['endOpacity'] ?? ${endOpacity};
+$opacity = $attributes['opacity'] ?? ${opacity};
+?>
+
+<div class="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#223252] bg-[#131c2e] p-6 shadow-2xl">
+  <div class="font-mono text-xs font-bold uppercase tracking-wider text-amber-500">
+    <?php echo $doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'; ?>
+  </div>
+  <h3 class="mt-3 text-xl font-bold text-white"><?php echo esc_html($attributes['title'] ?? 'Quantum Border Beam'); ?></h3>
+  <p class="mt-2 text-sm leading-relaxed text-slate-400"><?php echo esc_html($attributes['description'] ?? 'Hardware-accelerated perimeter laser trace.'); ?></p>
+
+  <?php $pathRadius = min((int)$size, 200); ?>
+  <div
+    class="exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit]"
+    style="border: <?php echo esc_attr($borderWidth); ?>px solid transparent; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;"
+  >
+    <div
+      class="exhuma-border-beam-trace"
+      style="position: absolute; aspect-ratio: 1 / 1; width: <?php echo esc_attr($size); ?>px; offset-path: rect(0 auto auto 0 round <?php echo esc_attr($pathRadius); ?>px); offset-anchor: <?php echo esc_attr($size / 2); ?>px <?php echo esc_attr($size / 2); ?>px; background: linear-gradient(to left, <?php echo esc_attr($colorFrom); ?>, <?php echo esc_attr($colorTo); ?>, transparent); animation: exhuma-border-beam <?php echo esc_attr($duration); ?>s linear infinite;"
+    ></div>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Framework-agnostic HTML implementing <exhuma-border-beam> custom element.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exhuma Border Beam — Web Component</title>
+  <script type="module" src="./exhuma-border-beam.js"></script>
+  <style>
+    body { margin: 0; background: #090d16; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .card { position: relative; width: 380px; padding: 28px; background: #131c2e; border: 1px solid #223252; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; }
+    .tag { font-size: 11px; font-family: monospace; color: #f59e0b; font-weight: bold; text-transform: uppercase; }
+    h3 { color: #fff; margin: 12px 0 8px; font-size: 20px; }
+    p { color: #94a3b8; font-size: 13px; line-height: 1.5; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="tag">${doubleBeam ? 'Dual Laser // 120 FPS' : 'Perimeter Trace // 120 FPS'}</div>
+    <h3>Quantum Border Beam</h3>
+    <p>Web Component perimeter trace compatible across all frameworks.</p>
+
+    <exhuma-border-beam
+      size="${size}"
+      duration="${duration}"
+      border-width="${borderWidth}"
+      color-from="${colorFrom}"
+      color-to="${colorTo}"
+      ${doubleBeam ? 'double-beam' : ''}
+      end-opacity="${endOpacity}"
+      opacity="${opacity}"
+    ></exhuma-border-beam>
+  </div>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'App.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo screen with BorderBeam.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { BorderBeam } from './components/BorderBeam';
+
+export default function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.card}>
+        <Text style={styles.tag}>${doubleBeam ? 'DUAL LASER // 120 FPS' : 'PERIMETER TRACE // 120 FPS'}</Text>
+        <Text style={styles.title}>Quantum Border Beam</Text>
+        <Text style={styles.desc}>
+          Hardware-accelerated perimeter laser trace running on native compositor.
+        </Text>
+        <BorderBeam
+          size={${size}}
+          duration={${duration}}
+          borderWidth={${borderWidth}}
+          colorFrom="${colorFrom}"
+          colorTo="${colorTo}"
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#090d16', alignItems: 'center', justifyContent: 'center', padding: 20 },
+  card: { position: 'relative', overflow: 'hidden', padding: 28, borderRadius: 20, backgroundColor: '#131c2e', borderWidth: 1, borderColor: '#223252', width: 340 },
+  tag: { fontSize: 11, fontFamily: 'monospace', color: '#f59e0b', fontWeight: 'bold' },
+  title: { fontSize: 22, fontWeight: 'bold', color: '#fff', marginTop: 8 },
+  desc: { fontSize: 14, color: '#94a3b8', marginTop: 8, lineHeight: 20 },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'border_beam_screen.dart',
+				language: 'dart',
+				description: 'Flutter screen with ExhumaBorderBeam widget.',
+				code: `import 'package:flutter/material.dart';
+import 'border_beam.dart';
+
+class BorderBeamScreen extends StatelessWidget {
+  const BorderBeamScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF090D16),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Container(
+            width: 360,
+            decoration: BoxDecoration(
+              color: const Color(0xFF131C2E),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFF223252)),
+              boxShadow: const [
+                BoxShadow(blurRadius: 24, color: Colors.black54, offset: Offset(0, 12))
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Stack(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(28.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${doubleBeam ? 'DUAL LASER // 120 FPS' : 'PERIMETER TRACE // 120 FPS'}',
+                          style: TextStyle(fontSize: 11, color: Color(0xFFF59E0B), fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Quantum Border Beam',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Hardware-composited perimeter laser sweep with sub-pixel canvas masking.',
+                          style: TextStyle(fontSize: 14, color: Color(0xFF94A3B8), height: 1.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: ExhumaBorderBeam(
+                      size: ${size}.0,
+                      duration: ${duration}.0,
+                      borderWidth: ${borderWidth},
+                      colorFrom: const Color(0xFFFFAA40),
+                      colorTo: const Color(0xFF9C40FF),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				code: `import { BorderBeam } from '@/components/ui/BorderBeam';\n\nexport default function Example() {\n  return (\n    <div className="relative overflow-hidden rounded-2xl border p-6">\n      <BorderBeam size={${size}} duration={${duration}} />\n    </div>\n  );\n}`,
+			};
+		}
+	}
+}

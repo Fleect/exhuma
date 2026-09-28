@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { ALL_COMPONENTS, CATEGORIES as REGISTRY_CATEGORIES } from '@/registry';
-import { ComponentCard } from './ComponentCard';
+import { ComponentCard } from '@/components/docs/ComponentCard';
 import { cn } from '@/lib/utils';
 
 const CATEGORY_DISPLAY_LABELS: Record<string, string> = {

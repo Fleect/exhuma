@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { ALL_COMPONENTS, CATEGORIES } from '@/registry';
-import { ComponentCard } from '@/components/showcase/ComponentCard';
-import { PackageManagerTabs } from '@/components/showcase/PackageManagerTabs';
+import { ComponentCard } from '@/components/docs/ComponentCard';
+import { PackageManagerTabs } from '@/components/docs/PackageManagerTabs';
 import { DocsPage } from '@/components/docs/DocsPage';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection } from '@/components/docs/DocsSection';

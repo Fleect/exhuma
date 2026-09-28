@@ -2256,3 +2256,469 @@ typedef CardSwipeStack = ExhumaCardSwipeStack;
 			return null;
 	}
 }
+
+export function getCardSwipeStackUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const thresholdDistance = Number(props.thresholdDistance ?? 120);
+	const maxRotation = Number(props.maxRotation ?? 20);
+	const scaleStep = Number(props.scaleStep ?? 0.05);
+	const offsetStep = Number(props.offsetStep ?? 14);
+	const preventLastCardDismiss = props.preventLastCardDismiss !== false;
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'SwipeStackDemo.tsx',
+				language: 'tsx',
+				description: 'Next.js App Router client component featuring velocity-sensitive CardSwipeStack with elastic resistance.',
+				code: `'use client';
+
+import React from 'react';
+import { CardSwipeStack } from '@/components/ui/CardSwipeStack';
+
+const ITEMS = [
+  { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz with zero GC stutter.' },
+  { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 production ecosystems.' },
+  { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d transform writes bypassing virtual DOM layout thrashing.' },
+];
+
+export default function SwipeStackDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <CardSwipeStack
+        thresholdDistance={${thresholdDistance}}
+        maxRotation={${maxRotation}}
+        scaleStep={${scaleStep}}
+        offsetStep={${offsetStep}}
+        preventLastCardDismiss={${preventLastCardDismiss}}
+        className="w-full max-w-sm"
+        items={ITEMS}
+        onSwipe={(item, dir) => console.log('Swiped:', item.title, dir)}
+        renderCard={(item) => (
+          <div className="w-full rounded-2xl border border-border bg-card p-6 shadow-2xl backdrop-blur-md">
+            <span className="text-3xs font-mono font-bold text-primary">{item.tag}</span>
+            <h4 className="mt-2 text-lg font-bold text-foreground">{item.title}</h4>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+            <div className="mt-4 flex items-center justify-between border-t border-border pt-3 font-mono text-3xs text-muted-foreground">
+              <span>← SWIPE LEFT</span>
+              <span>SWIPE RIGHT →</span>
+            </div>
+          </div>
+        )}
+      />
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'SwipeStackDemo.tsx',
+				language: 'tsx',
+				description: 'React component showcasing velocity-sensitive gesture swipe stack.',
+				code: `import React from 'react';
+import { CardSwipeStack } from '@/components/ui/CardSwipeStack';
+
+const ITEMS = [
+  { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz with zero GC stutter.' },
+  { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 production ecosystems.' },
+  { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d transform writes bypassing virtual DOM layout thrashing.' },
+];
+
+export default function SwipeStackDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <CardSwipeStack
+        thresholdDistance={${thresholdDistance}}
+        maxRotation={${maxRotation}}
+        scaleStep={${scaleStep}}
+        offsetStep={${offsetStep}}
+        preventLastCardDismiss={${preventLastCardDismiss}}
+        className="w-full max-w-sm"
+        items={ITEMS}
+        onSwipe={(item, dir) => console.log('Swiped:', item.title, dir)}
+        renderCard={(item) => (
+          <div className="w-full rounded-2xl border border-border bg-card p-6 shadow-2xl backdrop-blur-md">
+            <span className="text-3xs font-mono font-bold text-primary">{item.tag}</span>
+            <h4 className="mt-2 text-lg font-bold text-foreground">{item.title}</h4>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+            <div className="mt-4 flex items-center justify-between border-t border-border pt-3 font-mono text-3xs text-muted-foreground">
+              <span>← SWIPE LEFT</span>
+              <span>SWIPE RIGHT →</span>
+            </div>
+          </div>
+        )}
+      />
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'SwipeStackDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 SFC using native CardSwipeStack.',
+				code: `<script setup lang="ts">
+import CardSwipeStack from '@/components/ui/CardSwipeStack.vue';
+
+const items = [
+  { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz.' },
+  { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 ecosystems.' },
+  { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d writes bypassing virtual DOM reconciliation.' },
+];
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <CardSwipeStack
+      :threshold-distance="${thresholdDistance}"
+      :max-rotation="${maxRotation}"
+      :scale-step="${scaleStep}"
+      :offset-step="${offsetStep}"
+      :prevent-last-card-dismiss="${preventLastCardDismiss}"
+      :items="items"
+      class="w-full max-w-sm"
+    >
+      <template #card="{ item }">
+        <div class="w-full rounded-2xl border border-border bg-card p-6 shadow-2xl backdrop-blur-md">
+          <span class="text-3xs font-mono font-bold text-primary">{{ item.tag }}</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">{{ item.title }}</h4>
+          <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{{ item.desc }}</p>
+        </div>
+      </template>
+    </CardSwipeStack>
+  </div>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'SwipeStackDemo.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 runes component using CardSwipeStack.',
+				code: `<script lang="ts">
+  import CardSwipeStack from '$lib/components/CardSwipeStack.svelte';
+
+  const items = [
+    { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz.' },
+    { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 ecosystems.' },
+    { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d writes bypassing virtual DOM reconciliation.' },
+  ];
+</script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <CardSwipeStack
+    thresholdDistance={${thresholdDistance}}
+    maxRotation={${maxRotation}}
+    scaleStep={${scaleStep}}
+    offsetStep={${offsetStep}}
+    preventLastCardDismiss={${preventLastCardDismiss}}
+    {items}
+    class="w-full max-w-sm"
+  >
+    {#snippet card(item)}
+      <div class="w-full rounded-2xl border border-border bg-card p-6 shadow-2xl backdrop-blur-md">
+        <span class="text-3xs font-mono font-bold text-primary">{item.tag}</span>
+        <h4 class="mt-2 text-lg font-bold text-foreground">{item.title}</h4>
+        <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+      </div>
+    {/snippet}
+  </CardSwipeStack>
+</div>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'SwipeStackDemo.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with fine-grained reactivity.',
+				code: `import { CardSwipeStack } from '@/components/ui/CardSwipeStack';
+
+const ITEMS = [
+  { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz.' },
+  { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 ecosystems.' },
+  { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d writes bypassing virtual DOM reconciliation.' },
+];
+
+export default function SwipeStackDemo() {
+  return (
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <CardSwipeStack
+        thresholdDistance={${thresholdDistance}}
+        maxRotation={${maxRotation}}
+        scaleStep={${scaleStep}}
+        offsetStep={${offsetStep}}
+        preventLastCardDismiss={${preventLastCardDismiss}}
+        class="w-full max-w-sm"
+        items={ITEMS}
+        renderCard={(item) => (
+          <div class="w-full rounded-2xl border border-border bg-card p-6 shadow-2xl backdrop-blur-md">
+            <span class="text-3xs font-mono font-bold text-primary">{item.tag}</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">{item.title}</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+          </div>
+        )}
+      />
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'SwipeStackDemo.astro',
+				language: 'astro',
+				description: 'Astro island with client hydration.',
+				code: `---
+import { CardSwipeStack } from '@/components/ui/CardSwipeStack';
+
+const items = [
+  { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: 'Guaranteed lower bound frame rate floor of 120Hz.' },
+  { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Pure AST universal generation targeting 13 ecosystems.' },
+  { id: 3, title: 'Direct GPU Pipeline', tag: 'KINETICS', desc: 'Direct translate3d writes bypassing virtual DOM reconciliation.' },
+];
+---
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <CardSwipeStack
+    client:load
+    thresholdDistance={${thresholdDistance}}
+    maxRotation={${maxRotation}}
+    scaleStep={${scaleStep}}
+    offsetStep={${offsetStep}}
+    preventLastCardDismiss={${preventLastCardDismiss}}
+    items={items}
+    className="w-full max-w-sm"
+  />
+</div>
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'swipe-stack-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular standalone component using CardSwipeStack.',
+				code: `import { Component } from '@angular/core';
+import { CardSwipeStackComponent } from '@/components/ui/card-swipe-stack.component';
+
+@Component({
+  selector: 'app-swipe-stack-demo',
+  standalone: true,
+  imports: [CardSwipeStackComponent],
+  template: \`
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <exhuma-card-swipe-stack
+        [thresholdDistance]="${thresholdDistance}"
+        [maxRotation]="${maxRotation}"
+        [scaleStep]="${scaleStep}"
+        [offsetStep]="${offsetStep}"
+        [preventLastCardDismiss]="${preventLastCardDismiss}"
+        class="w-full max-w-sm"
+      />
+    </div>
+  \`
+})
+export class SwipeStackDemoComponent {}
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Standard Custom Element usage.',
+				code: `<script type="module" src="./exhuma-card-swipe-stack.js"></script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <exhuma-card-swipe-stack
+    threshold-distance="${thresholdDistance}"
+    max-rotation="${maxRotation}"
+    scale-step="${scaleStep}"
+    offset-step="${offsetStep}"
+    prevent-last-card-dismiss="${preventLastCardDismiss}"
+    class="w-full max-w-sm"
+  ></exhuma-card-swipe-stack>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'main.js',
+				language: 'javascript',
+				description: 'Vanilla JavaScript kinetic swipe stack initialization.',
+				code: `import { initCardSwipeStack } from './card-swipe-stack.vanilla.js';
+
+const container = document.getElementById('card-stack');
+
+initCardSwipeStack(container, {
+  thresholdDistance: ${thresholdDistance},
+  maxRotation: ${maxRotation},
+  scaleStep: ${scaleStep},
+  offsetStep: ${offsetStep},
+  preventLastCardDismiss: ${preventLastCardDismiss},
+  items: [
+    { id: 1, title: 'Big-Omega Guarantees', tag: 'MATHEMATICS', desc: '120Hz frame rate floor.' },
+    { id: 2, title: 'Zero Framework Locks', tag: 'COMPILERS', desc: 'Targeting 13 ecosystems.' },
+  ],
+});
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'swipe-stack-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade directive integration.',
+				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <x-exhuma.card-swipe-stack
+        :threshold-distance="${thresholdDistance}"
+        :max-rotation="${maxRotation}"
+        :scale-step="${scaleStep}"
+        :offset-step="${offsetStep}"
+        :prevent-last-card-dismiss="${preventLastCardDismiss ? 'true' : 'false'}"
+        class="w-full max-w-sm"
+    />
+</div>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg Block render template.',
+				code: `<?php
+/**
+ * Exhuma Card Swipe Stack Block
+ */
+$threshold_distance = $attributes['thresholdDistance'] ?? ${thresholdDistance};
+$max_rotation       = $attributes['maxRotation'] ?? ${maxRotation};
+$scale_step         = $attributes['scaleStep'] ?? ${scaleStep};
+$offset_step        = $attributes['offsetStep'] ?? ${offsetStep};
+?>
+<div class="exhuma-card-swipe-stack-block w-full max-w-sm"
+     data-threshold-distance="<?php echo esc_attr($threshold_distance); ?>"
+     data-max-rotation="<?php echo esc_attr($max_rotation); ?>">
+    <?php echo $content; ?>
+</div>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'SwipeStackDemo.native.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo gesture swipe stack implementation.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { CardSwipeStack } from '@/components/ui/CardSwipeStack';
+
+const ITEMS = [
+  { id: 1, title: 'Big-Omega Guarantees', desc: '120 FPS hardware acceleration.' },
+  { id: 2, title: 'Zero Framework Locks', desc: 'Direct AST generation.' },
+];
+
+export default function SwipeStackDemo() {
+  return (
+    <View style={styles.container}>
+      <CardSwipeStack
+        thresholdDistance={${thresholdDistance}}
+        maxRotation={${maxRotation}}
+        scaleStep={${scaleStep}}
+        offsetStep={${offsetStep}}
+        preventLastCardDismiss={${preventLastCardDismiss}}
+        items={ITEMS}
+        renderCard={(item) => (
+          <View style={styles.card}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.desc}>{item.desc}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
+  card: { padding: 24, borderRadius: 16, backgroundColor: '#1e293b' },
+  title: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
+  desc: { fontSize: 13, color: '#94a3b8', marginTop: 4 },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'swipe_stack_demo.dart',
+				language: 'dart',
+				description: 'Flutter tactile swipe stack widget.',
+				code: `import 'package:flutter/material.dart';
+import 'package:exhuma/components/card_swipe_stack.dart';
+
+class SwipeStackDemo extends StatelessWidget {
+  const SwipeStackDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
+      body: Center(
+        child: SizedBox(
+          width: 340,
+          child: ExhumaCardSwipeStack(
+            thresholdDistance: ${thresholdDistance}.0,
+            maxRotation: ${maxRotation}.0,
+            scaleStep: ${scaleStep},
+            offsetStep: ${offsetStep}.0,
+            preventLastCardDismiss: ${preventLastCardDismiss},
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return Card(
+                color: const Color(0xFF1E293B),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Text('Card \${index + 1}', style: const TextStyle(color: Colors.white, fontSize: 18)),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				description: 'CardSwipeStack universal usage.',
+				code: `import { CardSwipeStack } from '@/components/ui/CardSwipeStack';\n\nexport default function Example() {\n  return <CardSwipeStack thresholdDistance={${thresholdDistance}} />;\n}`,
+			};
+		}
+	}
+}

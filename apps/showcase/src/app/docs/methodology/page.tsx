@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { CodeBlock } from '@/components/showcase/CodeBlock';
+import { CodeBlock } from '@/components/docs/CodeBlock';
 import { DocsPage } from '@/components/docs/DocsPage';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection, DocsProse } from '@/components/docs/DocsSection';
