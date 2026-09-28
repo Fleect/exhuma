@@ -308,9 +308,10 @@ export const StackingCards = memo(
 			>
 				{childArray.map((child, index) => {
 					const isLast = totalCards > 1 && index === totalCards - 1;
-					// When reverse scaling is enabled, the last card sticks at topStart so it seamlessly crowns the stack and finishes reverse scaling.
+					// When reverse scaling is enabled, the last card sticks at the second-last card's sticky top
+					// (topStart + (totalCards - 2) * topIncrement) so it crowns the stack and eliminates any 1px alignment mismatch.
 					// When reverse scaling is disabled, each card sticks at its standard echelon layer: topStart + index * topIncrement.
-					const stickyTop = isReverseScaleEnabled && isLast ? topStart : topStart + index * topIncrement;
+					const stickyTop = isReverseScaleEnabled && isLast ? topStart + Math.max(0, totalCards - 2) * topIncrement : topStart + index * topIncrement;
 					return (
 						<div
 							key={index}

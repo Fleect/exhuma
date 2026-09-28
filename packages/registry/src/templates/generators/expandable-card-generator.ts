@@ -22,6 +22,7 @@ export interface ExpandableCardProps extends React.HTMLAttributes<HTMLDivElement
   expandedContent: React.ReactNode;
   duration?: number;
   expandedClassName?: string;
+  portalContainer?: HTMLElement | null;
 }
 
 /**
@@ -38,6 +39,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
   duration = ${duration},
   className,
   expandedClassName = '',
+  portalContainer,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -74,6 +76,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
       setIsExpanded(false);
       setIsClosing(false);
       firstRectRef.current = null;
+      triggerRef.current?.focus();
     }, duration);
   };
 
@@ -87,13 +90,39 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isExpanded]);
 
+  // Lock body scroll with scrollbar compensation to eliminate layout jumps
+  React.useLayoutEffect(() => {
+    if (!isExpanded) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    if (scrollbarWidth > 0) {
+      const currentPadding = parseFloat(window.getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = \`\${currentPadding + scrollbarWidth}px\`;
+    }
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [isExpanded]);
+
   // FLIP open animation
   React.useLayoutEffect(() => {
     if (!isExpanded || isClosing || !modalRef.current || !firstRectRef.current) return;
 
     const modal = modalRef.current;
     const lastRect = modal.getBoundingClientRect();
-    const firstRect = firstRectRef.current;
+    const currentTrigger = triggerRef.current?.getBoundingClientRect();
+    const firstRect = currentTrigger && currentTrigger.width > 0 ? {
+      left: currentTrigger.left,
+      top: currentTrigger.top,
+      width: currentTrigger.width,
+      height: currentTrigger.height,
+    } : firstRectRef.current;
 
     const dx = firstRect.left - lastRect.left;
     const dy = firstRect.top - lastRect.top;
@@ -118,6 +147,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
         modal.style.transition = \`transform \${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(duration * 0.8)}ms ease\`;
         modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
         modal.style.opacity = '1';
+        modal.focus();
 
         if (backdropRef.current) {
           backdropRef.current.style.transition = \`opacity \${duration}ms ease\`;
@@ -145,6 +175,16 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
     <>
       <div
         ref={triggerRef}
+        role="button"
+        tabIndex={0}
+        aria-haspopup="dialog"
+        aria-expanded={isExpanded}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            open();
+          }
+        }}
         className={clsx(
           'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md cursor-pointer select-none',
           className
@@ -165,8 +205,9 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
             />
             <div
               ref={modalRef}
+              tabIndex={-1}
               className={clsx(
-                'relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform',
+                'relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform',
                 expandedClassName
               )}
             >
@@ -183,7 +224,7 @@ export const ExpandableCard: React.FC<ExpandableCardProps> = ({
               </div>
             </div>
           </div>,
-          document.body
+          portalContainer || document.body
         )}
     </>
   );
@@ -636,7 +677,7 @@ export const ExpandableCard: Component<ExpandableCardProps> = (props) => {
 					filename: 'expandable-card.component.ts',
 					language: 'typescript',
 					description: 'Angular 18+ Standalone Expandable Card with signals.',
-					code: `import { Component, input, signal, ElementRef, viewChild } from '@angular/core';
+					code: `import { Component, input, signal, ElementRef, viewChild, effect } from '@angular/core';
 
 @Component({
   selector: 'exhuma-expandable-card',
@@ -653,10 +694,11 @@ export const ExpandableCard: Component<ExpandableCardProps> = (props) => {
 
     @if (isExpanded()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" (click)="close()"></div>
+        <div #backdrop class="fixed inset-0 bg-black/60 backdrop-blur-sm" (click)="close()"></div>
         <div
           #modal
-          class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform {{ expandedClass() }}"
+          tabindex="-1"
+          class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform {{ expandedClass() }}"
         >
           <div class="relative">
             <button
@@ -680,16 +722,88 @@ export class ExhumaExpandableCardComponent {
 
   readonly trigger = viewChild<ElementRef<HTMLDivElement>>('trigger');
   readonly modal = viewChild<ElementRef<HTMLDivElement>>('modal');
+  readonly backdrop = viewChild<ElementRef<HTMLDivElement>>('backdrop');
 
   readonly isExpanded = signal<boolean>(false);
   readonly isClosing = signal<boolean>(false);
 
+  private firstRect: { left: number; top: number; width: number; height: number } | null = null;
+  private invertTransform = 'translate3d(0, 0, 0) scale(1, 1)';
+  private closeTimer: any = null;
+
+  constructor() {
+    effect(() => {
+      if (this.isExpanded() && !this.isClosing()) {
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          const modalEl = this.modal()?.nativeElement;
+          const backdropEl = this.backdrop()?.nativeElement;
+          if (!modalEl || !this.firstRect) return;
+
+          const lastRect = modalEl.getBoundingClientRect();
+          const dx = this.firstRect.left - lastRect.left;
+          const dy = this.firstRect.top - lastRect.top;
+          const scaleX = lastRect.width > 0 ? this.firstRect.width / lastRect.width : 1;
+          const scaleY = lastRect.height > 0 ? this.firstRect.height / lastRect.height : 1;
+
+          this.invertTransform = \`translate3d(\${dx.toFixed(2)}px, \${dy.toFixed(2)}px, 0) scale(\${scaleX.toFixed(4)}, \${scaleY.toFixed(4)})\`;
+          modalEl.style.transformOrigin = 'top left';
+          modalEl.style.transform = this.invertTransform;
+          modalEl.style.opacity = '0.7';
+
+          if (backdropEl) {
+            backdropEl.style.opacity = '0';
+          }
+
+          requestAnimationFrame(() => {
+            modalEl.style.transition = \`transform \${this.duration()}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(this.duration() * 0.8)}ms ease\`;
+            modalEl.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+            modalEl.style.opacity = '1';
+            modalEl.focus();
+
+            if (backdropEl) {
+              backdropEl.style.transition = \`opacity \${this.duration()}ms ease\`;
+              backdropEl.style.opacity = '1';
+            }
+          });
+        });
+      }
+    });
+  }
+
   open() {
+    const triggerEl = this.trigger()?.nativeElement;
+    if (triggerEl) {
+      const r = triggerEl.getBoundingClientRect();
+      this.firstRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+    }
+    this.isClosing.set(false);
     this.isExpanded.set(true);
   }
 
   close() {
-    this.isExpanded.set(false);
+    if (this.isClosing() || !this.isExpanded()) return;
+    this.isClosing.set(true);
+
+    const modalEl = this.modal()?.nativeElement;
+    const backdropEl = this.backdrop()?.nativeElement;
+    if (modalEl) {
+      modalEl.style.transition = \`transform \${this.duration()}ms cubic-bezier(0.16, 1, 0.3, 1), opacity \${Math.round(this.duration() * 0.7)}ms ease\`;
+      modalEl.style.transform = this.invertTransform;
+      modalEl.style.opacity = '0';
+    }
+    if (backdropEl) {
+      backdropEl.style.transition = \`opacity \${this.duration()}ms ease\`;
+      backdropEl.style.opacity = '0';
+    }
+
+    this.closeTimer = setTimeout(() => {
+      this.isExpanded.set(false);
+      this.isClosing.set(false);
+      document.body.style.overflow = '';
+      this.firstRect = null;
+      this.trigger()?.nativeElement.focus();
+    }, this.duration());
   }
 }
 `,
@@ -975,24 +1089,65 @@ export function initExpandableCard(selector = '[data-expandable-card]') {
         isOpen: false,
         duration: {{ $duration }},
         firstRect: null,
+        invertTransform: 'translate3d(0, 0, 0) scale(1, 1)',
         open() {
-            this.firstRect = this.$refs.trigger.getBoundingClientRect();
+            const r = this.$refs.trigger.getBoundingClientRect();
+            this.firstRect = { left: r.left, top: r.top, width: r.width, height: r.height };
             this.isOpen = true;
+            document.body.style.overflow = 'hidden';
+
+            this.$nextTick(() => {
+                const modal = this.$refs.modal;
+                if (!modal || !this.firstRect) return;
+                const last = modal.getBoundingClientRect();
+                const dx = this.firstRect.left - last.left;
+                const dy = this.firstRect.top - last.top;
+                const sx = last.width > 0 ? this.firstRect.width / last.width : 1;
+                const sy = last.height > 0 ? this.firstRect.height / last.height : 1;
+
+                this.invertTransform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + sx.toFixed(4) + ', ' + sy.toFixed(4) + ')';
+                modal.style.transformOrigin = 'top left';
+                modal.style.transform = this.invertTransform;
+                modal.style.opacity = '0.7';
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        modal.style.transition = 'transform ' + this.duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(this.duration * 0.8) + 'ms ease';
+                        modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+                        modal.style.opacity = '1';
+                        modal.focus();
+                    });
+                });
+            });
         },
         close() {
-            this.isOpen = false;
+            const modal = this.$refs.modal;
+            if (modal) {
+                modal.style.transition = 'transform ' + this.duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(this.duration * 0.7) + 'ms ease';
+                modal.style.transform = this.invertTransform;
+                modal.style.opacity = '0';
+            }
+            setTimeout(() => {
+                this.isOpen = false;
+                document.body.style.overflow = '';
+                this.$refs.trigger?.focus();
+            }, this.duration);
         }
     }"
     class="relative inline-block w-full"
 >
     <div
         x-ref="trigger"
+        role="button"
+        tabindex="0"
         @click="open()"
+        @keydown.enter.prevent="open()"
+        @keydown.space.prevent="open()"
         {{ $attributes->merge([
             'class' => 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md cursor-pointer select-none',
         ]) }}
     >
-        {{ $trigger ?? '' }}
+        {{ $trigger ?? $slot }}
     </div>
 
     <template x-teleport="body">
@@ -1001,16 +1156,20 @@ export function initExpandableCard(selector = '[data-expandable-card]') {
             class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
             role="dialog"
             aria-modal="true"
+            @keydown.escape.window="close()"
         >
             <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="close()"></div>
             <div
-                class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl"
+                x-ref="modal"
+                tabindex="-1"
+                class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl outline-none will-change-transform"
             >
                 <div class="relative">
                     <button
                         type="button"
                         class="absolute top-0 right-0 flex size-8 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         @click="close()"
+                        aria-label="Close dialog"
                     >
                         ✕
                     </button>
@@ -1061,8 +1220,92 @@ $duration = isset($attributes['duration']) ? (int)$attributes['duration'] : ${du
     class="wp-block-exhuma-expandable-card relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm cursor-pointer select-none"
     data-duration="<?php echo esc_attr($duration); ?>"
 >
-    <?php echo $content; ?>
+    <?php echo !empty($content) ? $content : '<div class="space-y-2"><span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span><h4 class="text-lg font-bold">Expandable Card</h4></div>'; ?>
 </div>
+
+<template class="exhuma-modal-template">
+    <div class="exhuma-modal-portal fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+        <div class="exhuma-backdrop fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="exhuma-modal-content relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl will-change-transform">
+            <div class="relative">
+                <button type="button" class="exhuma-close-btn absolute top-0 right-0 flex size-8 items-center justify-center rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground transition-colors cursor-pointer" aria-label="Close dialog">
+                    ✕
+                </button>
+                <div class="exhuma-modal-body space-y-4">
+                    <h3 class="text-2xl font-bold">Modal Dialog</h3>
+                    <p class="text-sm text-muted-foreground">FLIP modal transition executed smoothly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+(function() {
+  function initWordPressExpandables() {
+    document.querySelectorAll('.wp-block-exhuma-expandable-card').forEach(function(card) {
+      if (card.__exhuma_init) return;
+      card.__exhuma_init = true;
+
+      var duration = parseInt(card.dataset.duration || '${duration}', 10);
+      var template = card.nextElementSibling;
+      while (template && !template.classList.contains('exhuma-modal-template')) {
+        template = template.nextElementSibling;
+      }
+      if (!template) return;
+
+      card.addEventListener('click', function() {
+        var firstRect = card.getBoundingClientRect();
+        var clone = template.content.cloneNode(true);
+        var portal = clone.querySelector('.exhuma-modal-portal');
+        var modal = clone.querySelector('.exhuma-modal-content');
+        var backdrop = clone.querySelector('.exhuma-backdrop');
+        var closeBtn = clone.querySelector('.exhuma-close-btn');
+
+        document.body.appendChild(portal);
+        document.body.style.overflow = 'hidden';
+
+        var lastRect = modal.getBoundingClientRect();
+        var dx = firstRect.left - lastRect.left;
+        var dy = firstRect.top - lastRect.top;
+        var scaleX = lastRect.width > 0 ? firstRect.width / lastRect.width : 1;
+        var scaleY = lastRect.height > 0 ? firstRect.height / lastRect.height : 1;
+
+        modal.style.transformOrigin = 'top left';
+        modal.style.transform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + scaleX.toFixed(4) + ', ' + scaleY.toFixed(4) + ')';
+        modal.style.opacity = '0.7';
+
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            modal.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(duration * 0.8) + 'ms ease';
+            modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
+            modal.style.opacity = '1';
+          });
+        });
+
+        function dismiss() {
+          modal.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.16, 1, 0.3, 1), opacity ' + Math.round(duration * 0.7) + 'ms ease';
+          modal.style.transform = 'translate3d(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px, 0) scale(' + scaleX.toFixed(4) + ', ' + scaleY.toFixed(4) + ')';
+          modal.style.opacity = '0';
+          setTimeout(function() {
+            portal.remove();
+            document.body.style.overflow = '';
+          }, duration);
+        }
+
+        backdrop.addEventListener('click', dismiss);
+        closeBtn.addEventListener('click', dismiss);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWordPressExpandables);
+  } else {
+    initWordPressExpandables();
+  }
+})();
+</script>
 `,
 				},
 			];
@@ -1224,5 +1467,471 @@ class ExpandableCard extends StatelessWidget {
 
 		default:
 			return null;
+	}
+}
+
+export function getExpandableCardUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const duration = Number(props.duration ?? 360);
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'Next.js App Router client component featuring FLIP morphing ExpandableCard with reverse collapse.',
+				code: `'use client';
+
+import React from 'react';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          cardContent={
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all hover:border-primary/50">
+              <span className="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 className="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                Hardware-accelerated layout morphing with zero Framer Motion dependencies.
+              </p>
+            </div>
+          }
+          expandedContent={
+            <div className="space-y-4">
+              <span className="font-mono text-xs font-bold text-primary">EXPANDED MODAL DIALOG</span>
+              <h3 className="text-2xl font-black text-foreground">Analytical FLIP Kinetics</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The card measures its initial trigger geometry and smoothly morphs into a centered dialog before reversing seamlessly upon dismissal.
+              </p>
+              <div className="rounded-xl border border-border bg-muted/30 p-4 font-mono text-xs text-muted-foreground">
+                Press ESC or click the backdrop to close
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'React component featuring FLIP morphing ExpandableCard.',
+				code: `import React from 'react';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          cardContent={
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all hover:border-primary/50">
+              <span className="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 className="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                Hardware-accelerated layout morphing with zero Framer Motion dependencies.
+              </p>
+            </div>
+          }
+          expandedContent={
+            <div className="space-y-4">
+              <span className="font-mono text-xs font-bold text-primary">EXPANDED MODAL DIALOG</span>
+              <h3 className="text-2xl font-black text-foreground">Analytical FLIP Kinetics</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The card measures its initial trigger geometry and smoothly morphs into a centered dialog before reversing seamlessly upon dismissal.
+              </p>
+              <div className="rounded-xl border border-border bg-muted/30 p-4 font-mono text-xs text-muted-foreground">
+                Press ESC or click the backdrop to close
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'ExpandableDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 SFC using ExpandableCard.',
+				code: `<script setup lang="ts">
+import ExpandableCard from '@/components/ui/ExpandableCard.vue';
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <div class="w-full max-w-sm">
+      <ExpandableCard :duration="${duration}">
+        <template #trigger>
+          <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+            <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Architecture</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+          </div>
+        </template>
+        <template #expanded>
+          <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+            <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+          </div>
+        </template>
+      </ExpandableCard>
+    </div>
+  </div>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'ExpandableDemo.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 runes component using ExpandableCard.',
+				code: `<script lang="ts">
+  import ExpandableCard from '$lib/components/ExpandableCard.svelte';
+</script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <ExpandableCard duration={${duration}}>
+      {#snippet trigger()}
+        <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+          <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+          <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+        </div>
+      {/snippet}
+      {#snippet expanded()}
+        <div class="space-y-4">
+          <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+          <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+        </div>
+      {/snippet}
+    </ExpandableCard>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'ExpandableDemo.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with fine-grained reactivity.',
+				code: `import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div class="w-full max-w-sm">
+        <ExpandableCard
+          duration={${duration}}
+          trigger={
+            <div class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+              <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+              <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+            </div>
+          }
+          expanded={
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'ExpandableDemo.astro',
+				language: 'astro',
+				description: 'Astro native component using ExpandableCard.',
+				code: `---
+import ExpandableCard from '@/components/ui/ExpandableCard.astro';
+---
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <ExpandableCard duration={${duration}}>
+      <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+        <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+        <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+      </div>
+      <div slot="expanded" class="space-y-4">
+        <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+        <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+      </div>
+    </ExpandableCard>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'expandable-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular standalone component using ExpandableCard.',
+				code: `import { Component } from '@angular/core';
+import { ExhumaExpandableCardComponent } from '@/components/ui/expandable-card.component';
+
+@Component({
+  selector: 'app-expandable-demo',
+  standalone: true,
+  imports: [ExhumaExpandableCardComponent],
+  template: \`
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <exhuma-expandable-card
+        [duration]="${duration}"
+        class="w-full max-w-sm"
+      >
+        <div slot="trigger" class="rounded-2xl border border-border bg-card p-6 shadow-lg transition-all">
+          <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+          <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+        </div>
+        <div slot="expanded" class="space-y-4">
+          <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+          <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+        </div>
+      </exhuma-expandable-card>
+    </div>
+  \`
+})
+export class ExpandableDemoComponent {}
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Standard Custom Element usage.',
+				code: `<script type="module" src="./exhuma-expandable-card.js"></script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <exhuma-expandable-card duration="${duration}" class="w-full max-w-sm">
+    <div slot="trigger">
+      <span style="font-family:monospace;font-size:0.75rem;font-weight:bold;color:#6366f1;">CLICK TO EXPAND</span>
+      <h4 style="margin-top:0.5rem;font-size:1.125rem;font-weight:bold;color:#fff;">FLIP Morphing Card</h4>
+    </div>
+    <div slot="expanded">
+      <h3 style="font-size:1.5rem;font-weight:bold;color:#fff;">Modal Dialog</h3>
+      <p style="font-size:0.875rem;color:#a1a1aa;">Morphing completed without layout shifts.</p>
+    </div>
+  </exhuma-expandable-card>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Vanilla JavaScript kinetic expandable card initialization.',
+				code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-sm">
+    <div
+      data-expandable-card
+      data-duration="${duration}"
+      class="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm hover:shadow-md cursor-pointer select-none"
+    >
+      <span class="font-mono text-xs font-bold text-indigo-400">CLICK TO EXPAND</span>
+      <h4 class="mt-2 text-lg font-bold text-white">FLIP Morphing Card</h4>
+      <p class="mt-1 text-xs text-zinc-400 leading-relaxed">Pure CSS matrix morphing.</p>
+
+      <div data-expanded-content class="hidden space-y-4">
+        <h3 class="text-2xl font-bold text-white">Modal Dialog</h3>
+        <p class="text-sm text-zinc-400">Morphing completed without layout shifts.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initExpandableCard } from './expandable-card.vanilla.js';
+    initExpandableCard('[data-expandable-card]');
+  </script>
+</body>
+</html>
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'expandable-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade directive integration.',
+				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <x-exhuma.expandable-card :duration="${duration}" class="w-full max-w-sm">
+        <x-slot:trigger>
+            <span class="font-mono text-xs font-bold text-primary">CLICK TO EXPAND</span>
+            <h4 class="mt-2 text-lg font-bold text-foreground">FLIP Morphing Card</h4>
+            <p class="mt-1 text-xs text-muted-foreground leading-relaxed">Pure CSS matrix morphing.</p>
+        </x-slot:trigger>
+
+        <x-slot:expanded>
+            <div class="space-y-4">
+                <h3 class="text-2xl font-bold text-foreground">Modal Dialog</h3>
+                <p class="text-sm text-muted-foreground">Morphing completed without layout shifts.</p>
+            </div>
+        </x-slot:expanded>
+    </x-exhuma.expandable-card>
+</div>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg Block render template.',
+				code: `<?php
+/**
+ * Exhuma Expandable Card Block
+ */
+$duration = $attributes['duration'] ?? ${duration};
+?>
+<div class="exhuma-expandable-card-block w-full max-w-sm" data-duration="<?php echo esc_attr($duration); ?>">
+    <?php echo $content; ?>
+</div>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'ExpandableDemo.native.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo expandable card modal.',
+				code: `import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { ExpandableCard } from '@/components/ui/ExpandableCard';
+
+export default function ExpandableDemo() {
+  return (
+    <View style={styles.container}>
+      <ExpandableCard
+        duration={${duration}}
+        cardContent={
+          <View>
+            <Text style={styles.tag}>CLICK TO EXPAND</Text>
+            <Text style={styles.title}>FLIP Morphing Card</Text>
+            <Text style={styles.desc}>Pure matrix morphing.</Text>
+          </View>
+        }
+        expandedContent={
+          <View style={styles.expandedContent}>
+            <Text style={styles.expandedTitle}>Modal Dialog</Text>
+            <Text style={styles.desc}>Hardware-accelerated layout transition.</Text>
+          </View>
+        }
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16, backgroundColor: '#09090b' },
+  tag: { fontFamily: 'monospace', fontSize: 12, fontWeight: 'bold', color: '#6366f1' },
+  title: { marginTop: 8, fontSize: 18, fontWeight: 'bold', color: '#ffffff' },
+  desc: { marginTop: 4, fontSize: 14, color: '#a1a1aa' },
+  expandedContent: { gap: 12 },
+  expandedTitle: { fontSize: 22, fontWeight: 'bold', color: '#ffffff' },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'expandable_demo.dart',
+				language: 'dart',
+				description: 'Flutter expandable card modal.',
+				code: `import 'package:flutter/material.dart';
+import 'expandable_card.dart';
+
+class ExpandableDemo extends StatelessWidget {
+  const ExpandableDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
+      body: Center(
+        child: SizedBox(
+          width: 380,
+          child: ExpandableCard(
+            duration: ${duration},
+            cardContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('CLICK TO EXPAND', style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 12)),
+                SizedBox(height: 8),
+                Text('FLIP Morphing Card', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                SizedBox(height: 4),
+                Text('Pure matrix morphing.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
+            expandedContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Modal Dialog', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+                SizedBox(height: 8),
+                Text('Hardware-accelerated layout transition.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				description: 'ExpandableCard universal usage.',
+				code: `import { ExpandableCard } from '@/components/ui/ExpandableCard';\n\nexport default function Example() {\n  return <ExpandableCard duration={${duration}} />;\n}`,
+			};
+		}
 	}
 }

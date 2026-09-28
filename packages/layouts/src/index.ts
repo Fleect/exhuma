@@ -8,14 +8,10 @@ export { MacyMasonry } from './Masonry/MacyMasonry';
 export { InfiniteMarquee, MarqueeRoot, MarqueeTrack, MarqueeItem } from './InfiniteMarquee/InfiniteMarquee';
 export { BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual } from './BentoGrid/BentoGrid';
 export { DiamondGrid, DiamondColumn, DiamondItem } from './DiamondGrid/DiamondGrid';
-export { ScrollTimeline, TimelineRoot, TimelineTrack, TimelineItem, TimelinePoint, TimelineContent } from './ScrollTimeline/ScrollTimeline';
-export { StickyParallaxScroll, ParallaxRoot, ParallaxSticky, ParallaxLayer, ParallaxContent } from './StickyParallax/StickyParallax';
-export { InteractiveGridPattern } from './InteractiveGrid/InteractiveGridPattern';
 
 // Mathematical Kernels
 export { calculateMarqueeOffset, dampFactor, parseGapToPx } from './InfiniteMarquee/marquee-math';
 export { getDiamondLayoutConfig, partitionDiamondItems } from './DiamondGrid/diamond-layout';
-export { generateTimelinePath, checkTimelineDirection } from './ScrollTimeline/timeline-path';
 
 export type {
 	AutoGridProps,
@@ -30,9 +26,4 @@ export type {
 	DiamondColumnProps,
 	DiamondItemProps,
 	DiamondLayoutVariant,
-	ScrollTimelineProps,
-	ScrollTimelineItemData,
-	StickyParallaxProps,
-	StickyParallaxLayerProps,
-	InteractiveGridPatternProps,
 } from './types';

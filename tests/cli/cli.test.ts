@@ -124,6 +124,18 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('ExpandableCard');
+    expect(code).toContain('ExpandableTrigger');
+  });
+
+  it('installs real Expandable Card component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add expandable-card --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/ExpandableCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('ExpandableCard');
+    expect(code).toContain('translate3d');
+    expect(code).toContain('createPortal');
   });
 
   it('installs real Diamond Grid component via exhuma add with ejected mode', () => {
@@ -164,6 +176,185 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('solveCriticallyDampedSpring');
     expect(code).toContain('translate3d');
     expect(code).toContain('TabsRoot');
+  });
+
+  it('installs real Stacking Cards component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add stacking-cards --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/StackingCards.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('StackingCards');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Stacking Cards component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add stacking-cards --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/StackingCards.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('StackingCards');
+    expect(code).toContain('smoothstep');
+    expect(code).toContain('getReverseScale');
+    expect(code).toContain('Float64Array');
+  });
+
+  it('installs real Spotlight Card component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add spotlight-card --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/SpotlightCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('SpotlightCard');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Spotlight Card component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add spotlight-card --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/SpotlightCard.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('SpotlightCard');
+    expect(code).toContain('--exhuma-spotlight-x');
+    expect(code).toContain('handlePointerMove');
+  });
+
+  it('installs real Border Beam component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add border-beam --flavor=react --yes`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/BorderBeam.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('BorderBeam');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Border Beam component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add border-beam --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/BorderBeam.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('BorderBeam');
+    expect(code).toContain('offsetPath');
+    expect(code).toContain('doubleBeam');
+  });
+
+  it('installs real Accordion component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add accordion --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/Accordion.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('Accordion');
+    expect(code).toContain('AccordionRoot');
+    expect(code).toContain('AccordionTrigger');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Accordion component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add accordion --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/Accordion.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('Accordion');
+    expect(code).toContain('grid-rows-[1fr]');
+    expect(code).toContain('grid-rows-[0fr]');
+    expect(code).toContain('rotate-0');
+    expect(code).toContain('-rotate-180');
+    expect(code).toContain('-rotate-90');
+    expect(code).toContain('focus-visible:ring-primary');
+  });
+
+  it('installs real Number Ticker component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add number-ticker --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/NumberTicker.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('NumberTicker');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Number Ticker component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add number-ticker --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/NumberTicker.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('NumberTicker');
+    expect(code).toContain('easeOutExpo');
+    expect(code).toContain('IntersectionObserver');
+    expect(code).toContain('textContent');
+  });
+
+  it('installs real Magnetic Button component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add magnetic-button --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/MagneticButton.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('MagneticButton');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Magnetic Button component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add magnetic-button --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/MagneticButton.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('MagneticButton');
+    expect(code).toContain('calculateMagneticPull');
+    expect(code).toContain('translate3d');
+    expect(code).toContain('maxDisplacement');
+  });
+
+  it('installs real Floating Dock component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add floating-dock --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/FloatingDock.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('FloatingDock');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Floating Dock component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add floating-dock --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/FloatingDock.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('FloatingDock');
+    expect(code).toContain('calculateCosineBellScale');
+    expect(code).toContain('calculateDockItemSize');
+    expect(code).toContain('requestAnimationFrame');
+  });
+
+  it('installs real Cursor Tooltip component via exhuma add (clean mode)', () => {
+    execSync(`node "${CLI_BIN}" add cursor-tooltip --flavor=react --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/CursorTooltip.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('CursorTooltip');
+    expect(code).toContain('@exhuma/core');
+  });
+
+  it('installs real Cursor Tooltip component via exhuma add with ejected mode', () => {
+    execSync(`node "${CLI_BIN}" add cursor-tooltip --flavor=react --eject --yes --overwrite`, { cwd: TEST_DIR });
+    const componentPath = resolve(TEST_DIR, 'src/lib/components/CursorTooltip.tsx');
+    expect(existsSync(componentPath)).toBe(true);
+
+    const code = readFileSync(componentPath, 'utf8');
+    expect(code).toContain('CursorTooltip');
+    expect(code).toContain('dampCursorCoordinate');
+    expect(code).toContain('clampTooltipToViewport');
+    expect(code).toContain('requestAnimationFrame');
   });
 
   it('executes exhuma build to generate static registry JSON', () => {

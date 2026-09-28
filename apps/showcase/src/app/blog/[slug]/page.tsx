@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { IconArrowLeft as ArrowLeft, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import { BLOG_POSTS, getBlogPostBySlug } from '@/lib/blog-data';
-import { CodeBlock } from '@/components/showcase/CodeBlock';
+import { CodeBlock } from '@/components/docs/CodeBlock';
 import { Callout } from '@/components/layout/Callout';
 import { DocsToc } from '@/components/layout/DocsToc';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';

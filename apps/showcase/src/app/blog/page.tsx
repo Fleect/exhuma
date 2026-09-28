@@ -4,7 +4,8 @@ import { BLOG_POSTS } from '@/lib/blog-data';
 import { BlogFeed } from '@/components/blog/BlogFeed';
 import { DocsPageHeader } from '@/components/docs/DocsPageHeader';
 import { DocsSection } from '@/components/docs/DocsSection';
-import { StatStrip } from '@/components/showcase/StatStrip';
+import { StatStrip } from '@/components/landing/StatStrip';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export const metadata: Metadata = {
 	title: 'Engineering Journal',
@@ -25,7 +26,7 @@ const TELEMETRY_STATS = [
 	{ label: 'Published Essays', value: BLOG_POSTS.length, note: 'Deep architectural audits' },
 	{ label: 'Compositor Target', value: 120, suffix: 'Hz', note: 'Hardware-accelerated floor' },
 	{ label: 'Animation Runtimes', value: 0, note: 'No external runtime dependencies' },
-	{ label: 'Ecosystem Parity', value: 13, note: 'Native non-transpiled files' },
+	{ label: 'Ecosystem Parity', value: ECOSYSTEM_COUNT, note: 'Native non-transpiled files' },
 ];
 
 export default function BlogIndexPage() {
@@ -35,8 +36,8 @@ export default function BlogIndexPage() {
 				<DocsPageHeader
 					eyebrow={[{ label: 'Engineering Journal' }]}
 					title='Engineering Journal'
-					description='First-principles analyses of kinetic interaction physics, compositor thread scheduling, memory-safe observer lifecycles, and copy-paste architecture across 13 frontend ecosystems.'
-					meta={[`${BLOG_POSTS.length} dispatches`, '13 ecosystems', '0 runtime deps', '120Hz target']}
+					description={`First-principles analyses of kinetic interaction physics, compositor thread scheduling, memory-safe observer lifecycles, and copy-paste architecture across ${ECOSYSTEM_COUNT} frontend ecosystems.`}
+					meta={[`${BLOG_POSTS.length} dispatches`, `${ECOSYSTEM_COUNT} ecosystems`, '0 runtime deps', '120Hz target']}
 				/>
 
 				{/* Telemetry Stat Grid matching StatStrip from homepage */}

@@ -61,21 +61,20 @@ export type DiamondGridComponent = React.ForwardRefExoticComponent<DiamondGridPr
  * - 'rhombic' (Default): Signature classic upright cards forming rhombic column silhouette.
  * - 'isometric': 45-degree diamond cards with counter-rotated upright contents.
  */
-export const DiamondGrid = React.forwardRef<HTMLDivElement, DiamondGridProps>(
-	({ children, gap = 16, layout = 'auto', mode = 'rhombic', diamondItems = false, responsive = false, className = '', style, ...props }, ref) => {
-		const uniqueId = useId().replace(/:/g, '');
-		const childrenArray = useMemo(() => Children.toArray(children), [children]);
-		const totalItems = childrenArray.length;
+const DiamondGridRoot = React.forwardRef<HTMLDivElement, DiamondGridProps>(({ children, gap = 16, layout = 'auto', mode = 'rhombic', diamondItems = false, responsive = false, className = '', style, ...props }, ref) => {
+	const uniqueId = useId().replace(/:/g, '');
+	const childrenArray = useMemo(() => Children.toArray(children), [children]);
+	const totalItems = childrenArray.length;
 
-		const config = useMemo(() => getDiamondLayoutConfig(totalItems, layout), [totalItems, layout]);
-		const columnGroups = useMemo(() => partitionDiamondItems(childrenArray, config), [childrenArray, config]);
+	const config = useMemo(() => getDiamondLayoutConfig(totalItems, layout), [totalItems, layout]);
+	const columnGroups = useMemo(() => partitionDiamondItems(childrenArray, config), [childrenArray, config]);
 
-		const gapVal = typeof gap === 'number' ? `${gap}px` : gap;
+	const gapVal = typeof gap === 'number' ? `${gap}px` : gap;
 
-		return (
-			<div ref={ref} className={`exhuma-diamond-container-${uniqueId} flex w-full flex-col gap-4 ${className}`} style={{ containerType: responsive ? 'inline-size' : undefined, ...style }} {...props}>
-				{responsive && (
-					<style>{`
+	return (
+		<div ref={ref} className={`exhuma-diamond-container-${uniqueId} flex w-full flex-col gap-4 ${className}`} style={{ containerType: responsive ? 'inline-size' : undefined, ...style }} {...props}>
+			{responsive && (
+				<style>{`
 						.exhuma-diamond-container-${uniqueId} {
 							container-type: inline-size;
 						}
@@ -102,46 +101,47 @@ export const DiamondGrid = React.forwardRef<HTMLDivElement, DiamondGridProps>(
 							}
 						}
 					`}</style>
-				)}
+			)}
 
-				{/* Mobile layout: standard compact grid (< 420px container width) only when responsive=true */}
-				{responsive && (
-					<div className={`exhuma-diamond-mobile-${uniqueId}`}>
-						{childrenArray.map((item, index) => (
-							<div key={`diamond-mobile-${index}`} className='flex items-center justify-center'>
-								{mode === 'isometric' || diamondItems ? <DiamondItem mode='isometric'>{item}</DiamondItem> : item}
-							</div>
-						))}
-					</div>
-				)}
-
-				{/* Rhombic Diamond pattern: always active when responsive=false; container-managed when responsive=true */}
-				<div
-					className={responsive ? `exhuma-diamond-desktop-${uniqueId}` : 'w-full'}
-					style={{
-						display: responsive ? undefined : 'grid',
-						gridTemplateColumns: `repeat(${config.columns}, minmax(0, 1fr))`,
-						gap: gapVal,
-						alignItems: 'center',
-						justifyContent: 'center',
-						width: '100%',
-					}}
-				>
-					{columnGroups.map((columnItems, columnIndex) => (
-						<DiamondColumn key={`diamond-col-${columnIndex}`} columnIndex={columnIndex} gap={gapVal}>
-							{columnItems.map((group) => (
-								<DiamondItem key={`item-${group.index}`} mode={mode} diamond={diamondItems}>
-									{group.item}
-								</DiamondItem>
-							))}
-						</DiamondColumn>
+			{/* Mobile layout: standard compact grid (< 420px container width) only when responsive=true */}
+			{responsive && (
+				<div className={`exhuma-diamond-mobile-${uniqueId}`}>
+					{childrenArray.map((item, index) => (
+						<div key={`diamond-mobile-${index}`} className='flex items-center justify-center'>
+							{mode === 'isometric' || diamondItems ? <DiamondItem mode='isometric'>{item}</DiamondItem> : item}
+						</div>
 					))}
 				</div>
-			</div>
-		);
-	}
-) as unknown as DiamondGridComponent;
+			)}
 
+			{/* Rhombic Diamond pattern: always active when responsive=false; container-managed when responsive=true */}
+			<div
+				className={responsive ? `exhuma-diamond-desktop-${uniqueId}` : 'w-full'}
+				style={{
+					display: responsive ? undefined : 'grid',
+					gridTemplateColumns: `repeat(${config.columns}, minmax(0, 1fr))`,
+					gap: gapVal,
+					alignItems: 'center',
+					justifyContent: 'center',
+					width: '100%',
+				}}
+			>
+				{columnGroups.map((columnItems, columnIndex) => (
+					<DiamondColumn key={`diamond-col-${columnIndex}`} columnIndex={columnIndex} gap={gapVal}>
+						{columnItems.map((group) => (
+							<DiamondItem key={`item-${group.index}`} mode={mode} diamond={diamondItems}>
+								{group.item}
+							</DiamondItem>
+						))}
+					</DiamondColumn>
+				))}
+			</div>
+		</div>
+	);
+});
+DiamondGridRoot.displayName = 'DiamondGrid';
+
+export const DiamondGrid = DiamondGridRoot as unknown as DiamondGridComponent;
 DiamondGrid.displayName = 'DiamondGrid';
 DiamondGrid.Grid = DiamondGrid;
 DiamondGrid.Column = DiamondColumn;

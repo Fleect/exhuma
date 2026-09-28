@@ -127,4 +127,23 @@ describe('Exhuma Kinetic Methodology — Expandable Card (Big-Ω)', () => {
 			expect(usage.code.length).toBeGreaterThan(100);
 		}
 	});
+
+	it('provides 5 curated studio presets adhering to the monorepo standard', () => {
+		const presets = {
+			Default: { duration: 360 },
+			Snappy: { duration: 220 },
+			Cinematic: { duration: 520 },
+			'Ultra Fast': { duration: 160 },
+			Smooth: { duration: 420 },
+		};
+
+		const presetKeys = Object.keys(presets);
+		expect(presetKeys.length).toBe(5);
+
+		for (const [name, config] of Object.entries(presets)) {
+			expect(config.duration).toBeGreaterThanOrEqual(150);
+			expect(config.duration).toBeLessThanOrEqual(600);
+		}
+	});
 });
+

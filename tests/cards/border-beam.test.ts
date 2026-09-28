@@ -20,7 +20,7 @@ describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
 
 		const sizeProp = borderBeamComponent.props.find((p) => p.name === 'size');
 		expect(sizeProp?.min).toBe(50);
-		expect(sizeProp?.max).toBe(200);
+		expect(sizeProp?.max).toBe(400);
 		expect(sizeProp?.step).toBe(10);
 
 		const colorFromProp = borderBeamComponent.props.find((p) => p.name === 'colorFrom');

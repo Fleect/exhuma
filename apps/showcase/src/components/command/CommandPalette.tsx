@@ -24,6 +24,7 @@ import {
 } from '@tabler/icons-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { ALL_COMPONENTS, ECOSYSTEM_LABELS, EcosystemFlavor } from '@/registry';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 import { BLOG_POSTS } from '@/lib/blog-data';
 import { cn } from '@/lib/utils';
 
@@ -140,7 +141,7 @@ export function CommandPalette() {
 				href: `/docs/components/${comp.slug}`,
 				cliCommand: `npx exhuma add ${comp.slug}`,
 				description: comp.description,
-				badges: [capitalize(comp.category), '13 Ecosystems', 'Zero-CSS-Leak', ...compTags],
+				badges: [capitalize(comp.category), `${ECOSYSTEM_COUNT} Ecosystems`, 'Zero-CSS-Leak', ...compTags],
 			});
 		});
 
@@ -230,7 +231,7 @@ export function CommandPalette() {
 			{
 				id: 'doc-lifecycle',
 				title: 'Lifecycle & Memory Safety',
-				subtitle: 'Deterministic Teardowns across 13 Frameworks',
+				subtitle: `Deterministic Teardowns across ${ECOSYSTEM_COUNT} Frameworks`,
 				category: 'docs',
 				icon: BookOpen,
 				href: '/docs/lifecycle',
@@ -288,7 +289,7 @@ export function CommandPalette() {
 				category: 'actions',
 				icon: Sliders,
 				href: '/docs/components',
-				description: 'Visual inspector with real-time code synthesis across all 13 platforms.',
+				description: `Visual inspector with real-time code synthesis across all ${ECOSYSTEM_COUNT} platforms.`,
 				badges: ['Playground', 'Components', 'Explore'],
 			},
 			{
@@ -419,7 +420,7 @@ export function CommandPalette() {
 						aria-activedescendant={selectedItem ? `command-palette-item-${selectedItem.id}` : undefined}
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						placeholder='Search components, 13 ecosystems, docs, actions... (⌘K)'
+						placeholder={`Search components, ${ECOSYSTEM_COUNT} ecosystems, docs, actions... (⌘K)`}
 						className='text-foreground placeholder:text-muted-foreground w-full bg-transparent text-sm outline-none'
 						autoFocus
 					/>

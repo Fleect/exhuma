@@ -1306,7 +1306,7 @@ export function initComparisonSlider(containerSelector = '[data-comparison-slide
 				{
 					filename: 'render.php',
 					language: 'php',
-					description: 'WordPress Gutenberg block dynamic render template.',
+					description: 'WordPress Gutenberg block dynamic render template with sub-pixel polygon clipping and kinetic pointer controller.',
 					code: `<?php
 /**
  * Comparison Slider Block Template
@@ -1331,12 +1331,124 @@ $clip = $is_vertical
     aria-valuenow="<?php echo esc_attr(round($pos * 100)); ?>"
     aria-valuemin="0"
     aria-valuemax="100"
+    aria-orientation="<?php echo esc_attr($orientation); ?>"
     tabindex="0"
 >
+    <!-- After Layer (Full View) -->
     <div class="exhuma-cs-after absolute inset-0 size-full overflow-hidden">
-        <?php echo $content; ?>
+        <?php echo !empty($content) ? $content : '<div class="flex size-full items-center justify-center bg-zinc-900 text-zinc-400 font-mono text-xs">After View</div>'; ?>
+    </div>
+
+    <!-- Before Layer (Sub-pixel Clipped Polygon) -->
+    <div
+        class="exhuma-cs-before absolute inset-0 size-full overflow-hidden will-change-[clip-path]"
+        style="clip-path: <?php echo esc_attr($clip); ?>;"
+    >
+        <div class="flex size-full items-center justify-center bg-zinc-950 text-white font-mono text-xs">
+            Before View
+        </div>
+    </div>
+
+    <!-- Divider Rail & Handle -->
+    <div
+        class="exhuma-cs-handle absolute z-20 pointer-events-none bg-white shadow-lg <?php echo $is_vertical ? 'left-0 right-0 h-0.5 -translate-y-1/2' : 'top-0 bottom-0 w-0.5 -translate-x-1/2'; ?>"
+        style="<?php echo $is_vertical ? 'top: ' . esc_attr($pct) . '%;' : 'left: ' . esc_attr($pct) . '%;'; ?>"
+    >
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-8 rounded-full border border-border/80 bg-background/90 backdrop-blur-md shadow-md text-foreground text-xs font-bold">
+            <?php echo $is_vertical ? '↕' : '↔'; ?>
+        </div>
     </div>
 </div>
+
+<script>
+(function() {
+  function initWordPressSliders() {
+    document.querySelectorAll('.wp-block-exhuma-comparison-slider').forEach(function(slider) {
+      if (slider.__exhuma_init) return;
+      slider.__exhuma_init = true;
+
+      var isVertical = slider.dataset.orientation === 'vertical';
+      var step = parseFloat(slider.dataset.step || '0.05');
+      var pos = parseFloat(slider.dataset.position || '0.5');
+      var isDragging = false;
+      var rect = null;
+
+      var beforeEl = slider.querySelector('.exhuma-cs-before');
+      var handleEl = slider.querySelector('.exhuma-cs-handle');
+
+      function applyPos(val) {
+        pos = Math.max(0, Math.min(1, val));
+        var pct = (pos * 100).toFixed(3);
+        var clip = isVertical
+          ? 'polygon(0 0, 100% 0, 100% ' + pct + '%, 0 ' + pct + '%)'
+          : 'polygon(0 0, ' + pct + '% 0, ' + pct + '% 100%, 0 100%)';
+        if (beforeEl) beforeEl.style.clipPath = clip;
+        if (handleEl) {
+          if (isVertical) handleEl.style.top = pct + '%';
+          else handleEl.style.left = pct + '%';
+        }
+        slider.setAttribute('aria-valuenow', Math.round(pos * 100).toString());
+      }
+
+      function updatePointer(clientX, clientY) {
+        if (!rect) rect = slider.getBoundingClientRect();
+        var ratio = isVertical
+          ? (clientY - rect.top) / rect.height
+          : (clientX - rect.left) / rect.width;
+        applyPos(ratio);
+      }
+
+      slider.addEventListener('pointerdown', function(e) {
+        if (e.button !== 0) return;
+        isDragging = true;
+        rect = slider.getBoundingClientRect();
+        try { slider.setPointerCapture(e.pointerId); } catch(err) {}
+        updatePointer(e.clientX, e.clientY);
+      });
+
+      slider.addEventListener('pointermove', function(e) {
+        if (!isDragging) return;
+        if (e.pointerType === 'mouse' && e.buttons === 0) {
+          isDragging = false;
+          rect = null;
+          return;
+        }
+        updatePointer(e.clientX, e.clientY);
+      });
+
+      function onEnd(e) {
+        isDragging = false;
+        rect = null;
+        try { if (slider.hasPointerCapture(e.pointerId)) slider.releasePointerCapture(e.pointerId); } catch(err) {}
+      }
+
+      slider.addEventListener('pointerup', onEnd);
+      slider.addEventListener('pointercancel', onEnd);
+
+      slider.addEventListener('keydown', function(e) {
+        var delta = 0;
+        if (isVertical) {
+          if (e.key === 'ArrowUp') delta = -step;
+          else if (e.key === 'ArrowDown') delta = step;
+        } else {
+          if (e.key === 'ArrowLeft') delta = -step;
+          else if (e.key === 'ArrowRight') delta = step;
+        }
+        if (delta !== 0) {
+          e.preventDefault();
+          applyPos(pos + delta);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWordPressSliders);
+  } else {
+    initWordPressSliders();
+  }
+})();
+</script>
 `,
 				},
 			];
@@ -1563,5 +1675,416 @@ class _SliderClipper extends CustomClipper<Rect> {
 
 		default:
 			return null;
+	}
+}
+
+export function getComparisonSliderUsage(flavor: EcosystemFlavor, props: Record<string, unknown>): ComponentFilePayload {
+	const defaultPosition = Number(props.defaultPosition ?? 0.5);
+	const step = Number(props.step ?? 0.05);
+	const orientation = String(props.orientation ?? 'horizontal');
+
+	switch (flavor) {
+		case 'nextjs': {
+			return {
+				filename: 'ComparisonDemo.tsx',
+				language: 'tsx',
+				description: 'Next.js App Router client component showcasing sub-pixel ComparisonSlider.',
+				code: `'use client';
+
+import React from 'react';
+import { ComparisonSlider } from '@/components/ui/ComparisonSlider';
+
+export default function ComparisonDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-2xl">
+        <ComparisonSlider
+          aspectRatio="16/10"
+          defaultPosition={${defaultPosition}}
+          step={${step}}
+          orientation="${orientation}"
+          before={
+            <div className="flex size-full flex-col justify-between bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 p-8 text-white">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-purple-300">
+                Legacy Pipeline
+              </span>
+              <div>
+                <h4 className="text-2xl font-bold">Unaccelerated Canvas</h4>
+                <p className="mt-1 text-sm text-purple-200/70">Standard 60Hz DOM repainting</p>
+              </div>
+            </div>
+          }
+          after={
+            <div className="flex size-full flex-col justify-between bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 p-8 text-white">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Exhuma Kinetic Engine
+              </span>
+              <div>
+                <h4 className="text-2xl font-bold">120Hz ProMotion</h4>
+                <p className="mt-1 text-sm text-emerald-200/70">Sub-pixel polygon GPU clipping</p>
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'react': {
+			return {
+				filename: 'ComparisonDemo.tsx',
+				language: 'tsx',
+				description: 'React component with sub-pixel clip-path media comparison slider.',
+				code: `import React from 'react';
+import { ComparisonSlider } from '@/components/ui/ComparisonSlider';
+
+export default function ComparisonDemo() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div className="w-full max-w-2xl">
+        <ComparisonSlider
+          aspectRatio="16/10"
+          defaultPosition={${defaultPosition}}
+          step={${step}}
+          orientation="${orientation}"
+          before={
+            <div className="flex size-full flex-col justify-between bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 p-8 text-white">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-purple-300">
+                Legacy Pipeline
+              </span>
+              <div>
+                <h4 className="text-2xl font-bold">Unaccelerated Canvas</h4>
+                <p className="mt-1 text-sm text-purple-200/70">Standard 60Hz DOM repainting</p>
+              </div>
+            </div>
+          }
+          after={
+            <div className="flex size-full flex-col justify-between bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 p-8 text-white">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Exhuma Kinetic Engine
+              </span>
+              <div>
+                <h4 className="text-2xl font-bold">120Hz ProMotion</h4>
+                <p className="mt-1 text-sm text-emerald-200/70">Sub-pixel polygon GPU clipping</p>
+              </div>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'vue': {
+			return {
+				filename: 'ComparisonDemo.vue',
+				language: 'vue',
+				description: 'Vue 3 SFC using ComparisonSlider with before and after slots.',
+				code: `<script setup lang="ts">
+import ComparisonSlider from '@/components/ui/ComparisonSlider.vue';
+</script>
+
+<template>
+  <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <div class="w-full max-w-2xl">
+      <ComparisonSlider
+        aspect-ratio="16/10"
+        :default-position="${defaultPosition}"
+        :step="${step}"
+        orientation="${orientation}"
+      >
+        <template #before>
+          <div class="flex size-full flex-col justify-between bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 p-8 text-white">
+            <span class="font-mono text-xs font-bold uppercase tracking-wider text-purple-300">Original View</span>
+            <h4 class="text-2xl font-bold">Static Canvas</h4>
+          </div>
+        </template>
+        <template #after>
+          <div class="flex size-full flex-col justify-between bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 p-8 text-white">
+            <span class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">Kinetic Mode</span>
+            <h4 class="text-2xl font-bold">120Hz ProMotion</h4>
+          </div>
+        </template>
+      </ComparisonSlider>
+    </div>
+  </div>
+</template>
+`,
+			};
+		}
+
+		case 'svelte': {
+			return {
+				filename: 'ComparisonDemo.svelte',
+				language: 'svelte',
+				description: 'Svelte 5 runes component using ComparisonSlider.',
+				code: `<script lang="ts">
+  import ComparisonSlider from '$lib/components/ComparisonSlider.svelte';
+</script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-2xl">
+    <ComparisonSlider
+      aspectRatio="16/10"
+      defaultPosition={${defaultPosition}}
+      step={${step}}
+      orientation="${orientation}"
+    >
+      {#snippet before()}
+        <div class="flex size-full flex-col justify-between bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 p-8 text-white">
+          <span class="font-mono text-xs font-bold uppercase tracking-wider text-purple-300">Original View</span>
+          <h4 class="text-2xl font-bold">Static Canvas</h4>
+        </div>
+      {/snippet}
+      {#snippet after()}
+        <div class="flex size-full flex-col justify-between bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 p-8 text-white">
+          <span class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">Kinetic Mode</span>
+          <h4 class="text-2xl font-bold">120Hz ProMotion</h4>
+        </div>
+      {/snippet}
+    </ComparisonSlider>
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'solid': {
+			return {
+				filename: 'ComparisonDemo.tsx',
+				language: 'tsx',
+				description: 'SolidJS component with fine-grained reactivity.',
+				code: `import { ComparisonSlider } from '@/components/ui/ComparisonSlider';
+
+export default function ComparisonDemo() {
+  return (
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <div class="w-full max-w-2xl">
+        <ComparisonSlider
+          aspectRatio="16/10"
+          defaultPosition={${defaultPosition}}
+          step={${step}}
+          orientation="${orientation}"
+          before={
+            <div class="flex size-full flex-col justify-between bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 p-8 text-white">
+              <span class="font-mono text-xs font-bold uppercase tracking-wider text-purple-300">Original View</span>
+              <h4 class="text-2xl font-bold">Static Canvas</h4>
+            </div>
+          }
+          after={
+            <div class="flex size-full flex-col justify-between bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 p-8 text-white">
+              <span class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">Kinetic Mode</span>
+              <h4 class="text-2xl font-bold">120Hz ProMotion</h4>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+`,
+			};
+		}
+
+		case 'astro': {
+			return {
+				filename: 'ComparisonDemo.astro',
+				language: 'astro',
+				description: 'Astro island with client hydration.',
+				code: `---
+import { ComparisonSlider } from '@/components/ui/ComparisonSlider';
+---
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <div class="w-full max-w-2xl">
+    <ComparisonSlider
+      client:load
+      aspectRatio="16/10"
+      defaultPosition={${defaultPosition}}
+      step={${step}}
+      orientation="${orientation}"
+    />
+  </div>
+</div>
+`,
+			};
+		}
+
+		case 'angular': {
+			return {
+				filename: 'comparison-demo.component.ts',
+				language: 'typescript',
+				description: 'Angular standalone component using ComparisonSlider.',
+				code: `import { Component } from '@angular/core';
+import { ComparisonSliderComponent } from '@/components/ui/comparison-slider.component';
+
+@Component({
+  selector: 'app-comparison-demo',
+  standalone: true,
+  imports: [ComparisonSliderComponent],
+  template: \`
+    <div class="flex min-h-screen items-center justify-center p-8 bg-background">
+      <exhuma-comparison-slider
+        [defaultPosition]="${defaultPosition}"
+        [step]="${step}"
+        orientation="${orientation}"
+        class="w-full max-w-2xl"
+      />
+    </div>
+  \`
+})
+export class ComparisonDemoComponent {}
+`,
+			};
+		}
+
+		case 'webcomponent': {
+			return {
+				filename: 'index.html',
+				language: 'html',
+				description: 'Standard Custom Element usage.',
+				code: `<script type="module" src="./exhuma-comparison-slider.js"></script>
+
+<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+  <exhuma-comparison-slider
+    default-position="${defaultPosition}"
+    step="${step}"
+    orientation="${orientation}"
+    class="w-full max-w-2xl"
+  ></exhuma-comparison-slider>
+</div>
+`,
+			};
+		}
+
+		case 'vanilla': {
+			return {
+				filename: 'main.js',
+				language: 'javascript',
+				description: 'Vanilla JavaScript kinetic comparison slider initialization.',
+				code: `import { initComparisonSlider } from './comparison-slider.vanilla.js';
+
+const container = document.getElementById('comparison-slider');
+
+initComparisonSlider(container, {
+  defaultPosition: ${defaultPosition},
+  step: ${step},
+  orientation: '${orientation}',
+});
+`,
+			};
+		}
+
+		case 'blade': {
+			return {
+				filename: 'comparison-demo.blade.php',
+				language: 'php',
+				description: 'Laravel Blade directive integration.',
+				code: `<div class="flex min-h-screen items-center justify-center p-8 bg-background">
+    <x-exhuma.comparison-slider
+        :default-position="${defaultPosition}"
+        :step="${step}"
+        orientation="${orientation}"
+        class="w-full max-w-2xl"
+    />
+</div>
+`,
+			};
+		}
+
+		case 'wordpress': {
+			return {
+				filename: 'render.php',
+				language: 'php',
+				description: 'WordPress Gutenberg Block render template.',
+				code: `<?php
+/**
+ * Exhuma Comparison Slider Block
+ */
+$default_position = $attributes['defaultPosition'] ?? ${defaultPosition};
+$orientation      = $attributes['orientation'] ?? '${orientation}';
+?>
+<div class="exhuma-comparison-slider-block w-full max-w-2xl"
+     data-default-position="<?php echo esc_attr($default_position); ?>"
+     data-orientation="<?php echo esc_attr($orientation); ?>">
+    <?php echo $content; ?>
+</div>
+`,
+			};
+		}
+
+		case 'react-native': {
+			return {
+				filename: 'ComparisonDemo.native.tsx',
+				language: 'tsx',
+				description: 'React Native / Expo comparison slider.',
+				code: `import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { ComparisonSlider } from '@/components/ui/ComparisonSlider';
+
+export default function ComparisonDemo() {
+  return (
+    <View style={styles.container}>
+      <ComparisonSlider
+        defaultPosition={${defaultPosition}}
+        orientation="${orientation}"
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
+});
+`,
+			};
+		}
+
+		case 'flutter': {
+			return {
+				filename: 'comparison_demo.dart',
+				language: 'dart',
+				description: 'Flutter comparison slider widget.',
+				code: `import 'package:flutter/material.dart';
+import 'package:exhuma/components/comparison_slider.dart';
+
+class ComparisonDemo extends StatelessWidget {
+  const ComparisonDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
+      body: Center(
+        child: SizedBox(
+          width: 500,
+          child: ExhumaComparisonSlider(
+            defaultPosition: ${defaultPosition},
+            orientation: '${orientation}',
+          ),
+        ),
+      ),
+    );
+  }
+}
+`,
+			};
+		}
+
+		default: {
+			return {
+				filename: 'usage.tsx',
+				language: 'tsx',
+				description: 'ComparisonSlider universal usage.',
+				code: `import { ComparisonSlider } from '@/components/ui/ComparisonSlider';\n\nexport default function Example() {\n  return <ComparisonSlider defaultPosition={${defaultPosition}} />;\n}`,
+			};
+		}
 	}
 }

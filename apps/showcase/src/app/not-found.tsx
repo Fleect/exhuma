@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { IconCompass as Compass, IconArrowRight as ArrowRight, IconHome as Home, IconBook2 as BookOpen, IconStack2 as Layers } from '@tabler/icons-react';
+import { COMPONENT_COUNT } from '@/components/docs/docs-stats';
 
 export const metadata: Metadata = {
 	title: { absolute: '404: Primitive Not Found — Exhuma' },
@@ -56,7 +57,7 @@ export default function NotFound() {
 				<div className='text-muted-foreground flex items-center justify-between pb-4 font-mono text-xs font-semibold tracking-wider uppercase'>
 					<span>Suggested Canonical Primitives</span>
 					<Link href='/docs/components' className='hover:text-foreground inline-flex items-center gap-1 transition-colors'>
-						<span>View all 23 components</span>
+						<span>View all {COMPONENT_COUNT} components</span>
 						<ArrowRight className='h-3 w-3' />
 					</Link>
 				</div>

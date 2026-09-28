@@ -10,12 +10,8 @@ import { accordionComponent } from './components/accordion';
 import { infiniteMarqueeComponent } from './components/infinite-marquee';
 import { bentoGridComponent } from './components/bento-grid';
 import { diamondGridComponent } from './components/diamond-grid';
-import { scrollTimelineComponent } from './components/scroll-timeline';
-import { stickyParallaxComponent } from './components/sticky-parallax';
 import { borderBeamComponent } from './components/border-beam';
-import { animatedSphereComponent } from './components/animated-sphere';
 import { floatingDockComponent } from './components/floating-dock';
-import { interactiveGridComponent } from './components/interactive-grid';
 import { numberTickerComponent } from './components/number-ticker';
 import { magneticButtonComponent } from './components/magnetic-button';
 import { cardSwipeStackComponent } from './components/card-swipe-stack';
@@ -25,6 +21,28 @@ import { cursorTooltipComponent } from './components/cursor-tooltip';
 
 export * from './schema';
 export { generateComponentUsage } from './templates/usage-generator';
+
+export {
+	stackingCardsComponent,
+	horizontalScrollerComponent,
+	cssMasonryComponent,
+	autoGridComponent,
+	tiltCardComponent,
+	spotlightCardComponent,
+	morphingTabsComponent,
+	accordionComponent,
+	infiniteMarqueeComponent,
+	bentoGridComponent,
+	diamondGridComponent,
+	borderBeamComponent,
+	floatingDockComponent,
+	numberTickerComponent,
+	magneticButtonComponent,
+	cardSwipeStackComponent,
+	comparisonSliderComponent,
+	expandableCardComponent,
+	cursorTooltipComponent,
+};
 
 export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'stacking-cards': stackingCardsComponent,
@@ -38,12 +56,8 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'infinite-marquee': infiniteMarqueeComponent,
 	'bento-grid': bentoGridComponent,
 	'diamond-grid': diamondGridComponent,
-	'scroll-timeline': scrollTimelineComponent,
-	'sticky-parallax': stickyParallaxComponent,
 	'border-beam': borderBeamComponent,
-	'animated-sphere': animatedSphereComponent,
 	'floating-dock': floatingDockComponent,
-	'interactive-grid': interactiveGridComponent,
 	'number-ticker': numberTickerComponent,
 	'magnetic-button': magneticButtonComponent,
 	'card-swipe-stack': cardSwipeStackComponent,
@@ -53,6 +67,7 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 };
 
 export const ALL_COMPONENTS: UniversalComponent[] = Object.values(COMPONENT_REGISTRY);
+export const COMPONENT_COUNT = ALL_COMPONENTS.length;
 
 export function getComponentBySlug(slug: string): UniversalComponent | undefined {
 	return COMPONENT_REGISTRY[slug];
@@ -62,9 +77,65 @@ export function getComponentsByCategory(category: UniversalComponent['category']
 	return ALL_COMPONENTS.filter((c) => c.category === category);
 }
 
-export const CATEGORIES = [
-	{ id: 'cards', label: 'Tactile Cards & Interactions', count: 8 },
-	{ id: 'layouts', label: 'Responsive Layout Engines', count: 8 },
-	{ id: 'navigation', label: 'Navigation & Rails', count: 2 },
-	{ id: 'primitives', label: 'Kinetic Primitives & Disclosures', count: 5 },
-] as const;
+export interface RegistryCategory {
+	id: string;
+	label: string;
+	count: number;
+}
+
+export const CATEGORY_METADATA: Record<string, { label: string; order: number }> = {
+	cards: { label: 'Tactile Cards & Interactions', order: 1 },
+	layouts: { label: 'Responsive Layout Engines', order: 2 },
+	navigation: { label: 'Navigation & Rails', order: 3 },
+	primitives: { label: 'Kinetic Primitives & Disclosures', order: 4 },
+};
+
+/**
+ * Dynamically computes categories and their live counts based on registered components.
+ * Automatically synchronizes category counts without manual hardcoding.
+ */
+export function computeCategories(components: UniversalComponent[] = ALL_COMPONENTS): RegistryCategory[] {
+	const definedCategories = Object.entries(CATEGORY_METADATA);
+	const activeCategoryIds = new Set(components.map((comp) => comp.category));
+
+	const categories: RegistryCategory[] = definedCategories.map(([id, meta]) => ({
+		id,
+		label: meta.label,
+		count: components.filter((comp) => comp.category === id).length,
+	}));
+
+	for (const catId of activeCategoryIds) {
+		if (!definedCategories.some(([id]) => id === catId)) {
+			categories.push({
+				id: catId,
+				label: catId.charAt(0).toUpperCase() + catId.slice(1),
+				count: components.filter((comp) => comp.category === catId).length,
+			});
+		}
+	}
+
+	return categories;
+}
+
+export const CATEGORIES: RegistryCategory[] = computeCategories();
+
+/**
+ * Helper to derive or extract dynamic categories from registry manifest index.json.
+ */
+export function getCategoriesFromManifest(manifest: { categories?: RegistryCategory[]; components?: Array<{ category: string }> }): RegistryCategory[] {
+	if (manifest.categories && Array.isArray(manifest.categories)) {
+		return manifest.categories;
+	}
+	if (manifest.components && Array.isArray(manifest.components)) {
+		const counts: Record<string, number> = {};
+		for (const comp of manifest.components) {
+			counts[comp.category] = (counts[comp.category] ?? 0) + 1;
+		}
+		return Object.entries(counts).map(([id, count]) => ({
+			id,
+			label: CATEGORY_METADATA[id]?.label ?? id.charAt(0).toUpperCase() + id.slice(1),
+			count,
+		}));
+	}
+	return CATEGORIES;
+}

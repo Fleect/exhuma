@@ -80,6 +80,17 @@
 	height: calc(100svh - var(--header-height));
 }
 
+@utility top-header-gap {
+	top: calc(var(--header-height, 4rem) + 0.75rem);
+}
+
+@utility top-header-mobile-gap {
+	top: calc(var(--header-height, 4rem) + 3.75rem);
+	@variant lg {
+		top: calc(var(--header-height, 4rem) + 0.75rem);
+	}
+}
+
 // Anchor jumps (TOC links, #hash URLs) land on the same line the sticky TOC
 // sits on, instead of under the sticky header. Below md the docs mobile nav bar
 // (h-12) is stuck under the header too, so it's cleared as well.

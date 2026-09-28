@@ -1,3 +1,5 @@
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
+
 export interface BlogPost {
 	slug: string;
 	title: string;
@@ -162,7 +164,7 @@ element.style.transform = \`perspective(1000px) rotateX(\${rotateX}deg) rotateY(
 	},
 	{
 		slug: 'deterministic-lifecycle-cleanup',
-		title: 'Deterministic Teardown: Zero Memory Leaks Across 13 Frameworks',
+		title: `Deterministic Teardown: Zero Memory Leaks Across ${ECOSYSTEM_COUNT} Frameworks`,
 		description: 'How Exhuma guarantees that listeners, observers, and spring animations cleanly terminate across SPA view transitions from Svelte 5 Runes to Angular Signals and Flutter.',
 		publishedAt: 'January 2025',
 		readTime: '7 min read',
@@ -175,7 +177,7 @@ element.style.transform = \`perspective(1000px) rotateX(\${rotateX}deg) rotateY(
 		content: {
 			headings: [
 				{ id: 'zombie-listeners', title: 'The Problem of Zombie Listeners' },
-				{ id: 'teardown-contract', title: 'The 13-Framework Teardown Contract' },
+				{ id: 'teardown-contract', title: `The ${ECOSYSTEM_COUNT}-Framework Teardown Contract` },
 				{ id: 'automated-audit', title: 'Automated Lifecycle Verification' },
 			],
 			sections: [
@@ -187,7 +189,7 @@ element.style.transform = \`perspective(1000px) rotateX(\${rotateX}deg) rotateY(
 				},
 				{
 					id: 'teardown-contract',
-					title: 'The 13-Framework Teardown Contract',
+					title: `The ${ECOSYSTEM_COUNT}-Framework Teardown Contract`,
 					content:
 						'Every Exhuma component is tested against an invariant lifecycle contract: when the component unmounts, zero detached DOM references, active observers, or pending animation frames may persist. We implement this using framework-native cleanup primitives:',
 					codeSnippet: {

@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export const SUPPORTED_ECOSYSTEMS = ['react', 'nextjs', 'vue', 'svelte', 'angular', 'solid', 'astro', 'blade', 'vanilla', 'wordpress', 'webcomponent', 'react-native', 'flutter'] as const;
 
+export const ECOSYSTEM_COUNT = SUPPORTED_ECOSYSTEMS.length;
+
 export const EcosystemFlavorSchema = z.enum(SUPPORTED_ECOSYSTEMS);
 
 export type EcosystemFlavor = z.infer<typeof EcosystemFlavorSchema>;

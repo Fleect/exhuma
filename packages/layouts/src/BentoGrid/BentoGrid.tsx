@@ -17,7 +17,7 @@ export interface BentoGridComponent extends React.ForwardRefExoticComponent<Bent
  * Modern responsive dense auto-flow grid with asymmetric spans and subtle
  * kinetic border sheen on hover. Zero layout shifts.
  */
-export const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(({ children, cols = 3, gap = '1.5rem', rowHeight, className = '', style, ...props }, ref) => {
+const BentoGridRoot = React.forwardRef<HTMLDivElement, BentoGridProps>(({ children, cols = 3, gap = '1.5rem', rowHeight, className = '', style, ...props }, ref) => {
 	const colsVal = typeof cols === 'number' ? cols : (cols.lg ?? cols.md ?? 3);
 	const gapVal = typeof gap === 'number' ? `${gap}px` : gap;
 	const autoRowsVal = rowHeight ? (typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight) : undefined;
@@ -37,8 +37,9 @@ export const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(({ chi
 			{children}
 		</div>
 	);
-}) as unknown as BentoGridComponent;
-BentoGrid.displayName = 'BentoGrid';
+});
+BentoGridRoot.displayName = 'BentoGrid';
+export const BentoGrid = BentoGridRoot as unknown as BentoGridComponent;
 
 export const BentoCard = React.forwardRef<HTMLDivElement, BentoCardProps>(
 	({ children, colSpan = 1, rowSpan = 1, enableGlow = true, glowColor = 'rgba(99, 102, 241, 0.08)', className = '', style, ...props }, forwardedRef) => {
