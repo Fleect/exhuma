@@ -5,7 +5,7 @@ export function getTiltCardOuterFiles(flavor: EcosystemFlavor, props: Record<str
 	const slug = 'tilt-card';
 	const pascalName = 'TiltCard';
 	const snakeName = 'tilt_card';
-	const defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform';
+	const defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md';
 	const defaultClass = defaultTailwindClass;
 	const description = 'Interactive 3D mouse-tracking card tilt with smooth gyroscopic physics, spring damping, and reverse mode.';
 
