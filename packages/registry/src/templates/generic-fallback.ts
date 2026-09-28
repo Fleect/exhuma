@@ -1,20 +1,8 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../schema';
 import type { ComponentOuterSpec } from './outer-layer';
 
-export function getGenericOuterFiles(
-	spec: ComponentOuterSpec,
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	options?: { eject?: boolean }
-): ComponentFilePayload[] {
-	const {
-		name,
-		slug,
-		pascalName,
-		snakeName,
-		description,
-		defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md',
-	} = spec;
+export function getGenericOuterFiles(spec: ComponentOuterSpec, flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] {
+	const { name, slug, pascalName, snakeName, description, defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md' } = spec;
 
 	const isEjected = options?.eject === true;
 

@@ -189,12 +189,12 @@ TiltCard.displayName = 'TiltCard';
 			];
 		}
 		case 'vue': {
-				return [
-					{
-						filename: `${pascalName}.vue`,
-						language: 'vue',
-						description: `Vue 3 Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
-						code: `<script setup lang="ts">
+			return [
+				{
+					filename: `${pascalName}.vue`,
+					language: 'vue',
+					description: `Vue 3 Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
+					code: `<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
 interface Props {
@@ -343,16 +343,16 @@ onUnmounted(() => {
   </div>
 </template>
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'svelte': {
-				return [
-					{
-						filename: `${pascalName}.svelte`,
-						language: 'svelte',
-						description: `Svelte 5 Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
-						code: `<script lang="ts">
+			return [
+				{
+					filename: `${pascalName}.svelte`,
+					language: 'svelte',
+					description: `Svelte 5 Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
+					code: `<script lang="ts">
   import { onMount } from 'svelte';
   import { clsx } from 'clsx';
 
@@ -502,16 +502,16 @@ onUnmounted(() => {
   {@render children?.()}
 </div>
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'solid': {
-				return [
-					{
-						filename: `${pascalName}.tsx`,
-						language: 'tsx',
-						description: `SolidJS Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
-						code: `import { Component, JSX, onMount, onCleanup, splitProps } from 'solid-js';
+			return [
+				{
+					filename: `${pascalName}.tsx`,
+					language: 'tsx',
+					description: `SolidJS Native ${name} component with interactive 3D perspective Euler matrix and zero layout thrashing.`,
+					code: `import { Component, JSX, onMount, onCleanup, splitProps } from 'solid-js';
 
 export interface TiltCardProps extends JSX.HTMLAttributes<HTMLDivElement> {
   maxTilt?: number;
@@ -669,16 +669,16 @@ export const TiltCard: Component<TiltCardProps> = (props) => {
   );
 };
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'angular': {
-				return [
-					{
-						filename: `${slug}.component.ts`,
-						language: 'typescript',
-						description: `Angular 18+ Standalone ${name} component with out-of-zone 120 FPS rAF tilt physics.`,
-						code: `import { Component, ElementRef, NgZone, OnInit, OnDestroy, input, viewChild } from '@angular/core';
+			return [
+				{
+					filename: `${slug}.component.ts`,
+					language: 'typescript',
+					description: `Angular 18+ Standalone ${name} component with out-of-zone 120 FPS rAF tilt physics.`,
+					code: `import { Component, ElementRef, NgZone, OnInit, OnDestroy, input, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -831,16 +831,16 @@ export class ExhumaTiltCardComponent implements OnInit, OnDestroy {
   }
 }
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'astro': {
-				return [
-					{
-						filename: `${pascalName}.astro`,
-						language: 'astro',
-						description: `Pure Native Astro ${name} component with interactive 3D Euler matrix and zero layout thrashing.`,
-						code: `---
+			return [
+				{
+					filename: `${pascalName}.astro`,
+					language: 'astro',
+					description: `Pure Native Astro ${name} component with interactive 3D Euler matrix and zero layout thrashing.`,
+					code: `---
 interface Props {
   maxTilt?: number;
   perspective?: number;
@@ -1009,16 +1009,16 @@ const {
   document.addEventListener('astro:page-load', initTiltCards);
 </script>
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'webcomponent': {
-				return [
-					{
-						filename: `exhuma-${slug}.js`,
-						language: 'javascript',
-						description: `Universal Web Component <exhuma-${slug}> with interactive 3D perspective Euler matrix and zero layout thrashing.`,
-						code: `class ExhumaTiltCardElement extends HTMLElement {
+			return [
+				{
+					filename: `exhuma-${slug}.js`,
+					language: 'javascript',
+					description: `Universal Web Component <exhuma-${slug}> with interactive 3D perspective Euler matrix and zero layout thrashing.`,
+					code: `class ExhumaTiltCardElement extends HTMLElement {
   connectedCallback() {
     if (this._cleanup) this._cleanup();
     this.classList.add('exhuma-tilt-card');
@@ -1154,16 +1154,16 @@ if (!customElements.get('exhuma-tilt-card')) {
   customElements.define('exhuma-tilt-card', ExhumaTiltCardElement);
 }
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'vanilla': {
-				return [
-					{
-						filename: `${slug}.vanilla.js`,
-						language: 'javascript',
-						description: `Pure Vanilla JS high-performance 120 FPS tilt engine with zero layout thrashing.`,
-						code: `export function initTiltCard(selector = '[data-exhuma-tilt-card]', options = {}) {
+			return [
+				{
+					filename: `${slug}.vanilla.js`,
+					language: 'javascript',
+					description: `Pure Vanilla JS high-performance 120 FPS tilt engine with zero layout thrashing.`,
+					code: `export function initTiltCard(selector = '[data-exhuma-tilt-card]', options = {}) {
   const elements = document.querySelectorAll(selector);
   const cleanups = [];
 
@@ -1289,16 +1289,16 @@ if (!customElements.get('exhuma-tilt-card')) {
   return () => cleanups.forEach((c) => c());
 }
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'blade': {
-				return [
-					{
-						filename: `${slug}.blade.php`,
-						language: 'php',
-						description: `Laravel Blade component for ${name} with kinetic 120 FPS tilt engine.`,
-						code: `@props([
+			return [
+				{
+					filename: `${slug}.blade.php`,
+					language: 'php',
+					description: `Laravel Blade component for ${name} with kinetic 120 FPS tilt engine.`,
+					code: `@props([
     'maxTilt' => 15,
     'perspective' => 1000,
     'scale' => 1.02,
@@ -1459,50 +1459,50 @@ $id = 'exhuma-tilt-' . uniqid();
 })();
 </script>
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'wordpress': {
-				return [
-					{
-						filename: 'block.json',
-						language: 'json',
-						description: `WordPress Block API v3 definition for ${name}.`,
-						code: JSON.stringify(
-							{
-								$schema: 'https://schemas.wp.org/trunk/block.json',
-								apiVersion: 3,
-								name: `exhuma/${slug}`,
-								version: '1.1.0',
-								title: `Exhuma ${name}`,
-								category: 'design',
-								icon: 'shield',
-								description,
-								attributes: {
-									maxTilt: { type: 'number', default: 15 },
-									perspective: { type: 'number', default: 1000 },
-									scale: { type: 'number', default: 1.02 },
-									speed: { type: 'number', default: 0.12 },
-									reverse: { type: 'boolean', default: false },
-									disabled: { type: 'boolean', default: false },
-									axis: { type: 'string', default: 'all' },
-								},
-								supports: {
-									align: ['wide', 'full'],
-									html: false,
-								},
-								editorScript: 'file:./index.js',
-								render: 'file:./render.php',
+			return [
+				{
+					filename: 'block.json',
+					language: 'json',
+					description: `WordPress Block API v3 definition for ${name}.`,
+					code: JSON.stringify(
+						{
+							$schema: 'https://schemas.wp.org/trunk/block.json',
+							apiVersion: 3,
+							name: `exhuma/${slug}`,
+							version: '1.1.0',
+							title: `Exhuma ${name}`,
+							category: 'design',
+							icon: 'shield',
+							description,
+							attributes: {
+								maxTilt: { type: 'number', default: 15 },
+								perspective: { type: 'number', default: 1000 },
+								scale: { type: 'number', default: 1.02 },
+								speed: { type: 'number', default: 0.12 },
+								reverse: { type: 'boolean', default: false },
+								disabled: { type: 'boolean', default: false },
+								axis: { type: 'string', default: 'all' },
 							},
-							null,
-							2
-						),
-					},
-					{
-						filename: 'render.php',
-						language: 'php',
-						description: `WordPress Gutenberg block rendering template for ${name}.`,
-						code: `<?php
+							supports: {
+								align: ['wide', 'full'],
+								html: false,
+							},
+							editorScript: 'file:./index.js',
+							render: 'file:./render.php',
+						},
+						null,
+						2
+					),
+				},
+				{
+					filename: 'render.php',
+					language: 'php',
+					description: `WordPress Gutenberg block rendering template for ${name}.`,
+					code: `<?php
 $max_tilt = $attributes['maxTilt'] ?? 15;
 $perspective = $attributes['perspective'] ?? 1000;
 $scale = $attributes['scale'] ?? 1.02;
@@ -1527,16 +1527,16 @@ $axis = $attributes['axis'] ?? 'all';
   </div>
 </div>
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'react-native': {
-				return [
-					{
-						filename: `${pascalName}.tsx`,
-						language: 'tsx',
-						description: `React Native ${name} native mobile 3D perspective tilt component.`,
-						code: `import React, { useRef } from 'react';
+			return [
+				{
+					filename: `${pascalName}.tsx`,
+					language: 'tsx',
+					description: `React Native ${name} native mobile 3D perspective tilt component.`,
+					code: `import React, { useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -1683,16 +1683,16 @@ const styles = StyleSheet.create({
   },
 });
 `,
-					},
-				];
+				},
+			];
 		}
 		case 'flutter': {
-				return [
-					{
-						filename: `${snakeName}.dart`,
-						language: 'dart',
-						description: `Flutter ${name} native 3D perspective Euler matrix tilt widget.`,
-						code: `import 'dart:math' as math;
+			return [
+				{
+					filename: `${snakeName}.dart`,
+					language: 'dart',
+					description: `Flutter ${name} native 3D perspective Euler matrix tilt widget.`,
+					code: `import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class ExhumaTiltCard extends StatefulWidget {
@@ -1805,8 +1805,8 @@ class _ExhumaTiltCardState extends State<ExhumaTiltCard> with SingleTickerProvid
   }
 }
 `,
-					},
-				];
+				},
+			];
 		}
 		default:
 			return null;

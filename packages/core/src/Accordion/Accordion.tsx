@@ -185,10 +185,7 @@ export const AccordionRoot: React.FC<AccordionRootProps> = ({
 				gap,
 			}}
 		>
-			<div
-				className={`exhuma-accordion-root flex w-full flex-col ${className}`}
-				style={{ gap: `${gap}px` }}
-			>
+			<div className={`exhuma-accordion-root flex w-full flex-col ${className}`} style={{ gap: `${gap}px` }}>
 				{children}
 			</div>
 		</AccordionContext.Provider>
@@ -203,14 +200,7 @@ export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
 	className?: string;
 }
 
-export const AccordionItem: React.FC<AccordionItemProps> = ({
-	value,
-	children,
-	bordered: itemBordered,
-	shadow: itemShadow,
-	className = '',
-	...props
-}) => {
+export const AccordionItem: React.FC<AccordionItemProps> = ({ value, children, bordered: itemBordered, shadow: itemShadow, className = '', ...props }) => {
 	const context = useAccordionContext();
 	const { expandedValues, registerItem, baseId, items, duration } = context;
 	const isOpen = expandedValues.has(value);
@@ -229,25 +219,17 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
 	const panelId = `${baseId}-panel-${value}`;
 
 	// Border styling: 100% working direct border classes
-	const borderClasses = bordered
-		? isOpen
-			? 'border border-primary/50 dark:border-primary/60 ring-1 ring-primary/20 z-10'
-			: 'border border-border/80 dark:border-neutral-800'
-		: 'border-0 ring-0';
+	const borderClasses = bordered ? (isOpen ? 'border border-primary/50 dark:border-primary/60 ring-1 ring-primary/20 z-10' : 'border border-border/80 dark:border-neutral-800') : 'border-0 ring-0';
 
 	// Shadow styling: clean elevation
-	const shadowClasses = shadow
-		? isOpen
-			? 'shadow-lg shadow-black/5 dark:shadow-white/5'
-			: 'shadow-sm'
-		: 'shadow-none';
+	const shadowClasses = shadow ? (isOpen ? 'shadow-lg shadow-black/5 dark:shadow-white/5' : 'shadow-sm') : 'shadow-none';
 
 	return (
 		<AccordionItemContext.Provider value={{ value, isOpen, triggerId, panelId, index }}>
 			<div
 				ref={itemRef}
 				style={{ transitionDuration: `${duration}ms`, ...props.style }}
-				className={`exhuma-accordion-item relative overflow-hidden rounded-2xl bg-card transition-all ${borderClasses} ${shadowClasses} ${className}`}
+				className={`exhuma-accordion-item bg-card relative overflow-hidden rounded-2xl transition-all ${borderClasses} ${shadowClasses} ${className}`}
 				{...props}
 			>
 				{children}
@@ -306,7 +288,7 @@ export const AccordionTrigger: React.FC<AccordionTriggerProps> = ({ children, sh
 			aria-controls={panelId}
 			onClick={() => toggleItem(value)}
 			onKeyDown={handleKeyDown}
-			className={`exhuma-accordion-trigger group flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left font-medium transition-colors select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:px-7 lg:py-5 ${className}`}
+			className={`exhuma-accordion-trigger group focus-visible:ring-primary flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left font-medium transition-colors select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none lg:px-7 lg:py-5 ${className}`}
 			{...props}
 		>
 			<span className='flex flex-1 items-center gap-3.5'>

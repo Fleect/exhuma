@@ -25,18 +25,7 @@ export interface NumberTickerProps extends React.HTMLAttributes<HTMLSpanElement>
  */
 export const NumberTicker = memo(
 	forwardRef<HTMLSpanElement, NumberTickerProps>(function NumberTicker(
-		{
-			value,
-			initialValue = 0,
-			duration = 1.5,
-			decimalPlaces = 0,
-			prefix = '',
-			suffix = '',
-			triggerOnScroll = true,
-			className = '',
-			style,
-			...props
-		},
+		{ value, initialValue = 0, duration = 1.5, decimalPlaces = 0, prefix = '', suffix = '', triggerOnScroll = true, className = '', style, ...props },
 		forwardedRef
 	) {
 		const containerRef = useRef<HTMLSpanElement>(null);
@@ -98,8 +87,7 @@ export const NumberTicker = memo(
 			}
 
 			// Honor prefers-reduced-motion: reduce
-			const prefersReducedMotion =
-				typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 			if (prefersReducedMotion) {
 				el.textContent = formatNumber(value);
@@ -142,16 +130,11 @@ export const NumberTicker = memo(
 		}, [triggerOnScroll, startTicker, formatNumber, initialValue, value]);
 
 		return (
-			<span
-				ref={containerRef}
-				className={`exhuma-number-ticker font-mono tracking-tight tabular-nums ${className}`}
-				style={style}
-				{...props}
-			>
-				<span ref={tickerRef} aria-hidden="true">
+			<span ref={containerRef} className={`exhuma-number-ticker font-mono tracking-tight tabular-nums ${className}`} style={style} {...props}>
+				<span ref={tickerRef} aria-hidden='true'>
 					{formatNumber(initialValue)}
 				</span>
-				<span className="sr-only">{formatNumber(value)}</span>
+				<span className='sr-only'>{formatNumber(value)}</span>
 			</span>
 		);
 	})

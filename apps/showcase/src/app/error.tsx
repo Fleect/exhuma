@@ -7,6 +7,7 @@ import { IconAlertTriangle as AlertTriangle, IconRefresh as Refresh, IconHome as
 export default function RootError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
 	React.useEffect(() => {
 		// Log exception to local telemetry or monitoring
+		// eslint-disable-next-line no-console
 		console.error('[Exhuma Runtime Error]:', error);
 	}, [error]);
 

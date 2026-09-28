@@ -2,14 +2,7 @@
 
 import React, { useRef, useState, useCallback, useEffect, useLayoutEffect, useId, createContext, useContext, memo, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import {
-	calculateElementCenter,
-	calculateTargetPosition,
-	clampTooltipToViewport,
-	dampCursorCoordinate,
-	type CursorTooltipVariant,
-	type CursorTooltipDirection,
-} from './cursor-math';
+import { calculateElementCenter, calculateTargetPosition, clampTooltipToViewport, dampCursorCoordinate, type CursorTooltipVariant, type CursorTooltipDirection } from './cursor-math';
 
 export type { CursorTooltipVariant, CursorTooltipDirection };
 
@@ -135,15 +128,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			const size = tooltipSizeRef.current;
 
 			if (mousePosRef.current.x >= 0) {
-				const target = calculateTargetPosition(
-					mousePosRef.current.x,
-					mousePosRef.current.y,
-					effectiveOffset.x,
-					effectiveOffset.y,
-					direction,
-					size.width,
-					size.height
-				);
+				const target = calculateTargetPosition(mousePosRef.current.x, mousePosRef.current.y, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 				targetPosRef.current = target;
 			}
 
@@ -194,15 +179,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			}
 
 			const size = tooltipSizeRef.current;
-			const target = calculateTargetPosition(
-				e.clientX,
-				e.clientY,
-				effectiveOffset.x,
-				effectiveOffset.y,
-				direction,
-				size.width,
-				size.height
-			);
+			const target = calculateTargetPosition(e.clientX, e.clientY, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 
 			targetPosRef.current = target;
 			setIsVisible(true);
@@ -227,15 +204,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			if ('pointerType' in e && e.pointerType === 'touch') return;
 			mousePosRef.current = { x: e.clientX, y: e.clientY };
 			const size = tooltipSizeRef.current;
-			const target = calculateTargetPosition(
-				e.clientX,
-				e.clientY,
-				effectiveOffset.x,
-				effectiveOffset.y,
-				direction,
-				size.width,
-				size.height
-			);
+			const target = calculateTargetPosition(e.clientX, e.clientY, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 			targetPosRef.current = target;
 			startRafIfNeeded();
 		},
@@ -248,15 +217,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			mousePosRef.current = { x: center.x, y: center.y };
 			currentPosRef.current = { x: center.x, y: center.y };
 			const size = tooltipSizeRef.current;
-			const target = calculateTargetPosition(
-				center.x,
-				center.y,
-				effectiveOffset.x,
-				effectiveOffset.y,
-				direction,
-				size.width,
-				size.height
-			);
+			const target = calculateTargetPosition(center.x, center.y, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 			targetPosRef.current = target;
 			setIsVisible(true);
 			startRafIfNeeded();

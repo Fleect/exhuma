@@ -15,15 +15,7 @@ export interface CursorPosition {
 
 export type CursorTooltipVariant = 'frosted' | 'accent' | 'dark' | 'minimal' | 'glow';
 
-export type CursorTooltipDirection =
-	| 'bottom-right'
-	| 'bottom-left'
-	| 'top-right'
-	| 'top-left'
-	| 'top'
-	| 'bottom'
-	| 'left'
-	| 'right';
+export type CursorTooltipDirection = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Calculates element center coordinates.

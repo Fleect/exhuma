@@ -19,15 +19,7 @@ export interface MagneticCoordinates {
  * When pointer is within radius R of center:
  *   displacement = (pointer - center) * strength * (1 - distance / R)
  */
-export function calculateMagneticPull(
-	pointerX: number,
-	pointerY: number,
-	centerX: number,
-	centerY: number,
-	radius: number,
-	strength: number = 0.4,
-	maxDisplacement: number = 40
-): MagneticCoordinates {
+export function calculateMagneticPull(pointerX: number, pointerY: number, centerX: number, centerY: number, radius: number, strength: number = 0.4, maxDisplacement: number = 40): MagneticCoordinates {
 	if (!Number.isFinite(pointerX) || !Number.isFinite(pointerY) || !Number.isFinite(centerX) || !Number.isFinite(centerY) || radius <= 0) {
 		return { x: 0, y: 0, distance: 0, isInside: false };
 	}
@@ -61,4 +53,3 @@ export function calculateMagneticPull(
 		isInside: true,
 	};
 }
-

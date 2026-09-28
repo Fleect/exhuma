@@ -24,23 +24,7 @@ export interface MagneticButtonProps extends ButtonHTMLAttributes<HTMLButtonElem
  */
 export const MagneticButton = memo(
 	React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
-		(
-			{
-				children,
-				strength = 0.35,
-				radius = 120,
-				springDamping = 18,
-				maxDisplacement = 36,
-				className = '',
-				style,
-				type = 'button',
-				asChild,
-				onPointerMove,
-				onPointerLeave,
-				...props
-			},
-			forwardedRef
-		) => {
+		({ children, strength = 0.35, radius = 120, springDamping = 18, maxDisplacement = 36, className = '', style, type = 'button', asChild, onPointerMove, onPointerLeave, ...props }, forwardedRef) => {
 			const buttonRef = useRef<HTMLButtonElement>(null);
 			React.useImperativeHandle(forwardedRef, () => buttonRef.current as HTMLButtonElement);
 
@@ -111,15 +95,7 @@ export const MagneticButton = memo(
 					const baseCenterX = rect.left - currentRef.current.x + rect.width / 2;
 					const baseCenterY = rect.top - currentRef.current.y + rect.height / 2;
 
-					const result = calculateMagneticPull(
-						e.clientX,
-						e.clientY,
-						baseCenterX,
-						baseCenterY,
-						radius,
-						strength,
-						maxDisplacement
-					);
+					const result = calculateMagneticPull(e.clientX, e.clientY, baseCenterX, baseCenterY, radius, strength, maxDisplacement);
 
 					targetRef.current.x = result.x;
 					targetRef.current.y = result.y;
@@ -170,4 +146,3 @@ export const MagneticButton = memo(
 );
 
 MagneticButton.displayName = 'MagneticButton';
-

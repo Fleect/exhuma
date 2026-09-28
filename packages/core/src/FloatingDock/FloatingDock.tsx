@@ -87,70 +87,73 @@ export const FloatingDock: React.FC<FloatingDockProps> & {
 		[baseSize]
 	);
 
-	const updateScales = useCallback((timestamp: number = performance.now()) => {
-		const isHovered = isHoveredRef.current;
-		const coord = pointerCoord.current;
-		const isHorizontal = direction === 'bottom' || direction === 'top';
-		const elements = itemsRef.current;
-		const count = elements.length;
+	const updateScales = useCallback(
+		(timestamp: number = performance.now()) => {
+			const isHovered = isHoveredRef.current;
+			const coord = pointerCoord.current;
+			const isHorizontal = direction === 'bottom' || direction === 'top';
+			const elements = itemsRef.current;
+			const count = elements.length;
 
-		if (count === 0) {
-			rafIdRef.current = null;
-			lastTimeRef.current = 0;
-			return;
-		}
-
-		if (!isHovered || coord === -9999) {
-			const dt = lastTimeRef.current > 0 ? Math.min((timestamp - lastTimeRef.current) / 1000, 0.05) : 0.016;
-			lastTimeRef.current = timestamp;
-
-			// Graceful exit decay back to baseSize with frame-rate independence
-			let stillDecaying = false;
-			for (let i = 0; i < count; i++) {
-				const el = elements[i];
-				const currentSize = currentSizesRef.current.get(el) ?? baseSize;
-				if (Math.abs(currentSize - baseSize) > 0.05) {
-					const nextSize = dampDockScale(currentSize, baseSize, 22, dt);
-					currentSizesRef.current.set(el, nextSize);
-					el.style.width = `${nextSize.toFixed(2)}px`;
-					el.style.height = `${nextSize.toFixed(2)}px`;
-					stillDecaying = true;
-				} else {
-					el.style.width = `${baseSize}px`;
-					el.style.height = `${baseSize}px`;
-					currentSizesRef.current.set(el, baseSize);
-				}
-			}
-			if (stillDecaying) {
-				rafIdRef.current = requestAnimationFrame(updateScales);
-			} else {
+			if (count === 0) {
 				rafIdRef.current = null;
 				lastTimeRef.current = 0;
+				return;
 			}
-			return;
-		}
 
-		lastTimeRef.current = 0;
+			if (!isHovered || coord === -9999) {
+				const dt = lastTimeRef.current > 0 ? Math.min((timestamp - lastTimeRef.current) / 1000, 0.05) : 0.016;
+				lastTimeRef.current = timestamp;
 
-		// When hovered: 120Hz continuous proximity magnification (Big-Ω: strictly separated read/write passes)
-		// Pass 1: Batched geometry measurement (reads only)
-		const centers = new Float64Array(count);
-		for (let i = 0; i < count; i++) {
-			const rect = elements[i].getBoundingClientRect();
-			centers[i] = isHorizontal ? rect.left + rect.width / 2 : rect.top + rect.height / 2;
-		}
+				// Graceful exit decay back to baseSize with frame-rate independence
+				let stillDecaying = false;
+				for (let i = 0; i < count; i++) {
+					const el = elements[i];
+					const currentSize = currentSizesRef.current.get(el) ?? baseSize;
+					if (Math.abs(currentSize - baseSize) > 0.05) {
+						const nextSize = dampDockScale(currentSize, baseSize, 22, dt);
+						currentSizesRef.current.set(el, nextSize);
+						el.style.width = `${nextSize.toFixed(2)}px`;
+						el.style.height = `${nextSize.toFixed(2)}px`;
+						stillDecaying = true;
+					} else {
+						el.style.width = `${baseSize}px`;
+						el.style.height = `${baseSize}px`;
+						currentSizesRef.current.set(el, baseSize);
+					}
+				}
+				if (stillDecaying) {
+					rafIdRef.current = requestAnimationFrame(updateScales);
+				} else {
+					rafIdRef.current = null;
+					lastTimeRef.current = 0;
+				}
+				return;
+			}
 
-		// Pass 2: Continuous scale calculation & batched style application (writes only)
-		for (let i = 0; i < count; i++) {
-			const el = elements[i];
-			const distance = Math.abs(coord - centers[i]);
-			const targetSize = calculateDockItemSize(distance, baseSize, influenceRadius, maxMagnification);
-			currentSizesRef.current.set(el, targetSize);
-			el.style.width = `${targetSize.toFixed(2)}px`;
-			el.style.height = `${targetSize.toFixed(2)}px`;
-		}
-		rafIdRef.current = null;
-	}, [baseSize, direction, influenceRadius, maxMagnification]);
+			lastTimeRef.current = 0;
+
+			// When hovered: 120Hz continuous proximity magnification (Big-Ω: strictly separated read/write passes)
+			// Pass 1: Batched geometry measurement (reads only)
+			const centers = new Float64Array(count);
+			for (let i = 0; i < count; i++) {
+				const rect = elements[i].getBoundingClientRect();
+				centers[i] = isHorizontal ? rect.left + rect.width / 2 : rect.top + rect.height / 2;
+			}
+
+			// Pass 2: Continuous scale calculation & batched style application (writes only)
+			for (let i = 0; i < count; i++) {
+				const el = elements[i];
+				const distance = Math.abs(coord - centers[i]);
+				const targetSize = calculateDockItemSize(distance, baseSize, influenceRadius, maxMagnification);
+				currentSizesRef.current.set(el, targetSize);
+				el.style.width = `${targetSize.toFixed(2)}px`;
+				el.style.height = `${targetSize.toFixed(2)}px`;
+			}
+			rafIdRef.current = null;
+		},
+		[baseSize, direction, influenceRadius, maxMagnification]
+	);
 
 	const scheduleUpdate = useCallback(() => {
 		if (rafIdRef.current === null) {

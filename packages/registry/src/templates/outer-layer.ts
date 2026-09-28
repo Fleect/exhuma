@@ -39,19 +39,8 @@ export interface ComponentOuterSpec {
 	compoundParts?: CompoundPart[];
 }
 
-export function generateOuterLayerFiles(
-	spec: ComponentOuterSpec,
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	options?: { eject?: boolean }
-): ComponentFilePayload[] {
-	const {
-		name,
-		slug,
-		pascalName,
-		defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md',
-		compoundParts = [],
-	} = spec;
+export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] {
+	const { name, slug, pascalName, defaultTailwindClass = 'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md', compoundParts = [] } = spec;
 
 	const isEjected = options?.eject === true;
 

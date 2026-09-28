@@ -337,11 +337,12 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const size = propSize ?? ctx.size ?? 'md';
 	const variant = ctx.variant ?? 'pill';
+	const { registerTrigger } = ctx;
 
 	useEffect(() => {
-		ctx.registerTrigger(value, triggerRef.current);
-		return () => ctx.registerTrigger(value, null);
-	}, [value, ctx.registerTrigger]);
+		registerTrigger(value, triggerRef.current);
+		return () => registerTrigger(value, null);
+	}, [value, registerTrigger]);
 
 	const id = `${ctx.baseId}-trigger-${value}`;
 	const panelId = `${ctx.baseId}-panel-${value}`;

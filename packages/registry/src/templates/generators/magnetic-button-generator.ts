@@ -4,11 +4,7 @@ function toDartDouble(val: number): string {
 	return Number.isInteger(val) ? `${val}.0` : `${val}`;
 }
 
-export function getMagneticButtonOuterFiles(
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	isEjected: boolean
-): ComponentFilePayload[] | null {
+export function getMagneticButtonOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const strength = Number(props.strength ?? 0.35);
 	const radius = Number(props.radius ?? 120);
 	const springDamping = Number(props.springDamping ?? 18);

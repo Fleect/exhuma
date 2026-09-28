@@ -1,10 +1,6 @@
 import { ComponentFilePayload, EcosystemFlavor } from '../../schema';
 
-export function getCursorTooltipOuterFiles(
-	flavor: EcosystemFlavor,
-	props: Record<string, unknown>,
-	isEjected: boolean
-): ComponentFilePayload[] | null {
+export function getCursorTooltipOuterFiles(flavor: EcosystemFlavor, props: Record<string, unknown>, isEjected: boolean): ComponentFilePayload[] | null {
 	const content = String(props.content ?? 'Explore Showcase');
 	const springDamping = Number(props.springDamping ?? 20);
 	const direction = String(props.direction ?? 'bottom-right');
@@ -3018,4 +3014,3 @@ export default function CursorTooltipDemo() {
 			};
 	}
 }
-
