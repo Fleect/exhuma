@@ -113,7 +113,7 @@ npx exhuma add stacking-cards
 npx exhuma add tilt-card --flavor=flutter
 
 # Overwrite existing component files
-npx exhuma add css-masonry --overwrite
+npx exhuma add masonry-grid --overwrite
 
 # Add all canonical components at once
 npx exhuma add --all`}
