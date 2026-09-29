@@ -52,3 +52,10 @@ export type {
 	DiamondItemProps,
 	DiamondLayoutVariant,
 } from './types';
+
+export { KineticGrid } from './KineticGrid/KineticGrid';
+export * from './KineticGrid/kinetic-grid-math';
+export { RowMasonry } from './RowMasonry/RowMasonry';
+export * from './RowMasonry/row-masonry-math';
+export { ParticleField } from './ParticleField/ParticleField';
+export * from './ParticleField/particle-math';

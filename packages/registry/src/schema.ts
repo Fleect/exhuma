@@ -49,7 +49,7 @@ export interface UniversalComponent {
 	id: string;
 	name: string;
 	slug: string;
-	category: 'cards' | 'layouts' | 'navigation' | 'primitives';
+	category: 'cards' | 'layouts' | 'navigation' | 'primitives' | 'typography' | 'buttons' | 'interactive';
 	description: string;
 	version: string;
 	props: PropDescriptor[];

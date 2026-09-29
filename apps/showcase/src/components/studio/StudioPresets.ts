@@ -28,6 +28,41 @@ export function toHexColor(color: unknown, fallback = '#ffffff'): string {
 
 // Architectural presets per component
 export const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>> = {
+	'huly-effect': {
+		Default: { glowColor: '#6366f1', ambientRadius: 40, intensity: 0.8, borderGlow: true },
+		'Crimson Aura': { glowColor: '#f43f5e', ambientRadius: 50, intensity: 0.9, borderGlow: true },
+		'Subtle Mist': { glowColor: '#06b6d4', ambientRadius: 30, intensity: 0.4, borderGlow: false },
+	},
+	'scratch-card': {
+		Default: { width: 300, height: 200, coverColor: '#c0c0c0', brushSize: 20, threshold: 0.65 },
+		'Gold Foil': { width: 300, height: 200, coverColor: '#d4af37', brushSize: 25, threshold: 0.60 },
+		'Fine Tip': { width: 300, height: 200, coverColor: '#808080', brushSize: 10, threshold: 0.70 },
+	},
+	'kinetic-grid': {
+		Default: { columns: 20, rows: 12, cellSize: 40, glowColor: '#6366f1', waveOnClick: true, proximityGlow: true, glowRadius: 3 },
+		'Dense Matrix': { columns: 30, rows: 18, cellSize: 24, glowColor: '#10b981', waveOnClick: true, proximityGlow: true, glowRadius: 4 },
+		'Sparse Neon': { columns: 12, rows: 8, cellSize: 64, glowColor: '#f43f5e', waveOnClick: true, proximityGlow: true, glowRadius: 2 },
+	},
+	'row-masonry': {
+		Default: { columns: 3, gap: 16, animateTransitions: true },
+		'Two Column': { columns: 2, gap: 24, animateTransitions: true },
+		'Dense Four': { columns: 4, gap: 12, animateTransitions: false },
+	},
+	'particle-field': {
+		Default: { particleCount: 60, particleColor: '#6366f1', particleSize: 2, repulsionRadius: 80, speed: 1.0, connectParticles: false },
+		'Constellation': { particleCount: 80, particleColor: '#c4b5fd', particleSize: 1.5, repulsionRadius: 60, speed: 0.5, connectParticles: true },
+		'Dense Dust': { particleCount: 150, particleColor: '#f59e0b', particleSize: 1, repulsionRadius: 50, speed: 1.5, connectParticles: false },
+	},
+	'text-scramble': {
+		Default: { text: 'Exhuma Studio', speed: 15, duration: 1200, trigger: 'mount' },
+		'Fast Decrypt': { text: 'INITIALIZING...', speed: 30, duration: 800, trigger: 'hover' },
+		'Slow Reveal': { text: 'Hello, World.', speed: 8, duration: 2400, trigger: 'inView' },
+	},
+	'text-shimmer': {
+		Default: { duration: 2.5, spread: 20, shimmerColor: '#ffffff', baseTextColor: '#4a4a6a', hoverAccelerate: false },
+		'Gold Sweep': { duration: 1.8, spread: 30, shimmerColor: '#fbbf24', baseTextColor: '#78530a', hoverAccelerate: true },
+		'Iridescent': { duration: 3.0, spread: 40, shimmerColor: '#c4b5fd', baseTextColor: '#2e1065', hoverAccelerate: false },
+	},
 	'stacking-cards': {
 		Default: { topStart: 20, topIncrement: 28, cardGap: 20, scaleThreshold: 150, minScale: 0.9, reverseScale: true },
 		'Subtle Elegance': { topStart: 20, topIncrement: 16, cardGap: 24, scaleThreshold: 180, minScale: 0.94, reverseScale: true },
@@ -282,5 +317,25 @@ export const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unk
 		'Compact Mobile': { direction: 'bottom', baseSize: 38, maxMagnification: 0.5, influenceRadius: 65, showLabels: true, panelStyle: 'glass' },
 		'Vertical Rail': { direction: 'right', baseSize: 40, maxMagnification: 0.7, influenceRadius: 75, showLabels: true, panelStyle: 'minimal' },
 		'Minimal Floating': { direction: 'bottom', baseSize: 44, maxMagnification: 0.85, influenceRadius: 90, showLabels: true, panelStyle: 'minimal' },
+	},
+	'shimmer-button': {
+		Default: { shimmerColor: '#ffffff', shimmerSize: 20, shimmerSpeed: 30, backgroundColor: '#000000', borderRadius: '8px', borderWidth: 1, tactilePress: true },
+		'Gold Laser': { shimmerColor: '#fbbf24', shimmerSize: 30, shimmerSpeed: 45, backgroundColor: '#1a0a00', borderRadius: '8px', borderWidth: 2, tactilePress: true },
+		'Neon Violet': { shimmerColor: '#a855f7', shimmerSize: 25, shimmerSpeed: 25, backgroundColor: '#0f0020', borderRadius: '100px', borderWidth: 1, tactilePress: true },
+	},
+	'click-effects': {
+		Default: { mode: 'shockwave', color: '#6366f1', duration: 600, sparkCount: 12 },
+		'Spark Burst': { mode: 'sparks', color: '#f59e0b', duration: 800, sparkCount: 16 },
+		'Water Ripple': { mode: 'ripple', color: '#06b6d4', duration: 900, sparkCount: 12 },
+	},
+	'confetti-burst': {
+		Default: { particleCount: 80, spread: 160, gravity: 800 },
+		'Heavy Shower': { particleCount: 160, spread: 360, gravity: 600 },
+		'Focused Burst': { particleCount: 50, spread: 60, gravity: 1000 },
+	},
+	drawer: {
+		Default: { backdropOpacity: 0.5, backdropBlur: false, dismissThreshold: 400 },
+		'Frosted Glass': { backdropOpacity: 0.3, backdropBlur: true, dismissThreshold: 300 },
+		'Strict Modal': { backdropOpacity: 0.8, backdropBlur: false, dismissThreshold: 600 },
 	},
 };

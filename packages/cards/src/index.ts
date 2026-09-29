@@ -17,3 +17,8 @@ export { calculateSplitPosition, calculateVerticalSplitPosition, generateClipPat
 export { ExpandableCard, ExpandableRoot, ExpandableTrigger, ExpandableContent, ExpandableClose } from './ExpandableCard/ExpandableCard';
 export { calculateFLIPDelta, generateInvertTransform, calculateRubberBandPull, calculateModalProgressTransform } from './ExpandableCard/flip-math';
 export type { HorizontalScrollerProps, StackingCardItemProps, StackingCardsProps, TiltCardProps, SpotlightCardProps, BorderBeamProps, CardSwipeStackProps, CardSwipeStackHandle, ComparisonSliderProps, ExpandableCardProps } from './types';
+
+export { HulyEffect } from './HulyEffect/HulyEffect';
+export { exponentialSmooth, toRelativePercent, buildHulyGradient } from './HulyEffect/huly-math';
+export { ScratchCard } from './ScratchCard/ScratchCard';
+export { estimateScratchRatio, scaledBrushRadius, isScratchComplete } from './ScratchCard/scratch-math';

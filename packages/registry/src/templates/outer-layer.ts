@@ -30,7 +30,7 @@ export interface ComponentOuterSpec {
 	id: string;
 	name: string;
 	slug: string;
-	category: 'cards' | 'layouts' | 'navigation' | 'primitives';
+	category: 'cards' | 'layouts' | 'navigation' | 'primitives' | 'typography' | 'buttons' | 'interactive';
 	pascalName: string;
 	snakeName: string;
 	description: string;

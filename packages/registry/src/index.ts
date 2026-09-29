@@ -18,6 +18,17 @@ import { cardSwipeStackComponent } from './components/card-swipe-stack';
 import { comparisonSliderComponent } from './components/comparison-slider';
 import { expandableCardComponent } from './components/expandable-card';
 import { cursorTooltipComponent } from './components/cursor-tooltip';
+import { shimmerButtonComponent } from './components/shimmer-button';
+import { clickEffectsComponent } from './components/click-effects';
+import { textScrambleComponent } from './components/text-scramble';
+import { textShimmerComponent } from './components/text-shimmer';
+import { confettiBurstComponent } from './components/confetti-burst';
+import { drawerComponent } from './components/drawer';
+import { hulyEffectComponent } from './components/huly-effect';
+import { scratchCardComponent } from './components/scratch-card';
+import { kineticGridComponent } from './components/kinetic-grid';
+import { rowMasonryComponent } from './components/row-masonry';
+import { particleFieldComponent } from './components/particle-field';
 
 export * from './schema';
 export { generateComponentUsage } from './templates/usage-generator';
@@ -42,6 +53,17 @@ export {
 	comparisonSliderComponent,
 	expandableCardComponent,
 	cursorTooltipComponent,
+	shimmerButtonComponent,
+	clickEffectsComponent,
+	textScrambleComponent,
+	textShimmerComponent,
+	confettiBurstComponent,
+	drawerComponent,
+	hulyEffectComponent,
+	scratchCardComponent,
+	kineticGridComponent,
+	rowMasonryComponent,
+	particleFieldComponent,
 };
 
 export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
@@ -64,6 +86,17 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'comparison-slider': comparisonSliderComponent,
 	'expandable-card': expandableCardComponent,
 	'cursor-tooltip': cursorTooltipComponent,
+	'shimmer-button': shimmerButtonComponent,
+	'click-effects': clickEffectsComponent,
+	'text-scramble': textScrambleComponent,
+	'text-shimmer': textShimmerComponent,
+	'confetti-burst': confettiBurstComponent,
+	drawer: drawerComponent,
+	'huly-effect': hulyEffectComponent,
+	'scratch-card': scratchCardComponent,
+	'kinetic-grid': kineticGridComponent,
+	'row-masonry': rowMasonryComponent,
+	'particle-field': particleFieldComponent,
 };
 
 export const ALL_COMPONENTS: UniversalComponent[] = Object.values(COMPONENT_REGISTRY);
@@ -88,6 +121,7 @@ export const CATEGORY_METADATA: Record<string, { label: string; order: number }>
 	layouts: { label: 'Responsive Layout Engines', order: 2 },
 	navigation: { label: 'Navigation & Rails', order: 3 },
 	primitives: { label: 'Kinetic Primitives & Disclosures', order: 4 },
+	typography: { label: 'Wave A Typography Primitives', order: 5 },
 };
 
 /**
