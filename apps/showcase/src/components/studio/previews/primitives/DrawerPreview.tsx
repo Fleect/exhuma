@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
+import { ComponentPreviewProps } from '../types';
 import { Drawer } from '@exhuma/core';
 
-export default function DrawerPreview(props: any) {
+export default function DrawerPreview({ props = {} }: ComponentPreviewProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -14,19 +16,20 @@ export default function DrawerPreview(props: any) {
 			</button>
 
 			<Drawer
-				{...props}
 				isOpen={isOpen}
 				onClose={() => setIsOpen(false)}
+				backdropOpacity={props.backdropOpacity as number}
+				backdropBlur={props.backdropBlur as boolean}
+				dismissThreshold={props.dismissThreshold as number}
 				className="bg-white text-gray-900 h-[60vh]"
 			>
-				<div className="p-4 flex flex-col space-y-4">
-					<h2 className="text-2xl font-bold">Interactive Drawer</h2>
-					<p className="text-gray-600">
-						This drawer implements the Exhuma Kinetic Methodology (EKM) with O(1)
-						rubber-banding, flick dismiss projection, and zero GC allocation in
-						the hot path.
+				<div className="p-6 flex flex-col gap-4">
+					<h2 className="text-2xl font-bold">Kinetic Drawer</h2>
+					<p className="text-gray-500 text-sm leading-relaxed">
+						Drag down to dismiss. Flick velocity triggers instant close.
+						Rubber-band damping on over-drag. All at 120 Hz via rAF.
 					</p>
-					<div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+					<div className="h-40 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm">
 						Content Area
 					</div>
 				</div>
