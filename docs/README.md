@@ -13,7 +13,7 @@ Welcome to the central documentation for **Exhuma**, a modern Universal Componen
 - [Cards Deep Dive](cards.md) — Detailed guide to `StackingCards` and `HorizontalScroller`.
 - [Layout Engines](layouts.md) — Understanding `CssMasonry`, `MacyMasonry`, and `AutoGrid`.
 - [Routing Framework](router.md) — Utilizing `LandingLayout`, `AuthLayout`, and `DashboardLayout`.
-- [Future Components Roadmap](future-components.md) — Post-beta roadmap and architecture for deferred kinetic primitives.
+- [Future Components Roadmap](future-components.md) — 23-component master wishlist and Beta expansion candidates.
 - [Provenance & Lineage](provenance.md) — Architectural lineage, governance, and licensing.
 
 ---
