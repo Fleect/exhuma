@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { calculateMagneticPull } from '../../packages/core/src/MagneticButton/magnetic-math';
+import { calculateMagneticPull, calculateMultiLayerDetachment, calculateShockwaveProgress, calculateShockwaveOrigin } from '../../packages/core/src/MagneticButton/magnetic-math';
 import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
 
 const component = getComponentBySlug('magnetic-button')!;
@@ -57,6 +57,60 @@ describe('MagneticButton — Mathematical Foundations & Vector Kinetics', () => 
 		expect(calculateMagneticPull(NaN, 100, 100, 100, 120, 0.4, 40).isInside).toBe(false);
 		expect(calculateMagneticPull(100, 100, 100, 100, -50, 0.4, 40).isInside).toBe(false);
 		expect(calculateMagneticPull(100, 100, 100, 100, 0, 0.4, 40).isInside).toBe(false);
+	});
+
+	it('computes dual-tier Apple iPadOS multi-layer magnetic detachment', () => {
+		// Pointer at (160, 100), center at (100, 100), radius = 120
+		// Base pull displacement: dx = 60, attenuation = 0.5 -> pull = 30
+		// Housing displacement: 30 * 0.25 = 7.5
+		// Content displacement: 30 * 0.65 = 19.5
+		const res = calculateMultiLayerDetachment(160, 100, 100, 100, 120, 0.25, 0.65);
+		expect(res.isInside).toBe(true);
+		expect(res.housing.x).toBe(7.5);
+		expect(res.housing.y).toBe(0);
+		expect(res.content.x).toBe(19.5);
+		expect(res.content.y).toBe(0);
+
+		// Outside radius
+		const out = calculateMultiLayerDetachment(300, 300, 100, 100, 120, 0.25, 0.65);
+		expect(out.isInside).toBe(false);
+		expect(out.housing).toEqual({ x: 0, y: 0 });
+		expect(out.content).toEqual({ x: 0, y: 0 });
+	});
+
+	it('computes radial shockwave radius expansion and opacity decay on click', () => {
+		// At t = 0
+		expect(calculateShockwaveProgress(0)).toEqual({ radius: 0, opacity: 0.8 });
+
+		// At t = 175ms (halfway of 350ms)
+		const mid = calculateShockwaveProgress(175, 60, 350);
+		expect(mid.radius).toBeGreaterThan(0);
+		expect(mid.radius).toBeLessThan(60);
+		expect(mid.opacity).toBeCloseTo(0.4, 1);
+
+		// At t = 350ms (complete)
+		expect(calculateShockwaveProgress(350, 60, 350)).toEqual({ radius: 60, opacity: 0 });
+	});
+
+	it('calculates shockwave origin coordinates at the exact click point and compensates for scale', () => {
+		// Button rect: left = 100, top = 50, width = 200, height = 40
+		// Pointer click at (150, 60) -> clickX = 50, clickY = 10
+		const origin = calculateShockwaveOrigin(150, 60, 100, 50, 200, 40);
+		expect(origin.x).toBe(50);
+		expect(origin.y).toBe(10);
+		expect(origin.maxRadius).toBe(56);
+
+		// With active scale compression (scale = 0.95):
+		// Pointer click at (147.5, 59.5) -> clickX = 47.5 / 0.95 = 50, clickY = 9.5 / 0.95 = 10
+		const scaled = calculateShockwaveOrigin(147.5, 59.5, 100, 50, 200, 40, 56, 0.95, 0.95);
+		expect(scaled.x).toBe(50);
+		expect(scaled.y).toBe(10);
+
+		// Non-finite fallback defaults to center (width / 2, height / 2)
+		const fallback = calculateShockwaveOrigin(NaN, NaN, 100, 50, 200, 40);
+		expect(fallback.x).toBe(100);
+		expect(fallback.y).toBe(20);
+		expect(fallback.maxRadius).toBe(56);
 	});
 });
 

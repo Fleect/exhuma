@@ -3,7 +3,7 @@ import { TiltCard } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function TiltCardPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const maxTilt = Number(propValues.maxTilt ?? 15);
 	const perspective = Number(propValues.perspective ?? 1000);

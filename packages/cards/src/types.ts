@@ -175,6 +175,16 @@ export interface TiltCardProps extends React.HTMLAttributes<HTMLDivElement> {
 	 */
 	axis?: 'all' | 'x' | 'y';
 	/**
+	 * Whether to render a specular radial glare reflection layer.
+	 * Default: false
+	 */
+	glare?: boolean;
+	/**
+	 * Peak opacity of specular glare reflection layer [0..1].
+	 * Default: 0.25
+	 */
+	maxGlareOpacity?: number;
+	/**
 	 * Additional CSS class for card container
 	 */
 	className?: string;
@@ -287,10 +297,20 @@ export interface BorderBeamProps {
 	 * Default: 16
 	 */
 	borderRadius?: number;
+	/**
+	 * Number of equidistant beams sweeping the perimeter path (1 to 8).
+	 * Overrides doubleBeam when provided.
+	 */
+	beamCount?: number;
+	/**
+	 * Reverse the direction of the beam perimeter sweep (counter-clockwise).
+	 * Default: false
+	 */
+	reverse?: boolean;
 	className?: string;
 	style?: CSSProperties;
 }
 
-export type { CardSwipeStackProps } from './CardSwipeStack/CardSwipeStack';
+export type { CardSwipeStackProps, CardSwipeStackHandle } from './CardSwipeStack/CardSwipeStack';
 export type { ComparisonSliderProps } from './ComparisonSlider/ComparisonSlider';
 export type { ExpandableCardProps } from './ExpandableCard/ExpandableCard';

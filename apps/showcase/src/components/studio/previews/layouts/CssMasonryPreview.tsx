@@ -4,7 +4,7 @@ import { CssMasonry, CssMasonryItem } from '@exhuma/layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function CssMasonryPreview(props: ComponentPreviewProps & { viewportMode?: string }) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const { viewportMode } = props;
 
 	const columns = Number(propValues.columns ?? 3);

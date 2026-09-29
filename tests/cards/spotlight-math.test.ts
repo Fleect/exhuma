@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateSpotlightCoordinates, generateSpotlightStyle, validateSpotlightRadius, validateSpotlightOpacity, validateSpotlightSpread } from '../../packages/cards/src/SpotlightCard/spotlight-math';
+import { calculateSpotlightCoordinates, generateSpotlightStyle, validateSpotlightRadius, validateSpotlightOpacity, validateSpotlightSpread, calculateGaussianIntensity, calculateRelativeSpotlightVector } from '../../packages/cards/src/SpotlightCard/spotlight-math';
 import { solveCriticallyDampedSpring } from '../../packages/core/src/physics/spring';
 import { exponentialSmoothing, normalizeCoordinate, clamp } from '../../packages/core/src/physics/lerp';
 
@@ -63,6 +63,36 @@ describe('Exhuma Kinetic Methodology — Spotlight Math & Physics', () => {
 		expect(validateSpotlightSpread(-5)).toBe(10);
 		expect(validateSpotlightSpread(150)).toBe(100);
 		expect(validateSpotlightSpread(NaN)).toBe(80);
+	});
+
+	it('computes Gaussian radial falloff intensity across horizon distances', () => {
+		// Distance 0 should yield peak opacity
+		expect(calculateGaussianIntensity(0, 350, 0.8)).toBe(0.8);
+
+		// Distance > 0 should attenuate smoothly
+		const halfRadius = calculateGaussianIntensity(175, 350, 0.8);
+		expect(halfRadius).toBeLessThan(0.8);
+		expect(halfRadius).toBeGreaterThan(0.3);
+
+		// Distance far outside radius should asymptotically approach zero
+		const farAway = calculateGaussianIntensity(1000, 350, 0.8);
+		expect(farAway).toBeLessThan(0.001);
+	});
+
+	it('computes relative vector coordinates and closest Euclidean distance to card', () => {
+		const cardRect = { left: 100, top: 100, width: 200, height: 150 };
+
+		// Point directly inside card: distance = 0
+		const inside = calculateRelativeSpotlightVector(150, 150, cardRect);
+		expect(inside.x).toBe(50);
+		expect(inside.y).toBe(50);
+		expect(inside.distance).toBe(0);
+
+		// Point 50px to the right of card
+		const right = calculateRelativeSpotlightVector(350, 150, cardRect);
+		expect(right.x).toBe(250);
+		expect(right.y).toBe(50);
+		expect(right.distance).toBe(50);
 	});
 });
 

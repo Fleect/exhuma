@@ -3,7 +3,7 @@ import { Accordion } from '@exhuma/core';
 import { ComponentPreviewProps } from '../types';
 
 export function AccordionPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const mode = (propValues.mode === 'multiple' ? 'multiple' : 'single') as 'single' | 'multiple';
 	const collapsible = propValues.collapsible !== false;
 	const gap = Number(propValues.gap ?? 12);

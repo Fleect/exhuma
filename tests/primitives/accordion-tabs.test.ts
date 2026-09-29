@@ -284,4 +284,75 @@ describe('Accordion — Big-Omega (Ω) Kinetics & State Reconciliation', () => {
 	});
 });
 
+describe('MorphingTabs — Pure tabs-math Kernel (EKM)', () => {
+	it('calculates volume-preserving liquid pill stretch adhering to affine incompressible invariant', async () => {
+		const { calculateLiquidPillStretch } = await import('../../packages/core/src/MorphingTabs/tabs-math');
+
+		// At rest
+		const rest = calculateLiquidPillStretch(0);
+		expect(rest.scaleX).toBe(1);
+		expect(rest.scaleY).toBe(1);
+
+		// At high velocity
+		const active = calculateLiquidPillStretch(400, 800, 0.35);
+		expect(active.scaleX).toBeGreaterThan(1);
+		expect(active.scaleY).toBeLessThan(1);
+		// Conservation of volume: scaleX * scaleY^2 ~= 1
+		const volume = active.scaleX * Math.pow(active.scaleY, 2);
+		expect(volume).toBeCloseTo(1, 1);
+
+		// Clamp at maxVelocity
+		const clamped = calculateLiquidPillStretch(1600, 800, 0.35);
+		expect(clamped.scaleX).toBe(1.35);
+	});
+
+	it('computes circular roving index navigation with modulo wrapping', async () => {
+		const { calculateRovingIndex } = await import('../../packages/core/src/MorphingTabs/tabs-math');
+
+		expect(calculateRovingIndex(0, 1, 4)).toBe(1);
+		expect(calculateRovingIndex(3, 1, 4)).toBe(0); // Wrap forward
+		expect(calculateRovingIndex(0, -1, 4)).toBe(3); // Wrap backward
+		expect(calculateRovingIndex(2, -1, 4)).toBe(1);
+		expect(calculateRovingIndex(0, 0, 0)).toBe(0);
+	});
+});
+
+describe('Accordion — Pure accordion-math Physics Kernel (EKM)', () => {
+	it('solves second-order spring height progression asymptotically converging to target height', async () => {
+		const { solveAccordionSpring } = await import('../../packages/core/src/Accordion/accordion-math');
+
+		const target = 320;
+		expect(solveAccordionSpring(0, target)).toBe(0);
+		expect(solveAccordionSpring(-1, target)).toBe(0);
+
+		const step1 = solveAccordionSpring(0.05, target, 28, 1.0);
+		expect(step1).toBeGreaterThan(0);
+		expect(step1).toBeLessThan(target);
+
+		const settled = solveAccordionSpring(0.5, target, 28, 1.0);
+		expect(settled).toBeCloseTo(target, 0);
+
+		// Underdamped spring
+		const underdamped = solveAccordionSpring(0.15, target, 28, 0.85);
+		expect(underdamped).toBeGreaterThan(0);
+	});
+
+	it('calculates deterministic cascade stagger delays for multi-panel expansion', async () => {
+		const { calculateCascadeDelay } = await import('../../packages/core/src/Accordion/accordion-math');
+
+		expect(calculateCascadeDelay(0, 35)).toBe(0);
+		expect(calculateCascadeDelay(1, 35)).toBe(35);
+		expect(calculateCascadeDelay(2, 35)).toBe(70);
+		expect(calculateCascadeDelay(3, 40)).toBe(120);
+	});
+
+	it('returns signature counter-rotating morphing icon angles', async () => {
+		const { calculateMorphingIconAngles } = await import('../../packages/core/src/Accordion/accordion-math');
+
+		expect(calculateMorphingIconAngles(false)).toEqual({ bar1: -180, bar2: -90 });
+		expect(calculateMorphingIconAngles(true)).toEqual({ bar1: 0, bar2: 0 });
+	});
+});
+
+
 

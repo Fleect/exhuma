@@ -3,14 +3,15 @@ import { MorphingTabs } from '@exhuma/core';
 import { ComponentPreviewProps } from '../types';
 
 export function MorphingTabsPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const springStiffness = typeof propValues.springStiffness === 'number' ? propValues.springStiffness : 26;
 	const variant = (propValues.variant as 'pill' | 'underline' | 'glow') || 'pill';
 	const size = (propValues.size as 'sm' | 'md' | 'lg') || 'md';
+	const liquidStretch = Boolean(propValues.liquidStretch ?? false);
 
 	return (
 		<div className='mx-auto w-full max-w-lg p-4'>
-			<MorphingTabs.Root defaultValue='dashboard' springStiffness={springStiffness} variant={variant} size={size}>
+			<MorphingTabs.Root defaultValue='dashboard' springStiffness={springStiffness} variant={variant} size={size} liquidStretch={liquidStretch}>
 				<MorphingTabs.List className='w-full justify-between'>
 					<MorphingTabs.Indicator springStiffness={springStiffness} variant={variant} />
 					<MorphingTabs.Trigger value='dashboard' size={size} className='flex-1'>

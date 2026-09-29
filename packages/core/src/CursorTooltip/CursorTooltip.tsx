@@ -45,6 +45,7 @@ export interface CursorTooltipProps extends Omit<React.HTMLAttributes<HTMLDivEle
 }
 
 const VARIANT_CLASSES: Record<CursorTooltipVariant, string> = {
+	'morph-card': 'bg-background shadow-2xl rounded-2xl border',
 	frosted: 'border border-white/20 bg-background/80 text-foreground dark:border-white/10 dark:bg-card/75 shadow-xl backdrop-blur-2xl rounded-xl',
 	accent: 'border border-primary/50 bg-primary text-primary-foreground shadow-lg shadow-primary/25 rounded-full font-bold',
 	dark: 'border border-zinc-800 bg-zinc-950 text-zinc-100 shadow-2xl rounded-lg',
@@ -86,12 +87,14 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 }) => {
 	const tooltipId = useId();
 	const [isVisible, setIsVisible] = useState(false);
+	const isVisibleRef = useRef(false);
 	const [contentNode, setContentNode] = useState<ReactNode>(content);
 	const mousePosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const targetPosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const currentPosRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 	const tooltipSizeRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
 	const tooltipElRef = useRef<HTMLDivElement | null>(null);
+	const triggerElRef = useRef<HTMLElement | null>(null);
 	const rafIdRef = useRef<number | null>(null);
 	const lastTimeRef = useRef<number>(0);
 	const [mounted, setMounted] = useState(false);
@@ -111,15 +114,14 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 		}
 	}, [content]);
 
-	useLayoutEffect(() => {
-		if (tooltipElRef.current) {
-			const rect = tooltipElRef.current.getBoundingClientRect();
-			tooltipSizeRef.current = { width: rect.width, height: rect.height };
-		}
-	}, [contentNode, isVisible]);
-
 	const updateRafLoop = useCallback(
 		(timestamp: number) => {
+			if (!isVisibleRef.current) {
+				rafIdRef.current = null;
+				lastTimeRef.current = 0;
+				return;
+			}
+
 			if (!lastTimeRef.current) lastTimeRef.current = timestamp;
 			const dt = Math.min((timestamp - lastTimeRef.current) / 1000, 0.05);
 			lastTimeRef.current = timestamp;
@@ -127,8 +129,11 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			const cur = currentPosRef.current;
 			const size = tooltipSizeRef.current;
 
-			if (mousePosRef.current.x >= 0) {
-				const target = calculateTargetPosition(mousePosRef.current.x, mousePosRef.current.y, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
+			const targetX = mousePosRef.current.x;
+			const targetY = mousePosRef.current.y;
+
+			if (targetX >= 0) {
+				const target = calculateTargetPosition(targetX, targetY, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 				targetPosRef.current = target;
 			}
 
@@ -150,14 +155,14 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			}
 
 			const dist = Math.hypot(target.x - cur.x, target.y - cur.y);
-			if (dist > 0.2 && isVisible) {
+			if (dist > 0.2 && isVisibleRef.current) {
 				rafIdRef.current = requestAnimationFrame(updateRafLoop);
 			} else {
 				rafIdRef.current = null;
 				lastTimeRef.current = 0;
 			}
 		},
-		[springDamping, direction, effectiveOffset.x, effectiveOffset.y, collisionPadding, isVisible]
+		[springDamping, direction, effectiveOffset.x, effectiveOffset.y, collisionPadding]
 	);
 
 	const startRafIfNeeded = useCallback(() => {
@@ -167,9 +172,22 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 		}
 	}, [updateRafLoop]);
 
+	useLayoutEffect(() => {
+		if (tooltipElRef.current) {
+			const rect = tooltipElRef.current.getBoundingClientRect();
+			if (rect.width > 0 && rect.height > 0) {
+				tooltipSizeRef.current = { width: rect.width, height: rect.height };
+			}
+		}
+		if (isVisibleRef.current) {
+			startRafIfNeeded();
+		}
+	}, [contentNode, isVisible, startRafIfNeeded]);
+
 	const show = useCallback(
 		(e: React.MouseEvent<HTMLElement> | React.PointerEvent<HTMLElement>) => {
 			if ('pointerType' in e && e.pointerType === 'touch') return;
+			triggerElRef.current = e.currentTarget;
 			mousePosRef.current = { x: e.clientX, y: e.clientY };
 
 			// Initialize position at element center if first appearance
@@ -180,16 +198,19 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 
 			const size = tooltipSizeRef.current;
 			const target = calculateTargetPosition(e.clientX, e.clientY, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
-
 			targetPosRef.current = target;
+			isVisibleRef.current = true;
 			setIsVisible(true);
+
 			startRafIfNeeded();
 		},
 		[effectiveOffset.x, effectiveOffset.y, direction, startRafIfNeeded]
 	);
 
 	const hide = useCallback(() => {
+		isVisibleRef.current = false;
 		setIsVisible(false);
+		triggerElRef.current = null;
 		mousePosRef.current = { x: -9999, y: -9999 };
 		currentPosRef.current = { x: -9999, y: -9999 };
 		targetPosRef.current = { x: -9999, y: -9999 };
@@ -202,7 +223,9 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 	const update = useCallback(
 		(e: React.MouseEvent<HTMLElement> | React.PointerEvent<HTMLElement>) => {
 			if ('pointerType' in e && e.pointerType === 'touch') return;
+			triggerElRef.current = e.currentTarget;
 			mousePosRef.current = { x: e.clientX, y: e.clientY };
+
 			const size = tooltipSizeRef.current;
 			const target = calculateTargetPosition(e.clientX, e.clientY, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 			targetPosRef.current = target;
@@ -219,6 +242,7 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 			const size = tooltipSizeRef.current;
 			const target = calculateTargetPosition(center.x, center.y, effectiveOffset.x, effectiveOffset.y, direction, size.width, size.height);
 			targetPosRef.current = target;
+			isVisibleRef.current = true;
 			setIsVisible(true);
 			startRafIfNeeded();
 			onFocus?.(e as any);
@@ -293,7 +317,9 @@ export const CursorTooltip: React.FC<CursorTooltipProps> & {
 							tooltipElRef.current = node;
 							if (node) {
 								const rect = node.getBoundingClientRect();
-								tooltipSizeRef.current = { width: rect.width, height: rect.height };
+								if (rect.width > 0 && rect.height > 0) {
+									tooltipSizeRef.current = { width: rect.width, height: rect.height };
+								}
 							}
 						}}
 						className={`pointer-events-none fixed top-0 left-0 z-50 transition-opacity duration-150 will-change-transform ${contentClassName}`}

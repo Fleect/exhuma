@@ -124,3 +124,54 @@ export function calculateElasticDamping(dx: number, maxDistance: number = 80, ex
 	const damped = Math.pow(Math.abs(dx), exponent) * scale;
 	return sign * Math.min(damped, maxDistance);
 }
+
+export type SwipeDirection4Way = 'left' | 'right' | 'up' | 'down' | null;
+
+export interface SwipeDecision4Way {
+	isDismissed: boolean;
+	direction: SwipeDirection4Way;
+}
+
+/**
+ * Evaluates 4-way gesture swipe decision (Left/Right/Up/Down) based on orthogonal energy dominance.
+ */
+export function evaluateMultiAxisSwipeDecision(
+	dx: number,
+	dy: number,
+	vx: number,
+	vy: number,
+	thresholdDistance: number = 120,
+	thresholdVelocity: number = 550
+): SwipeDecision4Way {
+	const isHorizontal = Math.abs(dx) >= Math.abs(dy);
+
+	if (isHorizontal) {
+		if (dx > thresholdDistance || vx > thresholdVelocity) {
+			return { isDismissed: true, direction: 'right' };
+		}
+		if (dx < -thresholdDistance || vx < -thresholdVelocity) {
+			return { isDismissed: true, direction: 'left' };
+		}
+	} else {
+		if (dy > thresholdDistance || vy > thresholdVelocity) {
+			return { isDismissed: true, direction: 'down' };
+		}
+		if (dy < -thresholdDistance || vy < -thresholdVelocity) {
+			return { isDismissed: true, direction: 'up' };
+		}
+	}
+
+	return { isDismissed: false, direction: null };
+}
+
+/**
+ * Calculates reverse trajectory coordinates for undo restitution spring.
+ */
+export function calculateUndoTrajectory(progress: number, exitX: number, exitY: number): { x: number; y: number } {
+	const t = Math.max(0, Math.min(1, progress));
+	const factor = 1 - t * t * (3 - 2 * t);
+	return {
+		x: Number((exitX * factor).toFixed(2)),
+		y: Number((exitY * factor).toFixed(2)),
+	};
+}

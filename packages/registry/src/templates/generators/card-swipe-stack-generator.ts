@@ -6,6 +6,7 @@ export function getCardSwipeStackOuterFiles(flavor: EcosystemFlavor, props: Reco
 	const scaleStep = Number(props.scaleStep ?? 0.05);
 	const offsetStep = Number(props.offsetStep ?? 14);
 	const preventLastCardDismiss = Boolean(props.preventLastCardDismiss ?? true);
+	const loop = Boolean(props.loop ?? false);
 
 	switch (flavor) {
 		case 'react':
@@ -29,6 +30,7 @@ export interface CardSwipeStackProps<T = unknown> {
   scaleStep?: number;
   offsetStep?: number;
   preventLastCardDismiss?: boolean;
+  loop?: boolean;
   className?: string;
 }
 
@@ -244,6 +246,7 @@ interface Props {
   scaleStep?: number;
   offsetStep?: number;
   preventLastCardDismiss?: boolean;
+  loop?: boolean;
   class?: string;
 }
 
@@ -437,6 +440,7 @@ const onPointerUp = (e: PointerEvent) => {
     scaleStep?: number;
     offsetStep?: number;
     preventLastCardDismiss?: boolean;
+    loop?: boolean;
     class?: string;
     card?: import('svelte').Snippet<[T, number]>;
     children?: import('svelte').Snippet;
@@ -630,6 +634,7 @@ export interface CardSwipeStackProps<T = any> {
   scaleStep?: number;
   offsetStep?: number;
   preventLastCardDismiss?: boolean;
+  loop?: boolean;
   class?: string;
   onSwipe?: (item: T, direction: 'left' | 'right') => void;
 }
@@ -1025,6 +1030,7 @@ interface Props {
   scaleStep?: number;
   offsetStep?: number;
   preventLastCardDismiss?: boolean;
+  loop?: boolean;
   class?: string;
   className?: string;
 }
@@ -1953,6 +1959,7 @@ export interface CardSwipeStackProps<T = unknown> {
   scaleStep?: number;
   offsetStep?: number;
   preventLastCardDismiss?: boolean;
+  loop?: boolean;
   onSwipe?: (item: T, direction: 'left' | 'right') => void;
 }
 
@@ -2263,6 +2270,7 @@ export function getCardSwipeStackUsage(flavor: EcosystemFlavor, props: Record<st
 	const scaleStep = Number(props.scaleStep ?? 0.05);
 	const offsetStep = Number(props.offsetStep ?? 14);
 	const preventLastCardDismiss = props.preventLastCardDismiss !== false;
+	const loop = Boolean(props.loop ?? false);
 
 	switch (flavor) {
 		case 'nextjs': {
@@ -2290,6 +2298,7 @@ export default function SwipeStackDemo() {
         scaleStep={${scaleStep}}
         offsetStep={${offsetStep}}
         preventLastCardDismiss={${preventLastCardDismiss}}
+        loop={${loop}}
         className="w-full max-w-sm"
         items={ITEMS}
         onSwipe={(item, dir) => console.log('Swiped:', item.title, dir)}
@@ -2335,6 +2344,7 @@ export default function SwipeStackDemo() {
         scaleStep={${scaleStep}}
         offsetStep={${offsetStep}}
         preventLastCardDismiss={${preventLastCardDismiss}}
+        loop={${loop}}
         className="w-full max-w-sm"
         items={ITEMS}
         onSwipe={(item, dir) => console.log('Swiped:', item.title, dir)}
@@ -2419,6 +2429,7 @@ const items = [
     scaleStep={${scaleStep}}
     offsetStep={${offsetStep}}
     preventLastCardDismiss={${preventLastCardDismiss}}
+    loop={${loop}}
     {items}
     class="w-full max-w-sm"
   >
@@ -2457,6 +2468,7 @@ export default function SwipeStackDemo() {
         scaleStep={${scaleStep}}
         offsetStep={${offsetStep}}
         preventLastCardDismiss={${preventLastCardDismiss}}
+        loop={${loop}}
         class="w-full max-w-sm"
         items={ITEMS}
         renderCard={(item) => (
@@ -2497,6 +2509,7 @@ const items = [
     scaleStep={${scaleStep}}
     offsetStep={${offsetStep}}
     preventLastCardDismiss={${preventLastCardDismiss}}
+    loop={${loop}}
     items={items}
     className="w-full max-w-sm"
   />
@@ -2525,6 +2538,7 @@ import { CardSwipeStackComponent } from '@/components/ui/card-swipe-stack.compon
         [scaleStep]="${scaleStep}"
         [offsetStep]="${offsetStep}"
         [preventLastCardDismiss]="${preventLastCardDismiss}"
+        [loop]="${loop}"
         class="w-full max-w-sm"
       />
     </div>
@@ -2645,6 +2659,7 @@ export default function SwipeStackDemo() {
         scaleStep={${scaleStep}}
         offsetStep={${offsetStep}}
         preventLastCardDismiss={${preventLastCardDismiss}}
+        loop={${loop}}
         items={ITEMS}
         renderCard={(item) => (
           <View style={styles.card}>

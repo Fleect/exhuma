@@ -4,7 +4,7 @@ import { InfiniteMarquee } from '@exhuma/layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function InfiniteMarqueePreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const speed = Number(propValues.speed ?? 40);
 	const direction = (propValues.direction as 'left' | 'right') ?? 'left';
@@ -14,6 +14,8 @@ export default function InfiniteMarqueePreview(props: ComponentPreviewProps) {
 	const fadeWidth = Number(propValues.fadeWidth ?? 48);
 	const fadeEdgeColor = String(propValues.fadeEdgeColor || '#ffffff');
 	const fadeEdgeColorDark = String(propValues.fadeEdgeColorDark || '#09090b');
+	const scrollCoupling = Boolean(propValues.scrollCoupling ?? false);
+	const directionHysteresis = Boolean(propValues.directionHysteresis ?? false);
 
 	return (
 		<div className='w-full overflow-hidden py-6'>
@@ -26,6 +28,8 @@ export default function InfiniteMarqueePreview(props: ComponentPreviewProps) {
 				fadeWidth={fadeWidth}
 				fadeEdgeColor={fadeEdgeColor}
 				fadeEdgeColorDark={fadeEdgeColorDark}
+				scrollCoupling={scrollCoupling}
+				directionHysteresis={directionHysteresis}
 			>
 				{[
 					{ label: '120Hz ProMotion', tag: 'Kinetic', status: 'Active' },

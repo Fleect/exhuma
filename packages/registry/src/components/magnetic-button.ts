@@ -57,6 +57,20 @@ export const magneticButtonComponent: UniversalComponent = {
 			defaultValue: 'Magnetic Attraction',
 			description: 'Inner label text for the button.',
 		},
+		{
+			name: 'dualTier',
+			label: 'Dual Tier',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Dual-layer displacement split between housing and content.',
+		},
+		{
+			name: 'shockwave',
+			label: 'Shockwave',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Radial expanding ring on click.',
+		},
 	],
 	defaultProps: {
 		strength: 0.35,
@@ -64,6 +78,8 @@ export const magneticButtonComponent: UniversalComponent = {
 		springDamping: 18,
 		maxDisplacement: 36,
 		text: 'Magnetic Attraction',
+		dualTier: false,
+		shockwave: false,
 	},
 	dependencies: CORE_COMPONENT_DEPENDENCIES,
 	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateTilt, calculateGlare, generateTiltTransform, generateGlareStyle, lerp } from '../../packages/cards/src/TiltCard/tilt-math';
+import { calculateTilt, calculateGlare, generateTiltTransform, generateGlareStyle, lerp, calculateParallaxOffset, generateParallaxTransform } from '../../packages/cards/src/TiltCard/tilt-math';
 
 describe('Exhuma Kinetic Methodology — Tilt Card Mathematical Kernel', () => {
 	const CARD_WIDTH = 400;
@@ -148,6 +148,34 @@ describe('Exhuma Kinetic Methodology — Tilt Card Mathematical Kernel', () => {
 
 			// After 60 frames with speed 0.12, remaining delta should be < 0.01
 			expect(Math.abs(target - current)).toBeLessThan(0.01);
+		});
+	});
+
+	describe('calculateParallaxOffset() & generateParallaxTransform() — Diorama 3D Parallax', () => {
+		it('returns zero offset when rotation is zero or depth is zero', () => {
+			expect(calculateParallaxOffset(0, 0, MAX_TILT, 20)).toEqual({ x: 0, y: 0 });
+			expect(calculateParallaxOffset(10, 10, MAX_TILT, 0)).toEqual({ x: 0, y: 0 });
+			expect(calculateParallaxOffset(10, 10, 0, 20)).toEqual({ x: 0, y: 0 });
+		});
+
+		it('calculates exact diorama translation offsets proportional to tilt and depth', () => {
+			// Yaw rotY = 10, maxTilt = 20 -> normRotY = 0.5; Pitch rotX = 5, maxTilt = 20 -> normRotX = 0.25; depth = 20
+			// x = 0.5 * 20 = 10; y = -0.25 * 20 = -5
+			const offset = calculateParallaxOffset(5, 10, MAX_TILT, 20);
+			expect(offset.x).toBe(10);
+			expect(offset.y).toBe(-5);
+		});
+
+		it('supports negative depth for recessed background layers', () => {
+			// rotY = 10, rotX = 5, depth = -10
+			// x = 0.5 * -10 = -5; y = -0.25 * -10 = 2.5
+			const offset = calculateParallaxOffset(5, 10, MAX_TILT, -10);
+			expect(offset.x).toBe(-5);
+			expect(offset.y).toBe(2.5);
+		});
+
+		it('synthesizes hardware-composited translate3d transform string', () => {
+			expect(generateParallaxTransform(12.5, -6.2)).toBe('translate3d(12.50px, -6.20px, 0)');
 		});
 	});
 });

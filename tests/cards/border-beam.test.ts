@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BorderBeam } from '../../packages/cards/src/index';
+import { BorderBeam, calculateBeamDelays, resolveEffectiveBeamCount } from '../../packages/cards/src/index';
 import { borderBeamComponent } from '../../packages/registry/src/components/border-beam';
 
 describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
@@ -183,5 +183,26 @@ describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
 		expect(code).toContain('@if ($doubleBeam)');
 		expect(code).toContain('mask-composite: exclude');
 		expect(code).not.toContain('reverse');
+	});
+
+	it('computes equidistant phase delay offsets for arbitrary N-beam sweeps', () => {
+		// Single beam: no delay
+		expect(calculateBeamDelays(1, 8)).toEqual([-0]);
+
+		// Dual beam (N=2, duration=8): [0, -4]
+		expect(calculateBeamDelays(2, 8)).toEqual([-0, -4]);
+
+		// Quad beam (N=4, duration=8): [0, -2, -4, -6]
+		expect(calculateBeamDelays(4, 8)).toEqual([-0, -2, -4, -6]);
+
+		// 3 beams with duration 6s: [0, -2, -4]
+		expect(calculateBeamDelays(3, 6)).toEqual([-0, -2, -4]);
+	});
+
+	it('resolves effective beam count respecting legacy doubleBeam and modern beamCount', () => {
+		expect(resolveEffectiveBeamCount(false)).toBe(1);
+		expect(resolveEffectiveBeamCount(true)).toBe(2);
+		expect(resolveEffectiveBeamCount(false, 3)).toBe(3);
+		expect(resolveEffectiveBeamCount(true, 4)).toBe(4);
 	});
 });

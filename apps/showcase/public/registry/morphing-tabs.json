@@ -38,7 +38,8 @@
 			],
 			"defaultValue": "md",
 			"description": "Padding and typographic scale of tab trigger buttons."
-		}
+		},
+		{ "name": "liquidStretch", "label": "Liquid Stretch", "type": "boolean", "defaultValue": false, "description": "Volume-preserving liquid pill stretch during transitions." }
 	],
 	"dependencies": {
 		"react": ["@exhuma/core"],

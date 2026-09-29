@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useCallback, memo } from 'react';
 import type { TiltCardProps } from '../types';
-import { calculateTilt, generateTiltTransform, lerp } from './tilt-math';
+import { calculateTilt, generateTiltTransform, calculateGlare, generateGlareStyle, calculateParallaxOffset, generateParallaxTransform, lerp } from './tilt-math';
 
 /**
  * TiltCard — Exhuma Kinetic Methodology (EKM)
@@ -13,20 +13,42 @@ import { calculateTilt, generateTiltTransform, lerp } from './tilt-math';
  * - Ω(120Hz) Fluidity: Direct DOM transform writes driven by rAF spring lerp.
  * - Accessibility: WCAG 2.2 AA prefers-reduced-motion fallback.
  */
-export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspective = 1000, scale = 1.02, speed = 0.12, reverse = false, disabled = false, axis = 'all', className = '', style, ...props }) => {
+export const TiltCard = memo<TiltCardProps>(({
+	children,
+	maxTilt = 15,
+	perspective = 1000,
+	scale = 1.02,
+	speed = 0.12,
+	reverse = false,
+	disabled = false,
+	axis = 'all',
+	glare = false,
+	maxGlareOpacity = 0.25,
+	className = '',
+	style,
+	...props
+}) => {
 	const cardRef = useRef<HTMLDivElement>(null);
+	const glareRef = useRef<HTMLDivElement>(null);
 	const rafIdRef = useRef<number | null>(null);
 	const rectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+	const depthItemsRef = useRef<Array<{ el: HTMLElement; depth: number }>>([]);
 
 	// Target values set from pointer events (no re-renders)
 	const targetRotX = useRef(0);
 	const targetRotY = useRef(0);
 	const targetScale = useRef(1);
+	const targetGlareX = useRef(50);
+	const targetGlareY = useRef(50);
+	const targetGlareOpacity = useRef(0);
 
 	// Current animated values
 	const currentRotX = useRef(0);
 	const currentRotY = useRef(0);
 	const currentScale = useRef(1);
+	const currentGlareX = useRef(50);
+	const currentGlareY = useRef(50);
+	const currentGlareOpacity = useRef(0);
 
 	const isHoveredRef = useRef(false);
 	const isReducedMotionRef = useRef(false);
@@ -53,17 +75,42 @@ export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspecti
 
 		card.style.transform = generateTiltTransform(perspective, currentRotX.current, currentRotY.current, currentScale.current);
 
+		if (glare && glareRef.current) {
+			currentGlareX.current = lerp(currentGlareX.current, targetGlareX.current, lerpFactor);
+			currentGlareY.current = lerp(currentGlareY.current, targetGlareY.current, lerpFactor);
+			currentGlareOpacity.current = lerp(currentGlareOpacity.current, targetGlareOpacity.current, lerpFactor);
+			const gStyle = generateGlareStyle(currentGlareX.current, currentGlareY.current, currentGlareOpacity.current);
+			glareRef.current.style.opacity = gStyle.opacity;
+			glareRef.current.style.background = gStyle.background;
+		}
+
+		if (depthItemsRef.current.length > 0) {
+			const items = depthItemsRef.current;
+			for (let i = 0; i < items.length; i++) {
+				const offset = calculateParallaxOffset(currentRotX.current, currentRotY.current, maxTilt, items[i].depth);
+				items[i].el.style.transform = generateParallaxTransform(offset.x, offset.y);
+			}
+		}
+
 		// Check convergence
 		const diffRotX = Math.abs(targetRotX.current - currentRotX.current);
 		const diffRotY = Math.abs(targetRotY.current - currentRotY.current);
 		const diffScale = Math.abs(targetScale.current - currentScale.current);
+		const diffGlare = glare ? Math.abs(targetGlareOpacity.current - currentGlareOpacity.current) : 0;
 
-		if (diffRotX > 0.01 || diffRotY > 0.01 || diffScale > 0.001 || isHoveredRef.current) {
+		if (diffRotX > 0.01 || diffRotY > 0.01 || diffScale > 0.001 || diffGlare > 0.01 || isHoveredRef.current) {
 			rafIdRef.current = requestAnimationFrame(updateFrame);
 		} else {
+			if (depthItemsRef.current.length > 0 && !isHoveredRef.current) {
+				const items = depthItemsRef.current;
+				for (let i = 0; i < items.length; i++) {
+					items[i].el.style.transform = '';
+				}
+				depthItemsRef.current = [];
+			}
 			rafIdRef.current = null;
 		}
-	}, [perspective, speed, disabled]);
+	}, [perspective, speed, disabled, glare, maxTilt]);
 
 	const scheduleRaf = useCallback(() => {
 		if (rafIdRef.current === null) {
@@ -92,9 +139,16 @@ export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspecti
 			targetRotX.current = tilt.rotX;
 			targetRotY.current = tilt.rotY;
 
+			if (glare) {
+				const glareCoord = calculateGlare(x, y, rect.width, rect.height, maxGlareOpacity);
+				targetGlareX.current = glareCoord.glareX;
+				targetGlareY.current = glareCoord.glareY;
+				targetGlareOpacity.current = glareCoord.glareOpacity;
+			}
+
 			scheduleRaf();
 		},
-		[disabled, maxTilt, reverse, axis, measureRect, scheduleRaf]
+		[disabled, maxTilt, reverse, axis, glare, maxGlareOpacity, measureRect, scheduleRaf]
 	);
 
 	const handlePointerEnter = useCallback(() => {
@@ -102,6 +156,15 @@ export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspecti
 		isHoveredRef.current = true;
 		targetScale.current = scale;
 		measureRect();
+
+		// Cache diorama depth child elements on enter (zero per-frame DOM queries)
+		if (cardRef.current) {
+			const depthEls = cardRef.current.querySelectorAll<HTMLElement>('[data-depth]');
+			depthItemsRef.current = Array.from(depthEls)
+				.map((el) => ({ el, depth: parseFloat(el.getAttribute('data-depth') || '0') }))
+				.filter((item) => !isNaN(item.depth) && item.depth !== 0);
+		}
+
 		scheduleRaf();
 	}, [disabled, scale, measureRect, scheduleRaf]);
 
@@ -111,8 +174,11 @@ export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspecti
 		targetRotX.current = 0;
 		targetRotY.current = 0;
 		targetScale.current = 1.0;
+		if (glare) {
+			targetGlareOpacity.current = 0;
+		}
 		scheduleRaf();
-	}, [scheduleRaf]);
+	}, [glare, scheduleRaf]);
 
 	// Handle scroll or resize during hover to keep bounds accurate without per-move thrashing
 	useEffect(() => {
@@ -143,6 +209,14 @@ export const TiltCard = memo<TiltCardProps>(({ children, maxTilt = 15, perspecti
 			{...props}
 		>
 			{children}
+			{glare && (
+				<div
+					ref={glareRef}
+					aria-hidden="true"
+					className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-150"
+					style={{ opacity: 0 }}
+				/>
+			)}
 		</div>
 	);
 });

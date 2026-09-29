@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { BorderBeamProps } from '../types';
+import { calculateBeamDelays, resolveEffectiveBeamCount } from './beam-math';
 
 /**
  * BorderBeam — Exhuma Kinetic Methodology (EKM)
@@ -9,6 +10,7 @@ import type { BorderBeamProps } from '../types';
  * Big-Omega (Ω) Guarantees:
  * - Zero JavaScript CPU/memory overhead during active animation (100% GPU compositor thread).
  * - Sub-pixel perimeter laser trace with hardware mask clipping (zero background bleed).
+ * - Equidistant N-beam phase synchronization with reverse sweep support.
  * - Framework and container agnostic: injects seamlessly into any card or button.
  */
 export const BorderBeam: React.FC<BorderBeamProps> = ({
@@ -18,6 +20,8 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 	colorFrom = '#ffaa40',
 	colorTo = '#9c40ff',
 	doubleBeam = false,
+	beamCount,
+	reverse = false,
 	endOpacity = 0,
 	opacity = 1,
 	blur = 0,
@@ -35,9 +39,12 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 	const endColor = clampedEndOpacity <= 0 ? 'transparent' : clampedEndOpacity >= 1 ? colorTo : `color-mix(in srgb, ${colorTo} ${Math.round(clampedEndOpacity * 100)}%, transparent)`;
 	const pathRadius = Math.min(safeSize, 200);
 
+	const effectiveCount = resolveEffectiveBeamCount(doubleBeam, beamCount);
+	const delays = calculateBeamDelays(effectiveCount, safeDuration);
+
 	return (
 		<div
-			key={`${safeDuration}-${doubleBeam}-${safeBorderRadius}`}
+			key={`${safeDuration}-${effectiveCount}-${reverse}-${safeBorderRadius}`}
 			aria-hidden='true'
 			className={`exhuma-border-beam pointer-events-none absolute inset-0 rounded-[inherit] ${className}`}
 			style={{
@@ -52,23 +59,10 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 				...style,
 			}}
 		>
-			{/* Primary Beam (Clockwise Sweep) */}
-			<div
-				className='exhuma-border-beam-trace'
-				style={{
-					position: 'absolute',
-					aspectRatio: '1 / 1',
-					width: `${safeSize}px`,
-					offsetPath: `rect(0 auto auto 0 round ${pathRadius}px)`,
-					offsetAnchor: `${safeSize / 2}px ${safeSize / 2}px`,
-					background: `linear-gradient(to left, ${colorFrom}, ${colorTo}, ${endColor})`,
-					animation: `exhuma-border-beam ${safeDuration}s linear infinite`,
-				}}
-			/>
-
-			{/* Secondary Beam (Opposite position, same direction sweep, 180° phase offset) */}
-			{doubleBeam && (
+			{/* Multi-Beam Phase Synchronous Tracks */}
+			{delays.map((delay, index) => (
 				<div
+					key={index}
 					className='exhuma-border-beam-trace'
 					style={{
 						position: 'absolute',
@@ -78,10 +72,11 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
 						offsetAnchor: `${safeSize / 2}px ${safeSize / 2}px`,
 						background: `linear-gradient(to left, ${colorFrom}, ${colorTo}, ${endColor})`,
 						animation: `exhuma-border-beam ${safeDuration}s linear infinite`,
-						animationDelay: `-${safeDuration / 2}s`,
+						animationDirection: reverse ? 'reverse' : 'normal',
+						animationDelay: delay !== 0 ? `${delay}s` : undefined,
 					}}
 				/>
-			)}
+			))}
 
 			<style>{`
 				.exhuma-border-beam-trace {

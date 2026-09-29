@@ -340,6 +340,7 @@ export function ComponentDocView({ slug }: ComponentDocViewProps) {
 		if (!PreviewComponent) return null;
 		return (
 			<PreviewComponent
+				{...propValues}
 				props={propValues}
 				viewportMode={viewportMode}
 				cardSwipeResetKey={cardSwipeResetKey}

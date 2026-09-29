@@ -3,7 +3,7 @@ import { NumberTicker } from '@exhuma/core';
 import { ComponentPreviewProps } from '../types';
 
 export function NumberTickerPreview(props: ComponentPreviewProps & { tickerResetKey?: number }) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const { tickerResetKey } = props;
 
 	const value = Number(propValues.value ?? 1000);

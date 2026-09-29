@@ -11,7 +11,9 @@ export * from './gestures/fsm';
 
 // Headless Kinetic Primitives
 export * from './MorphingTabs/MorphingTabs';
+export * from './MorphingTabs/tabs-math';
 export * from './Accordion/Accordion';
+export * from './Accordion/accordion-math';
 export * from './AnimatedSphere/AnimatedSphere';
 export * from './AnimatedSphere/sphere-math';
 export * from './FloatingDock/FloatingDock';

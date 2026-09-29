@@ -57,6 +57,13 @@ export const cardSwipeStackComponent: UniversalComponent = {
 			defaultValue: true,
 			description: 'When enabled, the final card cannot be dismissed. Dragging it applies elastic rubber-band resistance and it snaps back to center on release.',
 		},
+		{
+			name: 'loop',
+			label: 'Loop (Infinite Deck)',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Infinite deck recycling: swiped cards smoothly swoop under the deck back to the bottom of the stack.',
+		},
 	],
 	defaultProps: {
 		thresholdDistance: 120,
@@ -64,6 +71,7 @@ export const cardSwipeStackComponent: UniversalComponent = {
 		scaleStep: 0.05,
 		offsetStep: 14,
 		preventLastCardDismiss: true,
+		loop: false,
 	},
 	dependencies: CORE_COMPONENT_DEPENDENCIES,
 	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {

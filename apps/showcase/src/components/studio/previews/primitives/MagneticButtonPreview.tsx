@@ -4,12 +4,14 @@ import { IconSparkles as Sparkles } from '@tabler/icons-react';
 import { ComponentPreviewProps } from '../types';
 
 export function MagneticButtonPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const strength = Number(propValues.strength ?? 0.35);
 	const radius = Number(propValues.radius ?? 120);
 	const springDamping = Number(propValues.springDamping ?? 18);
 	const maxDisplacement = Number(propValues.maxDisplacement ?? 36);
 	const text = String(propValues.text ?? 'Magnetic Attraction');
+	const dualTier = Boolean(propValues.dualTier ?? false);
+	const shockwave = Boolean(propValues.shockwave ?? false);
 
 	const fieldDiameter = Math.max(120, Math.min(300, radius * 2));
 
@@ -54,6 +56,8 @@ export function MagneticButtonPreview(props: ComponentPreviewProps) {
 					radius={radius}
 					springDamping={springDamping}
 					maxDisplacement={maxDisplacement}
+					dualTier={dualTier}
+					shockwave={shockwave}
 					className='group bg-foreground text-background relative z-10 cursor-pointer rounded-2xl px-6 py-3.5 text-xs font-black shadow-2xl transition-transform will-change-transform select-none hover:scale-105 active:scale-95 sm:px-8 sm:py-4 sm:text-sm'
 				>
 					<span className='flex items-center gap-2 sm:gap-2.5'>

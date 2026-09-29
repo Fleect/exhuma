@@ -3,7 +3,7 @@ import { ComponentPreviewProps } from '../types';
 import { DiamondGrid } from '@exhuma/layouts';
 
 export default function DiamondGridPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const gap = typeof propValues.gap === 'number' ? propValues.gap : Number(propValues.gap ?? 16);
 	const layout = (propValues.layout as any) || 'auto';

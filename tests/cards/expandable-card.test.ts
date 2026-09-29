@@ -7,6 +7,8 @@ import {
 	ExpandableClose,
 	calculateFLIPDelta,
 	generateInvertTransform,
+	calculateRubberBandPull,
+	calculateModalProgressTransform,
 } from '../../packages/cards/src/index';
 import { expandableCardComponent } from '../../packages/registry/src/components/expandable-card';
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
@@ -144,6 +146,31 @@ describe('Exhuma Kinetic Methodology — Expandable Card (Big-Ω)', () => {
 			expect(config.duration).toBeGreaterThanOrEqual(150);
 			expect(config.duration).toBeLessThanOrEqual(600);
 		}
+	});
+
+	it('computes asymptotic viscous rubber-band pull-down resistance', () => {
+		// 0 displacement -> 0
+		expect(calculateRubberBandPull(0)).toBe(0);
+		expect(calculateRubberBandPull(-50)).toBe(0);
+
+		// 100px pull with stiffness 600 -> 100 / (1 + 100/600) = 100 / (7/6) = 85.71
+		expect(calculateRubberBandPull(100, 600)).toBeCloseTo(85.71, 1);
+
+		// 600px pull with stiffness 600 -> 600 / (1 + 1) = 300
+		expect(calculateRubberBandPull(600, 600)).toBeCloseTo(300, 1);
+	});
+
+	it('computes 2-phase asymmetric modal progress transform', () => {
+		// At rest (progress = 0)
+		expect(calculateModalProgressTransform(0, true)).toEqual({ scale: 0.92, opacity: 0 });
+
+		// Fully expanded (progress = 1)
+		expect(calculateModalProgressTransform(1, true)).toEqual({ scale: 1.0, opacity: 1 });
+
+		// Mid-transition is smooth
+		const mid = calculateModalProgressTransform(0.5, true);
+		expect(mid.scale).toBeGreaterThan(0.92);
+		expect(mid.scale).toBeLessThan(1.0);
 	});
 });
 

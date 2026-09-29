@@ -71,3 +71,26 @@ export function generateSpotlightStyle(x: number, y: number, radius: number, col
 	const validSpread = validateSpotlightSpread(spread);
 	return `radial-gradient(${validRadius}px circle at ${x}px ${y}px, ${color} 0%, transparent ${validSpread}%)`;
 }
+
+/**
+ * Calculates Gaussian illumination intensity at radial distance d.
+ * I(d) = peak * exp(-d^2 / (2 * sigma^2))
+ */
+export function calculateGaussianIntensity(distance: number, radius: number, peakOpacity: number = 1.0): number {
+	if (radius <= 0 || distance < 0) return 0;
+	const sigma = radius / 2.5;
+	const intensity = peakOpacity * Math.exp(-(distance * distance) / (2 * sigma * sigma));
+	return Number(Math.max(0, Math.min(1, intensity)).toFixed(4));
+}
+
+/**
+ * Computes vector distance and coordinates from global pointer to card origin.
+ */
+export function calculateRelativeSpotlightVector(clientX: number, clientY: number, cardRect: RectBounds): { x: number; y: number; distance: number } {
+	const x = clientX - cardRect.left;
+	const y = clientY - cardRect.top;
+	const dx = Math.max(0, Math.max(cardRect.left - clientX, clientX - (cardRect.left + cardRect.width)));
+	const dy = Math.max(0, Math.max(cardRect.top - clientY, clientY - (cardRect.top + cardRect.height)));
+	const distance = Math.sqrt(dx * dx + dy * dy);
+	return { x, y, distance };
+}

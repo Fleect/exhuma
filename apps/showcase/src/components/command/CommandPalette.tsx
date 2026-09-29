@@ -200,7 +200,7 @@ export function CommandPalette() {
 			{
 				id: 'doc-components-catalog',
 				title: 'All Components Catalog',
-				subtitle: 'Explore 23+ kinetic layout primitives',
+				subtitle: `Explore all ${ALL_COMPONENTS.length} kinetic layout primitives`,
 				category: 'docs',
 				icon: Layers,
 				href: '/docs/components',
@@ -251,7 +251,7 @@ export function CommandPalette() {
 			{
 				id: 'doc-ecosystems',
 				title: 'Supported Ecosystems Guide',
-				subtitle: '13 Frontend Framework Implementations',
+				subtitle: `${ECOSYSTEM_COUNT} Frontend Framework Implementations`,
 				category: 'docs',
 				icon: Cpu,
 				href: '/docs/ecosystems',

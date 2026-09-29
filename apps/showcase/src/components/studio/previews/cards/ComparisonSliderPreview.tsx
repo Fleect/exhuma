@@ -3,7 +3,7 @@ import { ComparisonSlider } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function ComparisonSliderPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const defaultPosition = Number(propValues.defaultPosition ?? 0.5);
 	const step = Number(propValues.step ?? 0.05);

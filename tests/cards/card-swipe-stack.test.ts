@@ -7,6 +7,8 @@ import {
 	calculateFlingDuration,
 	calculateElasticDamping,
 	SwipeVelocityRingBuffer,
+	evaluateMultiAxisSwipeDecision,
+	calculateUndoTrajectory,
 } from '../../packages/cards/src/index';
 import { cardSwipeStackComponent } from '../../packages/registry/src/components/card-swipe-stack';
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
@@ -231,5 +233,31 @@ describe('Exhuma Kinetic Methodology — Card Swipe Stack (Big-Ω)', () => {
 			expect(usage.code.toLowerCase()).toMatch(/card-?swipe-?stack/);
 			expect(usage.code.length).toBeGreaterThan(100);
 		}
+	});
+
+	it('evaluates 4-way multi-axis swipe decision (left, right, up, down)', () => {
+		// Horizontal dominance
+		expect(evaluateMultiAxisSwipeDecision(150, 20, 0, 0, 120, 550)).toEqual({ isDismissed: true, direction: 'right' });
+		expect(evaluateMultiAxisSwipeDecision(-150, 20, 0, 0, 120, 550)).toEqual({ isDismissed: true, direction: 'left' });
+
+		// Vertical dominance
+		expect(evaluateMultiAxisSwipeDecision(20, -150, 0, 0, 120, 550)).toEqual({ isDismissed: true, direction: 'up' });
+		expect(evaluateMultiAxisSwipeDecision(20, 150, 0, 0, 120, 550)).toEqual({ isDismissed: true, direction: 'down' });
+
+		// Within threshold
+		expect(evaluateMultiAxisSwipeDecision(40, 50, 0, 0, 120, 550)).toEqual({ isDismissed: false, direction: null });
+	});
+
+	it('calculates smooth undo restoration trajectory back to origin', () => {
+		// Progress 0: at exit position
+		expect(calculateUndoTrajectory(0, 400, 100)).toEqual({ x: 400, y: 100 });
+
+		// Progress 0.5: midway smoothly returning
+		const mid = calculateUndoTrajectory(0.5, 400, 100);
+		expect(mid.x).toBeLessThan(400);
+		expect(mid.x).toBeGreaterThan(0);
+
+		// Progress 1.0: fully settled at (0, 0)
+		expect(calculateUndoTrajectory(1.0, 400, 100)).toEqual({ x: 0, y: 0 });
 	});
 });

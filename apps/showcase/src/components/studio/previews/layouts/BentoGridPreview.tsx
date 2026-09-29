@@ -4,14 +4,13 @@ import { BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual } from '@e
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function BentoGridPreview(props: ComponentPreviewProps & { viewportMode?: string }) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const { viewportMode } = props;
 
 	const rawCols = Number(propValues.cols ?? 3);
 	const effectiveCols = viewportMode === 'mobile' ? 1 : viewportMode === 'tablet' ? Math.min(rawCols, 2) : rawCols;
 	const gap = propValues.gap !== undefined ? (typeof propValues.gap === 'number' ? propValues.gap : Number(String(propValues.gap).replace('px', '')) || 20) : 20;
 	const rowHeight = propValues.rowHeight !== undefined ? (typeof propValues.rowHeight === 'number' ? propValues.rowHeight : Number(String(propValues.rowHeight).replace('px', '')) || 180) : 180;
-
 	return (
 		<div className='mx-auto w-full max-w-5xl p-2 sm:p-4'>
 			<BentoGrid cols={effectiveCols} gap={gap} rowHeight={rowHeight}>
