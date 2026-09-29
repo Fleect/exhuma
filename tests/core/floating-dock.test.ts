@@ -9,6 +9,8 @@ import {
 	calculateDockItemSize,
 	lerpDockScale,
 	dampDockScale,
+	calculateDockDistance,
+	isApexProximity,
 	type DockDirection,
 } from '@exhuma/core';
 import { floatingDockComponent } from '@exhuma/registry';
@@ -198,6 +200,22 @@ describe('@exhuma/core — FloatingDock Physics & Parity Engine', () => {
 				expect(files.length).toBeGreaterThan(0);
 				expect(files[0].code.length).toBeGreaterThan(50);
 			}
+		});
+
+		it('calculates 1D dock distance along orientation axis and detects apex proximity for haptics', () => {
+			// Item starting at 100 with width 40 -> center at 120
+			expect(calculateDockDistance(120, 100, 40)).toBe(0);
+			expect(isApexProximity(0)).toBe(true);
+
+			// Pointer at 124 -> distance 4 (within 6px apex threshold)
+			const nearDist = calculateDockDistance(124, 100, 40);
+			expect(nearDist).toBe(4);
+			expect(isApexProximity(nearDist, 6)).toBe(true);
+
+			// Pointer at 140 -> distance 20 (outside apex threshold)
+			const farDist = calculateDockDistance(140, 100, 40);
+			expect(farDist).toBe(20);
+			expect(isApexProximity(farDist, 6)).toBe(false);
 		});
 	});
 });

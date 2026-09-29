@@ -164,6 +164,16 @@ export interface InfiniteMarqueeProps {
 	 * Default: '#09090b'
 	 */
 	fadeEdgeColorDark?: string;
+	/**
+	 * Marquee speed couples to page scroll velocity.
+	 * Default: false
+	 */
+	scrollCoupling?: boolean;
+	/**
+	 * Smooth direction reversal on scroll direction change.
+	 * Default: false
+	 */
+	directionHysteresis?: boolean;
 	className?: string;
 	style?: CSSProperties;
 }

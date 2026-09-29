@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { ComponentPreviewProps } from '../types';
 
 export function CursorTooltipPreview(props: ComponentPreviewProps & { viewportMode?: string }) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const { viewportMode } = props;
 
 	const isMobile = viewportMode === 'mobile' || (typeof window !== 'undefined' && window.innerWidth < 640);

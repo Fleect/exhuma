@@ -4,7 +4,10 @@ import { describe, expect, it } from 'vitest';
 import {
 	calculateTargetPosition,
 	clampTooltipToViewport,
+	calculateSigmoidClamp,
 	dampCursorCoordinate,
+	calculateMagneticSnap,
+	calculateSelectionCenter,
 } from '../../packages/core/src/CursorTooltip/cursor-math';
 import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
 
@@ -82,6 +85,30 @@ describe('CursorTooltip — Mathematical Foundations & Vector Kinetics', () => {
 		expect(topOver.y).toBe(padding);
 	});
 
+	it('cushions coordinates with smooth sigmoid boundary clamping near edges', () => {
+		const tooltipWidth = 120;
+		const tooltipHeight = 40;
+		const viewportWidth = 1920;
+		const viewportHeight = 1080;
+		const padding = 12;
+
+		// Inside safe zone -> exact 1:1 match
+		const safe = calculateSigmoidClamp(500, 400, tooltipWidth, tooltipHeight, viewportWidth, viewportHeight, padding);
+		expect(safe.x).toBe(500);
+		expect(safe.y).toBe(400);
+
+		// Soft cushioning outside right edge (does not jump to a rigid hard-stop)
+		const rightOver = calculateSigmoidClamp(1900, 400, tooltipWidth, tooltipHeight, viewportWidth, viewportHeight, padding);
+		const maxSafeX = viewportWidth - tooltipWidth - padding;
+		expect(rightOver.x).toBeGreaterThan(maxSafeX);
+		expect(rightOver.x).toBeLessThan(maxSafeX + 16);
+
+		// Soft cushioning outside left edge
+		const leftOver = calculateSigmoidClamp(-20, 400, tooltipWidth, tooltipHeight, viewportWidth, viewportHeight, padding);
+		expect(leftOver.x).toBeLessThan(padding);
+		expect(leftOver.x).toBeGreaterThan(padding - 16);
+	});
+
 	it('calculates target positions across all 8 directions accurately', () => {
 		const cx = 500;
 		const cy = 300;
@@ -98,6 +125,27 @@ describe('CursorTooltip — Mathematical Foundations & Vector Kinetics', () => {
 		expect(calculateTargetPosition(cx, cy, ox, oy, 'bottom', w, h)).toEqual({ x: 500 - 60, y: 316 });
 		expect(calculateTargetPosition(cx, cy, ox, oy, 'left', w, h)).toEqual({ x: 500 - 16 - 120, y: 300 - 20 });
 		expect(calculateTargetPosition(cx, cy, ox, oy, 'right', w, h)).toEqual({ x: 516, y: 300 - 20 });
+	});
+
+	it('computes magnetic snapping vector when cursor is within capture radius', () => {
+		// Cursor at (105, 105), target anchor at (100, 100), captureRadius 28, strength 0.5
+		const snapped = calculateMagneticSnap(105, 105, 100, 100, 28, 0.5);
+		expect(snapped.x).toBeLessThan(105);
+		expect(snapped.x).toBeGreaterThan(100);
+		expect(snapped.y).toBeLessThan(105);
+		expect(snapped.y).toBeGreaterThan(100);
+
+		// Cursor far outside capture radius -> no snap
+		const outside = calculateMagneticSnap(200, 200, 100, 100, 28, 0.5);
+		expect(outside.x).toBe(200);
+		expect(outside.y).toBe(200);
+	});
+
+	it('computes focal center for native selection client rects', () => {
+		const selectionRect = { left: 100, top: 250, right: 300, bottom: 270 };
+		const center = calculateSelectionCenter(selectionRect);
+		expect(center.x).toBe(200); // (100 + 300) / 2
+		expect(center.y).toBe(250); // top of selection
 	});
 });
 

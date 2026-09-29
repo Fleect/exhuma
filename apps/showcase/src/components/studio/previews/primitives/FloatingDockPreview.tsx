@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { ComponentPreviewProps } from '../types';
 
 export function FloatingDockPreview(props: ComponentPreviewProps & { dockIconSet?: string; setDockIconSet?: (val: string) => void; viewportMode?: string; activePreset?: string }) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const { dockIconSet, setDockIconSet, viewportMode, activePreset } = props;
 
 	const direction = (propValues.direction as any) || 'bottom';
@@ -29,6 +29,7 @@ export function FloatingDockPreview(props: ComponentPreviewProps & { dockIconSet
 	const influenceRadius = Number(propValues.influenceRadius ?? 60);
 	const showLabels = propValues.showLabels !== false;
 	const panelStyle = (propValues.panelStyle as any) || 'translucent';
+	const hapticFeedback = Boolean(propValues.hapticFeedback ?? false);
 
 	const dockPositionClass =
 		direction === 'bottom'
@@ -255,7 +256,16 @@ export function FloatingDockPreview(props: ComponentPreviewProps & { dockIconSet
 
 			{/* Kinetic Application Dock Container */}
 			<div className={`absolute ${dockPositionClass} z-30`}>
-				<FloatingDock direction={direction} baseSize={baseSize} maxMagnification={maxMagnification} influenceRadius={influenceRadius} showLabels={showLabels} panelStyle={panelStyle} items={activeDockItems} />
+				<FloatingDock
+					direction={direction}
+					baseSize={baseSize}
+					maxMagnification={maxMagnification}
+					influenceRadius={influenceRadius}
+					showLabels={showLabels}
+					panelStyle={panelStyle}
+					hapticFeedback={hapticFeedback}
+					items={activeDockItems}
+				/>
 			</div>
 		</div>
 	);

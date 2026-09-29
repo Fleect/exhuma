@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-28T15:02:34.214Z",
+	"generatedAt": "2026-09-29T20:16:00.357Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
@@ -394,7 +394,8 @@
 					],
 					"defaultValue": "md",
 					"description": "Padding and typographic scale of tab trigger buttons."
-				}
+				},
+				{ "name": "liquidStretch", "label": "Liquid Stretch", "type": "boolean", "defaultValue": false, "description": "Volume-preserving liquid pill stretch during transitions." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],
@@ -495,7 +496,9 @@
 					"type": "color",
 					"defaultValue": "#09090b",
 					"description": "Edge gradient color when dark mode is active. Falls back to fadeEdgeColor."
-				}
+				},
+				{ "name": "scrollCoupling", "label": "Scroll Coupling", "type": "boolean", "defaultValue": false, "description": "Marquee speed couples to page scroll velocity." },
+				{ "name": "directionHysteresis", "label": "Direction Hysteresis", "type": "boolean", "defaultValue": false, "description": "Smooth direction reversal on scroll direction change." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],
@@ -684,7 +687,8 @@
 						{ "label": "Frameless Minimal", "value": "minimal" }
 					],
 					"description": "Visual backing shelf styling of the dock."
-				}
+				},
+				{ "name": "hapticFeedback", "label": "Micro-Haptics", "type": "boolean", "defaultValue": false, "description": "Enables subtle tactile micro-haptic tick on apex crossing when supported by the device." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core", "clsx", "@tabler/icons-react"],
@@ -754,7 +758,9 @@
 					"step": 2,
 					"description": "Maximum absolute cursor attraction displacement cap in pixels."
 				},
-				{ "name": "text", "label": "Button Label", "type": "string", "defaultValue": "Magnetic Attraction", "description": "Inner label text for the button." }
+				{ "name": "text", "label": "Button Label", "type": "string", "defaultValue": "Magnetic Attraction", "description": "Inner label text for the button." },
+				{ "name": "dualTier", "label": "Dual Tier", "type": "boolean", "defaultValue": false, "description": "Dual-layer displacement split between housing and content." },
+				{ "name": "shockwave", "label": "Shockwave", "type": "boolean", "defaultValue": false, "description": "Radial expanding ring on click." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],
@@ -826,6 +832,13 @@
 					"type": "boolean",
 					"defaultValue": true,
 					"description": "When enabled, the final card cannot be dismissed. Dragging it applies elastic rubber-band resistance and it snaps back to center on release."
+				},
+				{
+					"name": "loop",
+					"label": "Loop (Infinite Deck)",
+					"type": "boolean",
+					"defaultValue": false,
+					"description": "Infinite deck recycling: swiped cards smoothly swoop under the deck back to the bottom of the stack."
 				}
 			],
 			"dependencies": {

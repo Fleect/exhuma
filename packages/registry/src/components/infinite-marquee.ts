@@ -79,6 +79,20 @@ export const infiniteMarqueeComponent: UniversalComponent = {
 			defaultValue: '#09090b',
 			description: 'Edge gradient color when dark mode is active. Falls back to fadeEdgeColor.',
 		},
+		{
+			name: 'scrollCoupling',
+			label: 'Scroll Coupling',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Marquee speed couples to page scroll velocity.',
+		},
+		{
+			name: 'directionHysteresis',
+			label: 'Direction Hysteresis',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Smooth direction reversal on scroll direction change.',
+		},
 	],
 	defaultProps: {
 		speed: 40,
@@ -89,6 +103,8 @@ export const infiniteMarqueeComponent: UniversalComponent = {
 		fadeWidth: 48,
 		fadeEdgeColor: '#ffffff',
 		fadeEdgeColorDark: '#09090b',
+		scrollCoupling: false,
+		directionHysteresis: false,
 	},
 	dependencies: CORE_COMPONENT_DEPENDENCIES,
 	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {

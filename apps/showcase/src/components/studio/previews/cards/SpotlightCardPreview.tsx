@@ -4,7 +4,7 @@ import { SpotlightCard } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function SpotlightCardPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const rawRadius = Number(propValues.radius ?? 350);
 	const rawOpacity = Number(propValues.opacity ?? 0.85);

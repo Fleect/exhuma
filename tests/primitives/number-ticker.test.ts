@@ -82,6 +82,39 @@ describe('NumberTicker — Mathematical Foundations & Analytical Easing', () => 
 		expect(floatStep.value).toBe(99.94);
 		expect(floatStep.isComplete).toBe(true);
 	});
+
+	it('calculates logarithmic rolling deceleration per digit column with stagger', async () => {
+		const { calculateColumnDeceleration } = await import('../../packages/core/src/NumberTicker/ticker-math');
+
+		// At start
+		const start = calculateColumnDeceleration(0, 1.0, 0, 7, 3);
+		expect(start.position).toBe(0);
+		expect(start.isComplete).toBe(false);
+
+		// Midway through
+		const mid = calculateColumnDeceleration(0.5, 1.0, 0, 7, 3);
+		expect(mid.position).toBeGreaterThan(0);
+		expect(mid.position).toBeLessThan(37);
+		expect(mid.isComplete).toBe(false);
+
+		// Complete: 10 * 3 + 7 = 37
+		const complete = calculateColumnDeceleration(1.0, 1.0, 0, 7, 3);
+		expect(complete.position).toBe(37);
+		expect(complete.isComplete).toBe(true);
+
+		// Higher column index with stagger has longer duration
+		const col2Mid = calculateColumnDeceleration(1.0, 1.0, 2, 7, 3, 0.08); // total = 1.16s
+		expect(col2Mid.isComplete).toBe(false);
+	});
+
+	it('calculates velocity-proportional vertical motion blur bounded by maxBlur', async () => {
+		const { calculateVelocityBlur } = await import('../../packages/core/src/NumberTicker/ticker-math');
+
+		expect(calculateVelocityBlur(0)).toBe(0);
+		expect(calculateVelocityBlur(-100, 0.005, 3.5)).toBe(0.5);
+		expect(calculateVelocityBlur(1000, 0.005, 3.5)).toBe(3.5); // clamped to maxBlur
+		expect(calculateVelocityBlur(NaN)).toBe(0);
+	});
 });
 
 describe('NumberTicker — 13-Ecosystem Code Generation Parity', () => {

@@ -1,8 +1,16 @@
 'use client';
 
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, createContext, useContext } from 'react';
 import type { SpotlightCardProps } from '../types';
-import { calculateSpotlightCoordinates, RectBounds } from './spotlight-math';
+import { calculateSpotlightCoordinates, RectBounds, calculateGaussianIntensity, calculateRelativeSpotlightVector } from './spotlight-math';
+
+export type SpotlightListener = (clientX: number, clientY: number, isActive: boolean) => void;
+
+export interface SpotlightGroupContextValue {
+	subscribe: (listener: SpotlightListener) => () => void;
+}
+
+export const SpotlightGroupContext = createContext<SpotlightGroupContextValue | null>(null);
 
 /**
  * SpotlightCard — Exhuma Kinetic Methodology (EKM)
@@ -122,6 +130,42 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 			rafIdRef.current = requestAnimationFrame(updateFrame);
 		}
 	}, [updateFrame]);
+
+	const groupContext = useContext(SpotlightGroupContext);
+
+	// Group-level ambient horizon bleed subscription
+	useEffect(() => {
+		if (!groupContext) return;
+		return groupContext.subscribe((clientX, clientY, isActive) => {
+			if (disabled || isReducedMotionRef.current) return;
+			if (!isActive) {
+				if (!isHoveredRef.current) {
+					targetOpacity.current = 0;
+					scheduleUpdate();
+				}
+				return;
+			}
+			if (!rectRef.current) measureRect();
+			const rect = rectRef.current;
+			if (!rect) return;
+
+			const rel = calculateRelativeSpotlightVector(clientX, clientY, rect);
+			if (rel.distance < radius * 1.5) {
+				targetX.current = rel.x;
+				targetY.current = rel.y;
+				const gaussian = calculateGaussianIntensity(rel.distance, radius, opacity);
+				targetOpacity.current = isHoveredRef.current ? opacity : gaussian;
+				if (currentX.current < -1000) {
+					currentX.current = rel.x;
+					currentY.current = rel.y;
+				}
+				scheduleUpdate();
+			} else if (!isHoveredRef.current && targetOpacity.current > 0) {
+				targetOpacity.current = 0;
+				scheduleUpdate();
+			}
+		});
+	}, [groupContext, disabled, radius, opacity, measureRect, scheduleUpdate]);
 
 	const handlePointerEnter = useCallback(
 		(e: React.PointerEvent<HTMLDivElement>) => {
@@ -256,10 +300,47 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
 	);
 };
 
-SpotlightCard.displayName = 'SpotlightCard';
+export interface SpotlightGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+	children: React.ReactNode;
+}
+
+export const SpotlightGroup: React.FC<SpotlightGroupProps> = ({ children, className = '', ...props }) => {
+	const listenersRef = useRef<Set<SpotlightListener>>(new Set());
+
+	const subscribe = useCallback((listener: SpotlightListener) => {
+		listenersRef.current.add(listener);
+		return () => {
+			listenersRef.current.delete(listener);
+		};
+	}, []);
+
+	const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+		listenersRef.current.forEach((fn) => fn(e.clientX, e.clientY, true));
+	}, []);
+
+	const handlePointerLeave = useCallback(() => {
+		listenersRef.current.forEach((fn) => fn(-9999, -9999, false));
+	}, []);
+
+	return (
+		<SpotlightGroupContext.Provider value={{ subscribe }}>
+			<div
+				onPointerMove={handlePointerMove}
+				onPointerLeave={handlePointerLeave}
+				className={`exhuma-spotlight-group relative ${className}`}
+				{...props}
+			>
+				{children}
+			</div>
+		</SpotlightGroupContext.Provider>
+	);
+};
+
+SpotlightGroup.displayName = 'SpotlightGroup';
 
 export const Spotlight = {
 	Root: SpotlightCard,
+	Group: SpotlightGroup,
 };
 
 export default SpotlightCard;

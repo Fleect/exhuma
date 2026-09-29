@@ -47,3 +47,21 @@ export function generateVerticalClipPath(position: number): string {
 export function stepSliderPosition(current: number, delta: number): number {
 	return Math.max(0, Math.min(1, current + delta));
 }
+
+/**
+ * Calculates sinusoidal idle breathing oscillation offset in normalized [0, 1] units.
+ *
+ * @param time Time in seconds
+ * @param amplitude Maximum normalized amplitude (e.g. 0.05 for 5%)
+ * @param frequency Oscillation frequency in Hz (e.g. 0.5 for 2-second period)
+ */
+export function calculateIdleBreathingOffset(time: number, amplitude: number = 0.05, frequency: number = 0.5): number {
+	return amplitude * Math.sin(2 * Math.PI * frequency * time);
+}
+
+/**
+ * Generates circular magnifying loupe clip-path string.
+ */
+export function generateLoupeClipPath(xPct: number, yPct: number, radiusPx: number): string {
+	return `circle(${radiusPx}px at ${xPct.toFixed(2)}% ${yPct.toFixed(2)}%)`;
+}

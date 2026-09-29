@@ -33,7 +33,8 @@
 				{ "label": "Frameless Minimal", "value": "minimal" }
 			],
 			"description": "Visual backing shelf styling of the dock."
-		}
+		},
+		{ "name": "hapticFeedback", "label": "Micro-Haptics", "type": "boolean", "defaultValue": false, "description": "Enables subtle tactile micro-haptic tick on apex crossing when supported by the device." }
 	],
 	"dependencies": {
 		"react": ["@exhuma/core", "clsx", "@tabler/icons-react"],

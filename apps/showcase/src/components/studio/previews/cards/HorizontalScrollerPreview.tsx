@@ -3,7 +3,7 @@ import { HorizontalScroller } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function HorizontalScrollerPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const horizontalScrollRef = React.useRef<HTMLDivElement>(null);
 
 	const speed = Number(propValues.speed ?? propValues.scrollSpeed ?? 1.0);

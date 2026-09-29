@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback, useId, type ReactNode, type HTMLAttributes, type ButtonHTMLAttributes } from 'react';
 import { solveCriticallyDampedSpring } from '../physics/spring';
+import { calculateRovingIndex, calculateLiquidPillStretch } from './tabs-math';
 
 /**
  * Exhuma Kinetic Methodology (EKM) — MorphingTabs
@@ -23,6 +24,7 @@ interface TabsContextValue {
 	springStiffness?: number;
 	variant?: 'pill' | 'underline' | 'glow';
 	size?: 'sm' | 'md' | 'lg';
+	liquidStretch?: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -44,9 +46,10 @@ export interface TabsRootProps {
 	springStiffness?: number;
 	variant?: 'pill' | 'underline' | 'glow';
 	size?: 'sm' | 'md' | 'lg';
+	liquidStretch?: boolean;
 }
 
-export const TabsRoot: React.FC<TabsRootProps> = ({ children, defaultValue, value: controlledValue, onValueChange, className = '', springStiffness = 26, variant = 'pill', size = 'md' }) => {
+export const TabsRoot: React.FC<TabsRootProps> = ({ children, defaultValue, value: controlledValue, onValueChange, className = '', springStiffness = 26, variant = 'pill', size = 'md', liquidStretch = false }) => {
 	const baseId = useId();
 	const [uncontrolledValue, setUncontrolledValue] = useState<string>(defaultValue || '');
 	const isControlled = controlledValue !== undefined;
@@ -134,6 +137,7 @@ export const TabsRoot: React.FC<TabsRootProps> = ({ children, defaultValue, valu
 				springStiffness,
 				variant,
 				size,
+				liquidStretch,
 			}}
 		>
 			<div className={`exhuma-tabs-root flex flex-col ${className}`}>{children}</div>
@@ -156,10 +160,10 @@ export const TabsList: React.FC<TabsListProps> = ({ children, className = '', ..
 		let nextIndex = currentIndex;
 		if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
 			e.preventDefault();
-			nextIndex = (currentIndex + 1) % triggers.length;
+			nextIndex = calculateRovingIndex(currentIndex, 1, triggers.length);
 		} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
 			e.preventDefault();
-			nextIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+			nextIndex = calculateRovingIndex(currentIndex, -1, triggers.length);
 		} else if (e.key === 'Home') {
 			e.preventDefault();
 			nextIndex = 0;
@@ -193,12 +197,14 @@ export interface TabsIndicatorProps extends HTMLAttributes<HTMLDivElement> {
 	className?: string;
 	springStiffness?: number;
 	variant?: 'pill' | 'underline' | 'glow';
+	liquidStretch?: boolean;
 }
 
-export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', style, springStiffness: propSpringStiffness, variant: propVariant, ...props }) => {
+export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', style, springStiffness: propSpringStiffness, variant: propVariant, liquidStretch: propLiquidStretch, ...props }) => {
 	const ctx = useTabsContext();
 	const activeRect = ctx.activeRect;
 	const variant = propVariant ?? ctx.variant ?? 'pill';
+	const liquidStretch = propLiquidStretch ?? ctx.liquidStretch ?? false;
 	const omega = propSpringStiffness ?? ctx.springStiffness ?? 26;
 
 	const indicatorRef = useRef<HTMLDivElement>(null);
@@ -211,6 +217,8 @@ export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', st
 
 	const variantRef = useRef(variant);
 	variantRef.current = variant;
+	const stretchRef = useRef(liquidStretch);
+	stretchRef.current = liquidStretch;
 
 	// Kinetic spring state
 	const currentX = useRef(0);
@@ -230,6 +238,7 @@ export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', st
 
 		const currentOmega = omegaRef.current;
 		const currentVariant = variantRef.current;
+		const currentStretch = stretchRef.current;
 
 		let targetY = rect.y;
 		let targetH = rect.height;
@@ -246,7 +255,14 @@ export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', st
 		currentW.current = springW.position;
 		velW.current = springW.velocity;
 
-		indicatorRef.current.style.transform = `translate3d(${currentX.current.toFixed(2)}px, ${targetY.toFixed(2)}px, 0)`;
+		let scaleX = 1;
+		let scaleY = 1;
+		if (currentStretch) {
+			const s = calculateLiquidPillStretch(springX.velocity);
+			scaleX = s.scaleX;
+			scaleY = s.scaleY;
+		}
+		indicatorRef.current.style.transform = `translate3d(${currentX.current.toFixed(2)}px, ${targetY.toFixed(2)}px, 0) scale(${scaleX}, ${scaleY})`;
 		indicatorRef.current.style.width = `${currentW.current.toFixed(2)}px`;
 		indicatorRef.current.style.height = `${targetH}px`;
 
@@ -270,7 +286,7 @@ export const TabsIndicator: React.FC<TabsIndicatorProps> = ({ className = '', st
 		}
 
 		indicatorRef.current.style.height = `${targetH}px`;
-		indicatorRef.current.style.transform = `translate3d(${(currentX.current || activeRect.x).toFixed(2)}px, ${targetY.toFixed(2)}px, 0)`;
+		indicatorRef.current.style.transform = `translate3d(${(currentX.current || activeRect.x).toFixed(2)}px, ${targetY.toFixed(2)}px, 0) scale(1, 1)`;
 
 		// If initial or if dimensions moved, trigger spring loop
 		if (currentW.current === 0) {
@@ -328,6 +344,7 @@ export interface TabsTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement
 	children: ReactNode;
 	className?: string;
 	size?: 'sm' | 'md' | 'lg';
+	liquidStretch?: boolean;
 }
 
 export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, className = '', size: propSize, ...props }) => {

@@ -61,3 +61,79 @@ export function dampDockScale(current: number, target: number, lambda: number = 
 	if (Math.abs(diff) < 0.02) return target;
 	return current + diff * (1 - Math.exp(-lambda * dt));
 }
+
+/**
+ * Calculates pointer distance to item center along the active orientation axis.
+ */
+export function calculateDockDistance(
+	pointerCoord: number,
+	itemStart: number,
+	itemDimension: number
+): number {
+	const itemCenter = itemStart + itemDimension / 2;
+	return Math.abs(pointerCoord - itemCenter);
+}
+
+/**
+ * Checks whether pointer is at the apex of magnification (peak item center) for haptic feedback triggers.
+ */
+export function isApexProximity(distance: number, thresholdPx: number = 6): boolean {
+	return Math.abs(distance) <= thresholdPx;
+}
+
+/**
+ * Mutable per-item spring state for the liquid-smooth GPU-composited dock mode.
+ * Tracks current scale and scale velocity for second-order spring integration.
+ */
+export interface DockSpringState {
+	/** Current interpolated scale factor (starts at 1.0) */
+	scale: number;
+	/** Current scale velocity (starts at 0) */
+	velocity: number;
+}
+
+/**
+ * Creates a new spring state at rest with scale = 1.0.
+ */
+export function createDockSpringState(): DockSpringState {
+	return { scale: 1.0, velocity: 0 };
+}
+
+/**
+ * Integrates a critically/slightly-overdamped second-order spring to filter
+ * instantaneous target scales into viscous, liquid-smooth intermediates.
+ *
+ * Uses semi-implicit Euler integration for unconditional stability.
+ *
+ * @param state Mutable spring state (mutated in-place for zero allocation)
+ * @param targetScale Instantaneous target scale from cosine proximity curve
+ * @param dt Frame delta time in seconds (capped to 50ms internally)
+ * @param zeta Damping ratio (default 1.05 = slight overdamping, zero micro-jitter)
+ * @param omegaN Natural frequency in rad/s (default 32)
+ * @returns The new interpolated scale value (also written to state.scale)
+ */
+export function springDampedScaleStep(
+	state: DockSpringState,
+	targetScale: number,
+	dt: number,
+	zeta: number = 1.05,
+	omegaN: number = 32
+): number {
+	const clampedDt = Math.min(dt, 0.05);
+	const displacement = state.scale - targetScale;
+	const springForce = -omegaN * omegaN * displacement;
+	const dampingForce = -2 * zeta * omegaN * state.velocity;
+	const acceleration = springForce + dampingForce;
+
+	// Semi-implicit Euler (unconditionally stable for stiff springs)
+	state.velocity += acceleration * clampedDt;
+	state.scale += state.velocity * clampedDt;
+
+	// Snap to rest when close enough (prevents eternal micro-oscillation)
+	if (Math.abs(displacement) < 0.001 && Math.abs(state.velocity) < 0.01) {
+		state.scale = targetScale;
+		state.velocity = 0;
+	}
+
+	return state.scale;
+}

@@ -103,3 +103,37 @@ export function generateGlareStyle(glareX: number, glareY: number, glareOpacity:
 		background: `radial-gradient(circle at ${glareX.toFixed(1)}% ${glareY.toFixed(1)}%, rgba(255,255,255,0.8), transparent 60%)`,
 	};
 }
+
+export interface ParallaxOffset {
+	x: number;
+	y: number;
+}
+
+/**
+ * Calculates 2D diorama parallax translation offsets for nested child layers declaring data-depth.
+ *
+ * @param rotX Current pitch Euler angle in degrees
+ * @param rotY Current yaw Euler angle in degrees
+ * @param maxTilt Maximum tilt range in degrees
+ * @param depth Relative depth coefficient (e.g. -20 to 50)
+ */
+export function calculateParallaxOffset(rotX: number, rotY: number, maxTilt: number, depth: number): ParallaxOffset {
+	if (maxTilt <= 0 || depth === 0) {
+		return { x: 0, y: 0 };
+	}
+
+	const normRotY = Math.max(-1, Math.min(1, rotY / maxTilt));
+	const normRotX = Math.max(-1, Math.min(1, rotX / maxTilt));
+
+	return {
+		x: Number((normRotY * depth).toFixed(2)),
+		y: Number((-normRotX * depth).toFixed(2)),
+	};
+}
+
+/**
+ * Generates hardware-composited 2D translation for parallax child layers.
+ */
+export function generateParallaxTransform(x: number, y: number): string {
+	return `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+}

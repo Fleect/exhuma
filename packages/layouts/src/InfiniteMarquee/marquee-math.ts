@@ -69,3 +69,40 @@ export function parseGapToPx(gap: string | number | undefined): number {
 	const px = parseFloat(str);
 	return Number.isFinite(px) ? px : 24;
 }
+
+/**
+ * Calculates scroll-velocity coupled marquee speed.
+ * v(t) = v_base + kappa_scroll * |v_scroll|
+ *
+ * @param baseSpeed Base marquee speed (px/s)
+ * @param scrollVelocity Current window or container scroll velocity (px/s)
+ * @param kappa Scroll-velocity coupling coefficient (default: 0.12)
+ */
+export function calculateCoupledScrollVelocity(
+	baseSpeed: number,
+	scrollVelocity: number,
+	kappa: number = 0.12
+): number {
+	if (!Number.isFinite(baseSpeed)) return 0;
+	if (!Number.isFinite(scrollVelocity) || scrollVelocity === 0) return Math.abs(baseSpeed);
+	return Math.abs(baseSpeed) + kappa * Math.abs(scrollVelocity);
+}
+
+/**
+ * Direction hysteresis filter preventing high-frequency jitter upon scroll reversal.
+ *
+ * @param currentDirection Current active direction ('left' or 'right')
+ * @param scrollVelocity Instantaneous vertical or horizontal scroll velocity
+ * @param threshold Velocity threshold needed to trigger reversal (default: 50 px/s)
+ */
+export function evaluateMarqueeDirectionHysteresis(
+	currentDirection: 'left' | 'right',
+	scrollVelocity: number,
+	threshold: number = 50
+): 'left' | 'right' {
+	if (!Number.isFinite(scrollVelocity)) return currentDirection;
+	if (scrollVelocity > threshold) return 'right';
+	if (scrollVelocity < -threshold) return 'left';
+	return currentDirection;
+}
+

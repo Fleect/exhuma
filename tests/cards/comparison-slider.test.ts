@@ -6,6 +6,8 @@ import {
 	generateClipPath,
 	generateVerticalClipPath,
 	stepSliderPosition,
+	calculateIdleBreathingOffset,
+	generateLoupeClipPath,
 } from '../../packages/cards/src/index';
 import { comparisonSliderComponent } from '../../packages/registry/src/components/comparison-slider';
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
@@ -145,5 +147,24 @@ describe('Exhuma Kinetic Methodology — Comparison Slider (Big-Ω)', () => {
 			expect(usage.code.toLowerCase()).toMatch(/comparison-?slider/);
 			expect(usage.code.length).toBeGreaterThan(100);
 		}
+	});
+
+	it('computes sinusoidal idle breathing offset', () => {
+		// At t = 0, sin(0) = 0
+		expect(calculateIdleBreathingOffset(0, 0.05, 0.5)).toBe(0);
+
+		// At t = 0.5s with freq = 0.5Hz: 2*PI*0.5*0.5 = 0.5*PI -> sin(PI/2) = 1 -> peak amplitude
+		expect(calculateIdleBreathingOffset(0.5, 0.05, 0.5)).toBeCloseTo(0.05, 4);
+
+		// At t = 1.0s: sin(PI) = 0
+		expect(calculateIdleBreathingOffset(1.0, 0.05, 0.5)).toBeCloseTo(0, 4);
+
+		// At t = 1.5s: sin(3PI/2) = -1 -> negative peak amplitude
+		expect(calculateIdleBreathingOffset(1.5, 0.05, 0.5)).toBeCloseTo(-0.05, 4);
+	});
+
+	it('generates circular magnifying loupe clip-path polygon', () => {
+		const loupe = generateLoupeClipPath(50, 40, 120);
+		expect(loupe).toBe('circle(120px at 50.00% 40.00%)');
 	});
 });

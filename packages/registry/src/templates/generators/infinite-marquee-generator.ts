@@ -9,6 +9,8 @@ export function getInfiniteMarqueeOuterFiles(flavor: EcosystemFlavor, props: Rec
 	const fadeWidth = Number(props.fadeWidth ?? 48);
 	const fadeEdgeColor = String(props.fadeEdgeColor || '#ffffff');
 	const fadeEdgeColorDark = String(props.fadeEdgeColorDark || '#09090b');
+	const scrollCoupling = props.scrollCoupling === true;
+	const directionHysteresis = props.directionHysteresis === true;
 
 	switch (flavor) {
 		case 'react':
@@ -32,6 +34,8 @@ export interface InfiniteMarqueeProps extends React.HTMLAttributes<HTMLDivElemen
   fadeWidth?: number;
   fadeEdgeColor?: string;
   fadeEdgeColorDark?: string;
+  scrollCoupling?: boolean;
+  directionHysteresis?: boolean;
 }
 
 /**
@@ -298,6 +302,8 @@ interface Props {
   fadeWidth?: number;
   fadeEdgeColor?: string;
   fadeEdgeColorDark?: string;
+  scrollCoupling?: boolean;
+  directionHysteresis?: boolean;
   class?: string;
 }
 
@@ -489,6 +495,8 @@ const onMouseLeave = () => { if (props.pauseOnHover) targetFactor = 1.0; };
     fadeWidth?: number;
     fadeEdgeColor?: string;
     fadeEdgeColorDark?: string;
+  scrollCoupling?: boolean;
+  directionHysteresis?: boolean;
     class?: string;
   }
 
@@ -827,6 +835,8 @@ export interface InfiniteMarqueeProps {
   fadeWidth?: number;
   fadeEdgeColor?: string;
   fadeEdgeColorDark?: string;
+  scrollCoupling?: boolean;
+  directionHysteresis?: boolean;
   class?: string;
 }
 
@@ -961,6 +971,8 @@ interface Props {
   fadeWidth?: number;
   fadeEdgeColor?: string;
   fadeEdgeColorDark?: string;
+  scrollCoupling?: boolean;
+  directionHysteresis?: boolean;
   class?: string;
 }
 
@@ -1479,6 +1491,8 @@ export function getInfiniteMarqueeUsage(flavor: EcosystemFlavor, props: Record<s
 	const fadeWidth = Number(props.fadeWidth ?? 48);
 	const fadeEdgeColor = String(props.fadeEdgeColor || '#ffffff');
 	const fadeEdgeColorDark = String(props.fadeEdgeColorDark || '#09090b');
+	const scrollCoupling = props.scrollCoupling === true;
+	const directionHysteresis = props.directionHysteresis === true;
 
 	switch (flavor) {
 		case 'nextjs': {

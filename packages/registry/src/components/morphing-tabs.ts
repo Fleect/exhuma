@@ -44,11 +44,19 @@ export const morphingTabsComponent: UniversalComponent = {
 			defaultValue: 'md',
 			description: 'Padding and typographic scale of tab trigger buttons.',
 		},
+		{
+			name: 'liquidStretch',
+			label: 'Liquid Stretch',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Volume-preserving liquid pill stretch during transitions.',
+		},
 	],
 	defaultProps: {
 		springStiffness: 26,
 		variant: 'pill',
 		size: 'md',
+		liquidStretch: false,
 	},
 	dependencies: CORE_COMPONENT_DEPENDENCIES,
 	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {

@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import type { InfiniteMarqueeProps } from '../types';
-import { calculateMarqueeOffset, dampFactor, parseGapToPx } from './marquee-math';
+import { calculateMarqueeOffset, dampFactor, parseGapToPx, calculateCoupledScrollVelocity, evaluateMarqueeDirectionHysteresis } from './marquee-math';
 
 /**
  * InfiniteMarquee — Exhuma Kinetic Methodology (EKM)
@@ -17,7 +17,7 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 	Root: typeof MarqueeRoot;
 	Track: typeof MarqueeTrack;
 	Item: typeof MarqueeItem;
-} = ({ children, speed = 40, direction = 'left', pauseOnHover = true, gap = '1.5rem', showFadeEdges = true, fadeWidth = 48, fadeEdgeColor = '#ffffff', fadeEdgeColorDark = '#09090b', className = '', style }) => {
+} = ({ children, speed = 40, direction = 'left', pauseOnHover = true, gap = '1.5rem', showFadeEdges = true, fadeWidth = 48, fadeEdgeColor = '#ffffff', fadeEdgeColorDark = '#09090b', scrollCoupling = false, directionHysteresis = false, className = '', style }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const trackRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -28,6 +28,15 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 	const lastTimeRef = useRef<number | null>(null);
 	const contentWidthRef = useRef<number>(0);
 	const rafIdRef = useRef<number | null>(null);
+
+	const lastScrollYRef = useRef<number>(0);
+	const scrollVelocityRef = useRef<number>(0);
+	const activeDirectionRef = useRef<'left' | 'right'>(direction);
+
+	// Sync direction prop to ref when it changes
+	useEffect(() => {
+		activeDirectionRef.current = direction;
+	}, [direction]);
 
 	const gapVal = typeof gap === 'number' ? `${gap}px` : gap;
 	const gapNum = parseGapToPx(gap);
@@ -52,19 +61,37 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 		(now: number) => {
 			if (lastTimeRef.current === null) {
 				lastTimeRef.current = now;
+				lastScrollYRef.current = window.scrollY;
 			}
 			const dt = Math.min((now - lastTimeRef.current) / 1000, 0.1); // Max 100ms clamp for tab switch
 			lastTimeRef.current = now;
 
+			const currentScrollY = window.scrollY;
+			if (dt > 0) {
+				scrollVelocityRef.current = (currentScrollY - lastScrollYRef.current) / dt;
+			}
+			lastScrollYRef.current = currentScrollY;
+
+			if (directionHysteresis) {
+				activeDirectionRef.current = evaluateMarqueeDirectionHysteresis(activeDirectionRef.current, scrollVelocityRef.current);
+			} else {
+				activeDirectionRef.current = direction;
+			}
+
 			// Smooth hover deceleration/acceleration factor
 			kineticFactorRef.current = dampFactor(kineticFactorRef.current, targetFactorRef.current, 12.0, dt);
 
-			const effectiveSpeed = speed * kineticFactorRef.current;
+			let baseSpeed = speed;
+			if (scrollCoupling) {
+				baseSpeed = calculateCoupledScrollVelocity(speed, scrollVelocityRef.current);
+			}
+
+			const effectiveSpeed = baseSpeed * kineticFactorRef.current;
 			const width = contentWidthRef.current;
 			const repeatWavelength = width + gapNum;
 
 			if (width > 0 && effectiveSpeed > 0.01) {
-				offsetRef.current = calculateMarqueeOffset(offsetRef.current, dt, effectiveSpeed, direction, repeatWavelength);
+				offsetRef.current = calculateMarqueeOffset(offsetRef.current, dt, effectiveSpeed, activeDirectionRef.current, repeatWavelength);
 
 				if (trackRef.current) {
 					trackRef.current.style.transform = `translate3d(${offsetRef.current.toFixed(2)}px, 0, 0)`;
@@ -73,7 +100,7 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 
 			rafIdRef.current = requestAnimationFrame(tick);
 		},
-		[speed, direction, gapNum]
+		[speed, direction, gapNum, scrollCoupling, directionHysteresis]
 	);
 
 	useEffect(() => {

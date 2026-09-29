@@ -188,6 +188,7 @@ export function StudioWorkbench({ initialSlug = 'stacking-cards' }: { initialSlu
 		if (!PreviewComponent) return null;
 		return (
 			<PreviewComponent
+				{...propValues}
 				props={propValues}
 				viewportMode={viewportMode === 'desktop' ? 'fluid' : viewportMode}
 				cardSwipeResetKey={cardSwipeResetKey}

@@ -3,7 +3,7 @@ import { StackingCards } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function StackingCardsPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const stackingScrollRef = React.useRef<HTMLDivElement>(null);
 
 	const rawTopStart = Number(propValues.topStart ?? 20);

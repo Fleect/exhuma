@@ -4,7 +4,7 @@ import { AutoGrid, AutoGridItem } from '@exhuma/layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function AutoGridPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const minItemWidth = Number(propValues.minItemWidth ?? 280);
 	const gap = Number(propValues.gap ?? 24);

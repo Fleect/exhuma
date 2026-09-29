@@ -4,7 +4,7 @@ import { BorderBeam } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function BorderBeamPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 
 	const rawSize = Number(propValues.size ?? 200);
 	const rawDuration = Number(propValues.duration ?? 8);

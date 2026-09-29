@@ -18,7 +18,9 @@
 			"step": 2,
 			"description": "Maximum absolute cursor attraction displacement cap in pixels."
 		},
-		{ "name": "text", "label": "Button Label", "type": "string", "defaultValue": "Magnetic Attraction", "description": "Inner label text for the button." }
+		{ "name": "text", "label": "Button Label", "type": "string", "defaultValue": "Magnetic Attraction", "description": "Inner label text for the button." },
+		{ "name": "dualTier", "label": "Dual Tier", "type": "boolean", "defaultValue": false, "description": "Dual-layer displacement split between housing and content." },
+		{ "name": "shockwave", "label": "Shockwave", "type": "boolean", "defaultValue": false, "description": "Radial expanding ring on click." }
 	],
 	"dependencies": {
 		"react": ["@exhuma/core"],

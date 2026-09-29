@@ -72,6 +72,13 @@ export const floatingDockComponent: UniversalComponent = {
 			],
 			description: 'Visual backing shelf styling of the dock.',
 		},
+		{
+			name: 'hapticFeedback',
+			label: 'Micro-Haptics',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Enables subtle tactile micro-haptic tick on apex crossing when supported by the device.',
+		},
 	],
 	defaultProps: {
 		direction: 'bottom',
@@ -80,6 +87,7 @@ export const floatingDockComponent: UniversalComponent = {
 		influenceRadius: 60,
 		showLabels: true,
 		panelStyle: 'translucent',
+		hapticFeedback: false,
 	},
 	dependencies: {
 		react: ['@exhuma/core', 'clsx', '@tabler/icons-react'],

@@ -3,7 +3,7 @@ import { ExpandableCard } from '@exhuma/cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function ExpandableCardPreview(props: ComponentPreviewProps) {
-	const propValues = props;
+	const propValues = (props.props ?? props) as Record<string, any>;
 	const duration = Number(propValues.duration ?? 360);
 	return (
 		<div className='mx-auto w-full max-w-sm py-4'>
