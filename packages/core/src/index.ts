@@ -36,3 +36,5 @@ export * from './ConfettiBurst/ConfettiBurst';
 export * from './ConfettiBurst/confetti-math';
 export * from './Drawer/Drawer';
 export * from './Drawer/drawer-math';
+export * from './HulyEffect/HulyEffect';
+export * from './HulyEffect/huly-math';
