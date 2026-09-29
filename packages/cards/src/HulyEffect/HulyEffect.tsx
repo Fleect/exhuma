@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { exponentialSmooth, toRelativePercent, buildHulyGradient } from './huly-math';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 
 export interface HulyEffectProps {
   children?: React.ReactNode;
@@ -143,7 +144,7 @@ export const HulyEffect = React.forwardRef<HTMLDivElement, HulyEffectProps>(
           ['--huly-shadow' as any]: borderGlow ? `0 0 20px 2px color-mix(in srgb, ${borderGlowColor} ${Math.round(intensity * 100)}%, transparent)` : 'none',
           ...style
         }}
-        {...props}
+        {...sanitizeDomProps(props as Record<string, unknown>)}
       >
         <div 
           aria-hidden="true"

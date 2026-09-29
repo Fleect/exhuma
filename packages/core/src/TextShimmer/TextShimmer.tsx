@@ -2,6 +2,7 @@
 
 import React, { forwardRef, memo, useEffect, useState, useId } from 'react';
 import { calculateHoverDuration, calculateShimmerDuration, calculateShimmerGradient } from './shimmer-text-math';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 
 export interface TextShimmerProps {
 	children: React.ReactNode;
@@ -88,7 +89,7 @@ export const TextShimmer = memo(
 					ref={forwardedRef}
 					className={`${shimmerClass} ${className}`}
 					style={style}
-					{...props}
+					{...sanitizeDomProps(props as Record<string, unknown>)}
 				>
 					{children}
 				</Component>

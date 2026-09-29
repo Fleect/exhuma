@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 import {
 	CONFETTI_PARTICLE_STRIDE,
 	initConfettiBuffer,
@@ -136,7 +137,7 @@ export const ConfettiBurst = React.forwardRef<HTMLDivElement, ConfettiBurstProps
 				ref={containerRef}
 				className={className}
 				style={{ ...style, position: 'relative' }}
-				{...props}
+				{...sanitizeDomProps(props as Record<string, unknown>)}
 			>
 				{trigger && (
 					<span className="sr-only" aria-live="polite">

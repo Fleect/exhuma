@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 import {
 	ClickEffectMode,
 	calculateShockwave,
@@ -205,7 +206,7 @@ export const ClickEffects = React.forwardRef<HTMLDivElement, ClickEffectsProps>(
 				ref={containerRef}
 				className={className}
 				style={{ ...style, position: 'relative' }}
-				{...props}
+				{...sanitizeDomProps(props as Record<string, unknown>)}
 			>
 				{children}
 				<canvas

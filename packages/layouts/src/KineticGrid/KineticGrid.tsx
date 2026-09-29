@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 import {
   calculateCellIllumination,
   calculateWaveDisplacement,
@@ -204,7 +205,7 @@ export const KineticGrid = React.forwardRef<HTMLDivElement, KineticGridProps>(
           width: columns * (cellSize + gap) - gap,
           height: rows * (cellSize + gap) - gap,
         }}
-        {...props}
+        {...sanitizeDomProps(props as Record<string, unknown>)}
       >
         <canvas
           ref={canvasRef}

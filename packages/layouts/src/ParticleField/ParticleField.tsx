@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 import {
   initParticleBuffer,
   stepParticleBuffer,
@@ -191,7 +192,7 @@ export const ParticleField = React.forwardRef<HTMLDivElement, ParticleFieldProps
         ref={containerRef}
         className={className}
         style={{ ...style, position: 'relative' }}
-        {...props}
+        {...sanitizeDomProps(props as Record<string, unknown>)}
       >
         <canvas
           ref={canvasRef}

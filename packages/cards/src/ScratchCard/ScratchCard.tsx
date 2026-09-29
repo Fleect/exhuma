@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { estimateScratchRatio, scaledBrushRadius, isScratchComplete } from './scratch-math';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 
 export interface ScratchCardProps {
   width: number;
@@ -130,7 +131,7 @@ export const ScratchCard = React.forwardRef<HTMLDivElement, ScratchCardProps>(
         ref={ref || containerRef}
         className={`relative overflow-hidden ${className}`}
         style={{ width, height, ...style }}
-        {...props}
+        {...sanitizeDomProps(props as Record<string, unknown>)}
       >
         <div className="absolute inset-0 z-0">
           {revealContent}

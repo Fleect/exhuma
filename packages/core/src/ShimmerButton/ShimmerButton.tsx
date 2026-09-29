@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { calculateShimmerAngle, calculatePressScale, buildConicGradient } from './shimmer-button-math';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 
 export interface ShimmerButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	shimmerColor?: string;
@@ -119,7 +120,7 @@ export const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonPr
 				onPointerDown={handlePointerDown}
 				onPointerUp={handlePointerUp}
 				onPointerLeave={handlePointerLeave}
-				{...props}
+				{...sanitizeDomProps(props as Record<string, unknown>)}
 			>
 				{/* The rotating gradient layer */}
 				<div

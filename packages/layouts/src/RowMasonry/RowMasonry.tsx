@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sanitizeDomProps } from '../utils/sanitize-dom-props';
 import {
   computeMasonryLayout,
   computeResponsiveColumns,
@@ -101,7 +102,7 @@ export const RowMasonry = React.forwardRef<HTMLDivElement, RowMasonryProps>(
           position: 'relative',
           height: layout.totalHeight,
         }}
-        {...props}
+        {...sanitizeDomProps(props as Record<string, unknown>)}
       >
         {React.Children.map(children, (child, index) => {
           if (!React.isValidElement(child)) return null;
