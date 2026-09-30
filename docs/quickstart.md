@@ -6,6 +6,8 @@ Get started with **Exhuma** in your React or Next.js project in under 60 seconds
 
 ## 1. Installation
 
+You can install the unified `@exhuma/core` package:
+
 ```bash
 # Using pnpm
 pnpm add @exhuma/core
@@ -15,6 +17,14 @@ npm install @exhuma/core
 
 # Using yarn
 yarn add @exhuma/core
+```
+
+Or copy-paste 100% owned source code directly into your repository with the Exhuma CLI:
+
+```bash
+# Add components directly to your codebase
+npx exhuma add stacking-cards
+npx exhuma add row-masonry
 ```
 
 ---
@@ -47,12 +57,41 @@ export default function ExperienceSection() {
 
 ---
 
-## 3. Using CSS Masonry
+## 3. Using Greedy Row Masonry
+
+`<RowMasonry>` calculates dynamic greedy shortest-column placement in $\mathcal{O}(N \log K)$, ensuring chronological reading order across rows with single-frame coalesced `requestAnimationFrame` batching:
+
+```tsx
+import { RowMasonry, RowMasonryItem } from '@exhuma/core';
+
+export default function DynamicFeed({ items }: { items: { id: string; height: number; title: string }[] }) {
+  return (
+    <RowMasonry columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap={16}>
+      {items.map((item) => (
+        <RowMasonryItem key={item.id}>
+          <div
+            style={{ height: item.height }}
+            className="rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-xl"
+          >
+            <h4 className="text-lg font-bold text-white">{item.title}</h4>
+          </div>
+        </RowMasonryItem>
+      ))}
+    </RowMasonry>
+  );
+}
+```
+
+---
+
+## 4. Using CSS Masonry
+
+For lightweight, zero-JavaScript column-count masonry:
 
 ```tsx
 import { CssMasonry } from '@exhuma/core';
 
-export default function MasonryFeed({ items }: { items: string[] }) {
+export default function SimpleMasonry({ items }: { items: string[] }) {
   return (
     <CssMasonry columns={{ sm: 1, md: 2, lg: 3 }} gap="1.5rem">
       {items.map((item, idx) => (

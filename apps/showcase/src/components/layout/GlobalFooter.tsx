@@ -103,7 +103,15 @@ export function GlobalFooter() {
 			<div className='border-border border-t'>
 				<div className='container-fluid text-muted-foreground text-2xs flex flex-col items-center justify-between gap-3 py-4 md:flex-row'>
 					<div className='flex flex-wrap items-center justify-center gap-2 text-center'>
-						<span>MIT License © {new Date().getFullYear()} Sapan Mozammel</span>
+						<span>MIT License © {new Date().getFullYear()}</span>
+						<span className='opacity-40'>·</span>
+						<span>
+							A{' '}
+							<Link href='https://fleect.com/' target='_blank' rel='noreferrer' className='text-foreground/80 hover:text-foreground underline-offset-3 transition-colors hover:underline'>
+								Fleect
+							</Link>{' '}
+							original
+						</span>
 					</div>
 
 					<div className='flex items-center gap-3'>

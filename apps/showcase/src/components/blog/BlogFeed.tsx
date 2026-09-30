@@ -104,7 +104,15 @@ export function BlogFeed({ posts }: BlogFeedProps) {
 									{featuredPost.author.avatar}
 								</div>
 								<div>
-									<div className='text-foreground text-xs font-semibold'>{featuredPost.author.name}</div>
+									<div className='text-foreground text-xs font-semibold'>
+										{featuredPost.author.url ? (
+											<Link href={featuredPost.author.url} target='_blank' rel='noreferrer' className='hover:text-primary transition-colors hover:underline'>
+												{featuredPost.author.name}
+											</Link>
+										) : (
+											featuredPost.author.name
+										)}
+									</div>
 									<div className='text-muted-foreground text-3xs font-mono'>{featuredPost.author.role}</div>
 								</div>
 							</div>
@@ -156,7 +164,13 @@ export function BlogFeed({ posts }: BlogFeedProps) {
 							<div className='border-border/60 mt-6 flex flex-wrap items-center justify-between gap-2 border-t pt-4 text-xs'>
 								<div className='flex items-center gap-2'>
 									<div className='border-border bg-background text-foreground text-3xs flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border font-mono font-bold'>{post.author.avatar}</div>
-									<span className='text-muted-foreground text-2xs font-mono'>{post.author.name}</span>
+									{post.author.url ? (
+										<Link href={post.author.url} target='_blank' rel='noreferrer' className='text-muted-foreground hover:text-foreground text-2xs font-mono transition-colors hover:underline'>
+											{post.author.name}
+										</Link>
+									) : (
+										<span className='text-muted-foreground text-2xs font-mono'>{post.author.name}</span>
+									)}
 								</div>
 								<span className='text-muted-foreground text-3xs flex items-center gap-1 font-mono'>
 									<Clock className='h-3 w-3' />

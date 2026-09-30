@@ -43,8 +43,8 @@ export const metadata: Metadata = {
 		'tailwind css',
 		'clsx',
 	],
-	authors: [{ name: 'Sapan Mozammel', url: 'https://github.com/SapanMozammel' }],
-	creator: 'Sapan Mozammel',
+	authors: [{ name: 'Fleect', url: 'https://fleect.com/' }],
+	creator: 'Fleect',
 	publisher: 'Exhuma',
 	robots: {
 		index: true,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 		title: `Exhuma — Universal Component Architecture for ${ECOSYSTEM_COUNT} Ecosystems`,
 		description: `Autonomous tactile interactions, dynamic layout engines, and zero-runtime-dependency physics components adapted natively across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
 		images: ['/og.png'],
-		creator: '@sapanmozammel',
+		creator: '@fleect',
 	},
 };
 
