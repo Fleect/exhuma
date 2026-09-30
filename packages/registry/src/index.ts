@@ -18,6 +18,7 @@ import { cardSwipeStackComponent } from './components/card-swipe-stack';
 import { comparisonSliderComponent } from './components/comparison-slider';
 import { expandableCardComponent } from './components/expandable-card';
 import { cursorTooltipComponent } from './components/cursor-tooltip';
+import { rowMasonryComponent } from './components/row-masonry';
 
 export * from './schema';
 export { generateComponentUsage } from './templates/usage-generator';
@@ -26,6 +27,7 @@ export {
 	stackingCardsComponent,
 	horizontalScrollerComponent,
 	cssMasonryComponent,
+	rowMasonryComponent,
 	autoGridComponent,
 	tiltCardComponent,
 	spotlightCardComponent,
@@ -48,6 +50,7 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'stacking-cards': stackingCardsComponent,
 	'horizontal-scroller': horizontalScrollerComponent,
 	'css-masonry': cssMasonryComponent,
+	'row-masonry': rowMasonryComponent,
 	'auto-grid': autoGridComponent,
 	'tilt-card': tiltCardComponent,
 	'spotlight-card': spotlightCardComponent,
@@ -65,6 +68,8 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'expandable-card': expandableCardComponent,
 	'cursor-tooltip': cursorTooltipComponent,
 };
+
+
 
 export const ALL_COMPONENTS: UniversalComponent[] = Object.values(COMPONENT_REGISTRY);
 export const COMPONENT_COUNT = ALL_COMPONENTS.length;

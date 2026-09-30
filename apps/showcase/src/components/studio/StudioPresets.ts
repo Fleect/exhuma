@@ -94,6 +94,15 @@ export const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unk
 		'Dense Gallery': { columns: 2, columnsSm: 3, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 12, columnFill: 'balance', height: 0 },
 		'Spacious Editorial': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 3, gap: 24, columnFill: 'balance', height: 0 },
 	},
+	'row-masonry': {
+		Default: { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 3, columnsXl: 4, gap: 16 },
+		'Dense Gallery': { columns: 2, columnsSm: 3, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 12 },
+		'Spacious Editorial': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 3, gap: 24 },
+		'High Velocity Flow': { columns: 2, columnsSm: 3, columnsMd: 4, columnsLg: 5, columnsXl: 6, gap: 14 },
+		'Compact Dual': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 2, gap: 10 },
+		'Wide Portfolio': { columns: 1, columnsSm: 2, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 20 },
+	},
+
 	'auto-grid': {
 		Default: { minItemWidth: 280, gap: 24, mode: 'auto-fit', maxColumns: 4, alignItems: 'stretch' },
 		'Compact Catalog': { minItemWidth: 180, gap: 16, mode: 'auto-fill', maxColumns: 6, alignItems: 'stretch' },

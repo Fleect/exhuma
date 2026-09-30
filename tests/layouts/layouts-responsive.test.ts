@@ -121,21 +121,7 @@ describe('Exhuma Layouts — AutoGrid Architecture & Registry', () => {
 });
 
 describe('Exhuma Layouts — Universal 13-Ecosystem Parity & Big-Ω Gates', () => {
-	const ECOSYSTEMS = [
-		'react',
-		'nextjs',
-		'vue',
-		'svelte',
-		'angular',
-		'solid',
-		'astro',
-		'blade',
-		'vanilla',
-		'wordpress',
-		'webcomponent',
-		'react-native',
-		'flutter',
-	] as const;
+	const ECOSYSTEMS = ['react', 'nextjs', 'vue', 'svelte', 'angular', 'solid', 'astro', 'blade', 'vanilla', 'wordpress', 'webcomponent', 'react-native', 'flutter'] as const;
 
 	for (const ecosystem of ECOSYSTEMS) {
 		it(`generates non-empty component source for Auto Grid on ${ecosystem}`, () => {
@@ -305,21 +291,7 @@ describe('Exhuma Layouts — DiamondGrid Architecture & Registry', () => {
 		expect(code).toContain('container-type');
 	});
 
-	const ecosystems = [
-		'react',
-		'nextjs',
-		'vue',
-		'svelte',
-		'angular',
-		'solid',
-		'astro',
-		'blade',
-		'vanilla',
-		'wordpress',
-		'webcomponent',
-		'react-native',
-		'flutter',
-	] as const;
+	const ecosystems = ['react', 'nextjs', 'vue', 'svelte', 'angular', 'solid', 'astro', 'blade', 'vanilla', 'wordpress', 'webcomponent', 'react-native', 'flutter'] as const;
 
 	for (const flavor of ecosystems) {
 		it(`generates non-empty component source for Diamond Grid on ${flavor}`, () => {
@@ -330,3 +302,174 @@ describe('Exhuma Layouts — DiamondGrid Architecture & Registry', () => {
 	}
 });
 
+describe('Exhuma Layouts — RowMasonry Studio Audit: Params, Presets & Canvas Physics', () => {
+	it('exports RowMasonry and RowMasonryItem components', async () => {
+		const { RowMasonry, RowMasonryItem } = await import('../../packages/layouts/src');
+		expect(RowMasonry).toBeDefined();
+		expect(typeof RowMasonry).toBe('object'); // React.forwardRef object
+		expect(RowMasonryItem).toBeDefined();
+		expect(typeof RowMasonryItem).toBe('function');
+	});
+
+	it('validates row-masonry registry schema with complete responsive parameters matching CSS Masonry', async () => {
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+		expect(rowMasonryComponent.id).toBe('row-masonry');
+		expect(rowMasonryComponent.defaultProps.columns).toBe(1);
+		expect(rowMasonryComponent.defaultProps.columnsSm).toBe(2);
+		expect(rowMasonryComponent.defaultProps.columnsMd).toBe(2);
+		expect(rowMasonryComponent.defaultProps.columnsLg).toBe(3);
+		expect(rowMasonryComponent.defaultProps.columnsXl).toBe(4);
+		expect(rowMasonryComponent.defaultProps.gap).toBe(16);
+
+		const columnsProp = rowMasonryComponent.props.find((p) => p.name === 'columns');
+		const columnsSmProp = rowMasonryComponent.props.find((p) => p.name === 'columnsSm');
+		const columnsMdProp = rowMasonryComponent.props.find((p) => p.name === 'columnsMd');
+		const columnsLgProp = rowMasonryComponent.props.find((p) => p.name === 'columnsLg');
+		const columnsXlProp = rowMasonryComponent.props.find((p) => p.name === 'columnsXl');
+		const gapProp = rowMasonryComponent.props.find((p) => p.name === 'gap');
+
+		expect(columnsProp?.type).toBe('number');
+		expect(columnsProp?.defaultValue).toBe(1);
+		expect(columnsSmProp?.defaultValue).toBe(2);
+		expect(columnsMdProp?.defaultValue).toBe(2);
+		expect(columnsLgProp?.defaultValue).toBe(3);
+		expect(columnsXlProp?.defaultValue).toBe(4);
+		expect(gapProp?.defaultValue).toBe(16);
+	});
+
+	it('validates all 6 Studio presets for row-masonry with zero missing keys', async () => {
+		const { COMPONENT_PRESETS } = await import('../../apps/showcase/src/components/studio/StudioPresets');
+		const presets = COMPONENT_PRESETS['row-masonry'];
+		expect(presets).toBeDefined();
+		expect(Object.keys(presets).length).toBe(6);
+
+		const expectedPresets = ['Default', 'Dense Gallery', 'Spacious Editorial', 'High Velocity Flow', 'Compact Dual', 'Wide Portfolio'];
+
+		for (const name of expectedPresets) {
+			const preset = presets[name];
+			expect(preset).toBeDefined();
+			expect(typeof preset.columns).toBe('number');
+			expect(typeof preset.columnsSm).toBe('number');
+			expect(typeof preset.columnsMd).toBe('number');
+			expect(typeof preset.columnsLg).toBe('number');
+			expect(typeof preset.columnsXl).toBe('number');
+			expect(typeof preset.gap).toBe('number');
+		}
+	});
+
+	it('audits canvas physics: greedy placement preserves bounds and zero overlap', async () => {
+		const { computeMasonryLayout, computeResponsiveColumns } = await import('../../packages/layouts/src/RowMasonry/row-masonry-math');
+
+		const containerWidth = 1200;
+		const heights = [130, 210, 145, 255, 145, 180, 130, 220, 135];
+		const gap = 16;
+		const cols = computeResponsiveColumns(containerWidth, { columnsLg: 3 });
+		expect(cols).toBe(3);
+
+		const { items, totalHeight } = computeMasonryLayout(heights, containerWidth, cols, gap);
+		expect(items).toHaveLength(heights.length);
+
+		// 1. Zero horizontal overflow
+		for (const item of items) {
+			expect(item.x + item.width).toBeLessThanOrEqual(containerWidth + 0.001);
+			expect(item.x).toBeGreaterThanOrEqual(0);
+			expect(item.y).toBeGreaterThanOrEqual(0);
+		}
+
+		// 2. Shortest column greedy assignment verification:
+		// Every item after the first K items must be placed on top of the shortest column
+		const colTrackers = new Array(cols).fill(0);
+		const colWidth = (containerWidth - gap * (cols - 1)) / cols;
+
+		for (let i = 0; i < heights.length; i++) {
+			const minColHeight = Math.min(...colTrackers);
+			const item = items[i];
+			expect(item.y).toBe(minColHeight);
+			expect(item.width).toBeCloseTo(colWidth, 2);
+
+			const colIndex = Math.round(item.x / (colWidth + gap));
+			colTrackers[colIndex] += heights[i] + gap;
+		}
+
+		// 3. Total height strictly matches the tallest column minus trailing gap
+		const maxTracker = Math.max(...colTrackers) - gap;
+		expect(totalHeight).toBe(maxTracker);
+	});
+
+	it('generates outer-layer payload across all 13 ecosystems for RowMasonry (standard and ejected)', async () => {
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+
+		for (const flavor of SUPPORTED_ECOSYSTEMS) {
+			const standard = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps);
+			expect(standard.length).toBeGreaterThan(0);
+			expect(standard[0].code.length).toBeGreaterThan(50);
+
+			const ejected = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps, { eject: true });
+			expect(ejected.length).toBeGreaterThan(0);
+			expect(ejected[0].code.length).toBeGreaterThan(100);
+		}
+	});
+
+	it('keeps published row-masonry registry artifact synchronized with source generation across all 13 ecosystems', async () => {
+		const { readFileSync } = await import('node:fs');
+		const { resolve } = await import('node:path');
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+
+		const artifactPath = resolve(process.cwd(), 'apps/showcase/public/registry/row-masonry.json');
+		const artifact = JSON.parse(readFileSync(artifactPath, 'utf8'));
+
+		expect(artifact.slug).toBe('row-masonry');
+		expect(artifact.category).toBe('layouts');
+		expect(artifact.props).toHaveLength(6);
+
+		for (const flavor of SUPPORTED_ECOSYSTEMS) {
+			expect(artifact.flavors[flavor]).toEqual(rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps));
+			expect(artifact.ejected[flavor]).toEqual(rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps, { eject: true }));
+		}
+	});
+
+	it('keeps embedded CLI canonical registry synchronized for row-masonry', async () => {
+		const { readFileSync } = await import('node:fs');
+		const { resolve } = await import('node:path');
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+
+		const cliPath = resolve(process.cwd(), 'packages/cli/src/registry/canonical.json');
+		const canonical = JSON.parse(readFileSync(cliPath, 'utf8'));
+
+		expect(canonical['row-masonry']).toBeDefined();
+		expect(canonical['row-masonry:ejected']).toBeDefined();
+
+		for (const flavor of SUPPORTED_ECOSYSTEMS) {
+			expect(canonical['row-masonry'][flavor]).toEqual(rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps));
+			expect(canonical['row-masonry:ejected'][flavor]).toEqual(rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps, { eject: true }));
+		}
+	});
+
+	it('verifies non-React framework implementations of RowMasonry are independent of @exhuma/core', async () => {
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+
+		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((f) => f !== 'react' && f !== 'nextjs')) {
+			const files = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps);
+			for (const file of files) {
+				expect(file.code).not.toContain('@exhuma/core');
+			}
+			expect(rowMasonryComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
+		}
+	});
+
+	it('guarantees rAF coalescing and lifecycle safety for browser engines of RowMasonry', async () => {
+		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
+
+		for (const flavor of ['react', 'nextjs', 'vue', 'svelte', 'angular', 'solid', 'vanilla', 'webcomponent'] as const) {
+			const files = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps, { eject: true });
+			const code = files[0]?.code ?? '';
+			expect(code).toMatch(/requestAnimationFrame/);
+			expect(code).toMatch(/cancelAnimationFrame/);
+			expect(code).toMatch(/translate3d/);
+		}
+	});
+});

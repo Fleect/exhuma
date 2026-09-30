@@ -4,6 +4,7 @@ import { getExpandableCardOuterFiles } from './generators/expandable-card-genera
 import { getCardSwipeStackOuterFiles } from './generators/card-swipe-stack-generator';
 import { getAutoGridOuterFiles } from './generators/auto-grid-generator';
 import { getCssMasonryOuterFiles } from './generators/css-masonry-generator';
+import { getRowMasonryOuterFiles } from './generators/row-masonry-generator';
 import { getInfiniteMarqueeOuterFiles } from './generators/infinite-marquee-generator';
 import { getHorizontalScrollerOuterFiles } from './generators/horizontal-scroller-generator';
 import { getBentoGridOuterFiles } from './generators/bento-grid-generator';
@@ -81,6 +82,11 @@ export function generateOuterLayerFiles(spec: ComponentOuterSpec, flavor: Ecosys
 
 	if (slug === 'css-masonry') {
 		const files = getCssMasonryOuterFiles(flavor, props, isEjected);
+		if (files) return files;
+	}
+
+	if (slug === 'row-masonry') {
+		const files = getRowMasonryOuterFiles(flavor, props, isEjected);
 		if (files) return files;
 	}
 

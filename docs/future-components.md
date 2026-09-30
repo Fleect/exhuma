@@ -35,7 +35,7 @@ Here is the complete wishlist inventory combining our **original 4 deferred comp
 | **2**  | **`sticky-parallax`**    | Sticky Parallax Scroll            | Layouts / Viewports    | **Original Wishlist** | Post-Beta (v1.1+)  |
 | **3**  | **`interactive-grid`**   | Interactive Grid Pattern          | Layouts / Backgrounds  | **Original Wishlist** | **Beta Candidate** |
 | **4**  | **`animated-sphere`**    | 3D Animated Sphere                | 3D / Creative Canvas   | **Original Wishlist** | Post-Beta (v1.2+)  |
-| **5**  | **`row-masonry`**        | Kinetic Row Masonry (Macy EKM)    | Layout Engines         |   **User Request**    | **Beta Candidate** |
+| **5**  | **`row-masonry`**        | Kinetic Row Masonry (Macy EKM)    | Layout Engines         |   **User Request**    | **Shipped (Beta 20)** |
 | **6**  | **`text-scramble`**      | Cyberpunk Text Decrypt            | Kinetic Typography     | **Framer University** | **Beta Candidate** |
 | **7**  | **`text-shimmer`**       | Specular Gradient Shimmer         | Kinetic Typography     | **Framer University** | **Beta Candidate** |
 | **8**  | **`shimmer-button`**     | Rotating Laser Glow Button        | Kinetic Actions        | **Framer University** | **Beta Candidate** |
@@ -68,11 +68,11 @@ Here is the complete wishlist inventory combining our **original 4 deferred comp
 
 ## 🎯 Target Beta Expansion Candidates (To Reach 25+ Components)
 
-To expand Exhuma's Beta catalog from **19 to 25+ production-grade primitives** (+6 needed), we select from the deep architectural specifications below based on visual punch, mathematical rigor, zero layout thrashing, and universal cross-framework portability:
+To expand Exhuma's Beta catalog from **20 to 25+ production-grade primitives** (+5 needed), we select from the deep architectural specifications below based on visual punch, mathematical rigor, zero layout thrashing, and universal cross-framework portability:
 
 ---
 
-### 1. Kinetic Row Masonry (`row-masonry` / `macy-masonry`)
+### 1. Kinetic Row Masonry (`row-masonry` / `macy-masonry`) — *Shipped in 20-Component Beta*
 
 - **Category**: Responsive Layout Engines
 - **Visual & Engineering Inspiration**: Macy.js, Pinterest, Packery, Unsplash dynamic feeds.
@@ -513,15 +513,15 @@ These components are preserved on the post-beta roadmap due to external specific
 ## 🗺️ Phased Implementation Roadmap
 
 ```
-Phase 1: High-Impact Core Primitives (Beta Expansion 19 → 25)
-  ├── 1. row-masonry        (Macy EKM chronological layout engine)
+Phase 1: High-Impact Core Primitives (Beta Expansion 20 → 25)
+  ├── 1. row-masonry        (Macy EKM chronological layout engine - SHIPPED)
   ├── 2. text-scramble      (Cyberpunk/Raycast tabular decrypt typography)
   ├── 3. text-shimmer       (Linear/Apple 100% GPU specular gradient text)
   ├── 4. coverflow-carousel (Parametric 3D spatial carousel engine)
   ├── 5. shimmer-button     (Rotating laser glow action button)
   └── 6. drawer             (Vaul-style gestural bottom sheet modal)
 
-Phase 2: Flagship Upgrades to Current 19 Components (Subject to User Review)
+Phase 2: Flagship Upgrades to Current 20 Components (Subject to User Review)
   ├── tilt-card diorama multi-plane depth (data-depth)
   ├── magnetic-button multi-layer label detachment
   ├── spotlight-card shared horizon grid bleed (SpotlightGroup)

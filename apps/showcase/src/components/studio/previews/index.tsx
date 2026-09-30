@@ -13,6 +13,7 @@ import ExpandableCardPreview from './cards/ExpandableCardPreview';
 
 // Layouts
 import CssMasonryPreview from './layouts/CssMasonryPreview';
+import RowMasonryPreview from './layouts/RowMasonryPreview';
 import AutoGridPreview from './layouts/AutoGridPreview';
 import InfiniteMarqueePreview from './layouts/InfiniteMarqueePreview';
 import BentoGridPreview from './layouts/BentoGridPreview';
@@ -36,6 +37,7 @@ export const COMPONENT_PREVIEWS: Record<string, React.ComponentType<any>> = {
 	'comparison-slider': ComparisonSliderPreview,
 	'expandable-card': ExpandableCardPreview,
 	'css-masonry': CssMasonryPreview,
+	'row-masonry': RowMasonryPreview,
 	'auto-grid': AutoGridPreview,
 	'infinite-marquee': InfiniteMarqueePreview,
 	'bento-grid': BentoGridPreview,
@@ -58,6 +60,7 @@ export {
 	ComparisonSliderPreview,
 	ExpandableCardPreview,
 	CssMasonryPreview,
+	RowMasonryPreview,
 	AutoGridPreview,
 	InfiniteMarqueePreview,
 	BentoGridPreview,
