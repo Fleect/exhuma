@@ -1,8 +1,33 @@
-node_modules
-dist
-.next
-.turbo
-out
-coverage
-pnpm-lock.yaml
+# Generated from FORMATTER_CONFIG.md
+# Monorepo layout: source lives under apps/*/src and packages/*/src,
+# not a single root-level src/ — so this excludes generated/vendor
+# output instead of whitelisting one src folder (which would silently
+# blackhole every workspace package).
+
+node_modules/
+vendor/
+build/
+dist/
+*.min.js
+*.min.css
 *.log
+coverage/
+.cache/
+.next/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# Auterix workflow context, managed adapters & task specs (protects regex parsers and SHA256 lockfile integrity)
+.ai/
+.agents/
+.cursor/
+.augment/
+CLAUDE.md
+AGENTS.md
+.github/copilot-instructions.md

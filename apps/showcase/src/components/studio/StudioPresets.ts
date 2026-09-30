@@ -1,0 +1,295 @@
+export const COLOR_PRESETS = [
+	{ label: 'Indigo', value: '#6366f1' },
+	{ label: 'Violet', value: '#8b5cf6' },
+	{ label: 'Cyan', value: '#06b6d4' },
+	{ label: 'Emerald', value: '#10b981' },
+	{ label: 'Rose', value: '#f43f5e' },
+	{ label: 'Amber', value: '#f59e0b' },
+	{ label: 'White', value: '#ffffff' },
+];
+
+export function toHexColor(color: unknown, fallback = '#ffffff'): string {
+	if (typeof color !== 'string') return fallback;
+	const str = color.trim().toLowerCase();
+	if (/^#[0-9a-f]{6}$/.test(str)) return str;
+	if (/^#[0-9a-f]{8}$/.test(str)) return str.slice(0, 7);
+	if (/^#[0-9a-f]{3}$/.test(str)) {
+		return `#${str[1]}${str[1]}${str[2]}${str[2]}${str[3]}${str[3]}`;
+	}
+	const rgbMatch = str.match(/^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+	if (rgbMatch) {
+		const r = Math.min(255, parseInt(rgbMatch[1], 10)).toString(16).padStart(2, '0');
+		const g = Math.min(255, parseInt(rgbMatch[2], 10)).toString(16).padStart(2, '0');
+		const b = Math.min(255, parseInt(rgbMatch[3], 10)).toString(16).padStart(2, '0');
+		return `#${r}${g}${b}`;
+	}
+	return fallback;
+}
+
+// Architectural presets per component
+export const COMPONENT_PRESETS: Record<string, Record<string, Record<string, unknown>>> = {
+	'stacking-cards': {
+		Default: { topStart: 20, topIncrement: 28, cardGap: 20, scaleThreshold: 150, minScale: 0.9, reverseScale: true },
+		'Subtle Elegance': { topStart: 20, topIncrement: 16, cardGap: 24, scaleThreshold: 180, minScale: 0.94, reverseScale: true },
+		'Cinematic Echelon': { topStart: 24, topIncrement: 36, cardGap: 28, scaleThreshold: 120, minScale: 0.85, reverseScale: true },
+		'Compact Deck': { topStart: 16, topIncrement: 14, cardGap: 12, scaleThreshold: 100, minScale: 0.92, reverseScale: false },
+		'Dramatic Cascade': { topStart: 28, topIncrement: 40, cardGap: 28, scaleThreshold: 110, minScale: 0.82, reverseScale: true },
+	},
+	'horizontal-scroller': {
+		Default: {
+			itemGap: 28,
+			speed: 1.0,
+			cardWidth: 320,
+			showProgress: true,
+			showFadeEdges: true,
+			fadeWidth: 48,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			mobileMode: 'scroll',
+		},
+		'Compact Gap': {
+			itemGap: 16,
+			speed: 1.0,
+			cardWidth: 320,
+			showProgress: true,
+			showFadeEdges: true,
+			fadeWidth: 48,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			mobileMode: 'scroll',
+		},
+		'Spacious Gap': {
+			itemGap: 44,
+			speed: 1.0,
+			cardWidth: 340,
+			showProgress: true,
+			showFadeEdges: true,
+			fadeWidth: 64,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			mobileMode: 'scroll',
+		},
+		'High Velocity': {
+			itemGap: 32,
+			speed: 1.8,
+			cardWidth: 320,
+			showProgress: true,
+			showFadeEdges: true,
+			fadeWidth: 64,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			mobileMode: 'scroll',
+		},
+	},
+	'tilt-card': {
+		Default: { maxTilt: 15, perspective: 1000, scale: 1.02, speed: 0.12, reverse: false, disabled: false, axis: 'all' },
+		'Subtle Float': { maxTilt: 8, perspective: 1200, scale: 1.01, speed: 0.08, reverse: false, disabled: false, axis: 'all' },
+		'Aggressive 3D': { maxTilt: 30, perspective: 800, scale: 1.06, speed: 0.18, reverse: false, disabled: false, axis: 'all' },
+		'Magnetic Lift (Reverse)': { maxTilt: 20, perspective: 900, scale: 1.04, speed: 0.15, reverse: true, disabled: false, axis: 'all' },
+		'Pitch Only (X-Axis)': { maxTilt: 20, perspective: 1000, scale: 1.02, speed: 0.12, reverse: false, disabled: false, axis: 'x' },
+		'Yaw Only (Y-Axis)': { maxTilt: 20, perspective: 1000, scale: 1.02, speed: 0.12, reverse: false, disabled: false, axis: 'y' },
+	},
+	'css-masonry': {
+		Default: { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 3, columnsXl: 4, gap: 16, columnFill: 'balance', height: 0 },
+		'Dense Gallery': { columns: 2, columnsSm: 3, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 12, columnFill: 'balance', height: 0 },
+		'Spacious Editorial': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 3, gap: 24, columnFill: 'balance', height: 0 },
+	},
+	'row-masonry': {
+		Default: { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 3, columnsXl: 4, gap: 16 },
+		'Dense Gallery': { columns: 2, columnsSm: 3, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 12 },
+		'Spacious Editorial': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 3, gap: 24 },
+		'High Velocity Flow': { columns: 2, columnsSm: 3, columnsMd: 4, columnsLg: 5, columnsXl: 6, gap: 14 },
+		'Compact Dual': { columns: 1, columnsSm: 2, columnsMd: 2, columnsLg: 2, columnsXl: 2, gap: 10 },
+		'Wide Portfolio': { columns: 1, columnsSm: 2, columnsMd: 3, columnsLg: 4, columnsXl: 5, gap: 20 },
+	},
+
+	'auto-grid': {
+		Default: { minItemWidth: 280, gap: 24, mode: 'auto-fit', maxColumns: 4, alignItems: 'stretch' },
+		'Compact Catalog': { minItemWidth: 180, gap: 16, mode: 'auto-fill', maxColumns: 6, alignItems: 'stretch' },
+		'Hero Showcase': { minItemWidth: 360, gap: 28, mode: 'auto-fit', maxColumns: 3, alignItems: 'stretch' },
+	},
+	'spotlight-card': {
+		Default: { radius: 350, opacity: 0.85, color: '#6366f1', borderColor: '#818cf8', spread: 60, mode: 'both', smoothing: 0.2, disabled: false },
+		Subtle: { radius: 250, opacity: 0.4, color: '#94a3b8', borderColor: '#cbd5e1', spread: 70, mode: 'both', smoothing: 0.15, disabled: false },
+		Broad: { radius: 500, opacity: 0.95, color: '#10b981', borderColor: '#34d399', spread: 90, mode: 'both', smoothing: 0.25, disabled: false },
+		BorderOnly: { radius: 300, opacity: 0.85, color: '#6366f1', borderColor: '#a855f7', spread: 80, mode: 'border', smoothing: 0.2, disabled: false },
+		'Background Sheen': { radius: 420, opacity: 0.9, color: '#ec4899', borderColor: '#f43f5e', spread: 75, mode: 'background', smoothing: 0.18, disabled: false },
+	},
+	'morphing-tabs': {
+		Default: { springStiffness: 26, variant: 'pill', size: 'md', liquidStretch: false },
+		'Liquid Pill Morph': { springStiffness: 28, variant: 'pill', size: 'md', liquidStretch: true },
+		'Snappy Kinetic': { springStiffness: 42, variant: 'pill', size: 'md', liquidStretch: false },
+		'Gentle Fluid': { springStiffness: 14, variant: 'pill', size: 'lg', liquidStretch: false },
+		'Minimal Underline': { springStiffness: 30, variant: 'underline', size: 'md', liquidStretch: false },
+		'Neon Glow': { springStiffness: 32, variant: 'glow', size: 'md', liquidStretch: false },
+	},
+	accordion: {
+		Default: { mode: 'single', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Multiple FAQ': { mode: 'multiple', collapsible: true, gap: 12, bordered: true, shadow: true, showNumbers: true, showIcon: true, duration: 300 },
+		'Compact List': { mode: 'single', collapsible: true, gap: 6, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 250 },
+		'Flat Minimal': { mode: 'single', collapsible: true, gap: 8, bordered: true, shadow: false, showNumbers: false, showIcon: true, duration: 180 },
+		'Clean Disclosure': { mode: 'single', collapsible: true, gap: 16, bordered: false, shadow: false, showNumbers: false, showIcon: true, duration: 240 },
+	},
+	'infinite-marquee': {
+		Default: {
+			speed: 40,
+			direction: 'left',
+			pauseOnHover: true,
+			gap: 24,
+			showFadeEdges: true,
+			fadeWidth: 48,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			scrollCoupling: false,
+			directionHysteresis: false,
+		},
+		'Scroll Coupled Hysteresis': {
+			speed: 40,
+			direction: 'left',
+			pauseOnHover: true,
+			gap: 24,
+			showFadeEdges: true,
+			fadeWidth: 48,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			scrollCoupling: true,
+			directionHysteresis: true,
+		},
+		'High Velocity (Reverse)': {
+			speed: 80,
+			direction: 'right',
+			pauseOnHover: true,
+			gap: 16,
+			showFadeEdges: true,
+			fadeWidth: 64,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			scrollCoupling: false,
+			directionHysteresis: false,
+		},
+		'Gentle Float': {
+			speed: 20,
+			direction: 'left',
+			pauseOnHover: false,
+			gap: 32,
+			showFadeEdges: false,
+			fadeWidth: 48,
+			fadeEdgeColor: '#ffffff',
+			fadeEdgeColorDark: '#09090b',
+			scrollCoupling: false,
+			directionHysteresis: false,
+		},
+	},
+	'bento-grid': {
+		Default: { cols: 3, gap: 20, rowHeight: 180 },
+		Dense: { cols: 4, gap: 16, rowHeight: 160 },
+		Spacious: { cols: 2, gap: 24, rowHeight: 200 },
+	},
+	'diamond-grid': {
+		Default: { mode: 'rhombic', gap: 16, layout: 'auto', responsive: false },
+		Isometric: { mode: 'isometric', gap: 20, layout: 'large', responsive: false },
+		Dense: { mode: 'rhombic', gap: 8, layout: 'large', responsive: false },
+		Spacious: { mode: 'rhombic', gap: 24, layout: 'large', responsive: false },
+		Compact: { mode: 'rhombic', gap: 12, layout: 'medium', responsive: false },
+	},
+	'border-beam': {
+		Default: { size: 200, duration: 8, borderWidth: 2, colorFrom: '#ffaa40', colorTo: '#9c40ff', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
+		'Laser Hyperdrive': { size: 200, duration: 6, borderWidth: 2.5, colorFrom: '#06b6d4', colorTo: '#3b82f6', doubleBeam: true, endOpacity: 0, opacity: 1, blur: 1, borderRadius: 16 },
+		'Dual Orbital': { size: 200, duration: 8, borderWidth: 2, colorFrom: '#06b6d4', colorTo: '#3b82f6', doubleBeam: true, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
+		Hyperdrive: { size: 180, duration: 4, borderWidth: 2.5, colorFrom: '#ec4899', colorTo: '#8b5cf6', doubleBeam: true, endOpacity: 0.05, opacity: 1, blur: 1, borderRadius: 16 },
+		'Subtle Glow': { size: 180, duration: 12, borderWidth: 1.5, colorFrom: '#6366f1', colorTo: '#a855f7', doubleBeam: false, endOpacity: 0, opacity: 0.85, blur: 0, borderRadius: 16 },
+		'Neon Emerald': { size: 200, duration: 6, borderWidth: 2, colorFrom: '#10b981', colorTo: '#06b6d4', doubleBeam: false, endOpacity: 0, opacity: 1, blur: 0, borderRadius: 16 },
+	},
+	'number-ticker': {
+		Default: { value: 1250, initialValue: 0, duration: 1.5, decimalPlaces: 0, prefix: '', suffix: '' },
+		'Rapid Counter': { value: 98765, initialValue: 0, duration: 2.2, decimalPlaces: 0, prefix: '$', suffix: '' },
+		'Currency ARR': { value: 148500, initialValue: 0, duration: 2.0, decimalPlaces: 0, prefix: '$', suffix: '' },
+		'Conversion Rate': { value: 99.94, initialValue: 0, duration: 1.8, decimalPlaces: 2, prefix: '', suffix: '%' },
+		'Sub-ms Latency': { value: 0.04, initialValue: 4.5, duration: 1.2, decimalPlaces: 2, prefix: '', suffix: 'ms' },
+		'Global Volume': { value: 24.8, initialValue: 0, duration: 2.2, decimalPlaces: 1, prefix: '+', suffix: 'M' },
+	},
+	'magnetic-button': {
+		'Default Magnet': { strength: 0.35, radius: 120, springDamping: 18, maxDisplacement: 36, text: 'Magnetic Attraction', dualTier: false, shockwave: false },
+		'Dual-Tier Shockwave': { strength: 0.45, radius: 140, springDamping: 20, maxDisplacement: 40, text: 'Experience Shockwave', dualTier: true, shockwave: true },
+		'Heavy Gravity': { strength: 0.65, radius: 180, springDamping: 24, maxDisplacement: 50, text: 'Explore Platform', dualTier: false, shockwave: false },
+		'Micro Snappy': { strength: 0.22, radius: 70, springDamping: 30, maxDisplacement: 20, text: 'Deploy Now', dualTier: false, shockwave: false },
+		'Fluid Elastic': { strength: 0.48, radius: 140, springDamping: 10, maxDisplacement: 44, text: 'Connect Wallet', dualTier: false, shockwave: false },
+		'Ghost Proximity': { strength: 0.15, radius: 90, springDamping: 16, maxDisplacement: 16, text: 'View Documentation', dualTier: false, shockwave: false },
+	},
+	'card-swipe-stack': {
+		Default: { thresholdDistance: 120, maxRotation: 20, scaleStep: 0.05, offsetStep: 14, preventLastCardDismiss: true, loop: false },
+		'Infinite Deck Recycling': { thresholdDistance: 120, maxRotation: 20, scaleStep: 0.05, offsetStep: 14, preventLastCardDismiss: false, loop: true },
+		Snappy: { thresholdDistance: 80, maxRotation: 28, scaleStep: 0.06, offsetStep: 16, preventLastCardDismiss: true, loop: false },
+		'Fluid Spring': { thresholdDistance: 150, maxRotation: 24, scaleStep: 0.04, offsetStep: 12, preventLastCardDismiss: true, loop: false },
+		Minimalist: { thresholdDistance: 100, maxRotation: 12, scaleStep: 0.03, offsetStep: 8, preventLastCardDismiss: true, loop: false },
+		'Free Swipe': { thresholdDistance: 120, maxRotation: 20, scaleStep: 0.05, offsetStep: 14, preventLastCardDismiss: false, loop: false },
+	},
+	'comparison-slider': {
+		Default: { defaultPosition: 0.5, step: 0.05, orientation: 'horizontal' },
+		'Split 25/75': { defaultPosition: 0.25, step: 0.05, orientation: 'horizontal' },
+		'Split 75/25': { defaultPosition: 0.75, step: 0.05, orientation: 'horizontal' },
+		'Micro Precision': { defaultPosition: 0.5, step: 0.01, orientation: 'horizontal' },
+		'Vertical Split': { defaultPosition: 0.5, step: 0.05, orientation: 'vertical' },
+	},
+	'expandable-card': {
+		Default: { duration: 360 },
+		Snappy: { duration: 220 },
+		Cinematic: { duration: 520 },
+		'Ultra Fast': { duration: 160 },
+		Smooth: { duration: 420 },
+	},
+	'cursor-tooltip': {
+		'Default Smooth': {
+			content: 'Explore Showcase',
+			springDamping: 20,
+			direction: 'bottom-right',
+			offsetX: 16,
+			offsetY: 16,
+			variant: 'frosted',
+			collisionPadding: 12,
+		},
+		'Snappy Pill': {
+			content: 'Click to Inspect',
+			springDamping: 32,
+			direction: 'top-right',
+			offsetX: 12,
+			offsetY: 14,
+			variant: 'accent',
+			collisionPadding: 8,
+		},
+		'Elastic Lag': {
+			content: 'Kinetic Physics',
+			springDamping: 10,
+			direction: 'bottom-left',
+			offsetX: 22,
+			offsetY: 22,
+			variant: 'dark',
+			collisionPadding: 16,
+		},
+		'Minimal Direct': {
+			content: 'Target Active',
+			springDamping: 38,
+			direction: 'top',
+			offsetX: 8,
+			offsetY: 10,
+			variant: 'minimal',
+			collisionPadding: 8,
+		},
+		'Glow Badge': {
+			content: '120 FPS GPU',
+			springDamping: 18,
+			direction: 'right',
+			offsetX: 18,
+			offsetY: 18,
+			variant: 'glow',
+			collisionPadding: 14,
+		},
+	},
+	'floating-dock': {
+		Default: { direction: 'bottom', baseSize: 36, maxMagnification: 0.75, influenceRadius: 60, showLabels: true, panelStyle: 'translucent' },
+		'Social Share': { direction: 'bottom', baseSize: 42, maxMagnification: 0.6, influenceRadius: 80, showLabels: true, panelStyle: 'glass' },
+		'Compact Mobile': { direction: 'bottom', baseSize: 38, maxMagnification: 0.5, influenceRadius: 65, showLabels: true, panelStyle: 'glass' },
+		'Vertical Rail': { direction: 'right', baseSize: 40, maxMagnification: 0.7, influenceRadius: 75, showLabels: true, panelStyle: 'minimal' },
+		'Minimal Floating': { direction: 'bottom', baseSize: 44, maxMagnification: 0.85, influenceRadius: 90, showLabels: true, panelStyle: 'minimal' },
+	},
+};

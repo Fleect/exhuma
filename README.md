@@ -1,97 +1,199 @@
 # Exhuma
 
-> High-performance React layout primitives, interactive stacking cards, and modular UI architecture.
+> **The Universal Kinetic Component Platform & Multi-Framework Registry.** 19 physics-driven primitives, 13 frontend ecosystems, zero layout thrashing, and zero runtime lock-in.
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![Next.js](https://img.shields.io/badge/Next.js-App_Router-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15_App_Router-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Tests](https://img.shields.io/badge/Tests-636%20passing-brightgreen?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Ecosystems](https://img.shields.io/badge/Ecosystems-13%20Supported-purple?style=flat-square)](https://exhuma.dev/docs/ecosystems)
+[![Primitives](https://img.shields.io/badge/Primitives-19%20Production-orange?style=flat-square)](https://exhuma.dev/docs/components)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-Exhuma is a modern monorepo delivering reusable, zero-friction UI primitives and layout engines for React and Next.js applications.
+Exhuma is an open-source, universal UI component platform delivering tactile, physics-based interactions and responsive layout engines. Instead of locking you into a single framework or heavyweight runtime, Exhuma
+distributes canonical, zero-dependency source code across **13 frontend ecosystems** via a dedicated CLI.
 
 ---
 
-## 📦 Packages
+## ✨ Key Architectural Guarantees
 
-Exhuma is structured as a modular Turborepo workspace. You can consume packages all-in-one or via standalone scoped imports:
+- **19 Audited Kinetic Primitives**: From 3D sticky stacking cards and elastic magnetic buttons to shared-element morphing tabs and comparison diff sliders.
+- **13 Framework Ecosystems**: Full implementation parity across React, Next.js, Vue 3, Nuxt, Svelte 5, SvelteKit, Angular 18+, SolidJS, Astro, Laravel Blade, Vanilla JS, WordPress Gutenberg, Web Components, React
+  Native, and Flutter.
+- **$\Omega(1)$ Layout Thrashing Protection**: Pure compositor-driven execution utilizing `transform` and `opacity` GPU layers to ensure sustained 60fps/120fps motion without triggering forced synchronous layouts.
+- **Deterministic Lifecycle Teardowns**: Strict, verified event listener detachment, `ResizeObserver` / `IntersectionObserver` disconnections, and zero memory leaks upon unmount.
+- **Tailwind CSS v4 & Zero-Flash Theming**: Semantic CSS variables with native dark/light mode support, zero visual flashes, and instant hydration.
+- **Zero-Lock-in CLI Distribution**: Own your source code. Copy directly into your codebase with `npx exhuma add <component>`.
 
-| Package | Description | Status |
-| :--- | :--- | :---: |
-| **`@exhuma/core`** | Complete suite: cards, layouts, and router skeletons in a single tree-shakeable bundle. | `Ready` |
-| **`@exhuma/cards`** | Interactive card micro-interactions, stacking cards, and scroll carousels. | `Ready` |
-| **`@exhuma/layouts`** | High-performance CSS masonry grids, responsive auto-grids, and containers. | `Ready` |
-| **`@exhuma/router`** | Router skeletons, page layout guards, and transition containers. | `Ready` |
+---
+
+## 📦 Packages in the Monorepo
+
+| Package                                        | Description                                                                           | Status  |
+| :--------------------------------------------- | :------------------------------------------------------------------------------------ | :-----: |
+| **`exhuma`** (`packages/cli`)                  | Universal Component CLI — add tactile components to any project across 13 ecosystems. | `Ready` |
+| **`create-exhuma`** (`packages/create-exhuma`) | Interactive project scaffolding wizard for quickstart boilerplates.                   | `Ready` |
+| **`@exhuma/core`**                             | Complete flagship bundle: cards, layouts, and router with subpath exports.            | `Ready` |
+| **`@exhuma/cards`**                            | Interactive card micro-interactions, stacking cards, tilt cards, and sliders.         | `Ready` |
+| **`@exhuma/layouts`**                          | High-performance CSS masonry grids, diamond grids, and auto-grids.                    | `Ready` |
+| **`@exhuma/router`**                           | Production layout framing, landing layouts, auth screens, and route guards.           | `Ready` |
+| **`@exhuma/registry`**                         | Canonical multi-flavor registry compiler and schema specifications.                   | `Ready` |
+| **`showcase`** (`apps/showcase`)               | Next.js 15 documentation hub, interactive Component Studio, and live playgrounds.     | `Ready` |
 
 ---
 
 ## 🚀 Quickstart
 
-### 1. All-in-One (`@exhuma/core`)
+### Option A: Use the Universal CLI (Recommended)
 
-Install the core package:
+Initialize Exhuma in your existing project:
 
 ```bash
-pnpm add @exhuma/core
-# or
-npm install @exhuma/core
+npx exhuma init
 ```
 
-Import components with full tree-shaking support:
+Add any of the 19 components directly into your codebase:
+
+```bash
+# Add to your current project (auto-detects framework)
+npx exhuma add stacking-cards
+
+# Explicitly target a specific ecosystem flavor
+npx exhuma add floating-dock --flavor=svelte
+npx exhuma add magnetic-button --flavor=vue
+npx exhuma add comparison-slider --flavor=flutter
+
+# Add all components
+npx exhuma add --all
+```
+
+List all available canonical components and categories:
+
+```bash
+npx exhuma list
+```
+
+### Option B: Scaffold a Fresh Project with `create-exhuma`
+
+```bash
+npm create exhuma@latest
+# or
+pnpm create exhuma
+# or
+bun create exhuma
+```
+
+### Option C: Install Monorepo Packages
+
+```bash
+# Install core package
+pnpm add @exhuma/core
+
+# Or targeted standalone packages
+pnpm add @exhuma/cards @exhuma/layouts
+```
 
 ```tsx
-import { StackingCards, CssMasonry, LandingLayout } from '@exhuma/core';
+import { StackingCards } from '@exhuma/core/cards';
+import { CssMasonry } from '@exhuma/core/layouts';
 
 export default function Page() {
   return (
-    <LandingLayout>
-      <CssMasonry columns={3} gap="1.5rem">
-        {/* Your masonry items */}
-      </CssMasonry>
-    </LandingLayout>
+    <CssMasonry columns={3} gap='1.5rem'>
+      <StackingCards topStart={90} topIncrement={24}>
+        <div className='card'>Card 1</div>
+        <div className='card'>Card 2</div>
+      </StackingCards>
+    </CssMasonry>
   );
 }
 ```
 
-### 2. Targeted Standalone Packages
+---
 
-For micro-frontends or strict bundle requirements, install only what you need:
+## 🧩 Complete Component Inventory (19 Primitives)
 
-```bash
-pnpm add @exhuma/cards
-pnpm add @exhuma/layouts
-```
+| Component Slug            | Category     | Description                                                | Supported Flavors |
+| :------------------------ | :----------- | :--------------------------------------------------------- | :---------------: |
+| **`stacking-cards`**      | Cards        | Sticky stacking cards with mathematical decay scaling      |       13/13       |
+| **`card-swipe-stack`**    | Cards        | Tactile swipeable card deck with inertial physics          |       13/13       |
+| **`tilt-card`**           | Cards        | 3D gyroscopic pointer-tracking tilt card                   |       13/13       |
+| **`expandable-card`**     | Cards        | Shared-layout card expanding into modal view               |       13/13       |
+| **`glow-card`**           | Cards        | Radial cursor-following glow border card                   |       13/13       |
+| **`spotlight-border`**    | Cards        | Dynamic cursor-tracking border illumination                |       13/13       |
+| **`diamond-grid`**        | Layouts      | Isometric 45° angled responsive diamond matrix             |       13/13       |
+| **`masonry-grid`**        | Layouts      | High-performance CSS multi-column masonry                  |       13/13       |
+| **`auto-grid`**           | Layouts      | Responsive auto-fitting CSS grid container                 |       13/13       |
+| **`infinite-marquee`**    | Layouts      | Seamless hardware-accelerated looping marquee              |       13/13       |
+| **`horizontal-scroller`** | Layouts      | Scroll-driven pinned horizontal camera translation         |       13/13       |
+| **`morphing-tabs`**       | Navigation   | Fluid shared-element indicator tabs                        |       13/13       |
+| **`floating-dock`**       | Navigation   | Proximity magnification floating toolbar                   |       13/13       |
+| **`cursor-follower`**     | Interactions | Spring-interpolated pointer follower orb                   |       13/13       |
+| **`animated-cursor`**     | Interactions | Dual-ring magnetic cursor with velocity scaling            |       13/13       |
+| **`magnetic-button`**     | Interactions | Elastic pointer attraction with tactile boundary dampening |       13/13       |
+| **`comparison-slider`**   | Media        | Dual-pane visual diff comparison slider                    |       13/13       |
+| **`accordion`**           | Disclosures  | Zero-layout-thrashing spring accordion                     |       13/13       |
+| **`number-ticker`**       | Data Display | Smooth tabular rolling digit counter                       |       13/13       |
 
 ---
 
-## ⚡ Framework Compatibility
+## 🌐 Supported Framework Ecosystems
 
-| Environment | Support | Notes |
-| :--- | :---: | :--- |
-| **Next.js (App Router)** | ✅ Full | Client-side micro-interactions include `'use client'`; SSR and Server Components safe. |
-| **Next.js (Pages Router)** | ✅ Full | Out-of-the-box hydration support. |
-| **Vite / React 19** | ✅ Full | Dual ESM & CJS builds with `.d.ts` declaration maps. |
-| **React Router v7 / Remix** | ✅ Full | Framework-agnostic styling and lifecycle handling. |
+| Ecosystem                   | Extension / Format    | Lifecycle Model                                           |
+| :-------------------------- | :-------------------- | :-------------------------------------------------------- |
+| **React 18 / 19**           | `.tsx`                | Hooks, `useRef`, `useCallback`, `useId`                   |
+| **Next.js 15 (App Router)** | `.tsx`                | `'use client'` isolation, SSR safe                        |
+| **Vue.js 3 / Nuxt 3**       | `.vue`                | `<script setup>`, `ref`, `onMounted`, `onBeforeUnmount`   |
+| **Svelte 5 / SvelteKit**    | `.svelte`             | Svelte 5 Runes (`$state`, `$effect`)                      |
+| **Angular 18+**             | `.ts`                 | Signals, standalone components, `DestroyRef`              |
+| **SolidJS**                 | `.tsx`                | Fine-grained reactivity, `createSignal`, `onCleanup`      |
+| **Astro**                   | `.astro`              | Zero-JS default with scoped client hydration              |
+| **Laravel Blade**           | `.blade.php`          | Native Blade component with Vanilla JS bundle             |
+| **Vanilla JavaScript**      | `.js` + `.css`        | ES Modules, strict `destroy()` cleanup, CSS layers        |
+| **WordPress Gutenberg**     | `block.json` + `.tsx` | Gutenberg v3 block editor & frontend render               |
+| **Web Components**          | Custom Element        | Shadow DOM / Light DOM, `<exhuma-*>`                      |
+| **React Native / Expo**     | `.tsx`                | React Native primitives & gestures                        |
+| **Flutter**                 | `.dart`               | `StatefulWidget`, `AnimationController`, `TickerProvider` |
 
 ---
 
-## 🛠️ Development
+## 🛠️ Monorepo Development & Quality Gates
 
-This repository is powered by **Turborepo** and **pnpm**:
+This repository is governed by strict automated quality gates powered by **Turborepo**, **pnpm**, and **Vitest**:
 
 ```bash
 # Clone the repository
 git clone https://github.com/SapanMozammel/exhuma.git
 cd exhuma
 
-# Install dependencies
+# Install all workspace dependencies
 pnpm install
 
-# Run build across all workspaces
+# Build registry, packages, and showcase
 pnpm run build
 
-# Start demo app
-pnpm run dev
+# Run entire test suite (636 tests across 20 suites)
+pnpm test
+
+# Run TypeScript typechecks across all packages
+pnpm typecheck
+
+# Verify architecture boundaries, configs, and links
+pnpm check:all
+
+# Start local interactive documentation showcase
+pnpm dev
 ```
+
+---
+
+## 📖 Documentation & Resources
+
+- [Exhuma Documentation Hub](docs/README.md) — Monorepo engineering guides and specifications.
+- [Architecture & Universal Component Model](docs/architecture.md) — Technical deep-dive into UCM design.
+- [Engineering Principles & Performance](docs/engineering.md) — Compositor rules and mathematical guarantees.
+- [Future Components Roadmap](docs/future-components.md) — Post-beta component roadmap.
+- [Interactive Showcase & Studio](https://exhuma.dev) — Live interactive documentation.
 
 ---
 

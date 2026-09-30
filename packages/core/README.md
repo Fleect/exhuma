@@ -17,17 +17,13 @@ npm install @exhuma/core
 ## Usage
 
 ### Direct Import
+
 ```tsx
-import {
-  HorizontalScroller,
-  StackingCards,
-  CssMasonry,
-  AutoGrid,
-  LandingLayout,
-} from '@exhuma/core';
+import { HorizontalScroller, StackingCards, CssMasonry, AutoGrid, LandingLayout } from '@exhuma/core';
 ```
 
 ### Subpath Imports
+
 ```tsx
 import { StackingCards } from '@exhuma/core/cards';
 import { CssMasonry, AutoGrid } from '@exhuma/core/layouts';

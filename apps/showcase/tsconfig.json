@@ -1,33 +1,26 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "noEmit": true,
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "jsx": "preserve"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"noEmit": true,
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"paths": {
+			"@/*": ["./src/*"],
+			"@exhuma/registry/schema": ["../../packages/registry/src/schema.ts"],
+			"@exhuma/registry": ["../../packages/registry/src/index.ts"],
+			"@exhuma/cards": ["../../packages/cards/src/index.ts"],
+			"@exhuma/core": ["../../packages/core/src/index.ts"],
+			"@exhuma/layouts": ["../../packages/layouts/src/index.ts"],
+			"@exhuma/router": ["../../packages/router/src/index.ts"]
+		},
+		"jsx": "preserve"
+	},
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../packages/*/src/**/*.d.ts"],
+	"exclude": ["node_modules"]
 }

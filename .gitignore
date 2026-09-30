@@ -34,8 +34,9 @@ playwright-report/
 # IDE / OS
 .DS_Store
 *.pem
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
+.vscode/
 .idea
 *.tsbuildinfo
+
+# Local scratch / experiment files
+scratch/

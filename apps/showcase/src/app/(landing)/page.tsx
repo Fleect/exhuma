@@ -1,151 +1,375 @@
-import React from "react";
-import Link from "next/link";
-import { Sliders, Layers, Terminal, ArrowRight } from "lucide-react";
-import { ALL_COMPONENTS } from "../../registry";
+import React from 'react';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import {
+	IconAdjustments as Sliders,
+	IconArrowRight as ArrowRight,
+	IconBook2 as BookOpen,
+	IconSparkles as Sparkles,
+	IconCommand as Command,
+	IconBolt as Zap,
+	IconStack2 as Layers,
+	IconShieldCheck as ShieldCheck,
+} from '@tabler/icons-react';
+import { ALL_COMPONENTS, ECOSYSTEM_LABELS } from '@/registry';
+import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
+import { PackageManagerTabs, StepCodeBlock } from '@/components/docs/PackageManagerTabs';
+import { StatStrip } from '@/components/landing/StatStrip';
+import { HeroBackdrop } from '@/components/landing/HeroBackdrop';
+import { EcosystemMarquee } from '@/components/landing/EcosystemMarquee';
+import { LiveShowcase } from '@/components/landing/LiveShowcase';
+import { ComponentCatalog } from '@/components/landing/ComponentCatalog';
+import { CapabilityMatrix } from '@/components/landing/CapabilityMatrix';
+import { Reveal } from '@/components/motion/Reveal';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+
+export const metadata: Metadata = {
+	title: { absolute: 'Exhuma — Universal Kinetic Primitives & Layout Engines' },
+	description: 'Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership. Native implementations for React, Next.js, Vue, Svelte, Angular, Solid, Astro, and more.',
+	openGraph: {
+		title: 'Exhuma — Universal Kinetic Primitives & Layout Engines',
+		description: `Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
+		type: 'website',
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: 'Exhuma — Universal Kinetic Primitives & Layout Engines',
+		description: `Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership across ${ECOSYSTEM_COUNT} frontend ecosystems.`,
+	},
+};
+
+const STEPS = [
+	{
+		step: '01',
+		title: 'Run the CLI',
+		body: 'One command pulls the canonical primitive directly into your project. No runtime packages to install, zero lock-in.',
+		code: 'npx exhuma add tilt-card',
+	},
+	{
+		step: '02',
+		title: 'Pick your ecosystem',
+		body: 'The exact mathematical contract authored natively for your framework — Svelte gets runes, Angular gets signals, Vue gets composition.',
+		code: 'npx exhuma add tilt-card --flavor=svelte',
+	},
+	{
+		step: '03',
+		title: 'Own the source code',
+		body: 'The file lands directly in your repository. Retune the spring velocity, customize styles, or delete what you do not need.',
+		code: 'src/components/ui/tilt-card.svelte',
+	},
+];
 
 export default function HomePage() {
-  return (
-    <div className="relative overflow-hidden">
-      {/* Radiant background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] bg-gradient-to-b from-indigo-500/15 via-purple-500/10 to-transparent pointer-events-none blur-3xl" />
+	const ecosystemCount = Object.keys(ECOSYSTEM_LABELS).length;
+	const componentCount = ALL_COMPONENTS.length;
 
-      {/* Hero */}
-      <section className="relative mx-auto max-w-7xl px-4 pt-20 pb-20 sm:px-6 lg:px-8 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-400 mb-8 backdrop-blur-md">
-          <span className="flex h-2 w-2 rounded-full bg-indigo-400 animate-pulse" />
-          <span>Universal Component Registry & Platform across 13 Ecosystems</span>
-        </div>
+	return (
+		<div className='relative min-h-screen overflow-x-hidden'>
+			{/* ─────────────────────────── 1. HERO ─────────────────────────── */}
+			<section className='relative pt-16 pb-14 sm:pt-24 sm:pb-20'>
+				<HeroBackdrop />
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-5xl mx-auto leading-tight">
-          Tactile Interactions.{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400">
-            Universal To Every Ecosystem.
-          </span>
-        </h1>
+				<div className='relative container text-center'>
+					{/* Eyebrow Announcement Pill */}
+					<Reveal>
+						<Link
+							href='/docs/components'
+							className='border-border/80 bg-card/75 text-foreground/80 hover:text-foreground hover:border-foreground/40 hover:bg-card group text-2xs inline-flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border p-1 pr-3.5 font-mono font-medium shadow-xs backdrop-blur-md transition-all sm:max-w-max'
+						>
+							<span className='bg-foreground text-background text-3xs flex items-center gap-1 rounded-full px-2 py-0.5 font-sans font-bold tracking-wider uppercase'>
+								<Sparkles className='h-3 w-3 shrink-0' />
+								<span>NEW</span>
+							</span>
+							<span className='truncate text-left'>
+								<span className='hidden sm:inline'>{componentCount} Kinetic Primitives · </span>
+								<span>{ecosystemCount} Native Ecosystems</span>
+							</span>
+							<ArrowRight className='text-muted-foreground group-hover:text-foreground h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5' />
+						</Link>
+					</Reveal>
 
-        <p className="mt-6 text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-          One headless architectural engine powering 13 production-grade implementations: React, Next.js 15, Vue 3, Svelte 5, Angular 18+, SolidJS, Astro, Laravel Blade, Raw Vanilla JS, WordPress Gutenberg, Universal Web Components, React Native, and Flutter.
-        </p>
+					{/* Display Headline with Metallic Grayscale Gradient */}
+					<Reveal delay={60}>
+						<h1 className='text-foreground mx-auto mt-8 max-w-4xl text-4xl font-black tracking-tight text-balance sm:text-6xl lg:text-7xl'>
+							Physics you can feel.
+							<br />
+							<span className='from-foreground via-foreground/85 to-foreground/40 bg-linear-to-b bg-clip-text text-transparent'>Code you actually own.</span>
+						</h1>
+					</Reveal>
 
-        {/* CTA Buttons */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/studio"
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3.5 text-sm font-bold text-white hover:from-indigo-500 hover:to-violet-500 transition-all shadow-xl shadow-indigo-500/25 active:scale-95"
-          >
-            <Sliders className="w-4 h-4" />
-            <span>Open Studio Workbench</span>
-          </Link>
-          <Link
-            href="/components/cards/stacking-cards"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/90 px-6 py-3.5 text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all shadow-md"
-          >
-            <Layers className="w-4 h-4" />
-            <span>Browse Components</span>
-          </Link>
-        </div>
+					{/* Subtitle */}
+					<Reveal delay={120}>
+						<p className='text-muted-foreground mx-auto mt-6 max-w-[62ch] text-base leading-relaxed sm:text-lg'>
+							Autonomous kinetic primitives engineered natively across {ecosystemCount} frontend ecosystems. Zero external animation runtimes, 120 FPS compositor execution, and 100% source ownership.
+						</p>
+					</Reveal>
 
-        {/* CLI Quickstart */}
-        <div className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-950/90 px-5 py-3 font-mono text-xs sm:text-sm text-slate-300 shadow-2xl backdrop-blur-md">
-          <Terminal className="w-4 h-4 text-indigo-400" />
-          <span className="text-slate-500">$</span>
-          <span>npx exhuma add stacking-cards</span>
-          <span className="text-slate-600">--flavor=nextjs</span>
-        </div>
-      </section>
+					{/* CLI Copy Bar */}
+					<Reveal delay={180}>
+						<div className='mt-8 flex justify-center'>
+							<PackageManagerTabs command='exhuma add tilt-card' />
+						</div>
+					</Reveal>
 
-      {/* The 13 Ecosystems Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-slate-900">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-            The 13 Production-Grade Ecosystem Contracts
-          </h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Zero code fragmentation. Pure native conventions for your exact stack, from Web to iOS, Android, and Desktop.
-          </p>
-        </div>
+					{/* Hero CTAs */}
+					<Reveal delay={240}>
+						<div className='mt-7 flex flex-wrap items-center justify-center gap-3.5'>
+							<Link href='#components'>
+								<Button size='lg' className='bg-foreground text-background hover:bg-foreground/90 gap-2 border-none font-bold shadow-lg shadow-black/10 transition-all hover:scale-105 active:scale-95'>
+									<span>Explore Components</span>
+									<ArrowRight className='h-4 w-4 shrink-0' />
+								</Button>
+							</Link>
+							<Link href='/docs/components'>
+								<Button variant='outline' size='lg' className='border-border/80 bg-card/60 hover:border-foreground/40 hover:bg-card/90 gap-2 backdrop-blur-sm'>
+									<Sliders className='text-foreground/70 h-4 w-4 shrink-0' />
+									<span>Explore Playground</span>
+								</Button>
+							</Link>
+						</div>
+					</Reveal>
+				</div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[
-            { title: "React 18/19", desc: "forwardRef, cn()", badge: "shadcn/ui parity" },
-            { title: "Next.js 15", desc: "RSC + Island safe", badge: "App Router" },
-            { title: "Vue.js 3 / Nuxt", desc: "Composition API", badge: "<script setup>" },
-            { title: "Svelte 5 / SvelteKit", desc: "Runes ($props, $state)", badge: ".svelte native" },
-            { title: "Angular 18+", desc: "Standalone + Signals", badge: "input() API" },
-            { title: "SolidJS", desc: "Fine-grained reactivity", badge: "createSignal" },
-            { title: "Astro", desc: "Zero client JS", badge: ".astro native" },
-            { title: "Laravel Blade", desc: "TALL stack ready", badge: "@props" },
-            { title: "Vanilla JS & CSS", desc: "destroy() cleanup", badge: "Zero dependencies" },
-            { title: "WordPress", desc: "Block API v3 + PHP", badge: "Gutenberg" },
-            { title: "Web Components", desc: "<exhuma-*>", badge: "Custom Element v1" },
-            { title: "React Native / Expo", desc: "iOS & Android ready", badge: "NativeWind" },
-            { title: "Flutter (Dart)", desc: "Canvas / Widget Tree", badge: "Multiplatform" },
-          ].map((eco) => (
-            <div
-              key={eco.title}
-              className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-5 hover:border-indigo-500/40 transition-all group"
-            >
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                {eco.badge}
-              </span>
-              <h3 className="text-base font-bold text-white mt-3 mb-1">{eco.title}</h3>
-              <p className="text-xs text-slate-400">{eco.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+				{/* Framework ticker ribbon */}
+				<div className='mt-14 sm:mt-18'>
+					<EcosystemMarquee />
+				</div>
+			</section>
 
-      {/* Component Catalog Preview */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 border-t border-slate-900">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-white">
-              Featured Universal Components
-            </h2>
-            <p className="text-sm text-slate-400">
-              Copy-paste runnable code blocks tested against real compiler suites.
-            </p>
-          </div>
-          <Link
-            href="/studio"
-            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1 self-start sm:self-auto"
-          >
-            <span>Open in Studio Workbench</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+			{/* ─────────────────── 2. NUMBERS THAT MATTER ─────────────────── */}
+			<section className='border-border/70 container border-t py-14'>
+				<div className='text-3xs text-muted-foreground mb-6 flex items-center justify-between font-mono'>
+					<span className='flex items-center gap-1.5'>
+						<span className='text-foreground font-bold'>{'// 01'}</span>
+						<span>·</span>
+						<span className='tracking-wider uppercase'>TELEMETRY</span>
+					</span>
+					<span className='hidden sm:inline-block'>SPECIFICATION BASELINE</span>
+				</div>
+				<StatStrip
+					stats={[
+						{ value: componentCount, label: 'Canonical components', note: 'Every one physics-driven' },
+						{ value: ecosystemCount, label: 'Native ecosystems', note: 'Idiomatic, not transpiled' },
+						{ value: 0, label: 'Animation runtimes', note: 'No Framer Motion or GSAP' },
+						{ value: 120, suffix: 'Hz', label: 'Frame rate floor', note: 'Guaranteed lower bound' },
+					]}
+				/>
+			</section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {ALL_COMPONENTS.map((comp) => (
-            <Link
-              key={comp.slug}
-              href={"/components/" + comp.category + "/" + comp.slug}
-              className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 hover:border-indigo-500/50 hover:bg-slate-900 transition-all group flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400 px-2.5 py-0.5 rounded bg-indigo-950/60 border border-indigo-800/40">
-                    {comp.category}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">v{comp.version}</span>
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors mb-2">
-                  {comp.name}
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-6">
-                  {comp.description}
-                </p>
-              </div>
-              <div className="flex items-center justify-between pt-4 border-t border-slate-800/80 text-xs font-semibold text-slate-400">
-                <span>13 flavors ready</span>
-                <span className="text-indigo-400 group-hover:translate-x-1 transition-transform">
-                  View &rarr;
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </div>
-  );
+			{/* ─────────────────────── 3. LIVE PROOF BLOCK ─────────────────────── */}
+			<section className='border-border/70 container border-t py-16 sm:py-24'>
+				<Reveal className='mb-10 max-w-2xl'>
+					<div className='text-3xs text-muted-foreground mb-3 flex items-center gap-2 font-mono'>
+						<span className='text-foreground font-bold'>{'// 02'}</span>
+						<span>·</span>
+						<span className='tracking-wider uppercase'>KINETICS LAB</span>
+					</div>
+					<h2 className='text-heading-large text-foreground mt-1'>Physics you can feel, not a screenshot.</h2>
+					<p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
+						Every interaction below is the shipped component running in this page — analytic springs and pointer fields written against native primitives, with no animation library underneath.
+					</p>
+				</Reveal>
+
+				<Reveal delay={120}>
+					<LiveShowcase />
+				</Reveal>
+			</section>
+
+			{/* ────────────────── 4. ARCHITECTURAL GUARANTEES ────────────────── */}
+			<section className='border-border/70 container border-t py-16 sm:py-24'>
+				<Reveal className='mb-10 max-w-2xl'>
+					<div className='text-3xs text-muted-foreground mb-3 flex items-center gap-2 font-mono'>
+						<span className='text-foreground font-bold'>{'// 03'}</span>
+						<span>·</span>
+						<span className='tracking-wider uppercase'>ARCHITECTURAL GUARANTEES</span>
+					</div>
+					<h2 className='text-heading-large text-foreground mt-1'>Engineered for absolute ownership.</h2>
+					<p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
+						Stop fighting bloated NPM dependency trees. Exhuma adapts idiomatic component code directly into your repository with zero runtime debt.
+					</p>
+				</Reveal>
+
+				<div className='flex flex-wrap gap-6'>
+					{/* Card 1: Zero Animation Debt */}
+					<Reveal delay={60} className='min-w-0 grow basis-64'>
+						<div className='border-border/80 bg-card/60 hover:border-foreground/40 group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border p-6 shadow-xs backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10'>
+							{/* Precision corner ticks */}
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 left-2 font-mono select-none'>+</div>
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 right-2 font-mono select-none'>+</div>
+
+							<div className='via-foreground/20 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+							<div>
+								<div className='border-border bg-background text-foreground flex h-10 w-10 items-center justify-center rounded-xl border shadow-xs'>
+									<Zap className='h-5 w-5' />
+								</div>
+								<h3 className='text-foreground mt-4 text-base font-bold tracking-tight'>Zero Animation Debt</h3>
+								<p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+									No Framer Motion or GSAP runtime dependencies. Spring math executes directly on the browser compositor thread with a guaranteed 120 FPS floor.
+								</p>
+							</div>
+							<div className='border-border/60 text-3xs text-foreground mt-5 flex items-center gap-1.5 border-t pt-3 font-mono font-semibold'>
+								<ShieldCheck className='h-3.5 w-3.5 shrink-0' />
+								<span>0.00 KB ANIMATION RUNTIME</span>
+							</div>
+						</div>
+					</Reveal>
+
+					{/* Card 2: 13 Native Ecosystems */}
+					<Reveal delay={120} className='min-w-0 grow basis-64'>
+						<div className='border-border/80 bg-card/60 hover:border-foreground/40 group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border p-6 shadow-xs backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10'>
+							{/* Precision corner ticks */}
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 left-2 font-mono select-none'>+</div>
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 right-2 font-mono select-none'>+</div>
+
+							<div className='via-foreground/20 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+							<div>
+								<div className='border-border bg-background text-foreground flex h-10 w-10 items-center justify-center rounded-xl border shadow-xs'>
+									<Layers className='h-5 w-5' />
+								</div>
+								<h3 className='text-foreground mt-4 text-base font-bold tracking-tight'>{ecosystemCount} Native Ecosystems</h3>
+								<p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+									Svelte gets Runes ($state), Angular gets Signals, Vue gets Composition, React gets direct DOM refs. Never cross-compiled through an AST bridge.
+								</p>
+							</div>
+							<div className='border-border/60 text-4xs text-muted-foreground mt-5 flex flex-wrap gap-1 border-t pt-3 font-mono'>
+								<span>SVELTE 5</span> · <span>ANGULAR 18</span> · <span>VUE 3</span> · <span>REACT 19</span> · <span>SOLIDJS</span>
+							</div>
+						</div>
+					</Reveal>
+
+					{/* Card 3: Memory & Lifecycle Safe */}
+					<Reveal delay={180} className='min-w-0 grow basis-64'>
+						<div className='border-border/80 bg-card/60 hover:border-foreground/40 group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border p-6 shadow-xs backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10'>
+							{/* Precision corner ticks */}
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 left-2 font-mono select-none'>+</div>
+							<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 right-2 font-mono select-none'>+</div>
+
+							<div className='via-foreground/20 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+							<div>
+								<div className='border-border bg-background text-foreground flex h-10 w-10 items-center justify-center rounded-xl border shadow-xs'>
+									<ShieldCheck className='h-5 w-5' />
+								</div>
+								<h3 className='text-foreground mt-4 text-base font-bold tracking-tight'>Memory & Lifecycle Safe</h3>
+								<p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+									Guaranteed listener detaching, ResizeObserver disconnects, and spring physics cancellation on component unmount. Zero memory leaks across client transitions.
+								</p>
+							</div>
+							<div className='border-border/60 text-3xs text-foreground mt-5 flex items-center gap-1.5 border-t pt-3 font-mono font-semibold'>
+								<ShieldCheck className='h-3.5 w-3.5 shrink-0' />
+								<span>CLEAN UNMOUNTS GUARANTEED</span>
+							</div>
+						</div>
+					</Reveal>
+				</div>
+			</section>
+
+			{/* ─────────────────── 5. COMPONENT CATALOG ─────────────────── */}
+			<section id='components' className='border-border/70 container scroll-mt-20 border-t py-16 sm:py-24'>
+				<Reveal className='mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end'>
+					<div>
+						<div className='text-3xs text-muted-foreground mb-3 flex items-center gap-2 font-mono'>
+							<span className='text-foreground font-bold'>{'// 04'}</span>
+							<span>·</span>
+							<span className='tracking-wider uppercase'>COMPONENT REGISTRY</span>
+						</div>
+						<h2 className='text-heading-large text-foreground mt-1'>Canonical Component Catalog</h2>
+						<p className='text-muted-foreground mt-1.5 text-xs sm:text-sm'>
+							All {componentCount} components engineered under the Exhuma Kinetic Methodology across {ecosystemCount} target ecosystems.
+						</p>
+					</div>
+
+					<Link href='/docs/components'>
+						<Button variant='outline' size='sm' className='border-border/80 bg-card/60 hover:border-foreground/40 gap-1.5 shadow-xs'>
+							<Sliders className='text-foreground/70 h-3.5 w-3.5' />
+							<span>Open Playground</span>
+						</Button>
+					</Link>
+				</Reveal>
+
+				<div>
+					<ComponentCatalog />
+				</div>
+			</section>
+
+			{/* ─────────────────────── 6. HOW IT WORKS ─────────────────────── */}
+			<section className='border-border/70 container border-t py-16 sm:py-24'>
+				<Reveal className='mb-10 max-w-2xl'>
+					<div className='text-3xs text-muted-foreground mb-3 flex items-center gap-2 font-mono'>
+						<span className='text-foreground font-bold'>{'// 05'}</span>
+						<span>·</span>
+						<span className='tracking-wider uppercase'>INTEGRATION PIPELINE</span>
+					</div>
+					<h2 className='text-heading-large text-foreground mt-1'>Three steps, then it&apos;s yours.</h2>
+					<p className='text-muted-foreground mt-2 text-sm leading-relaxed'>Copy canonical components into your codebase with one command. Read the source, tweak the springs, and ship.</p>
+				</Reveal>
+
+				<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+					{STEPS.map((item, idx) => (
+						<Reveal key={item.step} delay={idx * 100}>
+							<div className='border-border/80 bg-card/60 hover:border-foreground/40 group relative flex h-full flex-col rounded-2xl border p-6 shadow-xs backdrop-blur-sm transition-all hover:shadow-md'>
+								{/* Precision corner ticks */}
+								<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 left-2 font-mono select-none'>+</div>
+								<div className='text-foreground/20 text-4xs pointer-events-none absolute top-2 right-2 font-mono select-none'>+</div>
+
+								<div className='text-foreground font-mono text-xs font-black'>{item.step}</div>
+								<h3 className='text-foreground mt-3 text-base font-bold tracking-tight'>{item.title}</h3>
+								<p className='text-muted-foreground mt-2 mb-5 text-xs leading-relaxed'>{item.body}</p>
+								<StepCodeBlock code={item.code} />
+							</div>
+						</Reveal>
+					))}
+				</div>
+			</section>
+
+			{/* ──────────────────── 7. CAPABILITY MATRIX ──────────────────── */}
+			<section className='border-border/70 container border-t py-16 sm:py-24'>
+				<div className='text-3xs text-muted-foreground mb-6 flex items-center justify-between font-mono'>
+					<span className='flex items-center gap-1.5'>
+						<span className='text-foreground font-bold'>{'// 06'}</span>
+						<span>·</span>
+						<span className='tracking-wider uppercase'>CROSS-FRAMEWORK COMPILATION MATRIX</span>
+					</span>
+					<span className='hidden sm:inline-block'>{ecosystemCount} NATIVE TARGETS</span>
+				</div>
+				<Reveal>
+					<CapabilityMatrix />
+				</Reveal>
+			</section>
+
+			{/* ──────────────────────── 8. CLOSING CTA ──────────────────────── */}
+			<section className='border-border/70 container border-t py-20 text-center sm:py-28'>
+				<Reveal>
+					<div className='border-border/80 bg-card/75 relative mx-auto max-w-4xl overflow-hidden rounded-3xl border p-8 shadow-2xl backdrop-blur-xl sm:p-14'>
+						{/* Subtle grayscale ambient spotlight cone */}
+						<div className='from-foreground/10 via-foreground/5 pointer-events-none absolute -top-28 left-1/2 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-linear-to-b to-transparent blur-3xl' />
+						<div className='relative'>
+							<span className='kbd border-border bg-background text-foreground text-3xs mb-4 inline-flex font-mono tracking-wider'>
+								<Command className='mr-1.5 h-3 w-3' />
+								<span>PRESS ⌘K FOR COMMAND PALETTE</span>
+							</span>
+							<h2 className='text-heading-large text-foreground'>Start with one primitive.</h2>
+							<p className='text-muted-foreground mx-auto mt-3 max-w-xl text-sm leading-relaxed'>
+								Pull a single primitive into your project and read the source code. If it earns its place, take the rest — it all belongs to you either way.
+							</p>
+							<div className='mt-8 flex flex-wrap items-center justify-center gap-3.5'>
+								<Link href='/docs/components'>
+									<Button size='lg' className='bg-foreground text-background hover:bg-foreground/90 gap-2 border-none font-bold shadow-lg shadow-black/10 transition-all hover:scale-105 active:scale-95'>
+										<Sliders className='h-4 w-4 shrink-0' />
+										<span>Explore Components</span>
+									</Button>
+								</Link>
+								<Link href='/docs'>
+									<Button variant='outline' size='lg' className='border-border/80 bg-card/60 hover:border-foreground/40 gap-2 backdrop-blur-sm'>
+										<BookOpen className='text-foreground/70 h-4 w-4 shrink-0' />
+										<span>Read Documentation</span>
+									</Button>
+								</Link>
+							</div>
+						</div>
+					</div>
+				</Reveal>
+			</section>
+		</div>
+	);
 }

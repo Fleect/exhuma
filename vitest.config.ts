@@ -11,6 +11,7 @@ export default defineConfig({
       '@exhuma/layouts': fromRoot('./packages/layouts/src/index.ts'),
       '@exhuma/router': fromRoot('./packages/router/src/index.ts'),
       '@exhuma/core': fromRoot('./packages/core/src/index.ts'),
+      '@exhuma/registry': fromRoot('./packages/registry/src/index.ts'),
     },
   },
   test: {
@@ -18,7 +19,7 @@ export default defineConfig({
       'packages/**/src/**/*.test.ts',
       'apps/**/*.test.{ts,tsx}',
       'tooling/**/*.test.ts',
-      'tests/**/*.test.ts',
+      'tests/**/*.test.{ts,tsx}',
     ],
     exclude: [
       '**/node_modules/**',

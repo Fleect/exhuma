@@ -1,0 +1,49 @@
+{
+	"name": "create-exhuma",
+	"version": "0.1.0",
+	"description": "Interactive project starter wizard for Exhuma Universal Component Platform",
+	"type": "module",
+	"bin": {
+		"create-exhuma": "./dist/index.js"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "MIT",
+	"keywords": [
+		"create-exhuma",
+		"exhuma",
+		"starter",
+		"scaffold",
+		"components",
+		"templates",
+		"react",
+		"nextjs",
+		"vue",
+		"svelte",
+		"angular",
+		"flutter"
+	],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"type:check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"ora": "^8.2.0",
+		"picocolors": "^1.1.1",
+		"prompts": "^2.4.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"@types/prompts": "^2.4.9",
+		"tsup": "^8.5.1",
+		"typescript": "^5.7.0"
+	}
+}

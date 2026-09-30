@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Deep Obsidian Background -->
+  <rect width="1200" height="630" fill="#09090B"/>
+  
+  <!-- Outer Card Frame with subtle rounded border -->
+  <rect x="36" y="36" width="1128" height="558" rx="20" fill="#0D0D11" stroke="#27272A" stroke-width="2"/>
+  
+  <!-- Top Left: Eyebrow Badge - Exhuma Kinetic Methodology (EKM) -->
+  <g transform="translate(80, 85)">
+    <rect width="310" height="32" rx="8" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
+    <circle cx="16" cy="16" r="4" fill="#10B981"/>
+    <text x="30" y="20.5" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" letter-spacing="0.8">EXHUMA KINETIC METHODOLOGY (EKM)</text>
+  </g>
+
+  <!-- Main Hero Brand Section -->
+  <g transform="translate(80, 160)">
+    
+    <!-- Exact Approved Brand Logo: Option 2 (Kinetic Velocity Stepped) -->
+    <!-- ViewBox 16 14 70 85 scaled to height 195px (scale = 2.294) -->
+    <g transform="translate(0, 5) scale(2.294)">
+      <path d="M 24 16 H 84 L 72 28 H 48 A 4 4 0 0 0 44 32 V 41 A 4 4 0 0 0 48 45 H 84 L 72 68 H 48 A 4 4 0 0 0 44 72 V 81 A 4 4 0 0 0 48 85 H 84 L 72 97 H 24 A 6 6 0 0 1 18 91 V 73 A 6 6 0 0 1 24 67 H 32 A 5 5 0 0 0 37 62 V 51 A 5 5 0 0 0 32 46 H 24 A 6 6 0 0 1 18 40 V 22 A 6 6 0 0 1 24 16 Z" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Brand Typography Lockup -->
+    <g transform="translate(230, 0)">
+      <!-- Title: Exhuma -->
+      <text x="0" y="90" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="90" font-weight="900" letter-spacing="-2.5">Exhuma</text>
+
+      <!-- Primary Tagline -->
+      <text x="0" y="146" fill="#FAFAFA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" letter-spacing="-0.5">Universal Component Architecture</text>
+
+      <!-- Secondary Subtitle -->
+      <text x="0" y="186" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="400">Autonomous tactile interactions and physics adapted for 13 ecosystems</text>
+    </g>
+  </g>
+
+  <!-- Horizontal Divider Line -->
+  <line x1="80" y1="445" x2="1120" y2="445" stroke="#27272A" stroke-width="1.5"/>
+
+  <!-- Bottom Telemetry & Metadata Row -->
+  <g transform="translate(80, 485)">
+    <!-- Pill 1: Zero Runtime -->
+    <g transform="translate(0, 0)">
+      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
+      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">⚡ Zero Runtime Deps</text>
+    </g>
+
+    <!-- Pill 2: 120Hz Spring Physics -->
+    <g transform="translate(235, 0)">
+      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
+      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">Ω 120Hz Spring Physics</text>
+    </g>
+
+    <!-- Pill 3: 13 Ecosystems -->
+    <g transform="translate(470, 0)">
+      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
+      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">❖ 13 Native Targets</text>
+    </g>
+
+    <!-- Right Domain Stamp: exhuma.vercel.app -->
+    <text x="1040" y="28" fill="#D4D4D8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="18" font-weight="700" text-anchor="end" letter-spacing="0.5">exhuma.vercel.app</text>
+  </g>
+</svg>

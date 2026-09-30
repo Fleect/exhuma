@@ -39,6 +39,7 @@ We maintain uncompromising quality standards to ensure our open-source codebase 
 4. Run `pnpm test` to verify that all code snippets compile cleanly without syntax errors.
 
 ## Quality Gates Checklist Before Submitting a PR
+
 - [ ] `pnpm tooling:check` passes without errors.
 - [ ] `pnpm arch:check` passes with zero boundary violations.
 - [ ] `pnpm typecheck` passes with zero TypeScript errors.

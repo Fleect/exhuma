@@ -1,0 +1,272 @@
+{
+	"name": "Auto Grid",
+	"slug": "auto-grid",
+	"category": "layouts",
+	"description": "Responsive CSS Grid with auto-fit / auto-fill minmax repeat tracks with zero media queries.",
+	"version": "1.0.0",
+	"props": [
+		{
+			"name": "minItemWidth",
+			"label": "Min Width (px)",
+			"type": "number",
+			"defaultValue": 280,
+			"min": 120,
+			"max": 480,
+			"step": 10,
+			"description": "Minimum width of each grid column before wrapping to the next line."
+		},
+		{ "name": "gap", "label": "Grid Gap (px)", "type": "number", "defaultValue": 24, "min": 4, "max": 64, "step": 4, "description": "Gap between grid items." },
+		{
+			"name": "mode",
+			"label": "Track Mode",
+			"type": "select",
+			"defaultValue": "auto-fit",
+			"options": [
+				{ "label": "Auto-Fit (Expand to Fill Row)", "value": "auto-fit" },
+				{ "label": "Auto-Fill (Preserve Track Widths)", "value": "auto-fill" }
+			],
+			"description": "Determines whether tracks collapse to stretch items or stay fixed."
+		},
+		{ "name": "maxColumns", "label": "Max Columns", "type": "number", "defaultValue": 4, "min": 1, "max": 12, "step": 1, "description": "Upper constraint on maximum columns allowed." },
+		{
+			"name": "alignItems",
+			"label": "Item Alignment",
+			"type": "select",
+			"defaultValue": "stretch",
+			"options": [
+				{ "label": "Stretch (Equal Height)", "value": "stretch" },
+				{ "label": "Start (Top)", "value": "start" },
+				{ "label": "Center (Middle)", "value": "center" },
+				{ "label": "End (Bottom)", "value": "end" }
+			],
+			"description": "Cross-axis vertical alignment for items within grid rows."
+		}
+	],
+	"dependencies": {
+		"react": ["@exhuma/core"],
+		"nextjs": ["@exhuma/core"],
+		"vue": ["clsx"],
+		"svelte": ["clsx"],
+		"solid": ["clsx"],
+		"angular": [],
+		"astro": [],
+		"blade": [],
+		"vanilla": [],
+		"wordpress": [],
+		"webcomponent": [],
+		"react-native": [],
+		"flutter": []
+	},
+	"flavors": {
+		"react": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as AutoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as AutoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "AutoGrid.vue",
+				"language": "vue",
+				"description": "Vue 3 Native Auto Grid layout component.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\n\ninterface Props {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  minItemWidth: 280,\n  gap: 24,\n  mode: 'auto-fit',\n  maxColumns: 4,\n  alignItems: 'stretch',\n  class: '',\n});\n\nconst gridStyle = computed(() => {\n  const minWidthVal = typeof props.minItemWidth === 'number' ? `${props.minItemWidth}px` : props.minItemWidth;\n  const gapVal = typeof props.gap === 'number' ? `${props.gap}px` : props.gap;\n  const repeatTrack = props.mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n  const minTrack = `min(100%, ${minWidthVal})`;\n\n  const templateCols = props.maxColumns && props.maxColumns > 0\n    ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${props.maxColumns - 1} * ${gapVal}) / ${props.maxColumns})), 1fr))`\n    : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n  return {\n    display: 'grid',\n    gridTemplateColumns: templateCols,\n    gap: gapVal,\n    alignItems: props.alignItems,\n  };\n});\n</script>\n\n<template>\n  <div class=\"exhuma-auto-grid w-full\" :class=\"props.class\" :style=\"gridStyle\">\n    <slot />\n  </div>\n</template>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "AutoGrid.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes Auto Grid layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    minItemWidth = 280,\n    gap = 24,\n    mode = 'auto-fit',\n    maxColumns = 4,\n    alignItems = 'stretch',\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    minItemWidth?: number | string;\n    gap?: number | string;\n    mode?: 'auto-fit' | 'auto-fill';\n    maxColumns?: number;\n    alignItems?: 'stretch' | 'start' | 'center' | 'end';\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n\n  const minWidthVal = $derived(typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth);\n  const gapVal = $derived(typeof gap === 'number' ? `${gap}px` : gap);\n  const repeatTrack = $derived(mode === 'auto-fill' ? 'auto-fill' : 'auto-fit');\n  const minTrack = $derived(`min(100%, ${minWidthVal})`);\n\n  const gridTemplateColumns = $derived(\n    maxColumns && maxColumns > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`\n  );\n</script>\n\n<div\n  class={clsx('exhuma-auto-grid w-full', className)}\n  style=\"display: grid; grid-template-columns: {gridTemplateColumns}; gap: {gapVal}; align-items: {alignItems};\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "auto-grid.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone Auto Grid component with signals.",
+				"code": "import { Component, input, computed } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'exhuma-auto-grid',\n  standalone: true,\n  imports: [CommonModule],\n  template: `\n    <div\n      class=\"exhuma-auto-grid w-full {{ className() }}\"\n      [style.display]=\"'grid'\"\n      [style.gridTemplateColumns]=\"gridTemplateColumns()\"\n      [style.gap]=\"gapVal()\"\n      [style.alignItems]=\"alignItems()\"\n    >\n      <ng-content />\n    </div>\n  `,\n})\nexport class ExhumaAutoGridComponent {\n  minItemWidth = input<number | string>(280);\n  gap = input<number | string>(24);\n  mode = input<'auto-fit' | 'auto-fill'>('auto-fit');\n  maxColumns = input<number>(4);\n  alignItems = input<'stretch' | 'start' | 'center' | 'end'>('stretch');\n  className = input<string>('');\n\n  minWidthVal = computed(() =>\n    typeof this.minItemWidth() === 'number' ? `${this.minItemWidth()}px` : this.minItemWidth()\n  );\n\n  gapVal = computed(() =>\n    typeof this.gap() === 'number' ? `${this.gap()}px` : this.gap()\n  );\n\n  gridTemplateColumns = computed(() => {\n    const repeat = this.mode() === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${this.minWidthVal()})`;\n    const maxCols = this.maxColumns();\n\n    return maxCols && maxCols > 0\n      ? `repeat(${repeat}, minmax(max(${minTrack}, calc((100% - ${maxCols - 1} * ${this.gapVal()}) / ${maxCols})), 1fr))`\n      : `repeat(${repeat}, minmax(${minTrack}, 1fr))`;\n  });\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "SolidJS Native Auto Grid layout component.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface AutoGridProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n}\n\nexport const AutoGrid: Component<AutoGridProps> = (props) => {\n  const [local, others] = splitProps(props, [\n    'minItemWidth',\n    'gap',\n    'mode',\n    'maxColumns',\n    'alignItems',\n    'class',\n    'children',\n    'style',\n  ]);\n\n  const minItemWidth = () => local.minItemWidth ?? 280;\n  const gap = () => local.gap ?? 24;\n  const mode = () => local.mode ?? 'auto-fit';\n  const maxColumns = () => local.maxColumns ?? 4;\n  const alignItems = () => local.alignItems ?? 'stretch';\n\n  const minWidthVal = () => typeof minItemWidth() === 'number' ? `${minItemWidth()}px` : minItemWidth();\n  const gapVal = () => typeof gap() === 'number' ? `${gap()}px` : gap();\n  const repeatTrack = () => mode() === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n  const minTrack = () => `min(100%, ${minWidthVal()})`;\n\n  const templateCols = () =>\n    maxColumns() && maxColumns() > 0\n      ? `repeat(${repeatTrack()}, minmax(max(${minTrack()}, calc((100% - ${maxColumns() - 1} * ${gapVal()}) / ${maxColumns()})), 1fr))`\n      : `repeat(${repeatTrack()}, minmax(${minTrack()}, 1fr))`;\n\n  return (\n    <div\n      class={`exhuma-auto-grid w-full ${local.class ?? ''}`}\n      style={{\n        display: 'grid',\n        'grid-template-columns': templateCols(),\n        gap: gapVal(),\n        'align-items': alignItems(),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "AutoGrid.astro",
+				"language": "astro",
+				"description": "Astro zero-JS Auto Grid component.",
+				"code": "---\ninterface Props {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n  class?: string;\n}\n\nconst {\n  minItemWidth = 280,\n  gap = 24,\n  mode = 'auto-fit',\n  maxColumns = 4,\n  alignItems = 'stretch',\n  class: className = '',\n} = Astro.props;\n\nconst minWidthVal = typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth;\nconst gapVal = typeof gap === 'number' ? `${gap}px` : gap;\nconst repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\nconst minTrack = `min(100%, ${minWidthVal})`;\n\nconst gridTemplateColumns =\n  maxColumns && maxColumns > 0\n    ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n    : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n---\n\n<div\n  class:list={['exhuma-auto-grid w-full', className]}\n  style={{\n    display: 'grid',\n    gridTemplateColumns,\n    gap: gapVal,\n    alignItems,\n  }}\n>\n  <slot />\n</div>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "auto-grid.blade.php",
+				"language": "php",
+				"description": "Laravel Blade component for Auto Grid.",
+				"code": "@props([\n    'minItemWidth' => 280,\n    'gap' => 24,\n    'mode' => 'auto-fit',\n    'maxColumns' => 4,\n    'alignItems' => 'stretch',\n    'class' => '',\n])\n\n@php\n    $minWidthVal = is_numeric($minItemWidth) ? \"{$minItemWidth}px\" : $minItemWidth;\n    $gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n    $repeatTrack = $mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    $minTrack = \"min(100%, {$minWidthVal})\";\n\n    $templateCols = $maxColumns > 0\n        ? \"repeat({$repeatTrack}, minmax(max({$minTrack}, calc((100% - \" . ($maxColumns - 1) . \" * {$gapVal}) / {$maxColumns})), 1fr))\"\n        : \"repeat({$repeatTrack}, minmax({$minTrack}, 1fr))\";\n@endphp\n\n<div\n    {{ $attributes->merge(['class' => 'exhuma-auto-grid w-full ' . $class]) }}\n    style=\"display: grid; grid-template-columns: {{ $templateCols }}; gap: {{ $gapVal }}; align-items: {{ $alignItems }};\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "auto-grid.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript Auto Grid initializer.",
+				"code": "export function initAutoGrid(selector = '[data-exhuma-auto-grid]', options = {}) {\n  const elements = document.querySelectorAll(selector);\n\n  elements.forEach((el) => {\n    const minWidth = options.minItemWidth ?? el.dataset.minItemWidth ?? 280;\n    const gap = options.gap ?? el.dataset.gap ?? 24;\n    const mode = options.mode ?? el.dataset.mode ?? 'auto-fit';\n    const maxColumns = options.maxColumns ?? parseInt(el.dataset.maxColumns || '4', 10);\n    const alignItems = options.alignItems ?? el.dataset.alignItems ?? 'stretch';\n\n    const minWidthVal = typeof minWidth === 'number' ? `${minWidth}px` : minWidth;\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const cols = maxColumns > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n    el.style.display = 'grid';\n    el.style.gridTemplateColumns = cols;\n    el.style.gap = gapVal;\n    el.style.alignItems = alignItems;\n    el.style.width = '100%';\n  });\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress Gutenberg block render template for Auto Grid.",
+				"code": "<?php\n/**\n * Exhuma Auto Grid Block Render Template\n */\n$minItemWidth = $attributes['minItemWidth'] ?? 280;\n$gap = $attributes['gap'] ?? 24;\n$mode = $attributes['mode'] ?? 'auto-fit';\n$maxColumns = $attributes['maxColumns'] ?? 4;\n$alignItems = $attributes['alignItems'] ?? 'stretch';\n\n$minWidthVal = is_numeric($minItemWidth) ? \"{$minItemWidth}px\" : $minItemWidth;\n$gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n$repeatTrack = $mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n$minTrack = \"min(100%, {$minWidthVal})\";\n\n$templateCols = $maxColumns > 0\n    ? \"repeat({$repeatTrack}, minmax(max({$minTrack}, calc((100% - \" . ($maxColumns - 1) . \" * {$gapVal}) / {$maxColumns})), 1fr))\"\n    : \"repeat({$repeatTrack}, minmax({$minTrack}, 1fr))\";\n?>\n\n<div\n    class=\"exhuma-auto-grid w-full <?php echo esc_attr($attributes['className'] ?? ''); ?>\"\n    style=\"display: grid; grid-template-columns: <?php echo esc_attr($templateCols); ?>; gap: <?php echo esc_attr($gapVal); ?>; align-items: <?php echo esc_attr($alignItems); ?>;\"\n>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-auto-grid.js",
+				"language": "javascript",
+				"description": "Framework-agnostic Web Component for Auto Grid.",
+				"code": "class ExhumaAutoGrid extends HTMLElement {\n  static get observedAttributes() {\n    return ['min-item-width', 'gap', 'mode', 'max-columns', 'align-items'];\n  }\n\n  connectedCallback() {\n    this.render();\n  }\n\n  attributeChangedCallback() {\n    this.render();\n  }\n\n  render() {\n    const minWidth = this.getAttribute('min-item-width') || '280';\n    const gap = this.getAttribute('gap') || '24';\n    const mode = this.getAttribute('mode') || 'auto-fit';\n    const maxCols = parseInt(this.getAttribute('max-columns') || '4', 10);\n    const alignItems = this.getAttribute('align-items') || 'stretch';\n\n    const minWidthVal = isNaN(Number(minWidth)) ? minWidth : `${minWidth}px`;\n    const gapVal = isNaN(Number(gap)) ? gap : `${gap}px`;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const cols = maxCols > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxCols - 1} * ${gapVal}) / ${maxCols})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n    this.style.display = 'grid';\n    this.style.gridTemplateColumns = cols;\n    this.style.gap = gapVal;\n    this.style.alignItems = alignItems;\n    this.style.width = '100%';\n  }\n}\n\nif (!customElements.get('exhuma-auto-grid')) {\n  customElements.define('exhuma-auto-grid', ExhumaAutoGrid);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "React Native Auto Grid component using responsive flexbox wrapping.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, useWindowDimensions, type ViewProps } from 'react-native';\n\nexport interface AutoGridProps extends ViewProps {\n  minItemWidth?: number;\n  gap?: number;\n  maxColumns?: number;\n}\n\nexport const AutoGrid: React.FC<AutoGridProps> = ({\n  children,\n  minItemWidth = 280,\n  gap = 24,\n  maxColumns = 4,\n  style,\n  ...props\n}) => {\n  const { width } = useWindowDimensions();\n  const availableWidth = width - 32; // Default screen horizontal padding\n  const computedCols = Math.min(\n    maxColumns,\n    Math.max(1, Math.floor((availableWidth + gap) / (minItemWidth + gap)))\n  );\n  const itemWidth = (availableWidth - (computedCols - 1) * gap) / computedCols;\n\n  return (\n    <View style={[styles.container, { gap }, style]} {...props}>\n      {React.Children.map(children, (child) => (\n        <View style={{ width: itemWidth }}>\n          {child}\n        </View>\n      ))}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flexDirection: 'row',\n    flexWrap: 'wrap',\n    width: '100%',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "auto_grid.dart",
+				"language": "dart",
+				"description": "Flutter Auto Grid widget using SliverGridDelegateWithMaxCrossAxisExtent.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaAutoGrid extends StatelessWidget {\n  final List<Widget> children;\n  final double minItemWidth;\n  final double gap;\n  final int maxColumns;\n\n  const ExhumaAutoGrid({\n    super.key,\n    required this.children,\n    this.minItemWidth = 280.0,\n    this.gap = 24.0,\n    this.maxColumns = 4,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        final crossAxisCount = (constraints.maxWidth / minItemWidth).floor().clamp(1, maxColumns);\n\n        return GridView.builder(\n          shrinkWrap: true,\n          physics: const NeverScrollableScrollPhysics(),\n          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(\n            crossAxisCount: crossAxisCount,\n            crossAxisSpacing: gap,\n            mainAxisSpacing: gap,\n            childAspectRatio: 1.0,\n          ),\n          itemCount: children.length,\n          itemBuilder: (context, index) => children[index],\n        );\n      },\n    );\n  }\n}\n"
+			}
+		]
+	},
+	"ejected": {
+		"react": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "Auto Grid — Standalone Ejected Engine (Zero Dependencies). Raw minmax auto-fit/fill repeat track layout inlined.",
+				"code": "import * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridItemProps extends React.HTMLAttributes<HTMLDivElement> {\n  colSpan?: number | 'full';\n  rowSpan?: number;\n}\n\n/**\n * AutoGridItem — Standalone compound item with dynamic span support.\n * Guaranteed Ω(1) layout: uses standard grid-column and grid-row CSS declarations.\n */\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, AutoGridItemProps>(\n  ({ children, colSpan, rowSpan, className, style, ...props }, ref) => {\n    const itemStyle: React.CSSProperties = {\n      gridColumn: colSpan === 'full' ? '1 / -1' : typeof colSpan === 'number' ? `span ${colSpan}` : undefined,\n      gridRow: typeof rowSpan === 'number' ? `span ${rowSpan}` : undefined,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-auto-grid-item', className)}\n        style={itemStyle}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nAutoGridItem.displayName = 'AutoGridItem';\n\nexport interface AutoGridProps extends React.HTMLAttributes<HTMLDivElement> {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n}\n\n/**\n * AutoGrid — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) pure CSS Grid track calculation.\n * - Zero runtime JavaScript overhead or DOM event listeners.\n * - Zero layout thrashing (CLS = 0.00).\n * - Clamps max columns with pure CSS fractional unit distribution.\n */\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  (\n    {\n      children,\n      minItemWidth = 280,\n      gap = 24,\n      mode = 'auto-fit',\n      maxColumns = 4,\n      alignItems = 'stretch',\n      className,\n      style,\n      ...props\n    },\n    ref\n  ) => {\n    const minWidthVal = typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth;\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const gridStyle: React.CSSProperties = {\n      display: 'grid',\n      gridTemplateColumns:\n        maxColumns && maxColumns > 0\n          ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n          : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`,\n      gap: gapVal,\n      alignItems,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-auto-grid w-full', className)}\n        style={gridStyle}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nAutoGrid.displayName = 'AutoGrid';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "Auto Grid — Standalone Ejected Engine (Zero Dependencies). Raw minmax auto-fit/fill repeat track layout inlined.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridItemProps extends React.HTMLAttributes<HTMLDivElement> {\n  colSpan?: number | 'full';\n  rowSpan?: number;\n}\n\n/**\n * AutoGridItem — Standalone compound item with dynamic span support.\n * Guaranteed Ω(1) layout: uses standard grid-column and grid-row CSS declarations.\n */\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, AutoGridItemProps>(\n  ({ children, colSpan, rowSpan, className, style, ...props }, ref) => {\n    const itemStyle: React.CSSProperties = {\n      gridColumn: colSpan === 'full' ? '1 / -1' : typeof colSpan === 'number' ? `span ${colSpan}` : undefined,\n      gridRow: typeof rowSpan === 'number' ? `span ${rowSpan}` : undefined,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-auto-grid-item', className)}\n        style={itemStyle}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nAutoGridItem.displayName = 'AutoGridItem';\n\nexport interface AutoGridProps extends React.HTMLAttributes<HTMLDivElement> {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n}\n\n/**\n * AutoGrid — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) pure CSS Grid track calculation.\n * - Zero runtime JavaScript overhead or DOM event listeners.\n * - Zero layout thrashing (CLS = 0.00).\n * - Clamps max columns with pure CSS fractional unit distribution.\n */\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  (\n    {\n      children,\n      minItemWidth = 280,\n      gap = 24,\n      mode = 'auto-fit',\n      maxColumns = 4,\n      alignItems = 'stretch',\n      className,\n      style,\n      ...props\n    },\n    ref\n  ) => {\n    const minWidthVal = typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth;\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const gridStyle: React.CSSProperties = {\n      display: 'grid',\n      gridTemplateColumns:\n        maxColumns && maxColumns > 0\n          ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n          : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`,\n      gap: gapVal,\n      alignItems,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-auto-grid w-full', className)}\n        style={gridStyle}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nAutoGrid.displayName = 'AutoGrid';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "AutoGrid.vue",
+				"language": "vue",
+				"description": "Vue 3 Native Auto Grid layout component.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\n\ninterface Props {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  minItemWidth: 280,\n  gap: 24,\n  mode: 'auto-fit',\n  maxColumns: 4,\n  alignItems: 'stretch',\n  class: '',\n});\n\nconst gridStyle = computed(() => {\n  const minWidthVal = typeof props.minItemWidth === 'number' ? `${props.minItemWidth}px` : props.minItemWidth;\n  const gapVal = typeof props.gap === 'number' ? `${props.gap}px` : props.gap;\n  const repeatTrack = props.mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n  const minTrack = `min(100%, ${minWidthVal})`;\n\n  const templateCols = props.maxColumns && props.maxColumns > 0\n    ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${props.maxColumns - 1} * ${gapVal}) / ${props.maxColumns})), 1fr))`\n    : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n  return {\n    display: 'grid',\n    gridTemplateColumns: templateCols,\n    gap: gapVal,\n    alignItems: props.alignItems,\n  };\n});\n</script>\n\n<template>\n  <div class=\"exhuma-auto-grid w-full\" :class=\"props.class\" :style=\"gridStyle\">\n    <slot />\n  </div>\n</template>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "AutoGrid.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes Auto Grid layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    minItemWidth = 280,\n    gap = 24,\n    mode = 'auto-fit',\n    maxColumns = 4,\n    alignItems = 'stretch',\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    minItemWidth?: number | string;\n    gap?: number | string;\n    mode?: 'auto-fit' | 'auto-fill';\n    maxColumns?: number;\n    alignItems?: 'stretch' | 'start' | 'center' | 'end';\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n\n  const minWidthVal = $derived(typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth);\n  const gapVal = $derived(typeof gap === 'number' ? `${gap}px` : gap);\n  const repeatTrack = $derived(mode === 'auto-fill' ? 'auto-fill' : 'auto-fit');\n  const minTrack = $derived(`min(100%, ${minWidthVal})`);\n\n  const gridTemplateColumns = $derived(\n    maxColumns && maxColumns > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`\n  );\n</script>\n\n<div\n  class={clsx('exhuma-auto-grid w-full', className)}\n  style=\"display: grid; grid-template-columns: {gridTemplateColumns}; gap: {gapVal}; align-items: {alignItems};\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "auto-grid.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone Auto Grid component with signals.",
+				"code": "import { Component, input, computed } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'exhuma-auto-grid',\n  standalone: true,\n  imports: [CommonModule],\n  template: `\n    <div\n      class=\"exhuma-auto-grid w-full {{ className() }}\"\n      [style.display]=\"'grid'\"\n      [style.gridTemplateColumns]=\"gridTemplateColumns()\"\n      [style.gap]=\"gapVal()\"\n      [style.alignItems]=\"alignItems()\"\n    >\n      <ng-content />\n    </div>\n  `,\n})\nexport class ExhumaAutoGridComponent {\n  minItemWidth = input<number | string>(280);\n  gap = input<number | string>(24);\n  mode = input<'auto-fit' | 'auto-fill'>('auto-fit');\n  maxColumns = input<number>(4);\n  alignItems = input<'stretch' | 'start' | 'center' | 'end'>('stretch');\n  className = input<string>('');\n\n  minWidthVal = computed(() =>\n    typeof this.minItemWidth() === 'number' ? `${this.minItemWidth()}px` : this.minItemWidth()\n  );\n\n  gapVal = computed(() =>\n    typeof this.gap() === 'number' ? `${this.gap()}px` : this.gap()\n  );\n\n  gridTemplateColumns = computed(() => {\n    const repeat = this.mode() === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${this.minWidthVal()})`;\n    const maxCols = this.maxColumns();\n\n    return maxCols && maxCols > 0\n      ? `repeat(${repeat}, minmax(max(${minTrack}, calc((100% - ${maxCols - 1} * ${this.gapVal()}) / ${maxCols})), 1fr))`\n      : `repeat(${repeat}, minmax(${minTrack}, 1fr))`;\n  });\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "SolidJS Native Auto Grid layout component.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface AutoGridProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n}\n\nexport const AutoGrid: Component<AutoGridProps> = (props) => {\n  const [local, others] = splitProps(props, [\n    'minItemWidth',\n    'gap',\n    'mode',\n    'maxColumns',\n    'alignItems',\n    'class',\n    'children',\n    'style',\n  ]);\n\n  const minItemWidth = () => local.minItemWidth ?? 280;\n  const gap = () => local.gap ?? 24;\n  const mode = () => local.mode ?? 'auto-fit';\n  const maxColumns = () => local.maxColumns ?? 4;\n  const alignItems = () => local.alignItems ?? 'stretch';\n\n  const minWidthVal = () => typeof minItemWidth() === 'number' ? `${minItemWidth()}px` : minItemWidth();\n  const gapVal = () => typeof gap() === 'number' ? `${gap()}px` : gap();\n  const repeatTrack = () => mode() === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n  const minTrack = () => `min(100%, ${minWidthVal()})`;\n\n  const templateCols = () =>\n    maxColumns() && maxColumns() > 0\n      ? `repeat(${repeatTrack()}, minmax(max(${minTrack()}, calc((100% - ${maxColumns() - 1} * ${gapVal()}) / ${maxColumns()})), 1fr))`\n      : `repeat(${repeatTrack()}, minmax(${minTrack()}, 1fr))`;\n\n  return (\n    <div\n      class={`exhuma-auto-grid w-full ${local.class ?? ''}`}\n      style={{\n        display: 'grid',\n        'grid-template-columns': templateCols(),\n        gap: gapVal(),\n        'align-items': alignItems(),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "AutoGrid.astro",
+				"language": "astro",
+				"description": "Astro zero-JS Auto Grid component.",
+				"code": "---\ninterface Props {\n  minItemWidth?: number | string;\n  gap?: number | string;\n  mode?: 'auto-fit' | 'auto-fill';\n  maxColumns?: number;\n  alignItems?: 'stretch' | 'start' | 'center' | 'end';\n  class?: string;\n}\n\nconst {\n  minItemWidth = 280,\n  gap = 24,\n  mode = 'auto-fit',\n  maxColumns = 4,\n  alignItems = 'stretch',\n  class: className = '',\n} = Astro.props;\n\nconst minWidthVal = typeof minItemWidth === 'number' ? `${minItemWidth}px` : minItemWidth;\nconst gapVal = typeof gap === 'number' ? `${gap}px` : gap;\nconst repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\nconst minTrack = `min(100%, ${minWidthVal})`;\n\nconst gridTemplateColumns =\n  maxColumns && maxColumns > 0\n    ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n    : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n---\n\n<div\n  class:list={['exhuma-auto-grid w-full', className]}\n  style={{\n    display: 'grid',\n    gridTemplateColumns,\n    gap: gapVal,\n    alignItems,\n  }}\n>\n  <slot />\n</div>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "auto-grid.blade.php",
+				"language": "php",
+				"description": "Laravel Blade component for Auto Grid.",
+				"code": "@props([\n    'minItemWidth' => 280,\n    'gap' => 24,\n    'mode' => 'auto-fit',\n    'maxColumns' => 4,\n    'alignItems' => 'stretch',\n    'class' => '',\n])\n\n@php\n    $minWidthVal = is_numeric($minItemWidth) ? \"{$minItemWidth}px\" : $minItemWidth;\n    $gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n    $repeatTrack = $mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    $minTrack = \"min(100%, {$minWidthVal})\";\n\n    $templateCols = $maxColumns > 0\n        ? \"repeat({$repeatTrack}, minmax(max({$minTrack}, calc((100% - \" . ($maxColumns - 1) . \" * {$gapVal}) / {$maxColumns})), 1fr))\"\n        : \"repeat({$repeatTrack}, minmax({$minTrack}, 1fr))\";\n@endphp\n\n<div\n    {{ $attributes->merge(['class' => 'exhuma-auto-grid w-full ' . $class]) }}\n    style=\"display: grid; grid-template-columns: {{ $templateCols }}; gap: {{ $gapVal }}; align-items: {{ $alignItems }};\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "auto-grid.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript Auto Grid initializer.",
+				"code": "export function initAutoGrid(selector = '[data-exhuma-auto-grid]', options = {}) {\n  const elements = document.querySelectorAll(selector);\n\n  elements.forEach((el) => {\n    const minWidth = options.minItemWidth ?? el.dataset.minItemWidth ?? 280;\n    const gap = options.gap ?? el.dataset.gap ?? 24;\n    const mode = options.mode ?? el.dataset.mode ?? 'auto-fit';\n    const maxColumns = options.maxColumns ?? parseInt(el.dataset.maxColumns || '4', 10);\n    const alignItems = options.alignItems ?? el.dataset.alignItems ?? 'stretch';\n\n    const minWidthVal = typeof minWidth === 'number' ? `${minWidth}px` : minWidth;\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const cols = maxColumns > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxColumns - 1} * ${gapVal}) / ${maxColumns})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n    el.style.display = 'grid';\n    el.style.gridTemplateColumns = cols;\n    el.style.gap = gapVal;\n    el.style.alignItems = alignItems;\n    el.style.width = '100%';\n  });\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress Gutenberg block render template for Auto Grid.",
+				"code": "<?php\n/**\n * Exhuma Auto Grid Block Render Template\n */\n$minItemWidth = $attributes['minItemWidth'] ?? 280;\n$gap = $attributes['gap'] ?? 24;\n$mode = $attributes['mode'] ?? 'auto-fit';\n$maxColumns = $attributes['maxColumns'] ?? 4;\n$alignItems = $attributes['alignItems'] ?? 'stretch';\n\n$minWidthVal = is_numeric($minItemWidth) ? \"{$minItemWidth}px\" : $minItemWidth;\n$gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n$repeatTrack = $mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n$minTrack = \"min(100%, {$minWidthVal})\";\n\n$templateCols = $maxColumns > 0\n    ? \"repeat({$repeatTrack}, minmax(max({$minTrack}, calc((100% - \" . ($maxColumns - 1) . \" * {$gapVal}) / {$maxColumns})), 1fr))\"\n    : \"repeat({$repeatTrack}, minmax({$minTrack}, 1fr))\";\n?>\n\n<div\n    class=\"exhuma-auto-grid w-full <?php echo esc_attr($attributes['className'] ?? ''); ?>\"\n    style=\"display: grid; grid-template-columns: <?php echo esc_attr($templateCols); ?>; gap: <?php echo esc_attr($gapVal); ?>; align-items: <?php echo esc_attr($alignItems); ?>;\"\n>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-auto-grid.js",
+				"language": "javascript",
+				"description": "Framework-agnostic Web Component for Auto Grid.",
+				"code": "class ExhumaAutoGrid extends HTMLElement {\n  static get observedAttributes() {\n    return ['min-item-width', 'gap', 'mode', 'max-columns', 'align-items'];\n  }\n\n  connectedCallback() {\n    this.render();\n  }\n\n  attributeChangedCallback() {\n    this.render();\n  }\n\n  render() {\n    const minWidth = this.getAttribute('min-item-width') || '280';\n    const gap = this.getAttribute('gap') || '24';\n    const mode = this.getAttribute('mode') || 'auto-fit';\n    const maxCols = parseInt(this.getAttribute('max-columns') || '4', 10);\n    const alignItems = this.getAttribute('align-items') || 'stretch';\n\n    const minWidthVal = isNaN(Number(minWidth)) ? minWidth : `${minWidth}px`;\n    const gapVal = isNaN(Number(gap)) ? gap : `${gap}px`;\n    const repeatTrack = mode === 'auto-fill' ? 'auto-fill' : 'auto-fit';\n    const minTrack = `min(100%, ${minWidthVal})`;\n\n    const cols = maxCols > 0\n      ? `repeat(${repeatTrack}, minmax(max(${minTrack}, calc((100% - ${maxCols - 1} * ${gapVal}) / ${maxCols})), 1fr))`\n      : `repeat(${repeatTrack}, minmax(${minTrack}, 1fr))`;\n\n    this.style.display = 'grid';\n    this.style.gridTemplateColumns = cols;\n    this.style.gap = gapVal;\n    this.style.alignItems = alignItems;\n    this.style.width = '100%';\n  }\n}\n\nif (!customElements.get('exhuma-auto-grid')) {\n  customElements.define('exhuma-auto-grid', ExhumaAutoGrid);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "AutoGrid.tsx",
+				"language": "tsx",
+				"description": "React Native Auto Grid component using responsive flexbox wrapping.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, useWindowDimensions, type ViewProps } from 'react-native';\n\nexport interface AutoGridProps extends ViewProps {\n  minItemWidth?: number;\n  gap?: number;\n  maxColumns?: number;\n}\n\nexport const AutoGrid: React.FC<AutoGridProps> = ({\n  children,\n  minItemWidth = 280,\n  gap = 24,\n  maxColumns = 4,\n  style,\n  ...props\n}) => {\n  const { width } = useWindowDimensions();\n  const availableWidth = width - 32; // Default screen horizontal padding\n  const computedCols = Math.min(\n    maxColumns,\n    Math.max(1, Math.floor((availableWidth + gap) / (minItemWidth + gap)))\n  );\n  const itemWidth = (availableWidth - (computedCols - 1) * gap) / computedCols;\n\n  return (\n    <View style={[styles.container, { gap }, style]} {...props}>\n      {React.Children.map(children, (child) => (\n        <View style={{ width: itemWidth }}>\n          {child}\n        </View>\n      ))}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flexDirection: 'row',\n    flexWrap: 'wrap',\n    width: '100%',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "auto_grid.dart",
+				"language": "dart",
+				"description": "Flutter Auto Grid widget using SliverGridDelegateWithMaxCrossAxisExtent.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaAutoGrid extends StatelessWidget {\n  final List<Widget> children;\n  final double minItemWidth;\n  final double gap;\n  final int maxColumns;\n\n  const ExhumaAutoGrid({\n    super.key,\n    required this.children,\n    this.minItemWidth = 280.0,\n    this.gap = 24.0,\n    this.maxColumns = 4,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        final crossAxisCount = (constraints.maxWidth / minItemWidth).floor().clamp(1, maxColumns);\n\n        return GridView.builder(\n          shrinkWrap: true,\n          physics: const NeverScrollableScrollPhysics(),\n          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(\n            crossAxisCount: crossAxisCount,\n            crossAxisSpacing: gap,\n            mainAxisSpacing: gap,\n            childAspectRatio: 1.0,\n          ),\n          itemCount: children.length,\n          itemBuilder: (context, index) => children[index],\n        );\n      },\n    );\n  }\n}\n"
+			}
+		]
+	}
+}

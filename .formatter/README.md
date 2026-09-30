@@ -20,7 +20,7 @@ The system operates on a **single-location architecture** where `FORMATTER_CONFI
 
 1. Reads configuration from `FORMATTER_CONFIG.md`
 2. Validates dependencies and safety settings
-3. Generates all necessary config files (`.prettierrc.js`, `.eslintrc.js`, etc.)
+3. Generates all necessary config files (`.prettierrc.cjs`, `eslint.config.cjs`, etc.)
 4. Updates IDE settings for VS Code, Cursor, and other editors
 5. Ensures consistency across the entire development environment
 
@@ -30,12 +30,12 @@ The system operates on a **single-location architecture** where `FORMATTER_CONFI
 .formatter/
 ├── FORMATTER_CONFIG.md          # Primary configuration (single source of truth)
 ├── FORMATTER_CONFIG_EXAMPLES.md # Ready-to-use configuration examples
-├── sync.js                      # Sync system with pnpm integration
+├── sync.cjs                     # Sync system with pnpm integration
 └── README.md                    # This documentation file
 
 Generated files (auto-created by sync):
-├── .prettierrc.js              # Prettier configuration
-├── .eslintrc.js                # ESLint configuration
+├── .prettierrc.cjs             # Prettier configuration
+├── eslint.config.cjs           # ESLint configuration (flat config)
 ├── .editorconfig               # Editor configuration
 ├── .prettierignore             # File ignore patterns
 ├── .gitattributes              # Git line ending settings

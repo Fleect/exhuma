@@ -35,7 +35,7 @@ export default function MarketingPage() {
     <LandingLayout
       header={
         <Header
-          brand="Exhuma"
+          brand='Exhuma'
           navItems={[
             { label: 'Cards', href: '/cards' },
             { label: 'Layouts', href: '/layouts' },
@@ -43,9 +43,9 @@ export default function MarketingPage() {
           ]}
         />
       }
-      footer={<Footer brand="Exhuma Studio" />}
+      footer={<Footer brand='Exhuma Studio' />}
     >
-      <div className="py-24 text-center">Hello from Exhuma!</div>
+      <div className='py-24 text-center'>Hello from Exhuma!</div>
     </LandingLayout>
   );
 }

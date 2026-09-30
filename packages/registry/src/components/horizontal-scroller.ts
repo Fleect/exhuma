@@ -1,0 +1,128 @@
+import { UniversalComponent, ComponentFilePayload, EcosystemFlavor } from '../schema';
+import { generateOuterLayerFiles } from '../templates/outer-layer';
+import { CORE_COMPONENT_DEPENDENCIES } from '../templates/common-deps';
+
+export const horizontalScrollerComponent: UniversalComponent = {
+	id: 'horizontal-scroller',
+	name: 'Horizontal Scroller',
+	slug: 'horizontal-scroller',
+	category: 'cards',
+	description: 'Pinned kinetic viewport camera that seamlessly translates horizontal cards in 1:1 synchronization with vertical page scroll (Brix Agency architecture).',
+	version: '1.1.0',
+	props: [
+		{
+			name: 'itemGap',
+			label: 'Card Gap (px)',
+			type: 'number',
+			defaultValue: 28,
+			min: 8,
+			max: 64,
+			step: 4,
+			description: 'Spacing in pixels between horizontal cards (default: 28px).',
+		},
+		{
+			name: 'speed',
+			label: 'Scroll Speed Multiplier',
+			type: 'number',
+			defaultValue: 1.0,
+			min: 0.2,
+			max: 2.5,
+			step: 0.05,
+			description: 'Scroll distance multiplier mapping vertical page scroll to horizontal translation distance.',
+		},
+		{
+			name: 'cardWidth',
+			label: 'Card Width (px)',
+			type: 'number',
+			defaultValue: 320,
+			min: 240,
+			max: 600,
+			step: 10,
+			description: 'Fixed card width in pixels (default: 320px).',
+		},
+		{
+			name: 'showProgress',
+			label: 'Progress Indicator',
+			type: 'boolean',
+			defaultValue: true,
+			description: 'Display a kinetic telemetry progress bar indicating track traversal percentage.',
+		},
+		{
+			name: 'showFadeEdges',
+			label: 'Fade Edges',
+			type: 'boolean',
+			defaultValue: true,
+			description: 'Show subtle gradient mask at horizontal boundaries for graceful card entry and exit.',
+		},
+		{
+			name: 'fadeWidth',
+			label: 'Fade Width (px)',
+			type: 'number',
+			defaultValue: 48,
+			min: 16,
+			max: 96,
+			step: 8,
+			description: 'Width in pixels of the left and right gradient fade masks.',
+		},
+		{
+			name: 'fadeEdgeColor',
+			label: 'Fade Edge Color',
+			type: 'color',
+			defaultValue: '#ffffff',
+			description: 'Custom edge gradient color. When empty, an alpha mask is used.',
+		},
+		{
+			name: 'fadeEdgeColorDark',
+			label: 'Fade Edge Color (Dark Mode)',
+			type: 'color',
+			defaultValue: '#09090b',
+			description: 'Edge gradient color when dark mode is active. Falls back to fadeEdgeColor.',
+		},
+		{
+			name: 'mobileMode',
+			label: 'Mobile Mode',
+			type: 'select',
+			defaultValue: 'scroll',
+			options: [
+				{ label: 'Touch Swipe & Snap (scroll)', value: 'scroll' },
+				{ label: 'Vertical Stack Deck (stack)', value: 'stack' },
+				{ label: 'Pinned Kinetic Rail (pinned)', value: 'pinned' },
+			],
+			description: 'Mobile fallback behavior below 768px (scroll = native touch swipe with snap, stack = vertical list, pinned = retain pinned rail).',
+		},
+	],
+	defaultProps: {
+		itemGap: 28,
+		speed: 1.0,
+		cardWidth: 320,
+		showProgress: true,
+		showFadeEdges: true,
+		fadeWidth: 48,
+		fadeEdgeColor: '#ffffff',
+		fadeEdgeColorDark: '#09090b',
+		mobileMode: 'scroll',
+	},
+	dependencies: {
+		...CORE_COMPONENT_DEPENDENCIES,
+		vue: [],
+		svelte: [],
+		solid: [],
+	},
+	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {
+		return generateOuterLayerFiles(
+			{
+				id: 'horizontal-scroller',
+				name: 'Horizontal Scroller',
+				slug: 'horizontal-scroller',
+				category: 'cards',
+				pascalName: 'HorizontalScroller',
+				snakeName: 'horizontal_scroller',
+				description: 'Pinned kinetic viewport camera that seamlessly translates horizontal cards in 1:1 synchronization with vertical page scroll.',
+				defaultTailwindClass: 'relative overflow-hidden w-full py-8',
+			},
+			flavor,
+			props,
+			options
+		);
+	},
+};

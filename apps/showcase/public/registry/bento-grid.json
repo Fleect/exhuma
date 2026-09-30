@@ -1,0 +1,251 @@
+{
+	"name": "Bento Grid",
+	"slug": "bento-grid",
+	"category": "layouts",
+	"description": "Fluid responsive layout engine with dense auto-flow, asymmetric card spans, and subtle kinetic hover glow.",
+	"version": "1.0.0",
+	"props": [
+		{ "name": "cols", "label": "Columns", "type": "number", "defaultValue": 3, "min": 1, "max": 6, "step": 1, "description": "Maximum column count for desktop screens." },
+		{ "name": "gap", "label": "Grid Gap (px)", "type": "number", "defaultValue": 20, "min": 8, "max": 64, "step": 4, "description": "Spacing between bento tiles." },
+		{ "name": "rowHeight", "label": "Row Height (px)", "type": "number", "defaultValue": 180, "min": 100, "max": 320, "step": 10, "description": "Base auto-rows track height for vertical spans." }
+	],
+	"dependencies": {
+		"react": ["@exhuma/core"],
+		"nextjs": ["@exhuma/core"],
+		"vue": ["clsx"],
+		"svelte": ["clsx"],
+		"solid": ["clsx"],
+		"angular": [],
+		"astro": [],
+		"blade": [],
+		"vanilla": [],
+		"wordpress": [],
+		"webcomponent": [],
+		"react-native": [],
+		"flutter": []
+	},
+	"flavors": {
+		"react": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "Bento Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as BentoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface BentoGridProps extends React.ComponentPropsWithoutRef<typeof BentoGridPrimitive.BentoGrid> {\n  className?: string;\n}\n\nexport const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[22rem] max-w-7xl mx-auto w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoGrid>\n  )\n);\nBentoGrid.displayName = 'BentoGrid';\n\nexport const BentoCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoCard\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoCard>\n  )\n);\nBentoCard.displayName = 'BentoCard';\n\nexport const BentoHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoHeader\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoHeader>\n  )\n);\nBentoHeader.displayName = 'BentoHeader';\n\nexport const BentoContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoContent\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoContent>\n  )\n);\nBentoContent.displayName = 'BentoContent';\n\nexport const BentoVisual = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoVisual\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoVisual>\n  )\n);\nBentoVisual.displayName = 'BentoVisual';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "Bento Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as BentoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface BentoGridProps extends React.ComponentPropsWithoutRef<typeof BentoGridPrimitive.BentoGrid> {\n  className?: string;\n}\n\nexport const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[22rem] max-w-7xl mx-auto w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoGrid>\n  )\n);\nBentoGrid.displayName = 'BentoGrid';\n\nexport const BentoCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoCard\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoCard>\n  )\n);\nBentoCard.displayName = 'BentoCard';\n\nexport const BentoHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoHeader\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoHeader>\n  )\n);\nBentoHeader.displayName = 'BentoHeader';\n\nexport const BentoContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoContent\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoContent>\n  )\n);\nBentoContent.displayName = 'BentoContent';\n\nexport const BentoVisual = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <BentoGridPrimitive.BentoVisual\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </BentoGridPrimitive.BentoVisual>\n  )\n);\nBentoVisual.displayName = 'BentoVisual';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "BentoGrid.vue",
+				"language": "vue",
+				"description": "Vue 3 Native Bento Grid component with dense auto-flow.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\nimport { clsx } from 'clsx';\n\ninterface Props {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  cols: 3,\n  gap: 20,\n  rowHeight: 180,\n  class: '',\n});\n\nconst gridStyle = computed(() => {\n  const gapVal = typeof props.gap === 'number' ? `${props.gap}px` : props.gap;\n  const autoRowsVal = typeof props.rowHeight === 'number' ? `minmax(${props.rowHeight}px, auto)` : props.rowHeight;\n\n  return {\n    display: 'grid',\n    gridTemplateColumns: `repeat(${props.cols}, minmax(0, 1fr))`,\n    gap: gapVal,\n    gridAutoFlow: 'dense',\n    ...(autoRowsVal ? { gridAutoRows: autoRowsVal } : {}),\n  };\n});\n</script>\n\n<template>\n  <div :class=\"clsx('exhuma-bento-grid w-full', props.class)\" :style=\"gridStyle\" v-bind=\"$attrs\">\n    <slot />\n  </div>\n</template>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "BentoGrid.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes Bento Grid layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    cols = 3,\n    gap = 20,\n    rowHeight = 180,\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    cols?: number;\n    gap?: number | string;\n    rowHeight?: number | string;\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n\n  const gapVal = $derived(typeof gap === 'number' ? `${gap}px` : gap);\n  const autoRowsVal = $derived(typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight);\n</script>\n\n<div\n  class={clsx('exhuma-bento-grid grid w-full grid-flow-dense', className)}\n  style=\"grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gapVal}; {autoRowsVal ? `grid-auto-rows: ${autoRowsVal};` : ''}\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "bento-grid.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone Bento Grid component.",
+				"code": "import { Component, input, computed } from '@angular/core';\n\n@Component({\n  selector: 'exhuma-bento-grid',\n  standalone: true,\n  template: `\n    <div\n      class=\"exhuma-bento-grid grid w-full grid-flow-dense {{ customClass() }}\"\n      [style.gridTemplateColumns]=\"templateCols()\"\n      [style.gap]=\"gapVal()\"\n      [style.gridAutoRows]=\"autoRowsVal()\"\n    >\n      <ng-content></ng-content>\n    </div>\n  `,\n})\nexport class ExhumaBentoGridComponent {\n  readonly cols = input<number>(3);\n  readonly gap = input<number | string>(20);\n  readonly rowHeight = input<number | string>(180);\n  readonly customClass = input<string>('');\n\n  readonly templateCols = computed(() => `repeat(${this.cols()}, minmax(0, 1fr))`);\n  readonly gapVal = computed(() => typeof this.gap() === 'number' ? `${this.gap()}px` : this.gap() as string);\n  readonly autoRowsVal = computed(() => typeof this.rowHeight() === 'number' ? `minmax(${this.rowHeight()}px, auto)` : this.rowHeight() as string);\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "SolidJS Bento Grid layout component with fine-grained reactivity.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface BentoGridProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n}\n\nexport const BentoGrid: Component<BentoGridProps> = (props) => {\n  const [local, others] = splitProps(props, ['cols', 'gap', 'rowHeight', 'class', 'children', 'style']);\n  const cols = () => local.cols ?? 3;\n  const gap = () => typeof local.gap === 'number' ? `${local.gap}px` : (local.gap ?? '20px');\n  const autoRows = () => typeof local.rowHeight === 'number' ? `minmax(${local.rowHeight}px, auto)` : (local.rowHeight ?? 'minmax(180px, auto)');\n\n  return (\n    <div\n      class={`exhuma-bento-grid grid w-full grid-flow-dense ${local.class || ''}`}\n      style={{\n        'grid-template-columns': `repeat(${cols()}, minmax(0, 1fr))`,\n        gap: gap(),\n        'grid-auto-rows': autoRows(),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "BentoGrid.astro",
+				"language": "astro",
+				"description": "Astro Bento Grid layout component with zero clientside JS.",
+				"code": "---\ninterface Props {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n  class?: string;\n  [key: string]: unknown;\n}\n\nconst {\n  cols = 3,\n  gap = 20,\n  rowHeight = 180,\n  class: className = '',\n  ...props\n} = Astro.props;\n\nconst gapVal = typeof gap === 'number' ? `${gap}px` : gap;\nconst autoRowsVal = typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight;\n---\n\n<div\n  class={`exhuma-bento-grid grid w-full grid-flow-dense ${className}`}\n  style={`grid-template-columns: repeat(${cols}, minmax(0, 1fr)); gap: ${gapVal}; grid-auto-rows: ${autoRowsVal};`}\n  {...props}\n>\n  <slot />\n</div>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "bento-grid.blade.php",
+				"language": "php",
+				"description": "Laravel Blade Bento Grid component.",
+				"code": "@props([\n    'cols' => 3,\n    'gap' => 20,\n    'rowHeight' => 180,\n])\n\n@php\n$gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n$autoRowsVal = is_numeric($rowHeight) ? \"minmax({$rowHeight}px, auto)\" : $rowHeight;\n@endphp\n\n<div\n    {{ $attributes->merge([\n        'class' => 'exhuma-bento-grid grid w-full grid-flow-dense',\n    ]) }}\n    style=\"grid-template-columns: repeat({{ $cols }}, minmax(0, 1fr)); gap: {{ $gapVal }}; grid-auto-rows: {{ $autoRowsVal }};\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "bento-grid.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript Bento Grid with Big-Omega cached pointer sheen and auto-packing.",
+				"code": "/**\n * Initializes kinetic pointer sheen on Bento Grid cards.\n * Implements Big-Omega Ω(1) cached geometry reads on pointerenter.\n * Zero layout thrashing during active cursor movement.\n */\nexport function initBentoGrid(containerSelector = '.exhuma-bento-grid') {\n  const containers = document.querySelectorAll(containerSelector);\n  const cleanups = [];\n\n  containers.forEach((container) => {\n    const cards = container.querySelectorAll('.exhuma-bento-card');\n\n    cards.forEach((card) => {\n      let rect = null;\n\n      const onEnter = () => {\n        rect = card.getBoundingClientRect();\n      };\n\n      const onMove = (e) => {\n        if (!rect) rect = card.getBoundingClientRect();\n        const x = e.clientX - rect.left;\n        const y = e.clientY - rect.top;\n        card.style.setProperty('--bento-x', x.toFixed(1) + 'px');\n        card.style.setProperty('--bento-y', y.toFixed(1) + 'px');\n      };\n\n      const onLeave = () => {\n        rect = null;\n        card.style.setProperty('--bento-x', '-999px');\n        card.style.setProperty('--bento-y', '-999px');\n      };\n\n      card.addEventListener('pointerenter', onEnter);\n      card.addEventListener('pointermove', onMove);\n      card.addEventListener('pointerleave', onLeave);\n      card.addEventListener('pointercancel', onLeave);\n\n      cleanups.push(() => {\n        card.removeEventListener('pointerenter', onEnter);\n        card.removeEventListener('pointermove', onMove);\n        card.removeEventListener('pointerleave', onLeave);\n        card.removeEventListener('pointercancel', onLeave);\n      });\n    });\n  });\n\n  return {\n    destroy() {\n      cleanups.forEach((fn) => fn());\n    },\n  };\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "block.json",
+				"language": "json",
+				"description": "WordPress block definition for Bento Grid.",
+				"code": "{\n  \"$schema\": \"https://schemas.wp.org/trunk/block.json\",\n  \"apiVersion\": 3,\n  \"name\": \"exhuma/bento-grid\",\n  \"version\": \"1.0.0\",\n  \"title\": \"Exhuma Bento Grid\",\n  \"category\": \"layout\",\n  \"description\": \"Fluid responsive layout engine with dense auto-flow and asymmetric spans.\",\n  \"attributes\": {\n    \"cols\": { \"type\": \"number\", \"default\": 3 },\n    \"gap\": { \"type\": \"number\", \"default\": 20 },\n    \"rowHeight\": { \"type\": \"number\", \"default\": 180 }\n  },\n  \"render\": \"file:./render.php\"\n}\n"
+			},
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress render callback for Bento Grid.",
+				"code": "<?php\n/**\n * BentoGrid Block Render Template\n */\n$cols = isset($attributes['cols']) ? (int) $attributes['cols'] : 3;\n$gap = isset($attributes['gap']) ? (int) $attributes['gap'] : 20;\n$row_height = isset($attributes['rowHeight']) ? (int) $attributes['rowHeight'] : 180;\n\n$wrapper_attributes = get_block_wrapper_attributes([\n    'class' => 'exhuma-bento-grid grid w-full grid-flow-dense',\n    'style' => sprintf(\n        'grid-template-columns: repeat(%d, minmax(0, 1fr)); gap: %dpx; grid-auto-rows: minmax(%dpx, auto);',\n        $cols,\n        $gap,\n        $row_height\n    ),\n]);\n?>\n<div <?php echo $wrapper_attributes; ?>>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-bento-grid.js",
+				"language": "javascript",
+				"description": "Autonomous Custom Element <exhuma-bento-grid> with cached pointer sheen.",
+				"code": "class ExhumaBentoGridElement extends HTMLElement {\n  connectedCallback() {\n    const cols = this.getAttribute('cols') || '3';\n    const gap = this.getAttribute('gap') || '20';\n    const rowHeight = this.getAttribute('row-height') || '180';\n\n    this.style.display = 'grid';\n    this.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;\n    this.style.gap = `${gap}px`;\n    this.style.gridAutoFlow = 'dense';\n    this.style.gridAutoRows = `minmax(${rowHeight}px, auto)`;\n    this.style.width = '100%';\n\n    this.querySelectorAll('.exhuma-bento-card').forEach((card) => {\n      let rect = null;\n      card.addEventListener('pointerenter', () => {\n        rect = card.getBoundingClientRect();\n      });\n      card.addEventListener('pointermove', (e) => {\n        if (!rect) rect = card.getBoundingClientRect();\n        card.style.setProperty('--bento-x', (e.clientX - rect.left).toFixed(1) + 'px');\n        card.style.setProperty('--bento-y', (e.clientY - rect.top).toFixed(1) + 'px');\n      });\n      card.addEventListener('pointerleave', () => {\n        rect = null;\n        card.style.setProperty('--bento-x', '-999px');\n        card.style.setProperty('--bento-y', '-999px');\n      });\n    });\n  }\n}\n\nif (!customElements.get('exhuma-bento-grid')) {\n  customElements.define('exhuma-bento-grid', ExhumaBentoGridElement);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "React Native Bento Grid container.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, type ViewProps } from 'react-native';\n\nexport interface BentoGridProps extends ViewProps {\n  gap?: number;\n}\n\nexport const BentoGrid: React.FC<BentoGridProps> = ({ gap = 20, style, children, ...props }) => (\n  <View style={[styles.container, { gap }, style]} {...props}>\n    {children}\n  </View>\n);\n\nconst styles = StyleSheet.create({\n  container: {\n    width: '100%',\n    flexDirection: 'column',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "bento_grid.dart",
+				"language": "dart",
+				"description": "Flutter Bento Grid layout widget.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaBentoGrid extends StatelessWidget {\n  final List<Widget> children;\n  final double spacing;\n\n  const ExhumaBentoGrid({\n    super.key,\n    required this.children,\n    this.spacing = 20.0,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: children.map((c) => Padding(\n        padding: EdgeInsets.only(bottom: spacing),\n        child: c,\n      )).toList(),\n    );\n  }\n}\n"
+			}
+		]
+	},
+	"ejected": {
+		"react": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "Bento Grid — Standalone Ejected Engine (Zero Dependencies). Raw math, CSS Grid dense auto-packing, and cached pointer sheen inlined.",
+				"code": "import * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface BentoGridProps extends React.HTMLAttributes<HTMLDivElement> {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n}\n\nexport interface BentoCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  colSpan?: number;\n  rowSpan?: number;\n  enableGlow?: boolean;\n  glowColor?: string;\n}\n\n/**\n * BentoGrid — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) auto-flow packing.\n * - Zero forced reflows during active pointer tracking via cached bounding rect.\n */\nexport const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(\n  ({ children, cols = 3, gap = 20, rowHeight = 180, className, style, ...props }, ref) => {\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const autoRowsVal = rowHeight ? (typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight) : undefined;\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-bento-grid grid w-full grid-flow-dense', className)}\n        style={{\n          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,\n          gap: gapVal,\n          ...(autoRowsVal ? { gridAutoRows: autoRowsVal } : {}),\n          ...style,\n        }}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nBentoGrid.displayName = 'BentoGrid';\n\nexport const BentoCard = React.forwardRef<HTMLDivElement, BentoCardProps>(\n  ({ children, colSpan = 1, rowSpan = 1, enableGlow = true, glowColor = 'rgba(99, 102, 241, 0.08)', className, style, ...props }, forwardedRef) => {\n    const internalRef = React.useRef<HTMLDivElement>(null);\n    const rectRef = React.useRef<{ left: number; top: number } | null>(null);\n\n    const handlePointerEnter = React.useCallback(() => {\n      const el = internalRef.current;\n      if (!el) return;\n      const rect = el.getBoundingClientRect();\n      rectRef.current = { left: rect.left, top: rect.top };\n    }, []);\n\n    const handlePointerMove = React.useCallback((e: React.PointerEvent<HTMLDivElement>) => {\n      const el = internalRef.current;\n      if (!el) return;\n      if (!rectRef.current) {\n        const rect = el.getBoundingClientRect();\n        rectRef.current = { left: rect.left, top: rect.top };\n      }\n      const x = e.clientX - rectRef.current.left;\n      const y = e.clientY - rectRef.current.top;\n      el.style.setProperty('--bento-x', `${x.toFixed(1)}px`);\n      el.style.setProperty('--bento-y', `${y.toFixed(1)}px`);\n    }, []);\n\n    const handlePointerLeave = React.useCallback(() => {\n      rectRef.current = null;\n      const el = internalRef.current;\n      if (!el) return;\n      el.style.setProperty('--bento-x', '-999px');\n      el.style.setProperty('--bento-y', '-999px');\n    }, []);\n\n    const setRefs = React.useCallback(\n      (node: HTMLDivElement | null) => {\n        internalRef.current = node;\n        if (typeof forwardedRef === 'function') {\n          forwardedRef(node);\n        } else if (forwardedRef && 'current' in forwardedRef) {\n          (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;\n        }\n      },\n      [forwardedRef]\n    );\n\n    return (\n      <div\n        ref={setRefs}\n        onPointerEnter={handlePointerEnter}\n        onPointerMove={handlePointerMove}\n        onPointerLeave={handlePointerLeave}\n        onPointerCancel={handlePointerLeave}\n        className={clsx(\n          'exhuma-bento-card group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md transition-all duration-300 hover:border-primary/40 focus-within:border-primary/40 hover:shadow-xl',\n          className\n        )}\n        style={{\n          gridColumn: `span ${Math.max(1, colSpan)}`,\n          gridRow: `span ${Math.max(1, rowSpan)}`,\n          ...style,\n        }}\n        {...props}\n      >\n        {enableGlow && (\n          <div\n            className=\"pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100\"\n            style={{\n              background: `radial-gradient(400px circle at var(--bento-x, -999px) var(--bento-y, -999px), ${glowColor}, transparent 80%)`,\n            }}\n          />\n        )}\n        <div className=\"relative z-10 flex h-full flex-col justify-between\">{children}</div>\n      </div>\n    );\n  }\n);\nBentoCard.displayName = 'BentoCard';\n\nexport const BentoHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-header space-y-2', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoHeader.displayName = 'BentoHeader';\n\nexport const BentoContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-content text-sm text-muted-foreground', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoContent.displayName = 'BentoContent';\n\nexport const BentoVisual = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-visual my-auto flex items-center justify-center overflow-hidden py-4', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoVisual.displayName = 'BentoVisual';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "Bento Grid — Standalone Ejected Engine (Zero Dependencies). Raw math, CSS Grid dense auto-packing, and cached pointer sheen inlined.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface BentoGridProps extends React.HTMLAttributes<HTMLDivElement> {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n}\n\nexport interface BentoCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  colSpan?: number;\n  rowSpan?: number;\n  enableGlow?: boolean;\n  glowColor?: string;\n}\n\n/**\n * BentoGrid — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) auto-flow packing.\n * - Zero forced reflows during active pointer tracking via cached bounding rect.\n */\nexport const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps>(\n  ({ children, cols = 3, gap = 20, rowHeight = 180, className, style, ...props }, ref) => {\n    const gapVal = typeof gap === 'number' ? `${gap}px` : gap;\n    const autoRowsVal = rowHeight ? (typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight) : undefined;\n\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-bento-grid grid w-full grid-flow-dense', className)}\n        style={{\n          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,\n          gap: gapVal,\n          ...(autoRowsVal ? { gridAutoRows: autoRowsVal } : {}),\n          ...style,\n        }}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nBentoGrid.displayName = 'BentoGrid';\n\nexport const BentoCard = React.forwardRef<HTMLDivElement, BentoCardProps>(\n  ({ children, colSpan = 1, rowSpan = 1, enableGlow = true, glowColor = 'rgba(99, 102, 241, 0.08)', className, style, ...props }, forwardedRef) => {\n    const internalRef = React.useRef<HTMLDivElement>(null);\n    const rectRef = React.useRef<{ left: number; top: number } | null>(null);\n\n    const handlePointerEnter = React.useCallback(() => {\n      const el = internalRef.current;\n      if (!el) return;\n      const rect = el.getBoundingClientRect();\n      rectRef.current = { left: rect.left, top: rect.top };\n    }, []);\n\n    const handlePointerMove = React.useCallback((e: React.PointerEvent<HTMLDivElement>) => {\n      const el = internalRef.current;\n      if (!el) return;\n      if (!rectRef.current) {\n        const rect = el.getBoundingClientRect();\n        rectRef.current = { left: rect.left, top: rect.top };\n      }\n      const x = e.clientX - rectRef.current.left;\n      const y = e.clientY - rectRef.current.top;\n      el.style.setProperty('--bento-x', `${x.toFixed(1)}px`);\n      el.style.setProperty('--bento-y', `${y.toFixed(1)}px`);\n    }, []);\n\n    const handlePointerLeave = React.useCallback(() => {\n      rectRef.current = null;\n      const el = internalRef.current;\n      if (!el) return;\n      el.style.setProperty('--bento-x', '-999px');\n      el.style.setProperty('--bento-y', '-999px');\n    }, []);\n\n    const setRefs = React.useCallback(\n      (node: HTMLDivElement | null) => {\n        internalRef.current = node;\n        if (typeof forwardedRef === 'function') {\n          forwardedRef(node);\n        } else if (forwardedRef && 'current' in forwardedRef) {\n          (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;\n        }\n      },\n      [forwardedRef]\n    );\n\n    return (\n      <div\n        ref={setRefs}\n        onPointerEnter={handlePointerEnter}\n        onPointerMove={handlePointerMove}\n        onPointerLeave={handlePointerLeave}\n        onPointerCancel={handlePointerLeave}\n        className={clsx(\n          'exhuma-bento-card group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md transition-all duration-300 hover:border-primary/40 focus-within:border-primary/40 hover:shadow-xl',\n          className\n        )}\n        style={{\n          gridColumn: `span ${Math.max(1, colSpan)}`,\n          gridRow: `span ${Math.max(1, rowSpan)}`,\n          ...style,\n        }}\n        {...props}\n      >\n        {enableGlow && (\n          <div\n            className=\"pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100\"\n            style={{\n              background: `radial-gradient(400px circle at var(--bento-x, -999px) var(--bento-y, -999px), ${glowColor}, transparent 80%)`,\n            }}\n          />\n        )}\n        <div className=\"relative z-10 flex h-full flex-col justify-between\">{children}</div>\n      </div>\n    );\n  }\n);\nBentoCard.displayName = 'BentoCard';\n\nexport const BentoHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-header space-y-2', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoHeader.displayName = 'BentoHeader';\n\nexport const BentoContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-content text-sm text-muted-foreground', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoContent.displayName = 'BentoContent';\n\nexport const BentoVisual = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ children, className, ...props }, ref) => (\n    <div ref={ref} className={clsx('exhuma-bento-visual my-auto flex items-center justify-center overflow-hidden py-4', className)} {...props}>\n      {children}\n    </div>\n  )\n);\nBentoVisual.displayName = 'BentoVisual';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "BentoGrid.vue",
+				"language": "vue",
+				"description": "Vue 3 Native Bento Grid component with dense auto-flow.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\nimport { clsx } from 'clsx';\n\ninterface Props {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  cols: 3,\n  gap: 20,\n  rowHeight: 180,\n  class: '',\n});\n\nconst gridStyle = computed(() => {\n  const gapVal = typeof props.gap === 'number' ? `${props.gap}px` : props.gap;\n  const autoRowsVal = typeof props.rowHeight === 'number' ? `minmax(${props.rowHeight}px, auto)` : props.rowHeight;\n\n  return {\n    display: 'grid',\n    gridTemplateColumns: `repeat(${props.cols}, minmax(0, 1fr))`,\n    gap: gapVal,\n    gridAutoFlow: 'dense',\n    ...(autoRowsVal ? { gridAutoRows: autoRowsVal } : {}),\n  };\n});\n</script>\n\n<template>\n  <div :class=\"clsx('exhuma-bento-grid w-full', props.class)\" :style=\"gridStyle\" v-bind=\"$attrs\">\n    <slot />\n  </div>\n</template>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "BentoGrid.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes Bento Grid layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    cols = 3,\n    gap = 20,\n    rowHeight = 180,\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    cols?: number;\n    gap?: number | string;\n    rowHeight?: number | string;\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n\n  const gapVal = $derived(typeof gap === 'number' ? `${gap}px` : gap);\n  const autoRowsVal = $derived(typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight);\n</script>\n\n<div\n  class={clsx('exhuma-bento-grid grid w-full grid-flow-dense', className)}\n  style=\"grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gapVal}; {autoRowsVal ? `grid-auto-rows: ${autoRowsVal};` : ''}\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "bento-grid.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone Bento Grid component.",
+				"code": "import { Component, input, computed } from '@angular/core';\n\n@Component({\n  selector: 'exhuma-bento-grid',\n  standalone: true,\n  template: `\n    <div\n      class=\"exhuma-bento-grid grid w-full grid-flow-dense {{ customClass() }}\"\n      [style.gridTemplateColumns]=\"templateCols()\"\n      [style.gap]=\"gapVal()\"\n      [style.gridAutoRows]=\"autoRowsVal()\"\n    >\n      <ng-content></ng-content>\n    </div>\n  `,\n})\nexport class ExhumaBentoGridComponent {\n  readonly cols = input<number>(3);\n  readonly gap = input<number | string>(20);\n  readonly rowHeight = input<number | string>(180);\n  readonly customClass = input<string>('');\n\n  readonly templateCols = computed(() => `repeat(${this.cols()}, minmax(0, 1fr))`);\n  readonly gapVal = computed(() => typeof this.gap() === 'number' ? `${this.gap()}px` : this.gap() as string);\n  readonly autoRowsVal = computed(() => typeof this.rowHeight() === 'number' ? `minmax(${this.rowHeight()}px, auto)` : this.rowHeight() as string);\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "SolidJS Bento Grid layout component with fine-grained reactivity.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface BentoGridProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n}\n\nexport const BentoGrid: Component<BentoGridProps> = (props) => {\n  const [local, others] = splitProps(props, ['cols', 'gap', 'rowHeight', 'class', 'children', 'style']);\n  const cols = () => local.cols ?? 3;\n  const gap = () => typeof local.gap === 'number' ? `${local.gap}px` : (local.gap ?? '20px');\n  const autoRows = () => typeof local.rowHeight === 'number' ? `minmax(${local.rowHeight}px, auto)` : (local.rowHeight ?? 'minmax(180px, auto)');\n\n  return (\n    <div\n      class={`exhuma-bento-grid grid w-full grid-flow-dense ${local.class || ''}`}\n      style={{\n        'grid-template-columns': `repeat(${cols()}, minmax(0, 1fr))`,\n        gap: gap(),\n        'grid-auto-rows': autoRows(),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "BentoGrid.astro",
+				"language": "astro",
+				"description": "Astro Bento Grid layout component with zero clientside JS.",
+				"code": "---\ninterface Props {\n  cols?: number;\n  gap?: number | string;\n  rowHeight?: number | string;\n  class?: string;\n  [key: string]: unknown;\n}\n\nconst {\n  cols = 3,\n  gap = 20,\n  rowHeight = 180,\n  class: className = '',\n  ...props\n} = Astro.props;\n\nconst gapVal = typeof gap === 'number' ? `${gap}px` : gap;\nconst autoRowsVal = typeof rowHeight === 'number' ? `minmax(${rowHeight}px, auto)` : rowHeight;\n---\n\n<div\n  class={`exhuma-bento-grid grid w-full grid-flow-dense ${className}`}\n  style={`grid-template-columns: repeat(${cols}, minmax(0, 1fr)); gap: ${gapVal}; grid-auto-rows: ${autoRowsVal};`}\n  {...props}\n>\n  <slot />\n</div>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "bento-grid.blade.php",
+				"language": "php",
+				"description": "Laravel Blade Bento Grid component.",
+				"code": "@props([\n    'cols' => 3,\n    'gap' => 20,\n    'rowHeight' => 180,\n])\n\n@php\n$gapVal = is_numeric($gap) ? \"{$gap}px\" : $gap;\n$autoRowsVal = is_numeric($rowHeight) ? \"minmax({$rowHeight}px, auto)\" : $rowHeight;\n@endphp\n\n<div\n    {{ $attributes->merge([\n        'class' => 'exhuma-bento-grid grid w-full grid-flow-dense',\n    ]) }}\n    style=\"grid-template-columns: repeat({{ $cols }}, minmax(0, 1fr)); gap: {{ $gapVal }}; grid-auto-rows: {{ $autoRowsVal }};\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "bento-grid.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript Bento Grid with Big-Omega cached pointer sheen and auto-packing.",
+				"code": "/**\n * Initializes kinetic pointer sheen on Bento Grid cards.\n * Implements Big-Omega Ω(1) cached geometry reads on pointerenter.\n * Zero layout thrashing during active cursor movement.\n */\nexport function initBentoGrid(containerSelector = '.exhuma-bento-grid') {\n  const containers = document.querySelectorAll(containerSelector);\n  const cleanups = [];\n\n  containers.forEach((container) => {\n    const cards = container.querySelectorAll('.exhuma-bento-card');\n\n    cards.forEach((card) => {\n      let rect = null;\n\n      const onEnter = () => {\n        rect = card.getBoundingClientRect();\n      };\n\n      const onMove = (e) => {\n        if (!rect) rect = card.getBoundingClientRect();\n        const x = e.clientX - rect.left;\n        const y = e.clientY - rect.top;\n        card.style.setProperty('--bento-x', x.toFixed(1) + 'px');\n        card.style.setProperty('--bento-y', y.toFixed(1) + 'px');\n      };\n\n      const onLeave = () => {\n        rect = null;\n        card.style.setProperty('--bento-x', '-999px');\n        card.style.setProperty('--bento-y', '-999px');\n      };\n\n      card.addEventListener('pointerenter', onEnter);\n      card.addEventListener('pointermove', onMove);\n      card.addEventListener('pointerleave', onLeave);\n      card.addEventListener('pointercancel', onLeave);\n\n      cleanups.push(() => {\n        card.removeEventListener('pointerenter', onEnter);\n        card.removeEventListener('pointermove', onMove);\n        card.removeEventListener('pointerleave', onLeave);\n        card.removeEventListener('pointercancel', onLeave);\n      });\n    });\n  });\n\n  return {\n    destroy() {\n      cleanups.forEach((fn) => fn());\n    },\n  };\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "block.json",
+				"language": "json",
+				"description": "WordPress block definition for Bento Grid.",
+				"code": "{\n  \"$schema\": \"https://schemas.wp.org/trunk/block.json\",\n  \"apiVersion\": 3,\n  \"name\": \"exhuma/bento-grid\",\n  \"version\": \"1.0.0\",\n  \"title\": \"Exhuma Bento Grid\",\n  \"category\": \"layout\",\n  \"description\": \"Fluid responsive layout engine with dense auto-flow and asymmetric spans.\",\n  \"attributes\": {\n    \"cols\": { \"type\": \"number\", \"default\": 3 },\n    \"gap\": { \"type\": \"number\", \"default\": 20 },\n    \"rowHeight\": { \"type\": \"number\", \"default\": 180 }\n  },\n  \"render\": \"file:./render.php\"\n}\n"
+			},
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress render callback for Bento Grid.",
+				"code": "<?php\n/**\n * BentoGrid Block Render Template\n */\n$cols = isset($attributes['cols']) ? (int) $attributes['cols'] : 3;\n$gap = isset($attributes['gap']) ? (int) $attributes['gap'] : 20;\n$row_height = isset($attributes['rowHeight']) ? (int) $attributes['rowHeight'] : 180;\n\n$wrapper_attributes = get_block_wrapper_attributes([\n    'class' => 'exhuma-bento-grid grid w-full grid-flow-dense',\n    'style' => sprintf(\n        'grid-template-columns: repeat(%d, minmax(0, 1fr)); gap: %dpx; grid-auto-rows: minmax(%dpx, auto);',\n        $cols,\n        $gap,\n        $row_height\n    ),\n]);\n?>\n<div <?php echo $wrapper_attributes; ?>>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-bento-grid.js",
+				"language": "javascript",
+				"description": "Autonomous Custom Element <exhuma-bento-grid> with cached pointer sheen.",
+				"code": "class ExhumaBentoGridElement extends HTMLElement {\n  connectedCallback() {\n    const cols = this.getAttribute('cols') || '3';\n    const gap = this.getAttribute('gap') || '20';\n    const rowHeight = this.getAttribute('row-height') || '180';\n\n    this.style.display = 'grid';\n    this.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;\n    this.style.gap = `${gap}px`;\n    this.style.gridAutoFlow = 'dense';\n    this.style.gridAutoRows = `minmax(${rowHeight}px, auto)`;\n    this.style.width = '100%';\n\n    this.querySelectorAll('.exhuma-bento-card').forEach((card) => {\n      let rect = null;\n      card.addEventListener('pointerenter', () => {\n        rect = card.getBoundingClientRect();\n      });\n      card.addEventListener('pointermove', (e) => {\n        if (!rect) rect = card.getBoundingClientRect();\n        card.style.setProperty('--bento-x', (e.clientX - rect.left).toFixed(1) + 'px');\n        card.style.setProperty('--bento-y', (e.clientY - rect.top).toFixed(1) + 'px');\n      });\n      card.addEventListener('pointerleave', () => {\n        rect = null;\n        card.style.setProperty('--bento-x', '-999px');\n        card.style.setProperty('--bento-y', '-999px');\n      });\n    });\n  }\n}\n\nif (!customElements.get('exhuma-bento-grid')) {\n  customElements.define('exhuma-bento-grid', ExhumaBentoGridElement);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "BentoGrid.tsx",
+				"language": "tsx",
+				"description": "React Native Bento Grid container.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, type ViewProps } from 'react-native';\n\nexport interface BentoGridProps extends ViewProps {\n  gap?: number;\n}\n\nexport const BentoGrid: React.FC<BentoGridProps> = ({ gap = 20, style, children, ...props }) => (\n  <View style={[styles.container, { gap }, style]} {...props}>\n    {children}\n  </View>\n);\n\nconst styles = StyleSheet.create({\n  container: {\n    width: '100%',\n    flexDirection: 'column',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "bento_grid.dart",
+				"language": "dart",
+				"description": "Flutter Bento Grid layout widget.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaBentoGrid extends StatelessWidget {\n  final List<Widget> children;\n  final double spacing;\n\n  const ExhumaBentoGrid({\n    super.key,\n    required this.children,\n    this.spacing = 20.0,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: children.map((c) => Padding(\n        padding: EdgeInsets.only(bottom: spacing),\n        child: c,\n      )).toList(),\n    );\n  }\n}\n"
+			}
+		]
+	}
+}

@@ -32,9 +32,9 @@ import { HorizontalScroller } from '@exhuma/cards';
 export default function Showcase() {
   return (
     <HorizontalScroller speed={0.8}>
-      <div className="w-80 h-96 bg-zinc-900 rounded-xl p-6">Card 1</div>
-      <div className="w-80 h-96 bg-zinc-900 rounded-xl p-6">Card 2</div>
-      <div className="w-80 h-96 bg-zinc-900 rounded-xl p-6">Card 3</div>
+      <div className='h-96 w-80 rounded-xl bg-zinc-900 p-6'>Card 1</div>
+      <div className='h-96 w-80 rounded-xl bg-zinc-900 p-6'>Card 2</div>
+      <div className='h-96 w-80 rounded-xl bg-zinc-900 p-6'>Card 3</div>
     </HorizontalScroller>
   );
 }
@@ -48,15 +48,9 @@ import { StackingCards } from '@exhuma/cards';
 export default function Features() {
   return (
     <StackingCards topStart={100} topIncrement={24} minScale={0.88}>
-      <div className="h-80 bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-        Feature 1: Autonomous Layouts
-      </div>
-      <div className="h-80 bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-        Feature 2: Subterranean Physics
-      </div>
-      <div className="h-80 bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-        Feature 3: Unified Developer Flow
-      </div>
+      <div className='h-80 rounded-2xl border border-zinc-800 bg-zinc-900 p-8'>Feature 1: Autonomous Layouts</div>
+      <div className='h-80 rounded-2xl border border-zinc-800 bg-zinc-900 p-8'>Feature 2: Subterranean Physics</div>
+      <div className='h-80 rounded-2xl border border-zinc-800 bg-zinc-900 p-8'>Feature 3: Unified Developer Flow</div>
     </StackingCards>
   );
 }

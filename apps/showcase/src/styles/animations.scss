@@ -1,0 +1,105 @@
+@theme {
+	// Tokens
+	--animate-overlay-in: overlay-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	--animate-overlay-out: overlay-out 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	--animate-modal-in: modal-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	--animate-modal-out: modal-out 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	--animate-slide-up: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	--animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+	--animate-gradient-x: gradient-x 8s ease infinite;
+	--animate-float: float 5s ease-in-out infinite;
+	--animate-drawer-in: drawer-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+	// Keyframes
+	@keyframes drawer-in {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes overlay-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes overlay-out {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes modal-in {
+		from {
+			opacity: 0;
+			transform: scale(0.96) translateY(-8px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+	}
+
+	@keyframes modal-out {
+		from {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+		to {
+			opacity: 0;
+			transform: scale(0.96) translateY(-8px);
+		}
+	}
+
+	@keyframes slide-up {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes pulse-glow {
+		0%,
+		100% {
+			opacity: 0.45;
+			transform: scale(0.98);
+		}
+		50% {
+			opacity: 0.85;
+			transform: scale(1.02);
+		}
+	}
+
+	@keyframes gradient-x {
+		0%, 100% {
+			background-size: 200% 200%;
+			background-position: left center;
+		}
+		50% {
+			background-size: 200% 200%;
+			background-position: right center;
+		}
+	}
+
+	@keyframes float {
+		0%, 100% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+}

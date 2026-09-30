@@ -32,10 +32,10 @@ import { CssMasonry } from '@exhuma/layouts';
 
 export default function Gallery() {
   return (
-    <CssMasonry columns={{ sm: 1, md: 2, lg: 3 }} gap="1.5rem">
-      <div className="h-64 bg-zinc-800 rounded-xl p-4">Short card</div>
-      <div className="h-96 bg-zinc-800 rounded-xl p-4">Tall card</div>
-      <div className="h-48 bg-zinc-800 rounded-xl p-4">Mini card</div>
+    <CssMasonry columns={{ sm: 1, md: 2, lg: 3 }} gap='1.5rem'>
+      <div className='h-64 rounded-xl bg-zinc-800 p-4'>Short card</div>
+      <div className='h-96 rounded-xl bg-zinc-800 p-4'>Tall card</div>
+      <div className='h-48 rounded-xl bg-zinc-800 p-4'>Mini card</div>
     </CssMasonry>
   );
 }
@@ -48,7 +48,7 @@ import { AutoGrid } from '@exhuma/layouts';
 
 export default function Products() {
   return (
-    <AutoGrid minItemWidth={280} gap="1.5rem">
+    <AutoGrid minItemWidth={280} gap='1.5rem'>
       {items.map((item) => (
         <Card key={item.id} {...item} />
       ))}

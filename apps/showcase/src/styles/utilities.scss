@@ -1,0 +1,167 @@
+@utility container {
+	@apply mx-auto max-w-full px-4 sm:px-6 md:max-w-[85%] 2xl:max-w-[90rem];
+}
+
+@utility container-fluid {
+	@apply mx-auto max-w-full px-4 sm:px-6 md:px-10;
+}
+
+@utility section-separator {
+	@apply absolute inset-x-3 inset-y-0 -z-10 md:inset-x-10;
+}
+
+// ── Background & Texture Utilities ──────────────────────────────
+@utility bg-dot-grid {
+	background-image: radial-gradient(circle, var(--dot-grid-color) 1px, transparent 1px);
+	background-size: 24px 24px;
+}
+
+@utility bg-dot-grid-dense {
+	background-image: radial-gradient(circle, var(--dot-grid-color) 1px, transparent 1px);
+	background-size: 16px 16px;
+}
+
+@utility bg-dot-grid-studio {
+	background-color: var(--canvas-bg);
+	background-image: radial-gradient(circle, var(--dot-grid-color-studio) 1.25px, transparent 1.25px);
+	background-size: 20px 20px;
+}
+
+// ── Keycap Utility ──────────────────────────────────────────────
+@utility kbd {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--keycap-border);
+	background-color: var(--keycap-bg);
+	color: var(--keycap-text);
+	border-radius: 0.25rem;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	padding: 0.125rem 0.375rem;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+// ── Typography Utilities (from sapan.dev pattern) ───────────────
+@utility text-heading-xlarge {
+	@apply text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl;
+}
+
+@utility text-heading-large {
+	@apply text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl;
+}
+
+@utility text-heading-medium {
+	@apply text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl;
+}
+
+@utility text-heading-small {
+	@apply text-base font-semibold tracking-tight sm:text-lg;
+}
+
+@utility text-heading-xsmall {
+	@apply text-xs font-bold tracking-wider uppercase;
+}
+
+// ── Auto-Fitting Grid Columns ──────────────────────────────────
+// `grid-cols-auto-fit-64` → tracks of at least 16rem that reflow on their own.
+// The `min(…, 100%)` guard keeps a track from outgrowing a narrow container,
+// which is what otherwise forces horizontal scroll on small screens.
+@utility grid-cols-auto-fit-* {
+	grid-template-columns: repeat(auto-fit, minmax(min(--spacing(--value(integer)), 100%), 1fr));
+}
+
+// ── Header-Aware Sticky Rails ──────────────────────────────────
+// A sticky rail taller than the viewport never fully sticks: its lower half
+// stays unreachable until the page ends. Capping it to the space below the
+// header and scrolling it internally keeps every item reachable.
+@utility h-below-header {
+	height: calc(100svh - var(--header-height));
+}
+
+@utility top-header-gap {
+	top: calc(var(--header-height, 4rem) + 0.75rem);
+}
+
+@utility top-header-mobile-gap {
+	top: calc(var(--header-height, 4rem) + 3.75rem);
+	@variant lg {
+		top: calc(var(--header-height, 4rem) + 0.75rem);
+	}
+}
+
+// Anchor jumps (TOC links, #hash URLs) land on the same line the sticky TOC
+// sits on, instead of under the sticky header. Below md the docs mobile nav bar
+// (h-12) is stuck under the header too, so it's cleared as well.
+@utility anchor-offset {
+	--docs-subnav-height: 3rem;
+
+	@variant md {
+		--docs-subnav-height: 0rem;
+	}
+
+	& [id] {
+		scroll-margin-top: calc(var(--header-height) + var(--docs-subnav-height) + 1.5rem);
+	}
+}
+
+// ── Radial Fade Mask ───────────────────────────────────────────
+// Fades a decorative pattern out from the center (used by grid backdrops).
+@utility mask-radial-fade {
+	mask-image: radial-gradient(25rem circle at center, white, transparent);
+}
+
+// ── No Scrollbar Utility ───────────────────────────────────────
+@utility no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+
+	&::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+}
+
+// ── Custom Scrollbar ───────────────────────────────────────────
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--keycap-border);
+	border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: var(--muted-foreground);
+}
+
+// ── Shiki Dual-Theme Rules ─────────────────────────────────────
+.shiki {
+	background-color: transparent !important;
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+	color: var(--shiki-dark) !important;
+	font-style: var(--shiki-dark-font-style) !important;
+	font-weight: var(--shiki-dark-font-weight) !important;
+	text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+// ── Floating Sticky Dock Elevation ─────────────────────────────
+@utility shadow-sticky-dock {
+	box-shadow:
+		0 10px 30px -5px rgba(0, 0, 0, 0.15),
+		0 20px 40px -10px rgba(0, 0, 0, 0.2),
+		0 0 0 1px hsl(var(--border) / 0.8);
+}
+:where(.dark) .shadow-sticky-dock {
+	box-shadow:
+		0 10px 35px -5px rgba(0, 0, 0, 0.6),
+		0 25px 50px -12px rgba(0, 0, 0, 0.7),
+		0 0 0 1px hsl(var(--border) / 0.8),
+		0 0 25px -5px rgba(255, 255, 255, 0.05);
+}

@@ -1,0 +1,116 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+	--background: 0 0% 100%;
+	--foreground: 240 10% 3.9%;
+	--card: 0 0% 100%;
+	--card-foreground: 240 10% 3.9%;
+	--popover: 0 0% 100%;
+	--popover-foreground: 240 10% 3.9%;
+	--primary: 240 5.9% 10%;
+	--primary-foreground: 0 0% 98%;
+	--secondary: 240 4.8% 95.9%;
+	--secondary-foreground: 240 5.9% 10%;
+	--muted: 240 4.8% 95.9%;
+	--muted-foreground: 240 3.8% 46.1%;
+	--accent: 240 4.8% 95.9%;
+	--accent-foreground: 240 5.9% 10%;
+	--destructive: 0 84.2% 60.2%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 240 5.9% 90%;
+	--input: 240 5.9% 90%;
+	--ring: 240 5.9% 10%;
+	--radius: 0.625rem;
+
+	--dot-grid-color: rgba(0, 0, 0, 0.07);
+	--dot-grid-color-studio: rgba(0, 0, 0, 0.12);
+	--canvas-bg: #f8fafc;
+	--keycap-bg: #f4f4f5;
+	--keycap-border: #d4d4d8;
+	--keycap-text: #52525b;
+
+	/* Height of the sticky header (announcement banner + nav bar). GlobalHeader
+	   overwrites this with the measured value at runtime, because dismissing the
+	   banner changes it. This default matches the server render (banner shown). */
+	--header-height: 5.4375rem;
+}
+
+.dark {
+	--background: 240 10% 3.9%;
+	--foreground: 0 0% 98%;
+	--card: 240 10% 5%;
+	--card-foreground: 0 0% 98%;
+	--popover: 240 10% 5%;
+	--popover-foreground: 0 0% 98%;
+	--primary: 0 0% 98%;
+	--primary-foreground: 240 5.9% 10%;
+	--secondary: 240 3.7% 15.9%;
+	--secondary-foreground: 0 0% 98%;
+	--muted: 240 3.7% 15.9%;
+	--muted-foreground: 240 5% 64.9%;
+	--accent: 240 3.7% 15.9%;
+	--accent-foreground: 0 0% 98%;
+	--destructive: 0 62.8% 30.6%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 240 3.7% 15.9%;
+	--input: 240 3.7% 15.9%;
+	--ring: 240 4.9% 83.9%;
+
+	--dot-grid-color: rgba(255, 255, 255, 0.08);
+	--dot-grid-color-studio: rgba(255, 255, 255, 0.12);
+	--canvas-bg: #0c0d10;
+	--keycap-bg: #18181b;
+	--keycap-border: #3f3f46;
+	--keycap-text: #a1a1aa;
+}
+
+@theme {
+	--color-background: hsl(var(--background));
+	--color-foreground: hsl(var(--foreground));
+	--color-card: hsl(var(--card));
+	--color-card-foreground: hsl(var(--card-foreground));
+	--color-popover: hsl(var(--popover));
+	--color-popover-foreground: hsl(var(--popover-foreground));
+	--color-primary: hsl(var(--primary));
+	--color-primary-foreground: hsl(var(--primary-foreground));
+	--color-secondary: hsl(var(--secondary));
+	--color-secondary-foreground: hsl(var(--secondary-foreground));
+	--color-muted: hsl(var(--muted));
+	--color-muted-foreground: hsl(var(--muted-foreground));
+	--color-accent: hsl(var(--accent));
+	--color-accent-foreground: hsl(var(--accent-foreground));
+	--color-destructive: hsl(var(--destructive));
+	--color-destructive-foreground: hsl(var(--destructive-foreground));
+	--color-border: hsl(var(--border));
+	--color-input: hsl(var(--input));
+	--color-ring: hsl(var(--ring));
+	--radius-lg: var(--radius);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-sm: calc(var(--radius) - 4px);
+
+	/* Sub-xs caption/label sizes: Tailwind's default scale bottoms out at text-xs (12px),
+	   but this codebase uses 9/10/11px extensively for eyebrows, timestamps, and kbd hints. */
+	--text-2xs: 0.6875rem; /* 11px */
+	--text-3xs: 0.625rem; /* 10px */
+	--text-4xs: 0.5625rem; /* 9px */
+
+	/* Header-aware offsets for sticky rails: `top-header` sits flush under the
+	   sticky header; `top-header-offset` adds the docs content's 1.5rem top padding. */
+	--spacing-header: var(--header-height);
+	--spacing-header-offset: calc(var(--header-height) + 1.5rem);
+	--spacing-header-gap: calc(var(--header-height) + 0.75rem);
+	--spacing-header-mobile-gap: calc(var(--header-height) + 3.75rem);
+
+	/* Exhuma Brand Colors */
+	--color-exhuma-50: #f4f4f5;
+	--color-exhuma-100: #e4e4e7;
+	--color-exhuma-200: #d4d4d8;
+	--color-exhuma-300: #a1a1aa;
+	--color-exhuma-400: #71717a;
+	--color-exhuma-500: #52525b;
+	--color-exhuma-600: #3f3f46;
+	--color-exhuma-700: #27272a;
+	--color-exhuma-800: #18181b;
+	--color-exhuma-900: #09090b;
+	--color-exhuma-950: #040405;
+}

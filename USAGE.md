@@ -7,6 +7,7 @@ Guide to consuming Exhuma packages across applications and frameworks.
 ## Consumption Approaches
 
 ### 1. All-in-One (`@exhuma/core`)
+
 Recommended for rapid development and applications that use multiple tools across interactions, layout, and routing.
 
 ```bash
@@ -26,6 +27,7 @@ import { LandingLayout, DashboardLayout } from '@exhuma/core/router';
 ---
 
 ### 2. Standalone Targeted Packages
+
 Recommended for micro-frontends or repositories with strict bundle boundaries:
 
 ```bash
@@ -43,9 +45,9 @@ pnpm add @exhuma/router
 
 ## Framework Compatibility
 
-| Framework | Support Status | Notes |
-| :--- | :---: | :--- |
-| **Next.js (App Router)** | Full | All interactive components include `'use client'` banner; SSR safe. |
-| **Next.js (Pages Router)** | Full | Fully compatible. |
-| **Vite / React** | Full | Dual ESM and CJS bundle output with `.d.ts` declaration maps. |
-| **Remix / React Router v7** | Full | Fully compatible. |
+| Framework                   | Support Status | Notes                                                               |
+| :-------------------------- | :------------: | :------------------------------------------------------------------ |
+| **Next.js (App Router)**    |      Full      | All interactive components include `'use client'` banner; SSR safe. |
+| **Next.js (Pages Router)**  |      Full      | Fully compatible.                                                   |
+| **Vite / React**            |      Full      | Dual ESM and CJS bundle output with `.d.ts` declaration maps.       |
+| **Remix / React Router v7** |      Full      | Fully compatible.                                                   |

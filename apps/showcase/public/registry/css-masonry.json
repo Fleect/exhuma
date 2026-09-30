@@ -1,0 +1,263 @@
+{
+	"name": "CSS Masonry",
+	"slug": "css-masonry",
+	"category": "layouts",
+	"description": "Pure CSS multi-column responsive masonry layout with zero external JavaScript runtime overhead.",
+	"version": "1.0.0",
+	"props": [
+		{ "name": "columns", "label": "Mobile Columns (<640px)", "type": "number", "defaultValue": 1, "min": 1, "max": 8, "step": 1, "description": "Base column count on mobile viewports (<640px)." },
+		{ "name": "columnsSm", "label": "Tablet Columns (640-1024px)", "type": "number", "defaultValue": 2, "min": 1, "max": 4, "step": 1, "description": "Number of columns on tablet viewports (≥640px)." },
+		{ "name": "columnsMd", "label": "Medium Tablet Columns", "type": "number", "defaultValue": 2, "min": 1, "max": 6, "step": 1, "description": "Number of columns on medium tablet viewports." },
+		{ "name": "columnsLg", "label": "Desktop Columns (1024-1280px)", "type": "number", "defaultValue": 3, "min": 1, "max": 8, "step": 1, "description": "Number of columns on desktop viewports." },
+		{ "name": "columnsXl", "label": "Ultra-wide Columns (≥1280px)", "type": "number", "defaultValue": 4, "min": 1, "max": 10, "step": 1, "description": "Number of columns on large screens (≥1280px)." },
+		{ "name": "gap", "label": "Gap (px)", "type": "number", "defaultValue": 16, "min": 4, "max": 64, "step": 4, "description": "Spacing between masonry columns and item margins." },
+		{
+			"name": "columnFill",
+			"label": "Column Fill",
+			"type": "select",
+			"defaultValue": "balance",
+			"options": [
+				{ "label": "Balance (Balanced Heights)", "value": "balance" },
+				{ "label": "Auto (Sequential Waterfall)", "value": "auto" }
+			],
+			"description": "Controls whether column heights are balanced or filled sequentially."
+		},
+		{
+			"name": "height",
+			"label": "Container Height (px)",
+			"type": "number",
+			"defaultValue": 0,
+			"min": 0,
+			"max": 1200,
+			"step": 20,
+			"description": "Explicit container height for sequential waterfall (0 for auto balance)."
+		}
+	],
+	"dependencies": {
+		"react": ["@exhuma/core"],
+		"nextjs": ["@exhuma/core"],
+		"vue": ["clsx"],
+		"svelte": ["clsx"],
+		"solid": ["clsx"],
+		"angular": [],
+		"astro": [],
+		"blade": [],
+		"vanilla": [],
+		"wordpress": [],
+		"webcomponent": [],
+		"react-native": [],
+		"flutter": []
+	},
+	"flavors": {
+		"react": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as CssMasonryPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as CssMasonryPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "CssMasonry.vue",
+				"language": "vue",
+				"description": "Vue 3 Native CSS Masonry multi-column layout component.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\n\ninterface Props {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  columns: 1,\n  columnsSm: 2,\n  columnsMd: 2,\n  columnsLg: 3,\n  columnsXl: 4,\n  gap: 16,\n  columnFill: 'balance',\n  height: 0,\n  class: '',\n});\n\nconst containerStyle = computed(() => ({\n  columnCount: props.columns,\n  columnGap: `${props.gap}px`,\n  columnFill: props.columnFill === 'auto' ? 'auto' : 'balance',\n  height: props.columnFill === 'auto' && props.height > 0 ? `${props.height}px` : undefined,\n  overflowY: props.columnFill === 'auto' && props.height > 0 ? 'auto' : undefined,\n}));\n</script>\n\n<template>\n  <div\n    class=\"exhuma-css-masonry w-full\"\n    :class=\"[\n      props.columnsSm ? `sm:[column-count:${props.columnsSm}]` : '',\n      props.columnsMd ? `md:[column-count:${props.columnsMd}]` : '',\n      props.columnsLg ? `lg:[column-count:${props.columnsLg}]` : '',\n      props.columnsXl ? `xl:[column-count:${props.columnsXl}]` : '',\n      props.class,\n    ]\"\n    :style=\"containerStyle\"\n  >\n    <slot />\n  </div>\n</template>\n\n<style scoped>\n:deep(> *) {\n  break-inside: avoid;\n  margin-bottom: v-bind('`${props.gap}px`');\n}\n</style>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "CssMasonry.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes CSS Masonry multi-column layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    columns = 1,\n    columnsSm = 2,\n    columnsMd = 2,\n    columnsLg = 3,\n    columnsXl = 4,\n    gap = 16,\n    columnFill = 'balance',\n    height = 0,\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    columns?: number;\n    columnsSm?: number;\n    columnsMd?: number;\n    columnsLg?: number;\n    columnsXl?: number;\n    gap?: number;\n    columnFill?: 'balance' | 'auto';\n    height?: number;\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n</script>\n\n<div\n  class={clsx(\n    'exhuma-css-masonry w-full',\n    columnsSm && `sm:[column-count:${columnsSm}]`,\n    columnsMd && `md:[column-count:${columnsMd}]`,\n    columnsLg && `lg:[column-count:${columnsLg}]`,\n    columnsXl && `xl:[column-count:${columnsXl}]`,\n    className\n  )}\n  style=\"column-count: {columns}; column-gap: {gap}px; column-fill: {columnFill}; {columnFill === 'auto' && height > 0 ? `height: ${height}px; overflow-y: auto;` : ''}\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n\n<style>\n  :global(.exhuma-css-masonry > *) {\n    break-inside: avoid;\n    margin-bottom: var(--masonry-gap, 16px);\n  }\n</style>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "css-masonry.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone CSS Masonry component.",
+				"code": "import { Component, input } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'exhuma-css-masonry',\n  standalone: true,\n  imports: [CommonModule],\n  template: `\n    <div\n      class=\"exhuma-css-masonry w-full {{ className() }}\"\n      [style.columnCount]=\"columns()\"\n      [style.columnGap]=\"gap() + 'px'\"\n      [style.columnFill]=\"columnFill()\"\n      [style.height]=\"columnFill() === 'auto' && height() > 0 ? height() + 'px' : null\"\n      [style.overflowY]=\"columnFill() === 'auto' && height() > 0 ? 'auto' : null\"\n    >\n      <ng-content />\n    </div>\n  `,\n  styles: [`\n    :host ::ng-deep .exhuma-css-masonry > * {\n      break-inside: avoid;\n      margin-bottom: 16px;\n    }\n  `],\n})\nexport class ExhumaCssMasonryComponent {\n  columns = input<number>(1);\n  columnsSm = input<number>(2);\n  columnsMd = input<number>(2);\n  columnsLg = input<number>(3);\n  columnsXl = input<number>(4);\n  gap = input<number>(16);\n  columnFill = input<'balance' | 'auto'>('balance');\n  height = input<number>(0);\n  className = input<string>('');\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "SolidJS Native CSS Masonry multi-column component.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface CssMasonryProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n}\n\nexport const CssMasonry: Component<CssMasonryProps> = (props) => {\n  const [local, others] = splitProps(props, [\n    'columns',\n    'columnsSm',\n    'columnsMd',\n    'columnsLg',\n    'columnsXl',\n    'gap',\n    'columnFill',\n    'height',\n    'class',\n    'children',\n    'style',\n  ]);\n\n  const columns = () => local.columns ?? 1;\n  const columnsSm = () => local.columnsSm ?? 2;\n  const columnsMd = () => local.columnsMd ?? 2;\n  const columnsLg = () => local.columnsLg ?? 3;\n  const columnsXl = () => local.columnsXl ?? 4;\n  const gap = () => local.gap ?? 16;\n  const columnFill = () => local.columnFill ?? 'balance';\n  const height = () => local.height ?? 0;\n\n  return (\n    <div\n      class={`exhuma-css-masonry w-full ${columnsSm() ? `sm:[column-count:${columnsSm()}] ` : ''}${columnsMd() ? `md:[column-count:${columnsMd()}] ` : ''}${columnsLg() ? `lg:[column-count:${columnsLg}] ` : ''}${columnsXl() ? `xl:[column-count:${columnsXl()}] ` : ''}${local.class ?? ''}`}\n      style={{\n        'column-count': columns(),\n        'column-gap': `${gap()}px`,\n        'column-fill': columnFill() === 'auto' ? 'auto' : 'balance',\n        ...(columnFill() === 'auto' && height() > 0 ? { height: `${height()}px`, 'overflow-y': 'auto' } : {}),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "CssMasonry.astro",
+				"language": "astro",
+				"description": "Astro zero-JS CSS Masonry component.",
+				"code": "---\ninterface Props {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n  class?: string;\n}\n\nconst {\n  columns = 1,\n  columnsSm = 2,\n  columnsMd = 2,\n  columnsLg = 3,\n  columnsXl = 4,\n  gap = 16,\n  columnFill = 'balance',\n  height = 0,\n  class: className = '',\n} = Astro.props;\n---\n\n<div\n  class:list={[\n    'exhuma-css-masonry w-full',\n    columnsSm && `sm:[column-count:${columnsSm}]`,\n    columnsMd && `md:[column-count:${columnsMd}]`,\n    columnsLg && `lg:[column-count:${columnsLg}]`,\n    columnsXl && `xl:[column-count:${columnsXl}]`,\n    className,\n  ]}\n  style={{\n    columnCount: columns,\n    columnGap: `${gap}px`,\n    columnFill: columnFill === 'auto' ? 'auto' : 'balance',\n    height: columnFill === 'auto' && height > 0 ? `${height}px` : undefined,\n    overflowY: columnFill === 'auto' && height > 0 ? 'auto' : undefined,\n  }}\n>\n  <slot />\n</div>\n\n<style>\n  .exhuma-css-masonry > :global(*) {\n    break-inside: avoid;\n    margin-bottom: var(--masonry-gap, 16px);\n  }\n</style>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "css-masonry.blade.php",
+				"language": "php",
+				"description": "Laravel Blade component for CSS Masonry.",
+				"code": "@props([\n    'columns' => 1,\n    'columnsSm' => 2,\n    'columnsMd' => 2,\n    'columnsLg' => 3,\n    'columnsXl' => 4,\n    'gap' => 16,\n    'columnFill' => 'balance',\n    'height' => 0,\n    'class' => '',\n])\n\n<div\n    {{ $attributes->merge(['class' => 'exhuma-css-masonry w-full ' . $class]) }}\n    style=\"column-count: {{ $columns }}; column-gap: {{ $gap }}px; column-fill: {{ $columnFill }}; {{ $columnFill === 'auto' && $height > 0 ? \"height: {$height}px; overflow-y: auto;\" : '' }}\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "css-masonry.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript CSS Masonry initializer.",
+				"code": "export function initCssMasonry(selector = '[data-exhuma-css-masonry]', options = {}) {\n  const elements = document.querySelectorAll(selector);\n\n  elements.forEach((el) => {\n    const cols = options.columns ?? el.dataset.columns ?? 1;\n    const gap = options.gap ?? el.dataset.gap ?? 16;\n    const fill = options.columnFill ?? el.dataset.columnFill ?? 'balance';\n    const height = options.height ?? parseInt(el.dataset.height || '0', 10);\n\n    el.style.columnCount = cols;\n    el.style.columnGap = `${gap}px`;\n    el.style.columnFill = fill === 'auto' ? 'auto' : 'balance';\n\n    if (fill === 'auto' && height > 0) {\n      el.style.height = `${height}px`;\n      el.style.overflowY = 'auto';\n    }\n\n    Array.from(el.children).forEach((child) => {\n      child.style.breakInside = 'avoid';\n      child.style.marginBottom = `${gap}px`;\n    });\n  });\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress Gutenberg block render template for CSS Masonry.",
+				"code": "<?php\n/**\n * Exhuma CSS Masonry Block Render Template\n */\n$columns = $attributes['columns'] ?? 1;\n$gap = $attributes['gap'] ?? 16;\n$columnFill = $attributes['columnFill'] ?? 'balance';\n$height = $attributes['height'] ?? 0;\n?>\n\n<div\n    class=\"exhuma-css-masonry w-full <?php echo esc_attr($attributes['className'] ?? ''); ?>\"\n    style=\"column-count: <?php echo esc_attr($columns); ?>; column-gap: <?php echo esc_attr($gap); ?>px; column-fill: <?php echo esc_attr($columnFill); ?>; <?php echo $columnFill === 'auto' && $height > 0 ? \"height: {$height}px; overflow-y: auto;\" : ''; ?>\"\n>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-css-masonry.js",
+				"language": "javascript",
+				"description": "Framework-agnostic Web Component for CSS Masonry.",
+				"code": "class ExhumaCssMasonry extends HTMLElement {\n  static get observedAttributes() {\n    return ['columns', 'gap', 'column-fill', 'height'];\n  }\n\n  connectedCallback() {\n    this.render();\n  }\n\n  attributeChangedCallback() {\n    this.render();\n  }\n\n  render() {\n    const cols = this.getAttribute('columns') || '1';\n    const gap = this.getAttribute('gap') || '16';\n    const fill = this.getAttribute('column-fill') || 'balance';\n    const height = parseInt(this.getAttribute('height') || '0', 10);\n\n    this.style.display = 'block';\n    this.style.width = '100%';\n    this.style.columnCount = cols;\n    this.style.columnGap = `${gap}px`;\n    this.style.columnFill = fill === 'auto' ? 'auto' : 'balance';\n\n    if (fill === 'auto' && height > 0) {\n      this.style.height = `${height}px`;\n      this.style.overflowY = 'auto';\n    }\n  }\n}\n\nif (!customElements.get('exhuma-css-masonry')) {\n  customElements.define('exhuma-css-masonry', ExhumaCssMasonry);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "React Native dual-column vertical Masonry layout component.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, type ViewProps } from 'react-native';\n\nexport interface CssMasonryProps extends ViewProps {\n  columns?: number;\n  gap?: number;\n}\n\nexport const CssMasonry: React.FC<CssMasonryProps> = ({\n  children,\n  columns = 2,\n  gap = 16,\n  style,\n  ...props\n}) => {\n  const childArray = React.Children.toArray(children);\n  const columnBuckets: React.ReactNode[][] = Array.from({ length: columns }, () => []);\n\n  childArray.forEach((child, index) => {\n    columnBuckets[index % columns].push(child);\n  });\n\n  return (\n    <View style={[styles.container, { gap }, style]} {...props}>\n      {columnBuckets.map((bucket, colIdx) => (\n        <View key={colIdx} style={[styles.column, { gap }]}>\n          {bucket}\n        </View>\n      ))}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flexDirection: 'row',\n    width: '100%',\n  },\n  column: {\n    flex: 1,\n    flexDirection: 'column',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "css_masonry.dart",
+				"language": "dart",
+				"description": "Flutter dual-column Masonry layout widget.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaCssMasonry extends StatelessWidget {\n  final List<Widget> children;\n  final int columns;\n  final double gap;\n\n  const ExhumaCssMasonry({\n    super.key,\n    required this.children,\n    this.columns = 2,\n    this.gap = 16.0,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    final List<List<Widget>> buckets = List.generate(columns, (_) => []);\n\n    for (var i = 0; i < children.length; i++) {\n      buckets[i % columns].add(children[i]);\n      if (i < children.length - 1) {\n        buckets[i % columns].add(SizedBox(height: gap));\n      }\n    }\n\n    return Row(\n      crossAxisAlignment: CrossAxisAlignment.start,\n      children: [\n        for (var i = 0; i < buckets.length; i++) ...[\n          Expanded(\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              children: buckets[i],\n            ),\n          ),\n          if (i < buckets.length - 1) SizedBox(width: gap),\n        ],\n      ],\n    );\n  }\n}\n"
+			}
+		]
+	},
+	"ejected": {
+		"react": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "CSS Masonry — Standalone Ejected Engine (Zero Dependencies). Pure CSS multi-column layout with container queries inlined.",
+				"code": "import * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryItemProps extends React.HTMLAttributes<HTMLDivElement> {\n  breakInside?: 'avoid' | 'auto';\n}\n\n/**\n * CssMasonryItem — Standalone compound item preventing fragmentation across columns.\n */\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, CssMasonryItemProps>(\n  ({ children, breakInside = 'avoid', className, style, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-masonry-item inline-block w-full', className)}\n        style={{\n          breakInside: breakInside === 'avoid' ? 'avoid-column' : breakInside,\n          pageBreakInside: 'avoid',\n          display: 'inline-block',\n          width: '100%',\n          ...style,\n        }}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n\nexport interface CssMasonryProps extends React.HTMLAttributes<HTMLDivElement> {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n}\n\n/**\n * CssMasonry — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) multi-column CSS layout.\n * - Zero forced reflows or synchronous DOM measurements.\n * - Hardware compositor acceleration with break-inside-avoid protection.\n * - Supports balanced heights or deterministic sequential auto waterfall.\n */\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  (\n    {\n      children,\n      columns = 1,\n      columnsSm = 2,\n      columnsMd = 2,\n      columnsLg = 3,\n      columnsXl = 4,\n      gap = 16,\n      columnFill = 'balance',\n      height = 0,\n      className,\n      style,\n      ...props\n    },\n    ref\n  ) => {\n    const containerStyle: React.CSSProperties = {\n      columnCount: columns,\n      columnGap: `${gap}px`,\n      columnFill: columnFill === 'auto' ? 'auto' : 'balance',\n      height: columnFill === 'auto' && height && height > 0 ? `${height}px` : undefined,\n      overflowY: columnFill === 'auto' && height && height > 0 ? 'auto' : undefined,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx(\n          'exhuma-css-masonry w-full',\n          columnsSm && `sm:[column-count:${columnsSm}]`,\n          columnsMd && `md:[column-count:${columnsMd}]`,\n          columnsLg && `lg:[column-count:${columnsLg}]`,\n          columnsXl && `xl:[column-count:${columnsXl}]`,\n          className\n        )}\n        style={containerStyle}\n        {...props}\n      >\n        {React.Children.map(children, (child) => (\n          <div\n            className=\"break-inside-avoid\"\n            style={{ marginBottom: `${gap}px` }}\n          >\n            {child}\n          </div>\n        ))}\n      </div>\n    );\n  }\n);\nCssMasonry.displayName = 'CssMasonry';\n"
+			}
+		],
+		"nextjs": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "CSS Masonry — Standalone Ejected Engine (Zero Dependencies). Pure CSS multi-column layout with container queries inlined.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryItemProps extends React.HTMLAttributes<HTMLDivElement> {\n  breakInside?: 'avoid' | 'auto';\n}\n\n/**\n * CssMasonryItem — Standalone compound item preventing fragmentation across columns.\n */\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, CssMasonryItemProps>(\n  ({ children, breakInside = 'avoid', className, style, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={clsx('exhuma-masonry-item inline-block w-full', className)}\n        style={{\n          breakInside: breakInside === 'avoid' ? 'avoid-column' : breakInside,\n          pageBreakInside: 'avoid',\n          display: 'inline-block',\n          width: '100%',\n          ...style,\n        }}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n\nexport interface CssMasonryProps extends React.HTMLAttributes<HTMLDivElement> {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n}\n\n/**\n * CssMasonry — Standalone Ejected Engine (Zero-Dependency)\n * Big-Omega Invariants:\n * - Constant-time Ω(1) multi-column CSS layout.\n * - Zero forced reflows or synchronous DOM measurements.\n * - Hardware compositor acceleration with break-inside-avoid protection.\n * - Supports balanced heights or deterministic sequential auto waterfall.\n */\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  (\n    {\n      children,\n      columns = 1,\n      columnsSm = 2,\n      columnsMd = 2,\n      columnsLg = 3,\n      columnsXl = 4,\n      gap = 16,\n      columnFill = 'balance',\n      height = 0,\n      className,\n      style,\n      ...props\n    },\n    ref\n  ) => {\n    const containerStyle: React.CSSProperties = {\n      columnCount: columns,\n      columnGap: `${gap}px`,\n      columnFill: columnFill === 'auto' ? 'auto' : 'balance',\n      height: columnFill === 'auto' && height && height > 0 ? `${height}px` : undefined,\n      overflowY: columnFill === 'auto' && height && height > 0 ? 'auto' : undefined,\n      ...style,\n    };\n\n    return (\n      <div\n        ref={ref}\n        className={clsx(\n          'exhuma-css-masonry w-full',\n          columnsSm && `sm:[column-count:${columnsSm}]`,\n          columnsMd && `md:[column-count:${columnsMd}]`,\n          columnsLg && `lg:[column-count:${columnsLg}]`,\n          columnsXl && `xl:[column-count:${columnsXl}]`,\n          className\n        )}\n        style={containerStyle}\n        {...props}\n      >\n        {React.Children.map(children, (child) => (\n          <div\n            className=\"break-inside-avoid\"\n            style={{ marginBottom: `${gap}px` }}\n          >\n            {child}\n          </div>\n        ))}\n      </div>\n    );\n  }\n);\nCssMasonry.displayName = 'CssMasonry';\n"
+			}
+		],
+		"vue": [
+			{
+				"filename": "CssMasonry.vue",
+				"language": "vue",
+				"description": "Vue 3 Native CSS Masonry multi-column layout component.",
+				"code": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\n\ninterface Props {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n  class?: string;\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  columns: 1,\n  columnsSm: 2,\n  columnsMd: 2,\n  columnsLg: 3,\n  columnsXl: 4,\n  gap: 16,\n  columnFill: 'balance',\n  height: 0,\n  class: '',\n});\n\nconst containerStyle = computed(() => ({\n  columnCount: props.columns,\n  columnGap: `${props.gap}px`,\n  columnFill: props.columnFill === 'auto' ? 'auto' : 'balance',\n  height: props.columnFill === 'auto' && props.height > 0 ? `${props.height}px` : undefined,\n  overflowY: props.columnFill === 'auto' && props.height > 0 ? 'auto' : undefined,\n}));\n</script>\n\n<template>\n  <div\n    class=\"exhuma-css-masonry w-full\"\n    :class=\"[\n      props.columnsSm ? `sm:[column-count:${props.columnsSm}]` : '',\n      props.columnsMd ? `md:[column-count:${props.columnsMd}]` : '',\n      props.columnsLg ? `lg:[column-count:${props.columnsLg}]` : '',\n      props.columnsXl ? `xl:[column-count:${props.columnsXl}]` : '',\n      props.class,\n    ]\"\n    :style=\"containerStyle\"\n  >\n    <slot />\n  </div>\n</template>\n\n<style scoped>\n:deep(> *) {\n  break-inside: avoid;\n  margin-bottom: v-bind('`${props.gap}px`');\n}\n</style>\n"
+			}
+		],
+		"svelte": [
+			{
+				"filename": "CssMasonry.svelte",
+				"language": "svelte",
+				"description": "Svelte 5 Runes CSS Masonry multi-column layout component.",
+				"code": "<script lang=\"ts\">\n  import { clsx } from 'clsx';\n\n  let {\n    columns = 1,\n    columnsSm = 2,\n    columnsMd = 2,\n    columnsLg = 3,\n    columnsXl = 4,\n    gap = 16,\n    columnFill = 'balance',\n    height = 0,\n    class: className = '',\n    children,\n    ...restProps\n  }: {\n    columns?: number;\n    columnsSm?: number;\n    columnsMd?: number;\n    columnsLg?: number;\n    columnsXl?: number;\n    gap?: number;\n    columnFill?: 'balance' | 'auto';\n    height?: number;\n    class?: string;\n    children?: import('svelte').Snippet;\n    [key: string]: unknown;\n  } = $props();\n</script>\n\n<div\n  class={clsx(\n    'exhuma-css-masonry w-full',\n    columnsSm && `sm:[column-count:${columnsSm}]`,\n    columnsMd && `md:[column-count:${columnsMd}]`,\n    columnsLg && `lg:[column-count:${columnsLg}]`,\n    columnsXl && `xl:[column-count:${columnsXl}]`,\n    className\n  )}\n  style=\"column-count: {columns}; column-gap: {gap}px; column-fill: {columnFill}; {columnFill === 'auto' && height > 0 ? `height: ${height}px; overflow-y: auto;` : ''}\"\n  {...restProps}\n>\n  {@render children?.()}\n</div>\n\n<style>\n  :global(.exhuma-css-masonry > *) {\n    break-inside: avoid;\n    margin-bottom: var(--masonry-gap, 16px);\n  }\n</style>\n"
+			}
+		],
+		"angular": [
+			{
+				"filename": "css-masonry.component.ts",
+				"language": "typescript",
+				"description": "Angular 18+ standalone CSS Masonry component.",
+				"code": "import { Component, input } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'exhuma-css-masonry',\n  standalone: true,\n  imports: [CommonModule],\n  template: `\n    <div\n      class=\"exhuma-css-masonry w-full {{ className() }}\"\n      [style.columnCount]=\"columns()\"\n      [style.columnGap]=\"gap() + 'px'\"\n      [style.columnFill]=\"columnFill()\"\n      [style.height]=\"columnFill() === 'auto' && height() > 0 ? height() + 'px' : null\"\n      [style.overflowY]=\"columnFill() === 'auto' && height() > 0 ? 'auto' : null\"\n    >\n      <ng-content />\n    </div>\n  `,\n  styles: [`\n    :host ::ng-deep .exhuma-css-masonry > * {\n      break-inside: avoid;\n      margin-bottom: 16px;\n    }\n  `],\n})\nexport class ExhumaCssMasonryComponent {\n  columns = input<number>(1);\n  columnsSm = input<number>(2);\n  columnsMd = input<number>(2);\n  columnsLg = input<number>(3);\n  columnsXl = input<number>(4);\n  gap = input<number>(16);\n  columnFill = input<'balance' | 'auto'>('balance');\n  height = input<number>(0);\n  className = input<string>('');\n}\n"
+			}
+		],
+		"solid": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "SolidJS Native CSS Masonry multi-column component.",
+				"code": "import { Component, JSX, splitProps } from 'solid-js';\n\nexport interface CssMasonryProps extends JSX.HTMLAttributes<HTMLDivElement> {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n}\n\nexport const CssMasonry: Component<CssMasonryProps> = (props) => {\n  const [local, others] = splitProps(props, [\n    'columns',\n    'columnsSm',\n    'columnsMd',\n    'columnsLg',\n    'columnsXl',\n    'gap',\n    'columnFill',\n    'height',\n    'class',\n    'children',\n    'style',\n  ]);\n\n  const columns = () => local.columns ?? 1;\n  const columnsSm = () => local.columnsSm ?? 2;\n  const columnsMd = () => local.columnsMd ?? 2;\n  const columnsLg = () => local.columnsLg ?? 3;\n  const columnsXl = () => local.columnsXl ?? 4;\n  const gap = () => local.gap ?? 16;\n  const columnFill = () => local.columnFill ?? 'balance';\n  const height = () => local.height ?? 0;\n\n  return (\n    <div\n      class={`exhuma-css-masonry w-full ${columnsSm() ? `sm:[column-count:${columnsSm()}] ` : ''}${columnsMd() ? `md:[column-count:${columnsMd()}] ` : ''}${columnsLg() ? `lg:[column-count:${columnsLg}] ` : ''}${columnsXl() ? `xl:[column-count:${columnsXl()}] ` : ''}${local.class ?? ''}`}\n      style={{\n        'column-count': columns(),\n        'column-gap': `${gap()}px`,\n        'column-fill': columnFill() === 'auto' ? 'auto' : 'balance',\n        ...(columnFill() === 'auto' && height() > 0 ? { height: `${height()}px`, 'overflow-y': 'auto' } : {}),\n        ...(typeof local.style === 'object' ? local.style : {}),\n      }}\n      {...others}\n    >\n      {local.children}\n    </div>\n  );\n};\n"
+			}
+		],
+		"astro": [
+			{
+				"filename": "CssMasonry.astro",
+				"language": "astro",
+				"description": "Astro zero-JS CSS Masonry component.",
+				"code": "---\ninterface Props {\n  columns?: number;\n  columnsSm?: number;\n  columnsMd?: number;\n  columnsLg?: number;\n  columnsXl?: number;\n  gap?: number;\n  columnFill?: 'balance' | 'auto';\n  height?: number;\n  class?: string;\n}\n\nconst {\n  columns = 1,\n  columnsSm = 2,\n  columnsMd = 2,\n  columnsLg = 3,\n  columnsXl = 4,\n  gap = 16,\n  columnFill = 'balance',\n  height = 0,\n  class: className = '',\n} = Astro.props;\n---\n\n<div\n  class:list={[\n    'exhuma-css-masonry w-full',\n    columnsSm && `sm:[column-count:${columnsSm}]`,\n    columnsMd && `md:[column-count:${columnsMd}]`,\n    columnsLg && `lg:[column-count:${columnsLg}]`,\n    columnsXl && `xl:[column-count:${columnsXl}]`,\n    className,\n  ]}\n  style={{\n    columnCount: columns,\n    columnGap: `${gap}px`,\n    columnFill: columnFill === 'auto' ? 'auto' : 'balance',\n    height: columnFill === 'auto' && height > 0 ? `${height}px` : undefined,\n    overflowY: columnFill === 'auto' && height > 0 ? 'auto' : undefined,\n  }}\n>\n  <slot />\n</div>\n\n<style>\n  .exhuma-css-masonry > :global(*) {\n    break-inside: avoid;\n    margin-bottom: var(--masonry-gap, 16px);\n  }\n</style>\n"
+			}
+		],
+		"blade": [
+			{
+				"filename": "css-masonry.blade.php",
+				"language": "php",
+				"description": "Laravel Blade component for CSS Masonry.",
+				"code": "@props([\n    'columns' => 1,\n    'columnsSm' => 2,\n    'columnsMd' => 2,\n    'columnsLg' => 3,\n    'columnsXl' => 4,\n    'gap' => 16,\n    'columnFill' => 'balance',\n    'height' => 0,\n    'class' => '',\n])\n\n<div\n    {{ $attributes->merge(['class' => 'exhuma-css-masonry w-full ' . $class]) }}\n    style=\"column-count: {{ $columns }}; column-gap: {{ $gap }}px; column-fill: {{ $columnFill }}; {{ $columnFill === 'auto' && $height > 0 ? \"height: {$height}px; overflow-y: auto;\" : '' }}\"\n>\n    {{ $slot }}\n</div>\n"
+			}
+		],
+		"vanilla": [
+			{
+				"filename": "css-masonry.vanilla.js",
+				"language": "javascript",
+				"description": "Vanilla JavaScript CSS Masonry initializer.",
+				"code": "export function initCssMasonry(selector = '[data-exhuma-css-masonry]', options = {}) {\n  const elements = document.querySelectorAll(selector);\n\n  elements.forEach((el) => {\n    const cols = options.columns ?? el.dataset.columns ?? 1;\n    const gap = options.gap ?? el.dataset.gap ?? 16;\n    const fill = options.columnFill ?? el.dataset.columnFill ?? 'balance';\n    const height = options.height ?? parseInt(el.dataset.height || '0', 10);\n\n    el.style.columnCount = cols;\n    el.style.columnGap = `${gap}px`;\n    el.style.columnFill = fill === 'auto' ? 'auto' : 'balance';\n\n    if (fill === 'auto' && height > 0) {\n      el.style.height = `${height}px`;\n      el.style.overflowY = 'auto';\n    }\n\n    Array.from(el.children).forEach((child) => {\n      child.style.breakInside = 'avoid';\n      child.style.marginBottom = `${gap}px`;\n    });\n  });\n}\n"
+			}
+		],
+		"wordpress": [
+			{
+				"filename": "render.php",
+				"language": "php",
+				"description": "WordPress Gutenberg block render template for CSS Masonry.",
+				"code": "<?php\n/**\n * Exhuma CSS Masonry Block Render Template\n */\n$columns = $attributes['columns'] ?? 1;\n$gap = $attributes['gap'] ?? 16;\n$columnFill = $attributes['columnFill'] ?? 'balance';\n$height = $attributes['height'] ?? 0;\n?>\n\n<div\n    class=\"exhuma-css-masonry w-full <?php echo esc_attr($attributes['className'] ?? ''); ?>\"\n    style=\"column-count: <?php echo esc_attr($columns); ?>; column-gap: <?php echo esc_attr($gap); ?>px; column-fill: <?php echo esc_attr($columnFill); ?>; <?php echo $columnFill === 'auto' && $height > 0 ? \"height: {$height}px; overflow-y: auto;\" : ''; ?>\"\n>\n    <?php echo $content; ?>\n</div>\n"
+			}
+		],
+		"webcomponent": [
+			{
+				"filename": "exhuma-css-masonry.js",
+				"language": "javascript",
+				"description": "Framework-agnostic Web Component for CSS Masonry.",
+				"code": "class ExhumaCssMasonry extends HTMLElement {\n  static get observedAttributes() {\n    return ['columns', 'gap', 'column-fill', 'height'];\n  }\n\n  connectedCallback() {\n    this.render();\n  }\n\n  attributeChangedCallback() {\n    this.render();\n  }\n\n  render() {\n    const cols = this.getAttribute('columns') || '1';\n    const gap = this.getAttribute('gap') || '16';\n    const fill = this.getAttribute('column-fill') || 'balance';\n    const height = parseInt(this.getAttribute('height') || '0', 10);\n\n    this.style.display = 'block';\n    this.style.width = '100%';\n    this.style.columnCount = cols;\n    this.style.columnGap = `${gap}px`;\n    this.style.columnFill = fill === 'auto' ? 'auto' : 'balance';\n\n    if (fill === 'auto' && height > 0) {\n      this.style.height = `${height}px`;\n      this.style.overflowY = 'auto';\n    }\n  }\n}\n\nif (!customElements.get('exhuma-css-masonry')) {\n  customElements.define('exhuma-css-masonry', ExhumaCssMasonry);\n}\n"
+			}
+		],
+		"react-native": [
+			{
+				"filename": "CssMasonry.tsx",
+				"language": "tsx",
+				"description": "React Native dual-column vertical Masonry layout component.",
+				"code": "import React from 'react';\nimport { View, StyleSheet, type ViewProps } from 'react-native';\n\nexport interface CssMasonryProps extends ViewProps {\n  columns?: number;\n  gap?: number;\n}\n\nexport const CssMasonry: React.FC<CssMasonryProps> = ({\n  children,\n  columns = 2,\n  gap = 16,\n  style,\n  ...props\n}) => {\n  const childArray = React.Children.toArray(children);\n  const columnBuckets: React.ReactNode[][] = Array.from({ length: columns }, () => []);\n\n  childArray.forEach((child, index) => {\n    columnBuckets[index % columns].push(child);\n  });\n\n  return (\n    <View style={[styles.container, { gap }, style]} {...props}>\n      {columnBuckets.map((bucket, colIdx) => (\n        <View key={colIdx} style={[styles.column, { gap }]}>\n          {bucket}\n        </View>\n      ))}\n    </View>\n  );\n};\n\nconst styles = StyleSheet.create({\n  container: {\n    flexDirection: 'row',\n    width: '100%',\n  },\n  column: {\n    flex: 1,\n    flexDirection: 'column',\n  },\n});\n"
+			}
+		],
+		"flutter": [
+			{
+				"filename": "css_masonry.dart",
+				"language": "dart",
+				"description": "Flutter dual-column Masonry layout widget.",
+				"code": "import 'package:flutter/material.dart';\n\nclass ExhumaCssMasonry extends StatelessWidget {\n  final List<Widget> children;\n  final int columns;\n  final double gap;\n\n  const ExhumaCssMasonry({\n    super.key,\n    required this.children,\n    this.columns = 2,\n    this.gap = 16.0,\n  });\n\n  @override\n  Widget build(BuildContext context) {\n    final List<List<Widget>> buckets = List.generate(columns, (_) => []);\n\n    for (var i = 0; i < children.length; i++) {\n      buckets[i % columns].add(children[i]);\n      if (i < children.length - 1) {\n        buckets[i % columns].add(SizedBox(height: gap));\n      }\n    }\n\n    return Row(\n      crossAxisAlignment: CrossAxisAlignment.start,\n      children: [\n        for (var i = 0; i < buckets.length; i++) ...[\n          Expanded(\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              children: buckets[i],\n            ),\n          ),\n          if (i < buckets.length - 1) SizedBox(width: gap),\n        ],\n      ],\n    );\n  }\n}\n"
+			}
+		]
+	}
+}

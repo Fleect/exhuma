@@ -8,11 +8,7 @@ export interface UseMacyOptions {
 	[key: string]: unknown;
 }
 
-export function useMacy(
-	containerRef: RefObject<HTMLElement | null>,
-	childCount: number,
-	options: UseMacyOptions = {}
-) {
+export function useMacy(containerRef: RefObject<HTMLElement | null>, childCount: number, options: UseMacyOptions = {}) {
 	const instanceRef = useRef<unknown>(null);
 
 	useEffect(() => {
@@ -44,10 +40,7 @@ export function useMacy(
 	}, [containerRef, options]);
 
 	useEffect(() => {
-		if (
-			instanceRef.current &&
-			typeof (instanceRef.current as { reInit?: () => void }).reInit === 'function'
-		) {
+		if (instanceRef.current && typeof (instanceRef.current as { reInit?: () => void }).reInit === 'function') {
 			(instanceRef.current as { reInit: () => void }).reInit();
 		}
 	}, [childCount]);

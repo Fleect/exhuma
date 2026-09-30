@@ -1,0 +1,54 @@
+{
+	"name": "exhuma",
+	"version": "0.1.1",
+	"description": "Universal Component CLI — Add tactile, headless components to any project across 13 ecosystems",
+	"type": "module",
+	"bin": {
+		"exhuma": "dist/index.js"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "MIT",
+	"keywords": [
+		"cli",
+		"exhuma",
+		"components",
+		"shadcn",
+		"universal",
+		"react",
+		"nextjs",
+		"vue",
+		"svelte",
+		"angular",
+		"solid",
+		"astro",
+		"blade",
+		"flutter",
+		"react-native"
+	],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"type:check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@exhuma/registry": "workspace:*",
+		"commander": "^13.1.0",
+		"ora": "^8.2.0",
+		"picocolors": "^1.1.1",
+		"prompts": "^2.4.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"@types/prompts": "^2.4.9",
+		"tsup": "^8.5.1",
+		"typescript": "^5.7.0"
+	}
+}

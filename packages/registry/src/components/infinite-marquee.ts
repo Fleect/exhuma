@@ -1,0 +1,127 @@
+import { UniversalComponent, ComponentFilePayload, EcosystemFlavor } from '../schema';
+import { generateOuterLayerFiles } from '../templates/outer-layer';
+import { CORE_COMPONENT_DEPENDENCIES } from '../templates/common-deps';
+
+export const infiniteMarqueeComponent: UniversalComponent = {
+	id: 'infinite-marquee',
+	name: 'Infinite Marquee',
+	slug: 'infinite-marquee',
+	category: 'layouts',
+	description: 'High-performance rAF continuous translation loop with modulo wrap, exponential hover damping, and zero external animation libraries.',
+	version: '1.0.0',
+	props: [
+		{
+			name: 'speed',
+			label: 'Scroll Speed (px/s)',
+			type: 'number',
+			defaultValue: 40,
+			min: 10,
+			max: 200,
+			step: 5,
+			description: 'Scroll speed in pixels per second.',
+		},
+		{
+			name: 'direction',
+			label: 'Direction',
+			type: 'select',
+			defaultValue: 'left',
+			options: [
+				{ label: 'Left', value: 'left' },
+				{ label: 'Right', value: 'right' },
+			],
+			description: 'Direction of marquee translation.',
+		},
+		{
+			name: 'pauseOnHover',
+			label: 'Pause On Hover',
+			type: 'boolean',
+			defaultValue: true,
+			description: 'Smoothly decelerate to zero when hovered.',
+		},
+		{
+			name: 'gap',
+			label: 'Item Gap (px)',
+			type: 'number',
+			defaultValue: 24,
+			min: 8,
+			max: 64,
+			step: 4,
+			description: 'Spacing between items and repeated tracks in pixels.',
+		},
+		{
+			name: 'showFadeEdges',
+			label: 'Fade Edges',
+			type: 'boolean',
+			defaultValue: true,
+			description: 'Show subtle gradient mask at boundaries for graceful entry and exit.',
+		},
+		{
+			name: 'fadeWidth',
+			label: 'Fade Width (px)',
+			type: 'number',
+			defaultValue: 48,
+			min: 16,
+			max: 128,
+			step: 8,
+			description: 'Width of the edge gradient fade in pixels.',
+		},
+		{
+			name: 'fadeEdgeColor',
+			label: 'Fade Edge Color',
+			type: 'color',
+			defaultValue: '#ffffff',
+			description: 'Custom edge gradient color. When empty, an alpha mask is used.',
+		},
+		{
+			name: 'fadeEdgeColorDark',
+			label: 'Fade Edge Color (Dark Mode)',
+			type: 'color',
+			defaultValue: '#09090b',
+			description: 'Edge gradient color when dark mode is active. Falls back to fadeEdgeColor.',
+		},
+		{
+			name: 'scrollCoupling',
+			label: 'Scroll Coupling',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Marquee speed couples to page scroll velocity.',
+		},
+		{
+			name: 'directionHysteresis',
+			label: 'Direction Hysteresis',
+			type: 'boolean',
+			defaultValue: false,
+			description: 'Smooth direction reversal on scroll direction change.',
+		},
+	],
+	defaultProps: {
+		speed: 40,
+		direction: 'left',
+		pauseOnHover: true,
+		gap: 24,
+		showFadeEdges: true,
+		fadeWidth: 48,
+		fadeEdgeColor: '#ffffff',
+		fadeEdgeColorDark: '#09090b',
+		scrollCoupling: false,
+		directionHysteresis: false,
+	},
+	dependencies: CORE_COMPONENT_DEPENDENCIES,
+	generateCode: (flavor: EcosystemFlavor, props: Record<string, unknown>, options?: { eject?: boolean }): ComponentFilePayload[] => {
+		return generateOuterLayerFiles(
+			{
+				id: 'infinite-marquee',
+				name: 'Infinite Marquee',
+				slug: 'infinite-marquee',
+				category: 'layouts',
+				pascalName: 'InfiniteMarquee',
+				snakeName: 'infinite_marquee',
+				description: 'High-performance continuous translation loop with modulo wrap.',
+				defaultTailwindClass: 'relative flex overflow-hidden select-none w-full py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',
+			},
+			flavor,
+			props,
+			options
+		);
+	},
+};

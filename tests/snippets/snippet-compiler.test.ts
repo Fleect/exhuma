@@ -1,23 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import ts from 'typescript';
-import { ALL_COMPONENTS } from '../../apps/showcase/src/registry';
-import { EcosystemFlavor } from '../../apps/showcase/src/registry/schema';
+import {
+  ALL_COMPONENTS,
+  SUPPORTED_ECOSYSTEMS,
+  type EcosystemFlavor,
+} from '@exhuma/registry';
 
-const FLAVORS: EcosystemFlavor[] = [
-  'react',
-  'nextjs',
-  'vue',
-  'svelte',
-  'angular',
-  'solid',
-  'astro',
-  'blade',
-  'vanilla',
-  'wordpress',
-  'webcomponent',
-  'react-native',
-  'flutter',
-];
+const FLAVORS = SUPPORTED_ECOSYSTEMS;
 
 describe('Exhuma Universal Component Registry — Zero Broken Snippets Gate', () => {
   it('registers all canonical components', () => {

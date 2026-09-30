@@ -56,6 +56,26 @@
 				"types": "./dist/router.d.ts",
 				"default": "./dist/router.cjs"
 			}
+		},
+		"./physics": {
+			"import": {
+				"types": "./dist/physics.d.mts",
+				"default": "./dist/physics.mjs"
+			},
+			"require": {
+				"types": "./dist/physics.d.ts",
+				"default": "./dist/physics.cjs"
+			}
+		},
+		"./gestures": {
+			"import": {
+				"types": "./dist/gestures.d.mts",
+				"default": "./dist/gestures.mjs"
+			},
+			"require": {
+				"types": "./dist/gestures.d.ts",
+				"default": "./dist/gestures.cjs"
+			}
 		}
 	},
 	"files": [

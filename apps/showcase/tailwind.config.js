@@ -6,6 +6,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				display: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				exhuma: {
 					50: '#f4f4f5',
