@@ -9,7 +9,9 @@ import { getComparisonSliderUsage } from './generators/comparison-slider-generat
 import { getExpandableCardUsage } from './generators/expandable-card-generator';
 import { getAutoGridUsage } from './generators/auto-grid-generator';
 import { getCssMasonryUsage } from './generators/css-masonry-generator';
+import { getRowMasonryUsage } from './generators/row-masonry-generator';
 import { getInfiniteMarqueeUsage } from './generators/infinite-marquee-generator';
+
 import { getBentoGridUsage } from './generators/bento-grid-generator';
 import { getDiamondGridUsage } from './generators/diamond-grid-generator';
 import { getMorphingTabsUsage } from './generators/morphing-tabs-generator';
@@ -68,6 +70,10 @@ export function generateComponentUsage(component: UniversalComponent, flavor: Ec
 
 	if (slug === 'css-masonry') {
 		return getCssMasonryUsage(flavor, props);
+	}
+
+	if (slug === 'row-masonry') {
+		return getRowMasonryUsage(flavor, props);
 	}
 
 	if (slug === 'bento-grid') {

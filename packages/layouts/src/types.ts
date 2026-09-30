@@ -283,3 +283,47 @@ export interface DiamondItemProps extends React.HTMLAttributes<HTMLDivElement> {
 	 */
 	diamond?: boolean;
 }
+
+export interface RowMasonryProps extends React.HTMLAttributes<HTMLDivElement> {
+	children: React.ReactNode;
+	/**
+	 * Number of columns or responsive column breakpoint map.
+	 * Default: 1
+	 */
+	columns?: number | { sm?: number; md?: number; lg?: number; xl?: number };
+	/**
+	 * Column count override on mobile viewports (<640px).
+	 * Default: 1
+	 */
+	columnsSm?: number;
+	/**
+	 * Column count override on tablet viewports (640px-1024px).
+	 * Default: 2
+	 */
+	columnsMd?: number;
+	/**
+	 * Column count override on desktop viewports (1024px-1280px).
+	 * Default: 3
+	 */
+	columnsLg?: number;
+	/**
+	 * Column count override on ultra-wide viewports (>=1280px).
+	 * Default: 4
+	 */
+	columnsXl?: number;
+	/**
+	 * Spacing between columns and items in px or rem.
+	 * Default: 16
+	 */
+	gap?: string | number;
+	className?: string;
+	style?: React.CSSProperties;
+}
+
+export interface RowMasonryItemProps extends React.HTMLAttributes<HTMLDivElement> {
+	children: React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
+}
+
+

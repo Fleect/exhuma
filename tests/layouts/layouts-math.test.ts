@@ -301,4 +301,75 @@ describe('AutoGrid — Smoothstep Fluid Gap & FLIP Shuffle Kernel', () => {
 	});
 });
 
+describe('RowMasonry — Greedy Column Balancer & Responsive Breakpoint Math', () => {
+	it('parses CSS gap units with rem, px, and number conversions', async () => {
+		const { parseGapToPx } = await import(
+			'../../packages/layouts/src/RowMasonry/row-masonry-math'
+		);
+
+		expect(parseGapToPx(16)).toBe(16);
+		expect(parseGapToPx('16px')).toBe(16);
+		expect(parseGapToPx('1.5rem')).toBe(24);
+		expect(parseGapToPx('2em')).toBe(32);
+		expect(parseGapToPx(0)).toBe(0);
+	});
+
+	it('distributes items into the shortest column using greedy placement', async () => {
+		const { computeMasonryLayout } = await import(
+			'../../packages/layouts/src/RowMasonry/row-masonry-math'
+		);
+
+		// 3 columns, 920px container, 16px gap
+		// colWidth = (920 - 32) / 3 = 296px
+		const heights = [100, 200, 150, 80];
+		const { items, totalHeight } = computeMasonryLayout(heights, 920, 3, 16);
+
+		expect(items).toHaveLength(4);
+		expect(items[0]).toEqual({ index: 0, x: 0, y: 0, width: 296 });
+		expect(items[1]).toEqual({ index: 1, x: 312, y: 0, width: 296 });
+		expect(items[2]).toEqual({ index: 2, x: 624, y: 0, width: 296 });
+		// 4th item (height 80) should go to shortest column (column 0, height 100 + 16 gap = 116)
+		expect(items[3]).toEqual({ index: 3, x: 0, y: 116, width: 296 });
+
+		// Tallest column is column 1 (height 200)
+		expect(totalHeight).toBe(200);
+	});
+
+	it('computes responsive columns matching CSS Masonry breakpoints', async () => {
+		const { computeResponsiveColumns } = await import(
+			'../../packages/layouts/src/RowMasonry/row-masonry-math'
+		);
+
+		const options = {
+			columns: 1,
+			columnsSm: 2,
+			columnsMd: 2,
+			columnsLg: 3,
+			columnsXl: 4,
+		};
+
+		// Mobile (<640px)
+		expect(computeResponsiveColumns(375, options)).toBe(1);
+
+		// Tablet (640px - 768px)
+		expect(computeResponsiveColumns(700, options)).toBe(2);
+
+		// Desktop (1024px - 1280px)
+		expect(computeResponsiveColumns(1100, options)).toBe(3);
+
+		// Ultra-wide (>=1280px)
+		expect(computeResponsiveColumns(1440, options)).toBe(4);
+	});
+
+	it('handles zero or empty items gracefully with zero total height', async () => {
+		const { computeMasonryLayout } = await import(
+			'../../packages/layouts/src/RowMasonry/row-masonry-math'
+		);
+
+		const { items, totalHeight } = computeMasonryLayout([], 1000, 3, 16);
+		expect(items).toHaveLength(0);
+		expect(totalHeight).toBe(0);
+	});
+});
+
 

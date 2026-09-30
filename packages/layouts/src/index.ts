@@ -2,6 +2,7 @@ export { AutoGrid, AutoGridItem } from './AutoGrid/AutoGrid';
 export { useMacy } from './hooks/useMacy';
 export type { UseMacyOptions } from './hooks/useMacy';
 export { CssMasonry, CssMasonryItem } from './Masonry/CssMasonry';
+export { RowMasonry, RowMasonryItem } from './RowMasonry/RowMasonry';
 export { MacyMasonry } from './Masonry/MacyMasonry';
 
 // Wave 2: Responsive Layout Engines & Momentum
@@ -33,6 +34,11 @@ export {
 	calculatePreservedAspectRatio,
 } from './Masonry/masonry-math';
 export {
+	computeMasonryLayout,
+	computeResponsiveColumns,
+} from './RowMasonry/row-masonry-math';
+export type { MasonryItem } from './RowMasonry/row-masonry-math';
+export {
 	calculateSmoothstepGap,
 	calculateGridCellCoordinates,
 	calculateFlipShuffleDelta,
@@ -43,6 +49,8 @@ export type {
 	AutoGridItemProps,
 	CssMasonryProps,
 	CssMasonryItemProps,
+	RowMasonryProps,
+	RowMasonryItemProps,
 	MacyMasonryProps,
 	InfiniteMarqueeProps,
 	BentoGridProps,
@@ -52,3 +60,5 @@ export type {
 	DiamondItemProps,
 	DiamondLayoutVariant,
 } from './types';
+
+

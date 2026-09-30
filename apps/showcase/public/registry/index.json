@@ -1,10 +1,10 @@
 {
 	"$schema": "https://exhuma.dev/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-09-29T20:16:00.357Z",
+	"generatedAt": "2026-09-29T23:25:21.141Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
-		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 5 },
+		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 6 },
 		{ "id": "navigation", "label": "Navigation & Rails", "count": 2 },
 		{ "id": "primitives", "label": "Kinetic Primitives & Disclosures", "count": 4 }
 	],
@@ -161,6 +161,46 @@
 					"step": 20,
 					"description": "Explicit container height for sequential waterfall (0 for auto balance)."
 				}
+			],
+			"dependencies": {
+				"react": ["@exhuma/core"],
+				"nextjs": ["@exhuma/core"],
+				"vue": ["clsx"],
+				"svelte": ["clsx"],
+				"solid": ["clsx"],
+				"angular": [],
+				"astro": [],
+				"blade": [],
+				"vanilla": [],
+				"wordpress": [],
+				"webcomponent": [],
+				"react-native": [],
+				"flutter": []
+			},
+			"flavors": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"]
+		},
+		{
+			"name": "Row Masonry",
+			"slug": "row-masonry",
+			"category": "layouts",
+			"description": "Greedy dynamic row-by-row masonry balancer placing items into the shortest column with GPU translate3d positioning.",
+			"version": "1.0.0",
+			"props": [
+				{ "name": "columns", "label": "Mobile Columns (<640px)", "type": "number", "defaultValue": 1, "min": 1, "max": 6, "step": 1, "description": "Base column count on mobile viewports (<640px)." },
+				{ "name": "columnsSm", "label": "Tablet Columns (640-768px)", "type": "number", "defaultValue": 2, "min": 1, "max": 4, "step": 1, "description": "Number of columns on small tablet viewports (≥640px)." },
+				{
+					"name": "columnsMd",
+					"label": "Medium Tablet Columns (768-1024px)",
+					"type": "number",
+					"defaultValue": 2,
+					"min": 1,
+					"max": 6,
+					"step": 1,
+					"description": "Number of columns on medium tablet viewports (≥768px)."
+				},
+				{ "name": "columnsLg", "label": "Desktop Columns (1024-1280px)", "type": "number", "defaultValue": 3, "min": 1, "max": 8, "step": 1, "description": "Number of columns on desktop viewports (≥1024px)." },
+				{ "name": "columnsXl", "label": "Ultra-wide Columns (≥1280px)", "type": "number", "defaultValue": 4, "min": 1, "max": 10, "step": 1, "description": "Number of columns on large screens (≥1280px)." },
+				{ "name": "gap", "label": "Gap (px)", "type": "number", "defaultValue": 16, "min": 4, "max": 64, "step": 4, "description": "Spacing between masonry columns and items." }
 			],
 			"dependencies": {
 				"react": ["@exhuma/core"],
