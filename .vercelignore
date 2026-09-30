@@ -1,0 +1,24 @@
+# Scratch and local experiments
+scratch/
+.scratch/
+
+# Tests and tooling not needed for production deployment
+tests/
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Editor and local tools
+.vscode/
+.idea/
+.cursor/
+.agents/
+.augment/
+.ai/
+
+# Documentation source
+docs/
+
+# Environment files
+.env*.local
