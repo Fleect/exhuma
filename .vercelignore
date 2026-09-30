@@ -18,7 +18,7 @@ test-results/
 .ai/
 
 # Documentation source
-docs/
+/docs/
 
 # Environment files
 .env*.local
