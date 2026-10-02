@@ -31,6 +31,7 @@ const LINK_GROUPS = [
 		links: [
 			{ label: 'GitHub', href: GITHUB_URL, external: true },
 			{ label: 'npm', href: 'https://npmjs.com/package/exhuma', external: true },
+			{ label: 'Fleect OSS', href: 'https://fleect.com/oss', external: true },
 		],
 	},
 ] as const;
