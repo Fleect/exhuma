@@ -35,8 +35,8 @@
 		{ "name": "disabled", "label": "Disable Tracking", "type": "boolean", "defaultValue": false, "description": "Programmatically disable pointer tracking and spotlight illumination." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -54,16 +54,16 @@
 			{
 				"filename": "SpotlightCard.tsx",
 				"language": "tsx",
-				"description": "Spotlight Card — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as SpotlightCardPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface SpotlightCardProps extends React.ComponentPropsWithoutRef<typeof SpotlightCardPrimitive.SpotlightCard> {\n  className?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <SpotlightCardPrimitive.SpotlightCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </SpotlightCardPrimitive.SpotlightCard>\n  )\n);\nSpotlightCard.displayName = 'SpotlightCard';\n"
+				"description": "Spotlight Card — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as SpotlightCardPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface SpotlightCardProps extends React.ComponentPropsWithoutRef<typeof SpotlightCardPrimitive.SpotlightCard> {\n  className?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <SpotlightCardPrimitive.SpotlightCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </SpotlightCardPrimitive.SpotlightCard>\n  )\n);\nSpotlightCard.displayName = 'SpotlightCard';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "SpotlightCard.tsx",
 				"language": "tsx",
-				"description": "Spotlight Card — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as SpotlightCardPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface SpotlightCardProps extends React.ComponentPropsWithoutRef<typeof SpotlightCardPrimitive.SpotlightCard> {\n  className?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <SpotlightCardPrimitive.SpotlightCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </SpotlightCardPrimitive.SpotlightCard>\n  )\n);\nSpotlightCard.displayName = 'SpotlightCard';\n"
+				"description": "Spotlight Card — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as SpotlightCardPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface SpotlightCardProps extends React.ComponentPropsWithoutRef<typeof SpotlightCardPrimitive.SpotlightCard> {\n  className?: string;\n}\n\nexport const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <SpotlightCardPrimitive.SpotlightCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </SpotlightCardPrimitive.SpotlightCard>\n  )\n);\nSpotlightCard.displayName = 'SpotlightCard';\n"
 			}
 		],
 		"vue": [

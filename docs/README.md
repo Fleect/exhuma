@@ -9,7 +9,7 @@ Welcome to the central documentation for **Exhuma**, a modern Universal Componen
 - [Architecture & Universal Component Model](architecture.md) — Universal Component Model (UCM), headless math separation, and multi-ecosystem design.
 - [Engineering Principles & Performance](engineering.md) — $\Omega(1)$ layout thrashing guarantees, compositor acceleration, and memory safety rules.
 - [Component Specification](component-spec.md) — Standard schema for component metadata, props, dependencies, and lifecycle contracts.
-- [Quickstart Guide](quickstart.md) — Get up and running with `@exhuma/core` in under 60 seconds.
+- [Quickstart Guide](quickstart.md) — Get up and running with `@fleect/exhuma` in under 60 seconds.
 - [Cards Deep Dive](cards.md) — Complete guide to the tactile cards collection (`StackingCards`, `TiltCard`, `SpotlightCard`, `BorderBeam`, `CardSwipeStack`, `ComparisonSlider`, `ExpandableCard`, `HorizontalScroller`).
 - [Layout Engines](layouts.md) — Understanding `CssMasonry`, `RowMasonry`, and `AutoGrid`.
 - [Routing Framework](router.md) — Utilizing `LandingLayout`, `AuthLayout`, and `DashboardLayout`.
@@ -37,11 +37,11 @@ For the full interactive documentation experience with live playgrounds and code
 ```
 exhuma/
 ├── packages/
-│   ├── core/           # @exhuma/core — Unified flagship package (cards, layouts, router)
-│   ├── cards/          # @exhuma/cards — Standalone cards package
-│   ├── layouts/        # @exhuma/layouts — Standalone layout engines (Masonry, Diamond, AutoGrid)
-│   ├── router/         # @exhuma/router — Layout framing and route guards
-│   ├── registry/       # @exhuma/registry — Canonical component registry schema and compiler
+│   ├── core/           # @fleect/exhuma — Unified flagship package (cards, layouts, router)
+│   ├── cards/          # @fleect/exhuma-cards — Standalone cards package
+│   ├── layouts/        # @fleect/exhuma-layouts — Standalone layout engines (Masonry, Diamond, AutoGrid)
+│   ├── router/         # @fleect/exhuma-router — Layout framing and route guards
+│   ├── registry/       # @fleect/exhuma-registry — Canonical component registry schema and compiler
 │   ├── cli/            # exhuma — Universal Component CLI (init, add, list)
 │   └── create-exhuma/  # create-exhuma — Interactive project starter wizard
 ├── apps/

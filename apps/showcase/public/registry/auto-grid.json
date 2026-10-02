@@ -43,8 +43,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -62,16 +62,16 @@
 			{
 				"filename": "AutoGrid.tsx",
 				"language": "tsx",
-				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as AutoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
+				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as AutoGridPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "AutoGrid.tsx",
 				"language": "tsx",
-				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as AutoGridPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
+				"description": "Auto Grid — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as AutoGridPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface AutoGridProps extends React.ComponentPropsWithoutRef<typeof AutoGridPrimitive.AutoGrid> {\n  className?: string;\n}\n\nexport const AutoGrid = React.forwardRef<HTMLDivElement, AutoGridProps>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGrid\n      ref={ref}\n      className={clsx(\n        'grid grid-cols-[repeat(auto-fill,minmax(min(100%,280px),1fr))] gap-6 w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGrid>\n  )\n);\nAutoGrid.displayName = 'AutoGrid';\n\nexport const AutoGridItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <AutoGridPrimitive.AutoGridItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </AutoGridPrimitive.AutoGridItem>\n  )\n);\nAutoGridItem.displayName = 'AutoGridItem';\n"
 			}
 		],
 		"vue": [

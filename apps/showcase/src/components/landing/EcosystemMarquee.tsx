@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { InfiniteMarquee } from '@exhuma/layouts';
+import { InfiniteMarquee } from '@fleect/exhuma';
 import { ECOSYSTEM_LABELS, EcosystemFlavor } from '@/registry';
 
 /**

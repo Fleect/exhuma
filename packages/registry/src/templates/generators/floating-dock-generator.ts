@@ -23,7 +23,7 @@ export function getFloatingDockOuterFiles(flavor: EcosystemFlavor, props: Record
 					{
 						filename: 'FloatingDock.tsx',
 						language: 'tsx',
-						description: 'Floating Dock — Clean Shadcn-style component powered by @exhuma/core kinetic primitives.',
+						description: 'Floating Dock — Clean Shadcn-style component powered by @fleect/exhuma kinetic primitives.',
 						code: `${header}import * as React from 'react';
 import {
   FloatingDock as CoreFloatingDock,
@@ -34,7 +34,7 @@ import {
   type FloatingDockItemData,
   type DockDirection,
   type DockPanelStyle,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export type { FloatingDockItemData, DockDirection, DockPanelStyle };

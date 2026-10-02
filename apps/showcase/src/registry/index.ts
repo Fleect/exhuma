@@ -1,1 +1,1 @@
-export * from '@exhuma/registry';
+export * from '@fleect/exhuma-registry';

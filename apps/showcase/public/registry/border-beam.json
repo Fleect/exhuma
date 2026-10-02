@@ -23,8 +23,8 @@
 		{ "name": "borderRadius", "label": "Corner Radius (px)", "type": "number", "defaultValue": 16, "min": 0, "max": 48, "step": 2, "description": "Corner radius of the perimeter path matching card borders." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -42,16 +42,16 @@
 			{
 				"filename": "BorderBeam.tsx",
 				"language": "tsx",
-				"description": "Border Beam — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as BorderBeamPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface BorderBeamProps extends React.ComponentPropsWithoutRef<typeof BorderBeamPrimitive.BorderBeam> {\n  className?: string;\n}\n\nexport const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(\n  ({ className, children, ...props }, ref) => (\n    <BorderBeamPrimitive.BorderBeam\n      ref={ref}\n      className={clsx(\n        'pointer-events-none absolute inset-0 rounded-[inherit]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BorderBeamPrimitive.BorderBeam>\n  )\n);\nBorderBeam.displayName = 'BorderBeam';\n"
+				"description": "Border Beam — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as BorderBeamPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface BorderBeamProps extends React.ComponentPropsWithoutRef<typeof BorderBeamPrimitive.BorderBeam> {\n  className?: string;\n}\n\nexport const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(\n  ({ className, children, ...props }, ref) => (\n    <BorderBeamPrimitive.BorderBeam\n      ref={ref}\n      className={clsx(\n        'pointer-events-none absolute inset-0 rounded-[inherit]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BorderBeamPrimitive.BorderBeam>\n  )\n);\nBorderBeam.displayName = 'BorderBeam';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "BorderBeam.tsx",
 				"language": "tsx",
-				"description": "Border Beam — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as BorderBeamPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface BorderBeamProps extends React.ComponentPropsWithoutRef<typeof BorderBeamPrimitive.BorderBeam> {\n  className?: string;\n}\n\nexport const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(\n  ({ className, children, ...props }, ref) => (\n    <BorderBeamPrimitive.BorderBeam\n      ref={ref}\n      className={clsx(\n        'pointer-events-none absolute inset-0 rounded-[inherit]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BorderBeamPrimitive.BorderBeam>\n  )\n);\nBorderBeam.displayName = 'BorderBeam';\n"
+				"description": "Border Beam — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as BorderBeamPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface BorderBeamProps extends React.ComponentPropsWithoutRef<typeof BorderBeamPrimitive.BorderBeam> {\n  className?: string;\n}\n\nexport const BorderBeam = React.forwardRef<HTMLDivElement, BorderBeamProps>(\n  ({ className, children, ...props }, ref) => (\n    <BorderBeamPrimitive.BorderBeam\n      ref={ref}\n      className={clsx(\n        'pointer-events-none absolute inset-0 rounded-[inherit]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </BorderBeamPrimitive.BorderBeam>\n  )\n);\nBorderBeam.displayName = 'BorderBeam';\n"
 			}
 		],
 		"vue": [

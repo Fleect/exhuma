@@ -1,4 +1,4 @@
-import { SUPPORTED_ECOSYSTEMS, type EcosystemFlavor, ECOSYSTEM_LABELS, ALL_COMPONENTS } from '@exhuma/registry';
+import { SUPPORTED_ECOSYSTEMS, type EcosystemFlavor, ECOSYSTEM_LABELS, ALL_COMPONENTS } from '@fleect/exhuma-registry';
 
 export { SUPPORTED_ECOSYSTEMS, type EcosystemFlavor, ECOSYSTEM_LABELS };
 

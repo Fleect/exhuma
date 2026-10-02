@@ -1,4 +1,4 @@
-# @exhuma/core
+# @fleect/exhuma
 
 The unified flagship package of the **Exhuma** developer suite. Gives you complete access to all cards, layout engines, and routing frameworks with tree-shaking and subpath exports.
 
@@ -7,9 +7,9 @@ The unified flagship package of the **Exhuma** developer suite. Gives you comple
 ## Installation
 
 ```bash
-pnpm add @exhuma/core
+pnpm add @fleect/exhuma
 # or
-npm install @exhuma/core
+npm install @fleect/exhuma
 ```
 
 ---
@@ -19,13 +19,20 @@ npm install @exhuma/core
 ### Direct Import
 
 ```tsx
-import { HorizontalScroller, StackingCards, CssMasonry, AutoGrid, LandingLayout } from '@exhuma/core';
+import { HorizontalScroller, StackingCards, CssMasonry, AutoGrid, LandingLayout } from '@fleect/exhuma';
 ```
 
 ### Subpath Imports
 
 ```tsx
-import { StackingCards } from '@exhuma/core/cards';
-import { CssMasonry, AutoGrid } from '@exhuma/core/layouts';
-import { LandingLayout, DashboardLayout } from '@exhuma/core/router';
+import { StackingCards } from '@fleect/exhuma/cards';
+import { CssMasonry, AutoGrid } from '@fleect/exhuma/layouts';
+import { LandingLayout, DashboardLayout } from '@fleect/exhuma/router';
 ```
+
+---
+
+## License
+
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
+

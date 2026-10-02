@@ -21,6 +21,7 @@ export interface RegistryComponentResponse {
 export interface FetchRegistryOptions {
 	baseUrl?: string;
 	eject?: boolean;
+	offline?: boolean;
 }
 
 export async function fetchComponentFromRegistry(slug: string, flavor: EcosystemFlavor, options?: FetchRegistryOptions | string): Promise<ComponentFilePayload[]> {
@@ -28,11 +29,15 @@ export async function fetchComponentFromRegistry(slug: string, flavor: Ecosystem
 	const baseUrl = opts.baseUrl || REGISTRY_BASE_URL;
 	const isEjected = opts.eject === true;
 
+	if (opts.offline || process.env.EXHUMA_OFFLINE === 'true' || process.env.NODE_ENV === 'test' || process.env.VITEST) {
+		return getFallbackFiles(slug, flavor, isEjected);
+	}
+
 	try {
 		const url = `${baseUrl}/${slug}?flavor=${flavor}${isEjected ? '&eject=true' : ''}`;
 		const res = await fetch(url, {
 			headers: {
-				'User-Agent': 'exhuma-cli/0.1.1',
+				'User-Agent': 'exhuma-cli/0.2.0-beta.1',
 			},
 		});
 

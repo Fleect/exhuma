@@ -9,6 +9,19 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"isolatedModules": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"@fleect/exhuma": ["./packages/core/src/index.ts"],
+			"@fleect/exhuma/*": ["./packages/core/src/*"],
+			"@fleect/exhuma-cards": ["./packages/cards/src/index.ts"],
+			"@fleect/exhuma-cards/*": ["./packages/cards/src/*"],
+			"@fleect/exhuma-layouts": ["./packages/layouts/src/index.ts"],
+			"@fleect/exhuma-layouts/*": ["./packages/layouts/src/*"],
+			"@fleect/exhuma-router": ["./packages/router/src/index.ts"],
+			"@fleect/exhuma-router/*": ["./packages/router/src/*"],
+			"@fleect/exhuma-registry": ["./packages/registry/src/index.ts"],
+			"@fleect/exhuma-registry/*": ["./packages/registry/src/*"]
+		}
 	}
 }

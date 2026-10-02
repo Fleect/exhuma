@@ -34,8 +34,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -53,16 +53,16 @@
 			{
 				"filename": "CssMasonry.tsx",
 				"language": "tsx",
-				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as CssMasonryPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
+				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as CssMasonryPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "CssMasonry.tsx",
 				"language": "tsx",
-				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as CssMasonryPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
+				"description": "CSS Masonry — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as CssMasonryPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface CssMasonryProps extends React.ComponentPropsWithoutRef<typeof CssMasonryPrimitive.CssMasonry> {\n  className?: string;\n}\n\nexport const CssMasonry = React.forwardRef<HTMLDivElement, CssMasonryProps>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonry\n      ref={ref}\n      className={clsx(\n        'columns-1 sm:columns-2 md:columns-3 gap-4 [column-fill:_balance] w-full space-y-4',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonry>\n  )\n);\nCssMasonry.displayName = 'CssMasonry';\n\nexport const CssMasonryItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n  ({ className, children, ...props }, ref) => (\n    <CssMasonryPrimitive.CssMasonryItem\n      ref={ref}\n      className={clsx('', className)}\n      {...props}\n    >\n      {children}\n    </CssMasonryPrimitive.CssMasonryItem>\n  )\n);\nCssMasonryItem.displayName = 'CssMasonryItem';\n"
 			}
 		],
 		"vue": [

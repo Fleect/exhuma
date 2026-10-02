@@ -43,8 +43,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -62,16 +62,16 @@
 			{
 				"filename": "TiltCard.tsx",
 				"language": "tsx",
-				"description": "Tilt Card — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as TiltCardPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface TiltCardProps extends React.ComponentPropsWithoutRef<typeof TiltCardPrimitive.TiltCard> {\n  className?: string;\n}\n\nexport const TiltCard = React.forwardRef<HTMLDivElement, TiltCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <TiltCardPrimitive.TiltCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </TiltCardPrimitive.TiltCard>\n  )\n);\nTiltCard.displayName = 'TiltCard';\n"
+				"description": "Tilt Card — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as TiltCardPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface TiltCardProps extends React.ComponentPropsWithoutRef<typeof TiltCardPrimitive.TiltCard> {\n  className?: string;\n}\n\nexport const TiltCard = React.forwardRef<HTMLDivElement, TiltCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <TiltCardPrimitive.TiltCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </TiltCardPrimitive.TiltCard>\n  )\n);\nTiltCard.displayName = 'TiltCard';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "TiltCard.tsx",
 				"language": "tsx",
-				"description": "Tilt Card — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as TiltCardPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface TiltCardProps extends React.ComponentPropsWithoutRef<typeof TiltCardPrimitive.TiltCard> {\n  className?: string;\n}\n\nexport const TiltCard = React.forwardRef<HTMLDivElement, TiltCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <TiltCardPrimitive.TiltCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </TiltCardPrimitive.TiltCard>\n  )\n);\nTiltCard.displayName = 'TiltCard';\n"
+				"description": "Tilt Card — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as TiltCardPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface TiltCardProps extends React.ComponentPropsWithoutRef<typeof TiltCardPrimitive.TiltCard> {\n  className?: string;\n}\n\nexport const TiltCard = React.forwardRef<HTMLDivElement, TiltCardProps>(\n  ({ className, children, ...props }, ref) => (\n    <TiltCardPrimitive.TiltCard\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md will-change-transform',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </TiltCardPrimitive.TiltCard>\n  )\n);\nTiltCard.displayName = 'TiltCard';\n"
 			}
 		],
 		"vue": [

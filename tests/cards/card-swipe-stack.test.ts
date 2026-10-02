@@ -14,7 +14,7 @@ import { cardSwipeStackComponent } from '../../packages/registry/src/components/
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
 
 describe('Exhuma Kinetic Methodology — Card Swipe Stack (Big-Ω)', () => {
-	it('exports CardSwipeStack and mathematical kernel from @exhuma/cards', () => {
+	it('exports CardSwipeStack and mathematical kernel from @fleect/exhuma-cards', () => {
 		expect(CardSwipeStack).toBeDefined();
 		expect(typeof CardSwipeStack).toBe('function');
 		expect(calculateCardRotation).toBeDefined();

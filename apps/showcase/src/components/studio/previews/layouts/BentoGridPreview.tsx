@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual } from '@exhuma/layouts';
+import { BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual } from '@fleect/exhuma-layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function BentoGridPreview(props: ComponentPreviewProps & { viewportMode?: string }) {

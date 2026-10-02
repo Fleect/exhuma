@@ -124,6 +124,7 @@ npx exhuma add --all`}
 					label='exhuma add flags'
 					rows={[
 						{ flag: '--all, -a', type: 'boolean', description: `Installs all ${COMPONENT_COUNT} canonical components` },
+						{ flag: '--eject, -e', type: 'boolean', description: 'Ejects full self-contained source code without requiring @fleect/exhuma' },
 						{ flag: '--overwrite, -o', type: 'boolean', description: 'Forces file overwrite if already present' },
 						{ flag: '--flavor, -f', type: 'string', description: 'Target framework contract override' },
 						{ flag: '--path, -p', type: 'string', description: 'Explicit destination directory for this command' },

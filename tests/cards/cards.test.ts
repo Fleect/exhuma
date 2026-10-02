@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { TiltCard, HorizontalScroller, StackingCards } from '@exhuma/cards';
-import { AutoGrid, AutoGridItem, CssMasonry, CssMasonryItem, MacyMasonry, useMacy } from '@exhuma/layouts';
-import { ProtectedRoute, AuthLayout, DashboardLayout, LandingLayout, Header, Footer } from '@exhuma/router';
-import * as core from '@exhuma/core';
+import { TiltCard, HorizontalScroller, StackingCards } from '@fleect/exhuma-cards';
+import { AutoGrid, AutoGridItem, CssMasonry, CssMasonryItem, MacyMasonry, useMacy } from '@fleect/exhuma-layouts';
+import { ProtectedRoute, AuthLayout, DashboardLayout, LandingLayout, Header, Footer } from '@fleect/exhuma-router';
+import * as core from '@fleect/exhuma';
 
-describe('@exhuma Package Ecosystem — Complete Library Parity Gate', () => {
-  it('exports all tactile card components from @exhuma/cards', () => {
+describe('@fleect/exhuma Package Ecosystem — Complete Library Parity Gate', () => {
+  it('exports all tactile card components from @fleect/exhuma-cards', () => {
     expect(TiltCard).toBeDefined();
     expect(HorizontalScroller).toBeDefined();
     expect(StackingCards).toBeDefined();
   });
 
-  it('exports all responsive layout engines from @exhuma/layouts', () => {
+  it('exports all responsive layout engines from @fleect/exhuma-layouts', () => {
     expect(AutoGrid).toBeDefined();
     expect(AutoGridItem).toBeDefined();
     expect(CssMasonry).toBeDefined();
@@ -20,7 +20,7 @@ describe('@exhuma Package Ecosystem — Complete Library Parity Gate', () => {
     expect(useMacy).toBeDefined();
   });
 
-  it('exports all routing architectures from @exhuma/router', () => {
+  it('exports all routing architectures from @fleect/exhuma-router', () => {
     expect(ProtectedRoute).toBeDefined();
     expect(AuthLayout).toBeDefined();
     expect(DashboardLayout).toBeDefined();
@@ -29,7 +29,7 @@ describe('@exhuma Package Ecosystem — Complete Library Parity Gate', () => {
     expect(Footer).toBeDefined();
   });
 
-  it('re-exports all cards, layouts, and router modules through @exhuma/core', () => {
+  it('re-exports all cards, layouts, and router modules through @fleect/exhuma', () => {
     expect(core.TiltCard).toBeDefined();
     expect(core.HorizontalScroller).toBeDefined();
     expect(core.StackingCards).toBeDefined();
@@ -45,7 +45,7 @@ describe('@exhuma Package Ecosystem — Complete Library Parity Gate', () => {
   });
 });
 
-describe('@exhuma Dynamic Primitive Physics & Geometry Gate', () => {
+describe('Exhuma Dynamic Primitive Physics & Geometry Gate', () => {
   it('calculates progressive scaling accurately across stack layers', () => {
     // 4 cards stack with default minScale = 0.94
     const scales = core.generateDefaultScaleValues(4, 0.94);
@@ -104,8 +104,8 @@ describe('@exhuma Dynamic Primitive Physics & Geometry Gate', () => {
 });
 
 describe('StackingCards Registry Code Generation — Clean & Ejected Engine Gate', () => {
-  it('generates production-ready Clean code with @exhuma/core primitives and forwardRef', async () => {
-    const { getComponentBySlug } = await import('@exhuma/registry');
+  it('generates production-ready Clean code with @fleect/exhuma primitives and forwardRef', async () => {
+    const { getComponentBySlug } = await import('@fleect/exhuma-registry');
     const comp = getComponentBySlug('stacking-cards');
     expect(comp).toBeDefined();
 
@@ -114,14 +114,14 @@ describe('StackingCards Registry Code Generation — Clean & Ejected Engine Gate
 
     const cleanCode = cleanFiles[0].code;
     expect(cleanCode).toContain("'use client';");
-    expect(cleanCode).toContain("import * as StackingCardsPrimitive from '@exhuma/core';");
+    expect(cleanCode).toContain("import * as StackingCardsPrimitive from '@fleect/exhuma';");
     expect(cleanCode).toContain('React.forwardRef');
     expect(cleanCode).toContain('StackingCardsPrimitive.StackingCards');
     expect(cleanCode).toContain('StackingCards.displayName = \'StackingCards\';');
   });
 
   it('generates self-contained, zero-dependency Ejected Engine with Big-Omega performance', async () => {
-    const { getComponentBySlug } = await import('@exhuma/registry');
+    const { getComponentBySlug } = await import('@fleect/exhuma-registry');
     const comp = getComponentBySlug('stacking-cards');
     expect(comp).toBeDefined();
 
@@ -130,8 +130,8 @@ describe('StackingCards Registry Code Generation — Clean & Ejected Engine Gate
 
     const ejectedCode = ejectedFiles[0].code;
 
-    // Zero @exhuma dependencies
-    expect(ejectedCode).not.toContain('@exhuma');
+    // Zero @fleect dependencies
+    expect(ejectedCode).not.toContain('@fleect');
 
     // Inlined mathematical kernels
     expect(ejectedCode).toContain('export const smoothstep');
@@ -150,7 +150,7 @@ describe('StackingCards Registry Code Generation — Clean & Ejected Engine Gate
   });
 
   it('generates rich, valid Usage Examples for all 13 supported ecosystems', async () => {
-    const { getComponentBySlug, generateComponentUsage, SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+    const { getComponentBySlug, generateComponentUsage, SUPPORTED_ECOSYSTEMS } = await import('@fleect/exhuma-registry');
     const comp = getComponentBySlug('stacking-cards');
     expect(comp).toBeDefined();
 

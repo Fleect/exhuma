@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconSparkles as Sparkles } from '@tabler/icons-react';
-import { SpotlightCard } from '@exhuma/cards';
+import { SpotlightCard } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function SpotlightCardPreview(props: ComponentPreviewProps) {

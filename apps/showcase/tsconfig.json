@@ -5,19 +5,28 @@
 		"allowJs": true,
 		"noEmit": true,
 		"incremental": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
 		"plugins": [
 			{
 				"name": "next"
 			}
 		],
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@exhuma/registry/schema": ["../../packages/registry/src/schema.ts"],
-			"@exhuma/registry": ["../../packages/registry/src/index.ts"],
-			"@exhuma/cards": ["../../packages/cards/src/index.ts"],
-			"@exhuma/core": ["../../packages/core/src/index.ts"],
-			"@exhuma/layouts": ["../../packages/layouts/src/index.ts"],
-			"@exhuma/router": ["../../packages/router/src/index.ts"]
+			"@fleect/exhuma": ["../../packages/core/src/index.ts"],
+			"@fleect/exhuma/*": ["../../packages/core/src/*"],
+			"@fleect/exhuma-cards": ["../../packages/cards/src/index.ts"],
+			"@fleect/exhuma-cards/*": ["../../packages/cards/src/*"],
+			"@fleect/exhuma-layouts": ["../../packages/layouts/src/index.ts"],
+			"@fleect/exhuma-layouts/*": ["../../packages/layouts/src/*"],
+			"@fleect/exhuma-router": ["../../packages/router/src/index.ts"],
+			"@fleect/exhuma-router/*": ["../../packages/router/src/*"],
+			"@fleect/exhuma-registry": ["../../packages/registry/src/index.ts"],
+			"@fleect/exhuma-registry/*": ["../../packages/registry/src/*"],
+			"@fleect/exhuma-registry/schema": ["../../packages/registry/dist/schema.d.ts"]
 		},
 		"jsx": "preserve"
 	},

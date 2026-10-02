@@ -1,4 +1,4 @@
-# @exhuma/layouts
+# @fleect/exhuma-layouts
 
 High-performance, zero-dependency layout primitives for React: Masonry layouts, AutoGrids, and dynamic height balancers. Part of the **Exhuma** developer suite.
 
@@ -7,9 +7,9 @@ High-performance, zero-dependency layout primitives for React: Masonry layouts, 
 ## Installation
 
 ```bash
-pnpm add @exhuma/layouts
+pnpm add @fleect/exhuma-layouts
 # or
-npm install @exhuma/layouts
+npm install @fleect/exhuma-layouts
 ```
 
 ---
@@ -17,9 +17,10 @@ npm install @exhuma/layouts
 ## Features
 
 - **`CssMasonry`**: Zero-dependency CSS column-count masonry layout with automatic `break-inside: avoid` handling.
-- **`MacyMasonry`**: Balanced column layout that distributes items evenly across responsive columns with zero flicker.
+- **`RowMasonry`**: Greedy column balancer with GPU `translate3d` positioning and zero layout thrashing.
 - **`AutoGrid`**: Intelligent CSS grid container with auto-fit/auto-fill and minimum column widths.
-- **`useMacy`**: Custom hook for programmatic Macy.js recalculation.
+- **`BentoGrid`**: Adaptive kinetic bento grid with spring displacement.
+- **`InfiniteMarquee`**: Smooth continuous kinetic scroller.
 
 ---
 
@@ -28,7 +29,7 @@ npm install @exhuma/layouts
 ### Zero-Dependency CSS Masonry
 
 ```tsx
-import { CssMasonry } from '@exhuma/layouts';
+import { CssMasonry } from '@fleect/exhuma-layouts';
 
 export default function Gallery() {
   return (
@@ -44,7 +45,7 @@ export default function Gallery() {
 ### AutoGrid
 
 ```tsx
-import { AutoGrid } from '@exhuma/layouts';
+import { AutoGrid } from '@fleect/exhuma-layouts';
 
 export default function Products() {
   return (
@@ -56,3 +57,10 @@ export default function Products() {
   );
 }
 ```
+
+---
+
+## License
+
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
+

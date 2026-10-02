@@ -1,6 +1,6 @@
-# Cards Deep Dive (@exhuma/cards)
+# Cards Deep Dive (@fleect/exhuma-cards)
 
-`@exhuma/cards` delivers high-performance tactile, gesture-driven, and scroll-reactive card components engineered for the GPU compositor thread with zero layout thrashing.
+`@fleect/exhuma-cards` delivers high-performance tactile, gesture-driven, and scroll-reactive card components engineered for the GPU compositor thread with zero layout thrashing.
 
 ---
 
@@ -25,7 +25,7 @@ Renders stacked cards that pin at sticky thresholds and progressively decrease i
 ### Usage
 
 ```tsx
-import { StackingCards } from '@exhuma/core';
+import { StackingCards } from '@fleect/exhuma';
 
 export function ProjectStack() {
   return (
@@ -67,7 +67,7 @@ Hardware-accelerated 3D perspective tilt card driven by normalized pointer vecto
 ### Usage
 
 ```tsx
-import { TiltCard } from '@exhuma/core';
+import { TiltCard } from '@fleect/exhuma';
 
 export function InteractiveTilt() {
   return (
@@ -102,7 +102,7 @@ Pointer-tracking radial spotlight glow with decoupled surface luminance and sub-
 ### Usage
 
 ```tsx
-import { SpotlightCard, SpotlightGroup } from '@exhuma/core';
+import { SpotlightCard, SpotlightGroup } from '@fleect/exhuma';
 
 export function SpotlightGrid() {
   return (
@@ -146,7 +146,7 @@ GPU-composited perimeter border crawler using conic gradient calculation. Suppor
 ### Usage
 
 ```tsx
-import { BorderBeam } from '@exhuma/core';
+import { BorderBeam } from '@fleect/exhuma';
 
 export function HighlightedCard() {
   return (
@@ -187,7 +187,7 @@ Gestural swipe deck powered by a pre-allocated $\mathcal{O}(1)$ `Float64Array` v
 ### Usage
 
 ```tsx
-import { CardSwipeStack } from '@exhuma/core';
+import { CardSwipeStack } from '@fleect/exhuma';
 
 interface Profile { id: string; name: string; role: string; }
 
@@ -232,7 +232,7 @@ Interactive before/after comparison slider utilizing GPU polygon `clip-path` mas
 ### Usage
 
 ```tsx
-import { ComparisonSlider } from '@exhuma/core';
+import { ComparisonSlider } from '@fleect/exhuma';
 
 export function ImageComparison() {
   return (
@@ -275,7 +275,7 @@ For advanced layouts, `<ExpandableCard>` exports composable compound components:
 ### Usage
 
 ```tsx
-import { ExpandableCard } from '@exhuma/core';
+import { ExpandableCard } from '@fleect/exhuma';
 
 export function CaseStudy() {
   return (
@@ -327,7 +327,7 @@ Translates standard vertical window scroll into a silky-smooth horizontal rail m
 ### Usage
 
 ```tsx
-import { HorizontalScroller } from '@exhuma/core';
+import { HorizontalScroller } from '@fleect/exhuma';
 
 export function ProductShowcase({ products }: { products: { id: string; title: string }[] }) {
   return (

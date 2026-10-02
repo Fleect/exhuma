@@ -1,6 +1,6 @@
-# Layout Engines Deep Dive (@exhuma/layouts)
+# Layout Engines Deep Dive (@fleect/exhuma-layouts)
 
-`@exhuma/layouts` provides high-performance responsive layout engines, masonry balancers, marquee tracks, and geometric grids engineered for silky-smooth 60 FPS compositor execution.
+`@fleect/exhuma-layouts` provides high-performance responsive layout engines, masonry balancers, marquee tracks, and geometric grids engineered for silky-smooth 60 FPS compositor execution.
 
 ---
 
@@ -25,7 +25,7 @@ Zero-dependency CSS `column-count` masonry layout. Automatically handles `break-
 ### Usage
 
 ```tsx
-import { CssMasonry, CssMasonryItem } from '@exhuma/core';
+import { CssMasonry, CssMasonryItem } from '@fleect/exhuma';
 
 export function MasonryFeed({ items }: { items: string[] }) {
   return (
@@ -62,7 +62,7 @@ High-performance $\mathcal{O}(N \log K)$ greedy row-by-row masonry balancer plac
 ### Usage
 
 ```tsx
-import { RowMasonry, RowMasonryItem } from '@exhuma/core';
+import { RowMasonry, RowMasonryItem } from '@fleect/exhuma';
 
 export function ChronologicalFeed({ cards }: { cards: { id: string; height: number; text: string }[] }) {
   return (
@@ -102,7 +102,7 @@ Smart CSS grid wrapper utilizing `repeat(auto-fit, minmax(minItemWidth, 1fr))`. 
 ### Usage
 
 ```tsx
-import { AutoGrid, AutoGridItem } from '@exhuma/core';
+import { AutoGrid, AutoGridItem } from '@fleect/exhuma';
 
 export function FeatureGrid() {
   return (
@@ -143,7 +143,7 @@ Continuous horizontal ticker rail with pause-on-hover deceleration, edge gradien
 ### Usage
 
 ```tsx
-import { InfiniteMarquee } from '@exhuma/core';
+import { InfiniteMarquee } from '@fleect/exhuma';
 
 export function SponsorTicker({ logos }: { logos: string[] }) {
   return (
@@ -184,7 +184,7 @@ Asymmetric bento-box grid with responsive column spans, customizable row heights
 ### Usage
 
 ```tsx
-import { BentoGrid, BentoCard } from '@exhuma/core';
+import { BentoGrid, BentoCard } from '@fleect/exhuma';
 
 export function DashboardBento() {
   return (
@@ -220,7 +220,7 @@ Signature geometric diamond showcase displaying cards in a symmetrical rhombic c
 ### Usage
 
 ```tsx
-import { DiamondGrid, DiamondItem } from '@exhuma/core';
+import { DiamondGrid, DiamondItem } from '@fleect/exhuma';
 
 export function DiamondShowcase({ images }: { images: string[] }) {
   return (

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { CssMasonry, CssMasonryItem } from '@exhuma/layouts';
+import { CssMasonry, CssMasonryItem } from '@fleect/exhuma-layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function CssMasonryPreview(props: ComponentPreviewProps & { viewportMode?: string }) {

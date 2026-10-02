@@ -1,5 +1,5 @@
 import React from 'react';
-import { CursorTooltip } from '@exhuma/core';
+import { CursorTooltip } from '@fleect/exhuma';
 import { cn } from '@/lib/utils';
 import { ComponentPreviewProps } from '../types';
 

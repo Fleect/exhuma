@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { RowMasonry, RowMasonryItem } from '@exhuma/layouts';
+import { RowMasonry, RowMasonryItem } from '@fleect/exhuma-layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function RowMasonryPreview(props: ComponentPreviewProps & { viewportMode?: string }) {

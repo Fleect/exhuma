@@ -37,7 +37,11 @@ export function validateImport(file: string, specifier: string): string | undefi
 
   // Rule: Core headless math must never import UI or framework dependencies
   if (file.startsWith('packages/core/src/math/') || file.startsWith('packages/core/src/observers/')) {
-    if (specifier.startsWith('@exhuma/cards') || specifier.startsWith('@exhuma/layouts') || specifier.startsWith('@exhuma/router')) {
+    if (
+      specifier.startsWith('@fleect/exhuma-cards') ||
+      specifier.startsWith('@fleect/exhuma-layouts') ||
+      specifier.startsWith('@fleect/exhuma-router')
+    ) {
       return 'Core headless math modules must never import from UI packages.';
     }
     if (specifier === 'react' || specifier.startsWith('next/')) {

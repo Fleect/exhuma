@@ -5,7 +5,7 @@ import { detectEcosystem, writeConfig, getConfig } from '../utils/config';
 import { SUPPORTED_ECOSYSTEMS, ECOSYSTEM_LABELS, DEFAULT_PATHS, EcosystemFlavor } from '../constants';
 
 export async function initCommand(options: { yes?: boolean; flavor?: string }): Promise<void> {
-	console.log(pc.bold(pc.cyan('\n  ▲ Exhuma CLI v0.1.0\n')));
+	console.log(pc.bold(pc.cyan('\n  ▲ Exhuma CLI v0.2.0-beta.1\n')));
 
 	const existingConfig = getConfig();
 	if (existingConfig && !options.yes) {

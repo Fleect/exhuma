@@ -14,7 +14,7 @@ import { expandableCardComponent } from '../../packages/registry/src/components/
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
 
 describe('Exhuma Kinetic Methodology — Expandable Card (Big-Ω)', () => {
-	it('exports ExpandableCard, subcomponents, and mathematical kernel from @exhuma/cards', () => {
+	it('exports ExpandableCard, subcomponents, and mathematical kernel from @fleect/exhuma-cards', () => {
 		expect(ExpandableCard).toBeDefined();
 		expect(ExpandableRoot).toBeDefined();
 		expect(ExpandableTrigger).toBeDefined();

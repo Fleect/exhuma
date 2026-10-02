@@ -35,13 +35,13 @@ export function getCursorTooltipOuterFiles(flavor: EcosystemFlavor, props: Recor
 					{
 						filename: 'CursorTooltip.tsx',
 						language: 'tsx',
-						description: 'Cursor Tooltip — Clean Shadcn-style component powered by @exhuma/core kinetic primitives.',
+						description: 'Cursor Tooltip — Clean Shadcn-style component powered by @fleect/exhuma kinetic primitives.',
 						code: `${header}import * as React from 'react';
 import {
   CursorTooltip as CoreCursorTooltip,
   type CursorTooltipProps as CoreCursorTooltipProps,
   type CursorTooltipVariant,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export type { CursorTooltipVariant };

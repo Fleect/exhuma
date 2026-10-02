@@ -4,7 +4,7 @@ import {
   ALL_COMPONENTS,
   SUPPORTED_ECOSYSTEMS,
   type EcosystemFlavor,
-} from '@exhuma/registry';
+} from '@fleect/exhuma-registry';
 
 const FLAVORS = SUPPORTED_ECOSYSTEMS;
 

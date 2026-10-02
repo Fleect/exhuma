@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { IconSparkles as Sparkles, IconActivity as Activity, IconCpu as Cpu } from '@tabler/icons-react';
-import { TiltCard, SpotlightCard } from '@exhuma/cards';
-import { MagneticButton } from '@exhuma/core';
+import { TiltCard, SpotlightCard } from '@fleect/exhuma-cards';
+import { MagneticButton } from '@fleect/exhuma';
 
 function Stage({ label, hint, badge, formula, children }: { label: string; hint: string; badge?: string; formula?: string; children: React.ReactNode }) {
 	return (

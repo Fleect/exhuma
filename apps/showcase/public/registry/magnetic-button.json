@@ -23,8 +23,8 @@
 		{ "name": "shockwave", "label": "Shockwave", "type": "boolean", "defaultValue": false, "description": "Radial expanding ring on click." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -42,16 +42,16 @@
 			{
 				"filename": "MagneticButton.tsx",
 				"language": "tsx",
-				"description": "Magnetic Button — Clean component powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport {\n  MagneticButton as CoreMagneticButton,\n  type MagneticButtonProps as CoreMagneticButtonProps,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface MagneticButtonProps extends CoreMagneticButtonProps {\n  className?: string;\n}\n\nexport const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(\n  (\n    {\n      children,\n      strength = 0.35,\n      radius = 120,\n      springDamping = 18,\n      maxDisplacement = 36,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreMagneticButton\n        ref={ref}\n        strength={strength}\n        radius={radius}\n        springDamping={springDamping}\n        maxDisplacement={maxDisplacement}\n        className={clsx(\n          'group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-foreground px-8 py-4 text-sm font-black text-background shadow-2xl transition-transform hover:scale-105 active:scale-95 cursor-pointer will-change-transform select-none',\n          className\n        )}\n        {...props}\n      >\n        {children ?? 'Magnetic Attraction'}\n      </CoreMagneticButton>\n    );\n  }\n);\nMagneticButton.displayName = 'MagneticButton';\n\nexport default MagneticButton;\n"
+				"description": "Magnetic Button — Clean component powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport {\n  MagneticButton as CoreMagneticButton,\n  type MagneticButtonProps as CoreMagneticButtonProps,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface MagneticButtonProps extends CoreMagneticButtonProps {\n  className?: string;\n}\n\nexport const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(\n  (\n    {\n      children,\n      strength = 0.35,\n      radius = 120,\n      springDamping = 18,\n      maxDisplacement = 36,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreMagneticButton\n        ref={ref}\n        strength={strength}\n        radius={radius}\n        springDamping={springDamping}\n        maxDisplacement={maxDisplacement}\n        className={clsx(\n          'group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-foreground px-8 py-4 text-sm font-black text-background shadow-2xl transition-transform hover:scale-105 active:scale-95 cursor-pointer will-change-transform select-none',\n          className\n        )}\n        {...props}\n      >\n        {children ?? 'Magnetic Attraction'}\n      </CoreMagneticButton>\n    );\n  }\n);\nMagneticButton.displayName = 'MagneticButton';\n\nexport default MagneticButton;\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "MagneticButton.tsx",
 				"language": "tsx",
-				"description": "Magnetic Button — Clean component powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  MagneticButton as CoreMagneticButton,\n  type MagneticButtonProps as CoreMagneticButtonProps,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface MagneticButtonProps extends CoreMagneticButtonProps {\n  className?: string;\n}\n\nexport const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(\n  (\n    {\n      children,\n      strength = 0.35,\n      radius = 120,\n      springDamping = 18,\n      maxDisplacement = 36,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreMagneticButton\n        ref={ref}\n        strength={strength}\n        radius={radius}\n        springDamping={springDamping}\n        maxDisplacement={maxDisplacement}\n        className={clsx(\n          'group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-foreground px-8 py-4 text-sm font-black text-background shadow-2xl transition-transform hover:scale-105 active:scale-95 cursor-pointer will-change-transform select-none',\n          className\n        )}\n        {...props}\n      >\n        {children ?? 'Magnetic Attraction'}\n      </CoreMagneticButton>\n    );\n  }\n);\nMagneticButton.displayName = 'MagneticButton';\n\nexport default MagneticButton;\n"
+				"description": "Magnetic Button — Clean component powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  MagneticButton as CoreMagneticButton,\n  type MagneticButtonProps as CoreMagneticButtonProps,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface MagneticButtonProps extends CoreMagneticButtonProps {\n  className?: string;\n}\n\nexport const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(\n  (\n    {\n      children,\n      strength = 0.35,\n      radius = 120,\n      springDamping = 18,\n      maxDisplacement = 36,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreMagneticButton\n        ref={ref}\n        strength={strength}\n        radius={radius}\n        springDamping={springDamping}\n        maxDisplacement={maxDisplacement}\n        className={clsx(\n          'group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-foreground px-8 py-4 text-sm font-black text-background shadow-2xl transition-transform hover:scale-105 active:scale-95 cursor-pointer will-change-transform select-none',\n          className\n        )}\n        {...props}\n      >\n        {children ?? 'Magnetic Attraction'}\n      </CoreMagneticButton>\n    );\n  }\n);\nMagneticButton.displayName = 'MagneticButton';\n\nexport default MagneticButton;\n"
 			}
 		],
 		"vue": [

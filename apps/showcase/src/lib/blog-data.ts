@@ -236,7 +236,7 @@ export function computeMasonryLayout(
 					id: 'twenty-component-milestone',
 					title: 'The 20-Component Milestone Across 13 Ecosystems',
 					content:
-						'The addition of RowMasonry marks the official completion of Exhuma’s 20-Component Beta milestone. From tactile cards (StackingCards, TiltCard, SpotlightCard, BorderBeam, CardSwipeStack, ComparisonSlider, ExpandableCard, HorizontalScroller) to navigation rails (MorphingTabs, FloatingDock) and kinetic layout engines (CssMasonry, RowMasonry, AutoGrid, InfiniteMarquee, BentoGrid, DiamondGrid), every primitive is available across all 13 supported frontend ecosystems.\n\nWhether you consume components via pnpm add @exhuma/core or generate zero-dependency copy-paste source code for React, Next.js, Vue 3, Svelte 5, Angular 19, or Flutter using npx exhuma add, you get 100% owned source code engineered for peak tactile performance.',
+						'The addition of RowMasonry marks the official completion of Exhuma’s 20-Component Beta milestone. From tactile cards (StackingCards, TiltCard, SpotlightCard, BorderBeam, CardSwipeStack, ComparisonSlider, ExpandableCard, HorizontalScroller) to navigation rails (MorphingTabs, FloatingDock) and kinetic layout engines (CssMasonry, RowMasonry, AutoGrid, InfiniteMarquee, BentoGrid, DiamondGrid), every primitive is available across all 13 supported frontend ecosystems.\n\nWhether you consume components via pnpm add @fleect/exhuma or generate zero-dependency copy-paste source code for React, Next.js, Vue 3, Svelte 5, Angular 19, or Flutter using npx exhuma add, you get 100% owned source code engineered for peak tactile performance.',
 					codeSnippet: {
 						language: 'bash',
 						filename: 'terminal.sh',
@@ -244,7 +244,7 @@ export function computeMasonryLayout(
 npx exhuma add row-masonry --flavor=react
 
 # Or install the unified flagship engine
-pnpm add @exhuma/core @exhuma/layouts`,
+pnpm add @fleect/exhuma @fleect/exhuma-layouts`,
 					},
 				},
 			],

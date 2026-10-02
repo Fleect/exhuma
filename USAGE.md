@@ -6,22 +6,22 @@ Guide to consuming Exhuma packages across applications and frameworks.
 
 ## Consumption Approaches
 
-### 1. All-in-One (`@exhuma/core`)
+### 1. All-in-One (`@fleect/exhuma`)
 
 Recommended for rapid development and applications that use multiple tools across interactions, layout, and routing.
 
 ```bash
-pnpm add @exhuma/core
+pnpm add @fleect/exhuma
 ```
 
 ```tsx
 // Root barrel import (with tree-shaking)
-import { StackingCards, CssMasonry, LandingLayout } from '@exhuma/core';
+import { StackingCards, CssMasonry, LandingLayout } from '@fleect/exhuma';
 
 // Or explicit subpath imports
-import { StackingCards, HorizontalScroller } from '@exhuma/core/cards';
-import { CssMasonry, AutoGrid } from '@exhuma/core/layouts';
-import { LandingLayout, DashboardLayout } from '@exhuma/core/router';
+import { StackingCards, HorizontalScroller } from '@fleect/exhuma/cards';
+import { CssMasonry, AutoGrid } from '@fleect/exhuma/layouts';
+import { LandingLayout, DashboardLayout } from '@fleect/exhuma/router';
 ```
 
 ---
@@ -32,13 +32,13 @@ Recommended for micro-frontends or repositories with strict bundle boundaries:
 
 ```bash
 # Only interactive card micro-interactions
-pnpm add @exhuma/cards
+pnpm add @fleect/exhuma-cards
 
 # Only masonry and grid layouts
-pnpm add @exhuma/layouts
+pnpm add @fleect/exhuma-layouts
 
 # Only router skeletons and guards
-pnpm add @exhuma/router
+pnpm add @fleect/exhuma-router
 ```
 
 ---

@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { ECOSYSTEM_COUNT } from '@exhuma/registry';
+import { ECOSYSTEM_COUNT } from '@fleect/exhuma-registry';
 import { initCommand } from './commands/init';
 import { addCommand } from './commands/add';
 import { listCommand } from './commands/list';
@@ -7,7 +7,7 @@ import { buildCommand } from './commands/build';
 
 const program = new Command();
 
-program.name('exhuma').description(`Universal Component CLI — Add tactile, headless components to any project across ${ECOSYSTEM_COUNT} ecosystems`).version('0.1.1');
+program.name('exhuma').description(`Universal Component CLI — Add tactile, headless components to any project across ${ECOSYSTEM_COUNT} ecosystems`).version('0.2.0-beta.1');
 
 program
 	.command('init')

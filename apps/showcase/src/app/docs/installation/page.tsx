@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 const toc = [
 	{ id: 'prerequisites', title: 'Prerequisites & Styling Engine' },
 	{ id: 'quickstart', title: 'Interactive Starter Wizard' },
+	{ id: 'library-install', title: 'Library Package (@fleect/exhuma)' },
 	{ id: 'package-managers', title: 'Package Managers' },
 	{ id: 'cli-init', title: 'Manual Project Setup (exhuma init)' },
 	{ id: 'config-file', title: 'Configuration (exhuma.json)' },
@@ -67,7 +68,13 @@ export default function InstallationPage() {
 				<DocsProse>The wizard will prompt you for your project name and preferred framework, then generate a lightweight project with self-contained tactile components ready to run.</DocsProse>
 			</DocsSection>
 
-			<DocsSection id='package-managers' index={3} label='Package Managers' title='Supported Package Managers'>
+			<DocsSection id='library-install' index={3} label='NPM Library' title='Library Package (@fleect/exhuma)'>
+				<DocsProse>If you prefer consuming pre-bundled React components directly as an npm package instead of copying source code into your project, install the unified flagship package:</DocsProse>
+				<PackageManagerTabs command='add @fleect/exhuma' />
+				<DocsProse>This includes all tactile cards, layout engines, and interactive primitives with full TypeScript definitions and zero runtime dependencies.</DocsProse>
+			</DocsSection>
+
+			<DocsSection id='package-managers' index={4} label='Package Managers' title='Supported Package Managers'>
 				<DocsProse>Exhuma supports all major modern JavaScript package managers without installing global binaries:</DocsProse>
 				<div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
 					{PACKAGE_MANAGERS.map((manager) => (

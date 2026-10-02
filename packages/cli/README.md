@@ -53,4 +53,5 @@ npx exhuma list
 
 ## License
 
-MIT
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
+

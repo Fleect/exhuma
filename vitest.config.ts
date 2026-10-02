@@ -7,11 +7,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fromRoot('./apps/showcase/src'),
-      '@exhuma/cards': fromRoot('./packages/cards/src/index.ts'),
-      '@exhuma/layouts': fromRoot('./packages/layouts/src/index.ts'),
-      '@exhuma/router': fromRoot('./packages/router/src/index.ts'),
-      '@exhuma/core': fromRoot('./packages/core/src/index.ts'),
-      '@exhuma/registry': fromRoot('./packages/registry/src/index.ts'),
+      '@fleect/exhuma': fromRoot('./packages/core/src/index.ts'),
+      '@fleect/exhuma-cards': fromRoot('./packages/cards/src/index.ts'),
+      '@fleect/exhuma-layouts': fromRoot('./packages/layouts/src/index.ts'),
+      '@fleect/exhuma-router': fromRoot('./packages/router/src/index.ts'),
+      '@fleect/exhuma-registry': fromRoot('./packages/registry/src/index.ts'),
     },
   },
   test: {

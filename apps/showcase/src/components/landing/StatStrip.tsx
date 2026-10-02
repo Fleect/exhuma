@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { NumberTicker } from '@exhuma/core';
+import { NumberTicker } from '@fleect/exhuma';
 import { Reveal } from '@/components/motion/Reveal';
 
 interface Stat {

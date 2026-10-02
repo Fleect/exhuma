@@ -21,7 +21,7 @@ export function getAccordionOuterFiles(flavor: EcosystemFlavor, props: Record<st
 					{
 						filename: 'Accordion.tsx',
 						language: 'tsx',
-						description: 'Accordion — Clean compound component powered by @exhuma/core kinetic primitives.',
+						description: 'Accordion — Clean compound component powered by @fleect/exhuma kinetic primitives.',
 						code: `${header}import * as React from 'react';
 import {
   Accordion as CoreAccordion,
@@ -36,7 +36,7 @@ import {
   type AccordionIconProps as CoreAccordionIconProps,
   type AccordionContentProps as CoreAccordionContentProps,
   type AccordionMode,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export type { AccordionMode };

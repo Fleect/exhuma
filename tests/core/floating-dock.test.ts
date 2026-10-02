@@ -12,11 +12,11 @@ import {
 	calculateDockDistance,
 	isApexProximity,
 	type DockDirection,
-} from '@exhuma/core';
-import { floatingDockComponent } from '@exhuma/registry';
+} from '@fleect/exhuma';
+import { floatingDockComponent } from '@fleect/exhuma-registry';
 
-describe('@exhuma/core — FloatingDock Physics & Parity Engine', () => {
-	it('exports FloatingDock and all compound subcomponents from @exhuma/core', () => {
+describe('@fleect/exhuma — FloatingDock Physics & Parity Engine', () => {
+	it('exports FloatingDock and all compound subcomponents from @fleect/exhuma', () => {
 		expect(FloatingDock).toBeDefined();
 		expect(FloatingDock.Root).toBeDefined();
 		expect(FloatingDock.Item).toBeDefined();

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconStack2 as Layers } from '@tabler/icons-react';
-import { CardSwipeStack, type CardSwipeStackHandle } from '@exhuma/cards';
+import { CardSwipeStack, type CardSwipeStackHandle } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 

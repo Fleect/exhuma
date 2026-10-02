@@ -1,6 +1,6 @@
 {
 	"name": "showcase",
-	"version": "0.1.0",
+	"version": "0.2.0-beta.1",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
@@ -9,11 +9,11 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@exhuma/cards": "workspace:*",
-		"@exhuma/core": "workspace:*",
-		"@exhuma/layouts": "workspace:*",
-		"@exhuma/registry": "workspace:*",
-		"@exhuma/router": "workspace:*",
+		"@fleect/exhuma": "workspace:*",
+		"@fleect/exhuma-cards": "workspace:*",
+		"@fleect/exhuma-layouts": "workspace:*",
+		"@fleect/exhuma-registry": "workspace:*",
+		"@fleect/exhuma-router": "workspace:*",
 		"@radix-ui/react-dialog": "^1.1.23",
 		"@radix-ui/react-popover": "^1.1.23",
 		"@radix-ui/react-scroll-area": "^1.2.18",

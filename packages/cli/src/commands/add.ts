@@ -66,7 +66,7 @@ export async function addCommand(components: string[], options: AddCommandOption
 		if (!existsSync(vendorDir)) {
 			mkdirSync(vendorDir, { recursive: true });
 		}
-		const runtimeStub = `// Exhuma Kinetic Micro-Kernel (Local Vendor Asset)\nimport '@exhuma/core';\n`;
+		const runtimeStub = `// Exhuma Kinetic Micro-Kernel (Local Vendor Asset)\nimport '@fleect/exhuma';\n`;
 		writeFileSync(join(vendorDir, 'kinetic.js'), runtimeStub, 'utf8');
 		console.log(pc.green('  ✔ Vendored ') + pc.bold('public/vendor/exhuma/kinetic.js') + pc.dim(' for offline/firewall use'));
 	}

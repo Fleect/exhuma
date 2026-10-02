@@ -3,7 +3,7 @@ import { BorderBeam, calculateBeamDelays, resolveEffectiveBeamCount } from '../.
 import { borderBeamComponent } from '../../packages/registry/src/components/border-beam';
 
 describe('Exhuma Kinetic Methodology — Border Beam (Big-Ω)', () => {
-	it('exports BorderBeam component from @exhuma/cards', () => {
+	it('exports BorderBeam component from @fleect/exhuma-cards', () => {
 		expect(BorderBeam).toBeDefined();
 		expect(typeof BorderBeam).toBe('function');
 	});

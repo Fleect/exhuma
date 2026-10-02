@@ -1,1 +1,1 @@
-export * from '@exhuma/layouts';
+export * from '@fleect/exhuma-layouts';

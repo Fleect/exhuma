@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ComparisonSlider } from '@exhuma/cards';
+import { ComparisonSlider } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function ComparisonSliderPreview(props: ComponentPreviewProps) {

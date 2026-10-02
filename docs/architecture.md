@@ -27,11 +27,11 @@ WordPress Gutenberg, Universal Web Components, React Native / Expo, and Flutter 
 ## Monorepo Topology
 
 - `apps/showcase`: Next.js 15 App Router documentation hub, ComponentViewer, Studio Workbench, and JSON Registry API.
-- `packages/core`: Headless mathematical engines, shared utilities, and pre-bundled core primitives (`@exhuma/core`).
-- `packages/cards`: Pre-bundled standalone React cards package (`@exhuma/cards`).
-- `packages/layouts`: Pre-bundled standalone React layouts package (`@exhuma/layouts`).
-- `packages/router`: Pre-bundled layout frameworks and route guards (`@exhuma/router`).
-- `packages/registry`: Canonical multi-flavor registry compiler and schema specifications (`@exhuma/registry`).
+- `packages/core`: Headless mathematical engines, shared utilities, and pre-bundled core primitives (`@fleect/exhuma`).
+- `packages/cards`: Pre-bundled standalone React cards package (`@fleect/exhuma-cards`).
+- `packages/layouts`: Pre-bundled standalone React layouts package (`@fleect/exhuma-layouts`).
+- `packages/router`: Pre-bundled layout frameworks and route guards (`@fleect/exhuma-router`).
+- `packages/registry`: Canonical multi-flavor registry compiler and schema specifications (`@fleect/exhuma-registry`).
 - `packages/cli`: Universal Component CLI for project bootstrapping and component injection (`exhuma`).
 - `packages/create-exhuma`: Interactive project starter wizard (`create-exhuma`).
 - `tooling/`: Monorepo architecture validation, configuration checks, and registry compiler.

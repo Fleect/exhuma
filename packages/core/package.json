@@ -1,5 +1,5 @@
 {
-	"name": "@exhuma/core",
+	"name": "@fleect/exhuma",
 	"version": "0.2.0-beta.1",
 	"description": "Exhuma Core — Unified developer suite for tactile cards, responsive layout engines, and routing architecture",
 	"author": {
@@ -106,9 +106,9 @@
 		"type:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@exhuma/cards": "workspace:*",
-		"@exhuma/layouts": "workspace:*",
-		"@exhuma/router": "workspace:*"
+		"@fleect/exhuma-cards": "workspace:*",
+		"@fleect/exhuma-layouts": "workspace:*",
+		"@fleect/exhuma-router": "workspace:*"
 	},
 	"peerDependencies": {
 		"react": ">=18.0.0",

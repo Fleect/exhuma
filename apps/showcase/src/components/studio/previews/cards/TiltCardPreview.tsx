@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TiltCard } from '@exhuma/cards';
+import { TiltCard } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function TiltCardPreview(props: ComponentPreviewProps) {

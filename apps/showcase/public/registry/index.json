@@ -1,7 +1,7 @@
 {
 	"$schema": "https://exhuma-ui.com/schema/registry-index.json",
 	"version": "1.0.0",
-	"generatedAt": "2026-10-02T13:05:23.614Z",
+	"generatedAt": "2026-10-02T17:06:18.560Z",
 	"categories": [
 		{ "id": "cards", "label": "Tactile Cards & Interactions", "count": 8 },
 		{ "id": "layouts", "label": "Responsive Layout Engines", "count": 6 },
@@ -51,8 +51,8 @@
 				{ "name": "reverseScale", "label": "Reverse Scale", "type": "boolean", "defaultValue": true, "description": "Enable or disable reverse scaling exit cascade mechanics." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": [],
 				"svelte": [],
 				"solid": [],
@@ -111,8 +111,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": [],
 				"svelte": [],
 				"solid": [],
@@ -163,8 +163,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -203,8 +203,8 @@
 				{ "name": "gap", "label": "Gap (px)", "type": "number", "defaultValue": 16, "min": 4, "max": 64, "step": 4, "description": "Spacing between masonry columns and items." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -264,8 +264,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -325,8 +325,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -378,8 +378,8 @@
 				{ "name": "disabled", "label": "Disable Tracking", "type": "boolean", "defaultValue": false, "description": "Programmatically disable pointer tracking and spotlight illumination." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -438,8 +438,8 @@
 				{ "name": "liquidStretch", "label": "Liquid Stretch", "type": "boolean", "defaultValue": false, "description": "Volume-preserving liquid pill stretch during transitions." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -490,8 +490,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -541,8 +541,8 @@
 				{ "name": "directionHysteresis", "label": "Direction Hysteresis", "type": "boolean", "defaultValue": false, "description": "Smooth direction reversal on scroll direction change." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -569,8 +569,8 @@
 				{ "name": "rowHeight", "label": "Row Height (px)", "type": "number", "defaultValue": 180, "min": 100, "max": 320, "step": 10, "description": "Base auto-rows track height for vertical spans." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -626,8 +626,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -676,8 +676,8 @@
 				{ "name": "borderRadius", "label": "Corner Radius (px)", "type": "number", "defaultValue": 16, "min": 0, "max": 48, "step": 2, "description": "Corner radius of the perimeter path matching card borders." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -731,8 +731,8 @@
 				{ "name": "hapticFeedback", "label": "Micro-Haptics", "type": "boolean", "defaultValue": false, "description": "Enables subtle tactile micro-haptic tick on apex crossing when supported by the device." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core", "clsx", "@tabler/icons-react"],
-				"nextjs": ["@exhuma/core", "clsx", "@tabler/icons-react"],
+				"react": ["@fleect/exhuma", "clsx", "@tabler/icons-react"],
+				"nextjs": ["@fleect/exhuma", "clsx", "@tabler/icons-react"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -762,8 +762,8 @@
 				{ "name": "suffix", "label": "Suffix", "type": "string", "defaultValue": "", "description": "Trailing unit identifier (e.g. \"%\", \"ms\", \"k\", \"M\")." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -803,8 +803,8 @@
 				{ "name": "shockwave", "label": "Shockwave", "type": "boolean", "defaultValue": false, "description": "Radial expanding ring on click." }
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -882,8 +882,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -920,8 +920,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -944,8 +944,8 @@
 			"version": "1.0.0",
 			"props": [{ "name": "duration", "label": "Morph Duration (ms)", "type": "number", "defaultValue": 360, "min": 150, "max": 600, "step": 20, "description": "FLIP transition timing in milliseconds." }],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],
@@ -1023,8 +1023,8 @@
 				}
 			],
 			"dependencies": {
-				"react": ["@exhuma/core"],
-				"nextjs": ["@exhuma/core"],
+				"react": ["@fleect/exhuma"],
+				"nextjs": ["@fleect/exhuma"],
 				"vue": ["clsx"],
 				"svelte": ["clsx"],
 				"solid": ["clsx"],

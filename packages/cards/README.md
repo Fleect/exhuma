@@ -1,4 +1,4 @@
-# @exhuma/cards
+# @fleect/exhuma-cards
 
 Tactile, physics-driven interactive cards and horizontal rail scrollers for modern React applications. Part of the **Exhuma** developer suite.
 
@@ -7,9 +7,9 @@ Tactile, physics-driven interactive cards and horizontal rail scrollers for mode
 ## Installation
 
 ```bash
-pnpm add @exhuma/cards
+pnpm add @fleect/exhuma-cards
 # or
-npm install @exhuma/cards
+npm install @fleect/exhuma-cards
 ```
 
 ---
@@ -27,7 +27,7 @@ npm install @exhuma/cards
 ### Horizontal Rail Scroller
 
 ```tsx
-import { HorizontalScroller } from '@exhuma/cards';
+import { HorizontalScroller } from '@fleect/exhuma-cards';
 
 export default function Showcase() {
   return (
@@ -43,7 +43,7 @@ export default function Showcase() {
 ### Stacking Cards
 
 ```tsx
-import { StackingCards } from '@exhuma/cards';
+import { StackingCards } from '@fleect/exhuma-cards';
 
 export default function Features() {
   return (
@@ -55,3 +55,10 @@ export default function Features() {
   );
 }
 ```
+
+---
+
+## License
+
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
+

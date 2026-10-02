@@ -14,7 +14,7 @@ export function getMorphingTabsOuterFiles(flavor: EcosystemFlavor, props: Record
 					{
 						filename: 'MorphingTabs.tsx',
 						language: 'tsx',
-						description: 'Morphing Tabs — Clean Shadcn-style compound component powered by @exhuma/core kinetic primitives.',
+						description: 'Morphing Tabs — Clean Shadcn-style compound component powered by @fleect/exhuma kinetic primitives.',
 						code: `${isNext ? "'use client';\n\n" : ''}import * as React from 'react';
 import {
   TabsRoot as CoreTabsRoot,
@@ -27,7 +27,7 @@ import {
   type TabsIndicatorProps as CoreTabsIndicatorProps,
   type TabsTriggerProps as CoreTabsTriggerProps,
   type TabsContentProps as CoreTabsContentProps,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export interface TabsRootProps extends CoreTabsRootProps {
