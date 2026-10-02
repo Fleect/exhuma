@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://exhuma-ui.com/schema/registry-index.json",
+  "title": "Exhuma Registry Index Schema",
+  "description": "Schema definition for Exhuma's central component registry index. A Fleect Artifact.",
+  "type": "object",
+  "required": ["version", "categories", "components"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI reference to this schema"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the registry payload"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of payload generation"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "count"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "count": { "type": "number" }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "slug", "category", "description", "version"],
+        "properties": {
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "version": { "type": "string" },
+          "props": { "type": "array" }
+        }
+      }
+    }
+  }
+}
