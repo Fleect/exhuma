@@ -44,14 +44,7 @@ export function calculateTickerValue(startValue: number, targetValue: number, el
  * @param revolutions Full 10-digit cycles to traverse (default: 3)
  * @param staggerDelta Stagger increment per column in seconds (default: 0.08)
  */
-export function calculateColumnDeceleration(
-	t: number,
-	baseDuration: number,
-	columnIndex: number,
-	targetDigit: number,
-	revolutions: number = 3,
-	staggerDelta: number = 0.08
-): { position: number; isComplete: boolean } {
+export function calculateColumnDeceleration(t: number, baseDuration: number, columnIndex: number, targetDigit: number, revolutions: number = 3, staggerDelta: number = 0.08): { position: number; isComplete: boolean } {
 	const columnDuration = Math.max(0.1, baseDuration + columnIndex * staggerDelta);
 	if (t >= columnDuration) {
 		return { position: 10 * revolutions + targetDigit, isComplete: true };
@@ -77,13 +70,8 @@ export function calculateColumnDeceleration(
  * @param beta Velocity sensitivity multiplier (default: 0.005)
  * @param maxBlur Maximum blur radius in pixels (default: 3.5)
  */
-export function calculateVelocityBlur(
-	velocity: number,
-	beta: number = 0.005,
-	maxBlur: number = 3.5
-): number {
+export function calculateVelocityBlur(velocity: number, beta: number = 0.005, maxBlur: number = 3.5): number {
 	if (!Number.isFinite(velocity) || velocity === 0) return 0;
 	const blur = Math.min(maxBlur, Math.max(0, Math.abs(velocity) * beta));
 	return Number(blur.toFixed(2));
 }
-

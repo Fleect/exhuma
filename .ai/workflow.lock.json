@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "version": "1.2.0",
-  "source": "SapanMozammel/auterix",
-  "sourceDigest": "05010a2c51570f91cb6e996e3f7abd482a9e41a548f3e9df865b6c55794a8c69",
+  "source": "Fleect/auterix",
+  "sourceDigest": "e0d36128fe318d92b3d7bcb71971c7b60b2782bea9044308c102d901d165375b",
   "adapters": [
     "antigravity",
     "augment",
@@ -14,7 +14,7 @@
   "files": {
     ".agents/rules/workflow.md": "21919a5db3456a5a6155f6f6d81c7d3b61fec5f7f58a1eece799106ae3431c91",
     ".ai/adapters.json": "6a54e677b087a19b855d229f7937df5dc917dc6e23cf1edab749a123cf96283b",
-    ".ai/core/LICENSE.md": "554b94deb27fb32e07d9c679d945be949c8c70c0f70bce94e9e93737c3e57665",
+    ".ai/core/LICENSE.md": "a380c739911888a9161270ccaba128c00b08430b5aa1456e753299a92ee91ee3",
     ".ai/core/roles.md": "f658f0c3b001db9db8edc92917f920e65607d53b12ce51720e490372333605f8",
     ".ai/core/start.md": "cb96f6f6d4fd4ea774228d2ffe3040725526361773f6121ccaedbe34fde55f24",
     ".ai/core/workflows/ai-change.md": "4e4b0057e3ba89e593689b4df4cc827f8ea8c28e973ac3448777494238403cbe",
@@ -36,7 +36,7 @@
     ".ai/templates/tool-verification.md": "28e7f9fc02981f7917fcdc198496a889aa6f9bcf4161a020d61a2aa022d8d7cb",
     ".ai/tools/check.mjs": "7328c3db1d41906a7ce0c10611b58fe65301d0f3c0828d87b759f49c478b04f4",
     ".ai/tools/context.mjs": "8fa2cef3fcca5c0d75e54a9190befb40c9183528e130b0a97cc6c57a1f4a93e5",
-    ".ai/tools/workflow.mjs": "9b6bc1e67852877126182d467faab9e683691b8b2836bd941418f043f4f0890d",
+    ".ai/tools/workflow.mjs": "10f57f3d4a0977051ee8ce4f6b5787fb590b6d53d353057d6193238de2238f95",
     ".augment/rules/workflow.md": "c7fbbe26d37068d6b36958b11ed1c9f36ed51f5600e23952ae15fdd20d04859e",
     ".cursor/rules/workflow.mdc": "e081459f9aea1ca392882072c265533ac51a2dd142595e338e0ae22b2f21362a",
     ".github/copilot-instructions.md": "21919a5db3456a5a6155f6f6d81c7d3b61fec5f7f58a1eece799106ae3431c91",

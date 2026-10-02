@@ -22,7 +22,7 @@ export function buildCommand(options: BuildCommandOptions): void {
 
 	// 1. Generate index.json
 	const indexManifest = {
-		$schema: 'https://exhuma.dev/schema/registry-index.json',
+		$schema: 'https://exhuma-ui.com/schema/registry-index.json',
 		version: '1.0.0',
 		generatedAt: new Date().toISOString(),
 		components: CANONICAL_COMPONENTS.map((c) => ({

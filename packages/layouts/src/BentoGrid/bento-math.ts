@@ -39,13 +39,7 @@ export function calculateFlipDisplacement(oldPos: Vector2D, newPos: Vector2D): D
  * @param omega Natural frequency in rad/s (default: 26)
  * @param zeta Damping ratio (default: 0.92)
  */
-export function solveBentoSpringPosition(
-	t: number,
-	newPos: Vector2D,
-	delta: Delta2D,
-	omega: number = 26,
-	zeta: number = 0.92
-): Vector2D {
+export function solveBentoSpringPosition(t: number, newPos: Vector2D, delta: Delta2D, omega: number = 26, zeta: number = 0.92): Vector2D {
 	if (t <= 0) {
 		return { x: newPos.x + delta.dx, y: newPos.y + delta.dy };
 	}
@@ -72,12 +66,7 @@ export function solveBentoSpringPosition(
  * @param maxForce Maximum repulsion force displacement in pixels (default: 32)
  * @param epsilon Softening length scale to avoid singularity (default: 120)
  */
-export function calculateRepulsionVector(
-	dragPos: Vector2D,
-	itemPos: Vector2D,
-	maxForce: number = 32,
-	epsilon: number = 120
-): { fx: number; fy: number } {
+export function calculateRepulsionVector(dragPos: Vector2D, itemPos: Vector2D, maxForce: number = 32, epsilon: number = 120): { fx: number; fy: number } {
 	const rx = itemPos.x - dragPos.x;
 	const ry = itemPos.y - dragPos.y;
 	const distSq = rx * rx + ry * ry;

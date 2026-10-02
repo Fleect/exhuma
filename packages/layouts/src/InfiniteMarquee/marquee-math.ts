@@ -78,11 +78,7 @@ export function parseGapToPx(gap: string | number | undefined): number {
  * @param scrollVelocity Current window or container scroll velocity (px/s)
  * @param kappa Scroll-velocity coupling coefficient (default: 0.12)
  */
-export function calculateCoupledScrollVelocity(
-	baseSpeed: number,
-	scrollVelocity: number,
-	kappa: number = 0.12
-): number {
+export function calculateCoupledScrollVelocity(baseSpeed: number, scrollVelocity: number, kappa: number = 0.12): number {
 	if (!Number.isFinite(baseSpeed)) return 0;
 	if (!Number.isFinite(scrollVelocity) || scrollVelocity === 0) return Math.abs(baseSpeed);
 	return Math.abs(baseSpeed) + kappa * Math.abs(scrollVelocity);
@@ -95,14 +91,9 @@ export function calculateCoupledScrollVelocity(
  * @param scrollVelocity Instantaneous vertical or horizontal scroll velocity
  * @param threshold Velocity threshold needed to trigger reversal (default: 50 px/s)
  */
-export function evaluateMarqueeDirectionHysteresis(
-	currentDirection: 'left' | 'right',
-	scrollVelocity: number,
-	threshold: number = 50
-): 'left' | 'right' {
+export function evaluateMarqueeDirectionHysteresis(currentDirection: 'left' | 'right', scrollVelocity: number, threshold: number = 50): 'left' | 'right' {
 	if (!Number.isFinite(scrollVelocity)) return currentDirection;
 	if (scrollVelocity > threshold) return 'right';
 	if (scrollVelocity < -threshold) return 'left';
 	return currentDirection;
 }
-

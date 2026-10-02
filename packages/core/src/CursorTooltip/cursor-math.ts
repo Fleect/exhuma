@@ -102,15 +102,7 @@ export function clampTooltipToViewport(targetX: number, targetY: number, tooltip
  * Smooth boundary viewport sigmoid clamping.
  * Soft organic sigmoid deceleration near edges instead of rigid wall stops.
  */
-export function calculateSigmoidClamp(
-	targetX: number,
-	targetY: number,
-	tooltipWidth: number,
-	tooltipHeight: number,
-	viewportWidth: number,
-	viewportHeight: number,
-	padding: number = 12
-): CursorPosition {
+export function calculateSigmoidClamp(targetX: number, targetY: number, tooltipWidth: number, tooltipHeight: number, viewportWidth: number, viewportHeight: number, padding: number = 12): CursorPosition {
 	const safePadding = Math.max(0, padding);
 	const minX = safePadding;
 	const maxX = Math.max(minX, viewportWidth - tooltipWidth - safePadding);
@@ -153,14 +145,7 @@ export function dampCursorCoordinate(current: number, target: number, lambda: nu
 /**
  * Calculates magnetic snapping coordinates when tooltip is near an anchor point.
  */
-export function calculateMagneticSnap(
-	cursorX: number,
-	cursorY: number,
-	targetX: number,
-	targetY: number,
-	captureRadius: number = 28,
-	strength: number = 0.5
-): CursorPosition {
+export function calculateMagneticSnap(cursorX: number, cursorY: number, targetX: number, targetY: number, captureRadius: number = 28, strength: number = 0.5): CursorPosition {
 	const dx = targetX - cursorX;
 	const dy = targetY - cursorY;
 	const distance = Math.hypot(dx, dy);

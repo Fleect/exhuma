@@ -4,7 +4,7 @@ import { IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight } from '@t
 import { ExhumaLogo } from '@/components/brand/ExhumaLogo';
 import { ECOSYSTEM_LABELS, EcosystemFlavor } from '@/registry';
 
-const GITHUB_URL = 'https://github.com/SapanMozammel/exhuma';
+const GITHUB_URL = 'https://github.com/Fleect/exhuma';
 export const APP_VERSION = '0.1.0';
 
 const LINK_GROUPS = [
@@ -110,7 +110,7 @@ export function GlobalFooter() {
 							<Link href='https://fleect.com/' target='_blank' rel='noreferrer' className='text-foreground/80 hover:text-foreground underline-offset-3 transition-colors hover:underline'>
 								Fleect
 							</Link>{' '}
-							original
+							Artifact.
 						</span>
 					</div>
 

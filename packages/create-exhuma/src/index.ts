@@ -90,7 +90,7 @@ async function run(): Promise<void> {
 
 	// Generate exhuma.json
 	const config = {
-		$schema: 'https://exhuma.dev/schema.json',
+		$schema: 'https://exhuma-ui.com/schema.json',
 		flavor: ecosystem,
 		path: DEFAULT_PATHS[ecosystem] || 'components/ui',
 		typescript: true,
@@ -99,7 +99,7 @@ async function run(): Promise<void> {
 	writeFileSync(resolve(targetPath, 'exhuma.json'), `${JSON.stringify(config, null, 2)}\n`);
 
 	// Generate basic README
-	const readme = `# ${projectName}\n\nBuilt with [Exhuma](https://exhuma.dev) — Universal Component Platform.\n\n## Getting Started\n\n\`\`\`bash\nnpx exhuma add stacking-cards\nnpx exhuma add horizontal-scroller\n\`\`\`\n`;
+	const readme = `# ${projectName}\n\nBuilt with [Exhuma](https://exhuma-ui.com) — Universal Component Platform.\n\n## Getting Started\n\n\`\`\`bash\nnpx exhuma add stacking-cards\nnpx exhuma add horizontal-scroller\n\`\`\`\n`;
 	writeFileSync(resolve(targetPath, 'README.md'), readme);
 
 	spinner.succeed(pc.green(`Project created at ${pc.bold(projectName)}`));

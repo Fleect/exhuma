@@ -66,15 +66,7 @@ export interface MultiLayerMagneticOffset {
  * Housing displacement coefficient: 0.25
  * Content displacement coefficient: 0.65
  */
-export function calculateMultiLayerDetachment(
-	pointerX: number,
-	pointerY: number,
-	centerX: number,
-	centerY: number,
-	radius: number,
-	housingStrength = 0.25,
-	contentStrength = 0.65
-): MultiLayerMagneticOffset {
+export function calculateMultiLayerDetachment(pointerX: number, pointerY: number, centerX: number, centerY: number, radius: number, housingStrength = 0.25, contentStrength = 0.65): MultiLayerMagneticOffset {
 	const base = calculateMagneticPull(pointerX, pointerY, centerX, centerY, radius, 1.0, 100);
 	if (!base.isInside) {
 		return {
@@ -102,11 +94,7 @@ export function calculateMultiLayerDetachment(
 /**
  * Calculates radial shockwave radius and opacity on click.
  */
-export function calculateShockwaveProgress(
-	elapsedMs: number,
-	maxRadius = 56,
-	waveDuration = 350
-): { radius: number; opacity: number } {
+export function calculateShockwaveProgress(elapsedMs: number, maxRadius = 56, waveDuration = 350): { radius: number; opacity: number } {
 	if (elapsedMs <= 0) return { radius: 0, opacity: 0.8 };
 	if (elapsedMs >= waveDuration) return { radius: maxRadius, opacity: 0 };
 
@@ -130,26 +118,12 @@ export interface ShockwaveOrigin {
  * Calculates shockwave origin coordinates relative to element bounding box
  * and sets a balanced tactile shockwave radius.
  */
-export function calculateShockwaveOrigin(
-	pointerX: number,
-	pointerY: number,
-	rectLeft: number,
-	rectTop: number,
-	rectWidth?: number,
-	rectHeight?: number,
-	maxRadius = 56,
-	scaleX = 1,
-	scaleY = 1
-): ShockwaveOrigin {
+export function calculateShockwaveOrigin(pointerX: number, pointerY: number, rectLeft: number, rectTop: number, rectWidth?: number, rectHeight?: number, maxRadius = 56, scaleX = 1, scaleY = 1): ShockwaveOrigin {
 	const safeScaleX = Number.isFinite(scaleX) && scaleX > 0 ? scaleX : 1;
 	const safeScaleY = Number.isFinite(scaleY) && scaleY > 0 ? scaleY : 1;
 
-	const clickX = Number.isFinite(pointerX)
-		? (pointerX - rectLeft) / safeScaleX
-		: rectWidth ? rectWidth / 2 : 0;
-	const clickY = Number.isFinite(pointerY)
-		? (pointerY - rectTop) / safeScaleY
-		: rectHeight ? rectHeight / 2 : 0;
+	const clickX = Number.isFinite(pointerX) ? (pointerX - rectLeft) / safeScaleX : rectWidth ? rectWidth / 2 : 0;
+	const clickY = Number.isFinite(pointerY) ? (pointerY - rectTop) / safeScaleY : rectHeight ? rectHeight / 2 : 0;
 
 	return {
 		x: Number(clickX.toFixed(2)),
@@ -157,5 +131,3 @@ export function calculateShockwaveOrigin(
 		maxRadius: Number(maxRadius.toFixed(2)),
 	};
 }
-
-

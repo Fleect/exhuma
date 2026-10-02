@@ -35,7 +35,6 @@ export const calculateScrollProgress = (scrolledInto: number, totalScrollable: n
 	return Math.min(Math.max(scrolledInto / totalScrollable, 0), 1);
 };
 
-
 /**
  * HorizontalScroller — Pinned Kinetic Translation Primitive (Brix Agency Style)
  *

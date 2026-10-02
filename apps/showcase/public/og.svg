@@ -1,63 +1,166 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <!-- Deep Obsidian Background -->
+  <defs>
+    <!-- Architectural Coordinate Grid Pattern -->
+    <pattern id="arch-grid" width="48" height="48" patternUnits="userSpaceOnUse" x="-1" y="-1">
+      <path d="M.5 48V.5H48" fill="none" stroke="#27272A" stroke-width="0.75" stroke-opacity="0.45"/>
+      <path d="M24 21v6M21 24h6" fill="none" stroke="#3F3F46" stroke-width="0.75" stroke-opacity="0.35"/>
+    </pattern>
+
+    <!-- Radial Mask for Grid Fadeout -->
+    <radialGradient id="grid-fade" cx="50%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="grid-mask">
+      <rect width="1200" height="630" fill="url(#grid-fade)"/>
+    </mask>
+
+    <!-- Volumetric Overhead Ambient Cone -->
+    <radialGradient id="ambient-light" cx="50%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Metallic Grayscale Linear Gradient for Subheadline -->
+    <linearGradient id="metallic-gradient" x1="0" y1="0" x2="0" y2="100%" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#D4D4D8"/>
+      <stop offset="100%" stop-color="#71717A"/>
+    </linearGradient>
+
+    <!-- Card Glow Gradient -->
+    <linearGradient id="card-border-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3F3F46" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#27272A" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#18181B" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Deep Obsidian Slate Canvas -->
   <rect width="1200" height="630" fill="#09090B"/>
-  
-  <!-- Outer Card Frame with subtle rounded border -->
-  <rect x="36" y="36" width="1128" height="558" rx="20" fill="#0D0D11" stroke="#27272A" stroke-width="2"/>
-  
-  <!-- Top Left: Eyebrow Badge - Exhuma Kinetic Methodology (EKM) -->
-  <g transform="translate(80, 85)">
-    <rect width="310" height="32" rx="8" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
-    <circle cx="16" cy="16" r="4" fill="#10B981"/>
-    <text x="30" y="20.5" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" letter-spacing="0.8">EXHUMA KINETIC METHODOLOGY (EKM)</text>
+
+  <!-- Architectural Background Grid with Coordinates -->
+  <rect width="1200" height="630" fill="url(#arch-grid)" mask="url(#grid-mask)"/>
+
+  <!-- Concentric Kinetic Orbit Rings (Exact HeroBackdrop geometry) -->
+  <ellipse cx="600" cy="-60" rx="600" ry="380" fill="none" stroke="#27272A" stroke-width="1" stroke-opacity="0.4"/>
+  <ellipse cx="600" cy="-30" rx="460" ry="290" fill="none" stroke="#3F3F46" stroke-width="1" stroke-dasharray="6 6" stroke-opacity="0.35"/>
+  <ellipse cx="600" cy="0" rx="310" ry="195" fill="none" stroke="#27272A" stroke-width="1" stroke-opacity="0.5"/>
+
+  <!-- Volumetric Overhead Luminous Glow -->
+  <rect width="1200" height="630" fill="url(#ambient-light)"/>
+
+  <!-- Precision Corner Coordinate Crosshairs -->
+  <g stroke="#52525B" stroke-width="1" opacity="0.6">
+    <path d="M 40 48 V 32 M 32 40 H 48"/>
+    <path d="M 1160 48 V 32 M 1152 40 H 1168"/>
+    <path d="M 40 598 V 582 M 32 590 H 48"/>
+    <path d="M 1160 598 V 582 M 1152 590 H 1168"/>
   </g>
 
-  <!-- Main Hero Brand Section -->
-  <g transform="translate(80, 160)">
+  <!-- ──────────────────────── TOP BAR ──────────────────────── -->
+  <!-- Eyebrow Pill (Matching Homepage Top Announcement) -->
+  <g transform="translate(64, 48)">
+    <rect width="360" height="34" rx="17" fill="#18181B" stroke="#27272A" stroke-width="1" fill-opacity="0.8"/>
     
-    <!-- Exact Approved Brand Logo: Option 2 (Kinetic Velocity Stepped) -->
-    <!-- ViewBox 16 14 70 85 scaled to height 195px (scale = 2.294) -->
-    <g transform="translate(0, 5) scale(2.294)">
+    <!-- Inner NEW badge -->
+    <rect x="3" y="3" width="56" height="28" rx="14" fill="#FFFFFF"/>
+    <text x="31" y="21" fill="#09090B" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="900" letter-spacing="1.2" text-anchor="middle">NEW</text>
+    
+    <!-- Eyebrow Text -->
+    <text x="72" y="21.5" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="11.5" font-weight="600">20 Primitives · 13 Native Ecosystems</text>
+  </g>
+
+  <!-- Top Right Institutional Moniker -->
+  <g transform="translate(1136, 48)">
+    <text x="0" y="23" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12" font-weight="600" letter-spacing="1.5" text-anchor="end">A FLEECT ARTIFACT.</text>
+  </g>
+
+  <!-- ──────────────────────── MAIN HERO SECTION ──────────────────────── -->
+  <!-- Left Side: Iconic Stepped Kinetic Monogram inside Precision Studio Container -->
+  <g transform="translate(64, 128)">
+    <!-- Ambient Logo Glow -->
+    <circle cx="115" cy="115" r="130" fill="#FFFFFF" fill-opacity="0.04" filter="blur(30px)"/>
+
+    <!-- Precision Card Frame for Monogram -->
+    <rect width="230" height="230" rx="28" fill="#121216" stroke="url(#card-border-glow)" stroke-width="1.5"/>
+
+    <!-- Subtle Inner Grid Inside Logo Card -->
+    <path d="M 0 115 H 230 M 115 0 V 230" stroke="#27272A" stroke-width="0.75" stroke-opacity="0.3"/>
+
+    <!-- Exact Kinetic Stepped Monogram (Path bounds 18..84 x 16..97 centered at cx=115, cy=115) -->
+    <g transform="translate(115, 115) scale(1.65) translate(-51, -56.5)">
       <path d="M 24 16 H 84 L 72 28 H 48 A 4 4 0 0 0 44 32 V 41 A 4 4 0 0 0 48 45 H 84 L 72 68 H 48 A 4 4 0 0 0 44 72 V 81 A 4 4 0 0 0 48 85 H 84 L 72 97 H 24 A 6 6 0 0 1 18 91 V 73 A 6 6 0 0 1 24 67 H 32 A 5 5 0 0 0 37 62 V 51 A 5 5 0 0 0 32 46 H 24 A 6 6 0 0 1 18 40 V 22 A 6 6 0 0 1 24 16 Z" fill="#FFFFFF"/>
     </g>
 
-    <!-- Brand Typography Lockup -->
-    <g transform="translate(230, 0)">
-      <!-- Title: Exhuma -->
-      <text x="0" y="90" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="90" font-weight="900" letter-spacing="-2.5">Exhuma</text>
-
-      <!-- Primary Tagline -->
-      <text x="0" y="146" fill="#FAFAFA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" letter-spacing="-0.5">Universal Component Architecture</text>
-
-      <!-- Secondary Subtitle -->
-      <text x="0" y="186" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="400">Autonomous tactile interactions and physics adapted for 13 ecosystems</text>
+    <!-- Sub-label underneath card -->
+    <g transform="translate(0, 246)">
+      <text x="115" y="16" fill="#71717A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="10.5" font-weight="600" letter-spacing="1.2" text-anchor="middle">EKM KINETIC ENGINE</text>
     </g>
   </g>
 
-  <!-- Horizontal Divider Line -->
-  <line x1="80" y1="445" x2="1120" y2="445" stroke="#27272A" stroke-width="1.5"/>
+  <!-- Right Side: Headline Typography & Value Proposition -->
+  <g transform="translate(340, 138)">
+    <!-- Product Brand Name with Beta Badge Pill -->
+    <g>
+      <text x="0" y="38" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Exhuma</text>
+      <rect x="135" y="18" width="46" height="22" rx="4" fill="#18181B" stroke="#3F3F46" stroke-width="1"/>
+      <text x="158" y="33" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="11" font-weight="700" text-anchor="middle">Beta</text>
+    </g>
 
-  <!-- Bottom Telemetry & Metadata Row -->
-  <g transform="translate(80, 485)">
-    <!-- Pill 1: Zero Runtime -->
+    <!-- Homepage Display Headline (Exact copy & metallic gradient) -->
+    <text x="0" y="112" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="56" font-weight="900" letter-spacing="-2.2">Physics you can feel.</text>
+    <text x="0" y="174" fill="url(#metallic-gradient)" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="56" font-weight="900" letter-spacing="-2.2">Code you actually own.</text>
+
+    <!-- Supporting Narrative Subtitle -->
+    <text x="0" y="222" fill="#A1A1AA" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="400" letter-spacing="-0.2">Zero runtime lock-in · 120 FPS compositor execution · Pure source ownership</text>
+  </g>
+
+  <!-- ──────────────────────── BOTTOM TELEMETRY DOCK ──────────────────────── -->
+  <!-- Horizontal Horizon Divider -->
+  <line x1="64" y1="440" x2="1136" y2="440" stroke="#27272A" stroke-width="1"/>
+
+  <!-- Telemetry Badges & Terminal Action -->
+  <g transform="translate(64, 464)">
+    <!-- Pill 1: Zero Runtime Deps -->
     <g transform="translate(0, 0)">
-      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
-      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">⚡ Zero Runtime Deps</text>
+      <rect width="185" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#F43F5E" font-size="13">⚡</text>
+      <text x="38" y="25.5" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12" font-weight="600">0 Runtime Deps</text>
     </g>
 
     <!-- Pill 2: 120Hz Spring Physics -->
-    <g transform="translate(235, 0)">
-      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
-      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">Ω 120Hz Spring Physics</text>
+    <g transform="translate(200, 0)">
+      <rect width="195" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#10B981" font-size="13">Ω</text>
+      <text x="38" y="25.5" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12" font-weight="600">120Hz Compositor</text>
     </g>
 
-    <!-- Pill 3: 13 Ecosystems -->
-    <g transform="translate(470, 0)">
-      <rect width="215" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.5"/>
-      <text x="20" y="26" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="600">❖ 13 Native Targets</text>
+    <!-- Pill 3: 13 Native Targets -->
+    <g transform="translate(410, 0)">
+      <rect width="185" height="42" rx="10" fill="#18181B" stroke="#27272A" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#6366F1" font-size="13">❖</text>
+      <text x="38" y="25.5" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12" font-weight="600">13 Native Stacks</text>
     </g>
 
-    <!-- Right Domain Stamp: exhuma.vercel.app -->
-    <text x="1040" y="28" fill="#D4D4D8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="18" font-weight="700" text-anchor="end" letter-spacing="0.5">exhuma.vercel.app</text>
+    <!-- Terminal Command Snippet Box -->
+    <g transform="translate(610, 0)">
+      <rect width="250" height="42" rx="10" fill="#0F0F13" stroke="#27272A" stroke-width="1.2"/>
+      <text x="16" y="26" fill="#10B981" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" font-weight="700">$</text>
+      <text x="32" y="25.5" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12.5" font-weight="600">npx exhuma add</text>
+      <text x="162" y="25.5" fill="#3B82F6" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="12.5" font-weight="600">tilt-card</text>
+    </g>
+
+    <!-- Production Domain Stamp -->
+    <g transform="translate(1072, 0)">
+      <text x="0" y="27" fill="#FFFFFF" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="20" font-weight="800" letter-spacing="-0.5" text-anchor="end">exhuma-ui.com</text>
+    </g>
+  </g>
+
+  <!-- Bottom Sub-status Hairline -->
+  <g transform="translate(64, 552)">
+    <text x="0" y="16" fill="#52525B" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="11" font-weight="500">React · Next.js · Vue · Svelte · Angular · Solid · Astro · Blade · WordPress · Web Components</text>
   </g>
 </svg>

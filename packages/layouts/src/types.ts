@@ -247,7 +247,7 @@ export interface DiamondGridProps extends React.HTMLAttributes<HTMLDivElement> {
 	layout?: DiamondLayoutVariant;
 	/**
 	 * Visual rendering mode:
-	 * - 'rhombic': Classic signature layout from sapan.dev — upright cards arranged in a symmetrical rhombic column silhouette [1, 2, 3, 4, 3, 2, 1].
+	 * - 'rhombic': Classic signature layout — upright cards arranged in a symmetrical rhombic column silhouette [1, 2, 3, 4, 3, 2, 1].
 	 * - 'isometric': 45-degree diamond-tilted cards (rotate-45) with upright counter-rotated content.
 	 * Default: 'rhombic'
 	 */
@@ -325,5 +325,3 @@ export interface RowMasonryItemProps extends React.HTMLAttributes<HTMLDivElement
 	className?: string;
 	style?: React.CSSProperties;
 }
-
-

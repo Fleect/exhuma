@@ -1,6 +1,6 @@
 # create-exhuma
 
-Interactive project starter wizard for the [Exhuma](https://exhuma.dev) Universal Component Platform.
+Interactive project starter wizard for the [Exhuma](https://exhuma-ui.com) Universal Component Platform.
 
 ```bash
 npm create exhuma@latest

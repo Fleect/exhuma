@@ -17,7 +17,7 @@ const bricolageGrotesque = Bricolage_Grotesque({
 	display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://exhuma.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://exhuma-ui.com';
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 	],
 	authors: [{ name: 'Fleect', url: 'https://fleect.com/' }],
 	creator: 'Fleect',
-	publisher: 'Exhuma',
+	publisher: 'Fleect',
 	robots: {
 		index: true,
 		follow: true,

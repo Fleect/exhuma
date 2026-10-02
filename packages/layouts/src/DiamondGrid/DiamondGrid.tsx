@@ -52,7 +52,7 @@ export type DiamondGridComponent = React.ForwardRefExoticComponent<DiamondGridPr
 
 /**
  * DiamondGrid — Exhuma Kinetic Methodology (EKM)
- * Elevated from sapan.dev
+ * Rhombic symmetrical topology kernel.
  *
  * Symmetrical rhombic column layout [1, 2, 3, 4, 3, 2, 1] with container-query
  * responsive mobile collapse.

@@ -18,3 +18,6 @@ Examples of behavior that contributes to a positive environment for our communit
 
 Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate,
 threatening, offensive, or harmful.
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at [contact@fleect.com](mailto:contact@fleect.com). All complaints will be reviewed and investigated promptly and
+fairly.

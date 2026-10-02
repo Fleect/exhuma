@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { ALL_COMPONENTS } from '@exhuma/registry';
 import { BLOG_POSTS } from '@/lib/blog-data';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://exhuma.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://exhuma-ui.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	const now = new Date();

@@ -59,7 +59,7 @@ export async function initCommand(options: { yes?: boolean; flavor?: string }): 
 
 	const spinner = ora('Writing exhuma.json configuration...').start();
 	writeConfig({
-		$schema: 'https://exhuma.dev/schema.json',
+		$schema: 'https://exhuma-ui.com/schema.json',
 		flavor,
 		path: componentPath,
 		typescript: true,

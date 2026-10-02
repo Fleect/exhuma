@@ -121,7 +121,7 @@ module.exports = (async () => {
 				'object-shorthand': 'error',
 				'prefer-template': 'error',
 
-				// Filename casing (sapan H2-B convention): kebab-case for utility/helper files,
+				// Filename casing (Fleect H2-B convention): kebab-case for utility/helper files,
 				// but also allow PascalCase (component files matching their component name,
 				// e.g. StackingCards/StackingCards.tsx) and camelCase (hook files, e.g. useMacy.ts)
 				// — both are standard React conventions already used consistently across this codebase.

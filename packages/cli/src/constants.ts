@@ -25,4 +25,4 @@ export const CANONICAL_COMPONENTS = ALL_COMPONENTS.map((comp) => ({
 	description: comp.description,
 }));
 
-export const REGISTRY_BASE_URL = 'https://exhuma.dev/api/registry';
+export const REGISTRY_BASE_URL = 'https://exhuma-ui.com/api/registry';

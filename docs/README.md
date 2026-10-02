@@ -22,13 +22,13 @@ Welcome to the central documentation for **Exhuma**, a modern Universal Componen
 
 For the full interactive documentation experience with live playgrounds and code generators, visit the Exhuma Showcase application:
 
-- **[Installation & Quickstart](https://exhuma.dev/docs/installation)** — Step-by-step setup guides for all package managers.
-- **[CLI Reference Manual](https://exhuma.dev/docs/cli)** — Complete documentation for `exhuma init`, `add`, `list`, and `build`.
-- **[Component Catalog](https://exhuma.dev/docs/components)** — Live interactive catalog of all 20 kinetic primitives across 13 frontend ecosystems.
-- **[Supported Ecosystems](https://exhuma.dev/docs/ecosystems)** — In-depth implementation guides for all 13 frontend ecosystems.
-- **[Engineering Methodology](https://exhuma.dev/docs/methodology)** — Compositor pipeline, zero layout thrashing, and mathematical modeling.
-- **[Lifecycle & Safety](https://exhuma.dev/docs/lifecycle)** — Deterministic teardowns, zero-leak event handling, and memory guarantees.
-- **[Theming & Tokens](https://exhuma.dev/docs/theming)** — CSS custom properties, Tailwind CSS v4 `@theme`, and zero-flash dark mode.
+- **[Installation & Quickstart](https://exhuma-ui.com/docs/installation)** — Step-by-step setup guides for all package managers.
+- **[CLI Reference Manual](https://exhuma-ui.com/docs/cli)** — Complete documentation for `exhuma init`, `add`, `list`, and `build`.
+- **[Component Catalog](https://exhuma-ui.com/docs/components)** — Live interactive catalog of all 20 kinetic primitives across 13 frontend ecosystems.
+- **[Supported Ecosystems](https://exhuma-ui.com/docs/ecosystems)** — In-depth implementation guides for all 13 frontend ecosystems.
+- **[Engineering Methodology](https://exhuma-ui.com/docs/methodology)** — Compositor pipeline, zero layout thrashing, and mathematical modeling.
+- **[Lifecycle & Safety](https://exhuma-ui.com/docs/lifecycle)** — Deterministic teardowns, zero-leak event handling, and memory guarantees.
+- **[Theming & Tokens](https://exhuma-ui.com/docs/theming)** — CSS custom properties, Tailwind CSS v4 `@theme`, and zero-flash dark mode.
 
 ---
 

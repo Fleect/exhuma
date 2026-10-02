@@ -246,8 +246,9 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 		}
 
 		// PLAY: animate to final centered state
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
+		let raf2: number | undefined;
+		const raf1 = requestAnimationFrame(() => {
+			raf2 = requestAnimationFrame(() => {
 				modal.style.transition = `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${Math.round(duration * 0.8)}ms ease`;
 				modal.style.transform = 'translate3d(0, 0, 0) scale(1, 1)';
 				modal.style.opacity = '1';
@@ -259,6 +260,11 @@ export const ExpandableContent = memo<React.HTMLAttributes<HTMLDivElement>>(({ c
 				}
 			});
 		});
+
+		return () => {
+			cancelAnimationFrame(raf1);
+			if (raf2 !== undefined) cancelAnimationFrame(raf2);
+		};
 	}, [ctx.isExpanded, isClosing, duration, ctx.firstRectRef, ctx.triggerRef]);
 
 	// Reverse FLIP animation on close

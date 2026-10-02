@@ -324,12 +324,7 @@ export const SpotlightGroup: React.FC<SpotlightGroupProps> = ({ children, classN
 
 	return (
 		<SpotlightGroupContext.Provider value={{ subscribe }}>
-			<div
-				onPointerMove={handlePointerMove}
-				onPointerLeave={handlePointerLeave}
-				className={`exhuma-spotlight-group relative ${className}`}
-				{...props}
-			>
+			<div onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave} className={`exhuma-spotlight-group relative ${className}`} {...props}>
 				{children}
 			</div>
 		</SpotlightGroupContext.Provider>

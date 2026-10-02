@@ -6,8 +6,8 @@
 [![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15_App_Router-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![Tests](https://img.shields.io/badge/Tests-636%20passing-brightgreen?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
-[![Ecosystems](https://img.shields.io/badge/Ecosystems-13%20Supported-purple?style=flat-square)](https://exhuma.dev/docs/ecosystems)
-[![Primitives](https://img.shields.io/badge/Primitives-19%20Production-orange?style=flat-square)](https://exhuma.dev/docs/components)
+[![Ecosystems](https://img.shields.io/badge/Ecosystems-13%20Supported-purple?style=flat-square)](https://exhuma-ui.com/docs/ecosystems)
+[![Primitives](https://img.shields.io/badge/Primitives-20%20Production-orange?style=flat-square)](https://exhuma-ui.com/docs/components)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 Exhuma is an open-source, universal UI component platform delivering tactile, physics-based interactions and responsive layout engines. Instead of locking you into a single framework or heavyweight runtime, Exhuma
@@ -163,7 +163,7 @@ This repository is governed by strict automated quality gates powered by **Turbo
 
 ```bash
 # Clone the repository
-git clone https://github.com/SapanMozammel/exhuma.git
+git clone https://github.com/Fleect/exhuma.git
 cd exhuma
 
 # Install all workspace dependencies
@@ -193,10 +193,10 @@ pnpm dev
 - [Architecture & Universal Component Model](docs/architecture.md) — Technical deep-dive into UCM design.
 - [Engineering Principles & Performance](docs/engineering.md) — Compositor rules and mathematical guarantees.
 - [Future Components Roadmap](docs/future-components.md) — Post-beta component roadmap.
-- [Interactive Showcase & Studio](https://exhuma.dev) — Live interactive documentation.
+- [Interactive Showcase & Studio](https://exhuma-ui.com) — Live interactive documentation.
 
 ---
 
 ## 📄 License
 
-MIT © [Sapan Mozammel](https://github.com/SapanMozammel)
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.

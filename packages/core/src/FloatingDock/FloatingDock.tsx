@@ -383,7 +383,7 @@ export const DockItem: React.FC<{
 			role={href ? undefined : 'button'}
 			aria-label={title}
 			aria-describedby={showTooltip ? tooltipId : undefined}
-			className={`exhuma-dock-item focus-visible:ring-primary/50 relative flex shrink-0 cursor-pointer items-center justify-center rounded-2xl outline-none focus-visible:ring-2 will-change-[width,height] ${className}`}
+			className={`exhuma-dock-item focus-visible:ring-primary/50 relative flex shrink-0 cursor-pointer items-center justify-center rounded-2xl will-change-[width,height] outline-none focus-visible:ring-2 ${className}`}
 			style={{
 				width: `${baseSize}px`,
 				height: `${baseSize}px`,

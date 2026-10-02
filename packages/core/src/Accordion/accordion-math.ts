@@ -22,12 +22,7 @@
  * @param omega Natural frequency in rad/s (default: 28)
  * @param zeta Damping ratio (default: 1.0)
  */
-export function solveAccordionSpring(
-	t: number,
-	targetHeight: number,
-	omega: number = 28,
-	zeta: number = 1.0
-): number {
+export function solveAccordionSpring(t: number, targetHeight: number, omega: number = 28, zeta: number = 1.0): number {
 	if (t <= 0 || targetHeight <= 0) return 0;
 	if (!Number.isFinite(t) || !Number.isFinite(targetHeight)) return 0;
 

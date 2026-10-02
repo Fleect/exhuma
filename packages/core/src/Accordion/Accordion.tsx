@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useCallback, useId, useRef,
 
 /**
  * Exhuma Kinetic Methodology (EKM) — Accordion
- * Elevated from sapan.dev with full WAI-ARIA compliance & Big-Omega guarantees.
+ * Engineered with full WAI-ARIA compliance & Big-Omega guarantees.
  *
  * Big-Omega (Ω) Guarantees:
  * - Ω(1) / O(1) Instant, zero-layout-thrashing expansion via modern CSS Grid (0fr ➔ 1fr).
@@ -309,7 +309,7 @@ export interface AccordionIconProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Signature Morphing Plus/Minus icon from sapan.dev.
+ * Signature Morphing Plus/Minus icon with Exhuma Kinetic Methodology.
  * Constructed with dual kinetic counter-rotating bars with zero SVG/icon dependencies.
  */
 export const AccordionIcon: React.FC<AccordionIconProps> = ({ className = '', ...props }) => {
