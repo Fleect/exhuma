@@ -135,14 +135,7 @@ export interface SwipeDecision4Way {
 /**
  * Evaluates 4-way gesture swipe decision (Left/Right/Up/Down) based on orthogonal energy dominance.
  */
-export function evaluateMultiAxisSwipeDecision(
-	dx: number,
-	dy: number,
-	vx: number,
-	vy: number,
-	thresholdDistance: number = 120,
-	thresholdVelocity: number = 550
-): SwipeDecision4Way {
+export function evaluateMultiAxisSwipeDecision(dx: number, dy: number, vx: number, vy: number, thresholdDistance: number = 120, thresholdVelocity: number = 550): SwipeDecision4Way {
 	const isHorizontal = Math.abs(dx) >= Math.abs(dy);
 
 	if (isHorizontal) {

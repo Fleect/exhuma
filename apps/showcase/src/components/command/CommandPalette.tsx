@@ -305,10 +305,10 @@ export function CommandPalette() {
 			{
 				id: 'action-github',
 				title: 'Open GitHub Repository',
-				subtitle: 'SapanMozammel/exhuma',
+				subtitle: 'Fleect/exhuma',
 				category: 'actions',
 				icon: BrandGithub,
-				action: () => window.open('https://github.com/SapanMozammel/exhuma', '_blank', 'noopener,noreferrer'),
+				action: () => window.open('https://github.com/Fleect/exhuma', '_blank', 'noopener,noreferrer'),
 				description: 'Inspect source code, star the project, report issues, or contribute.',
 				badges: ['GitHub', 'Source', 'Open Source'],
 			}

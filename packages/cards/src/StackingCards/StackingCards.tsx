@@ -37,7 +37,6 @@ export const generateDefaultScaleValues = (count: number, minScale = 0.9): numbe
 	return values;
 };
 
-
 /**
  * Pure Mathematical Kernel for Tiered Reverse Cascade Scaling:
  *

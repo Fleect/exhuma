@@ -122,14 +122,7 @@ export function calculateConcentricRipple(
  * @param maxLift Maximum elevation in pixels (default: 18)
  * @param radius Influence radius in pixels (default: 90)
  */
-export function calculateIsometricLift(
-	cursorX: number,
-	cursorY: number,
-	tileCenterX: number,
-	tileCenterY: number,
-	maxLift: number = 18,
-	radius: number = 90
-): number {
+export function calculateIsometricLift(cursorX: number, cursorY: number, tileCenterX: number, tileCenterY: number, maxLift: number = 18, radius: number = 90): number {
 	if (radius <= 0 || maxLift <= 0) return 0;
 	const dx = cursorX - tileCenterX;
 	const dy = cursorY - tileCenterY;
@@ -138,4 +131,3 @@ export function calculateIsometricLift(
 	const lift = maxLift / (1 + distSq / (radius * radius));
 	return Number(lift.toFixed(2));
 }
-

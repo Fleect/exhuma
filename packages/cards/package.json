@@ -1,7 +1,21 @@
 {
 	"name": "@exhuma/cards",
-	"version": "0.1.0",
+	"version": "0.2.0-beta.1",
 	"description": "Tactile, physics-driven interactive cards and horizontal rail scrollers for React",
+	"author": {
+		"name": "Fleect",
+		"url": "https://fleect.com",
+		"email": "contact@fleect.com"
+	},
+	"homepage": "https://exhuma-ui.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Fleect/exhuma.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Fleect/exhuma/issues",
+		"email": "support@fleect.com"
+	},
 	"license": "MIT",
 	"keywords": [
 		"react",

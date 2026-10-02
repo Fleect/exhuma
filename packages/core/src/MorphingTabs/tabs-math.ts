@@ -20,11 +20,7 @@ export interface LiquidStretch {
  * @param maxVelocity Normalizing velocity ceiling (default: 800 px/s)
  * @param stretchFactor Maximum stretch intensity (default: 0.35)
  */
-export function calculateLiquidPillStretch(
-	velocity: number,
-	maxVelocity: number = 800,
-	stretchFactor: number = 0.35
-): LiquidStretch {
+export function calculateLiquidPillStretch(velocity: number, maxVelocity: number = 800, stretchFactor: number = 0.35): LiquidStretch {
 	if (maxVelocity <= 0 || !Number.isFinite(velocity)) {
 		return { scaleX: 1, scaleY: 1 };
 	}

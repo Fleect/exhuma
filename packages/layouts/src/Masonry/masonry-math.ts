@@ -16,12 +16,7 @@
  * @param baseDelayMs Initial base delay in milliseconds (default: 0)
  * @param columnDeltaMs Delay increment per column phase in milliseconds (default: 35)
  */
-export function calculateStaggerDelay(
-	index: number,
-	columnCount: number,
-	baseDelayMs: number = 0,
-	columnDeltaMs: number = 35
-): number {
+export function calculateStaggerDelay(index: number, columnCount: number, baseDelayMs: number = 0, columnDeltaMs: number = 35): number {
 	if (index < 0 || columnCount <= 0) return Math.max(0, baseDelayMs);
 	const columnPhase = index % columnCount;
 	return Math.max(0, baseDelayMs) + columnPhase * columnDeltaMs;

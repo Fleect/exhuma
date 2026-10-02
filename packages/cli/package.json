@@ -1,7 +1,21 @@
 {
 	"name": "exhuma",
-	"version": "0.1.1",
+	"version": "0.2.0-beta.1",
 	"description": "Universal Component CLI — Add tactile, headless components to any project across 13 ecosystems",
+	"author": {
+		"name": "Fleect",
+		"url": "https://fleect.com",
+		"email": "contact@fleect.com"
+	},
+	"homepage": "https://exhuma-ui.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Fleect/exhuma.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Fleect/exhuma/issues",
+		"email": "support@fleect.com"
+	},
 	"type": "module",
 	"bin": {
 		"exhuma": "dist/index.js"

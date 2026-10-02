@@ -17,7 +17,21 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> & {
 	Root: typeof MarqueeRoot;
 	Track: typeof MarqueeTrack;
 	Item: typeof MarqueeItem;
-} = ({ children, speed = 40, direction = 'left', pauseOnHover = true, gap = '1.5rem', showFadeEdges = true, fadeWidth = 48, fadeEdgeColor = '#ffffff', fadeEdgeColorDark = '#09090b', scrollCoupling = false, directionHysteresis = false, className = '', style }) => {
+} = ({
+	children,
+	speed = 40,
+	direction = 'left',
+	pauseOnHover = true,
+	gap = '1.5rem',
+	showFadeEdges = true,
+	fadeWidth = 48,
+	fadeEdgeColor = '#ffffff',
+	fadeEdgeColorDark = '#09090b',
+	scrollCoupling = false,
+	directionHysteresis = false,
+	className = '',
+	style,
+}) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const trackRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);

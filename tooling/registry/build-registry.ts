@@ -24,7 +24,7 @@ export async function buildRegistry(rootDir: string = process.cwd()): Promise<vo
 
 	// 1. Index Manifest
 	const indexManifest = {
-		$schema: 'https://exhuma.dev/schema/registry-index.json',
+		$schema: 'https://exhuma-ui.com/schema/registry-index.json',
 		version: '1.0.0',
 		generatedAt: new Date().toISOString(),
 		categories: CATEGORIES,

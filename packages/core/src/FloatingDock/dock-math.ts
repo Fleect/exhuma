@@ -65,11 +65,7 @@ export function dampDockScale(current: number, target: number, lambda: number = 
 /**
  * Calculates pointer distance to item center along the active orientation axis.
  */
-export function calculateDockDistance(
-	pointerCoord: number,
-	itemStart: number,
-	itemDimension: number
-): number {
+export function calculateDockDistance(pointerCoord: number, itemStart: number, itemDimension: number): number {
 	const itemCenter = itemStart + itemDimension / 2;
 	return Math.abs(pointerCoord - itemCenter);
 }
@@ -112,13 +108,7 @@ export function createDockSpringState(): DockSpringState {
  * @param omegaN Natural frequency in rad/s (default 32)
  * @returns The new interpolated scale value (also written to state.scale)
  */
-export function springDampedScaleStep(
-	state: DockSpringState,
-	targetScale: number,
-	dt: number,
-	zeta: number = 1.05,
-	omegaN: number = 32
-): number {
+export function springDampedScaleStep(state: DockSpringState, targetScale: number, dt: number, zeta: number = 1.05, omegaN: number = 32): number {
 	const clampedDt = Math.min(dt, 0.05);
 	const displacement = state.scale - targetScale;
 	const springForce = -omegaN * omegaN * displacement;

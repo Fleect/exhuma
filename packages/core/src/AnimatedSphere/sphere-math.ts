@@ -1,6 +1,6 @@
 /**
  * 3D Spherical Trigonometry & Euler Rotation Kernel — Exhuma Kinetic Methodology (EKM)
- * Elevated from sapan.dev
+ * Closed-form 3D projection kernel.
  *
  * Big-Omega (Ω) Guarantees:
  * - Deterministic O(N) 3D coordinate projection

@@ -1,7 +1,21 @@
 {
 	"name": "@exhuma/core",
-	"version": "0.1.0",
+	"version": "0.2.0-beta.1",
 	"description": "Exhuma Core — Unified developer suite for tactile cards, responsive layout engines, and routing architecture",
+	"author": {
+		"name": "Fleect",
+		"url": "https://fleect.com",
+		"email": "contact@fleect.com"
+	},
+	"homepage": "https://exhuma-ui.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Fleect/exhuma.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Fleect/exhuma/issues",
+		"email": "support@fleect.com"
+	},
 	"license": "MIT",
 	"keywords": [
 		"react",

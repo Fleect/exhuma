@@ -15,7 +15,7 @@ export interface AnimatedSphereProps extends React.CanvasHTMLAttributes<HTMLCanv
 
 /**
  * AnimatedSphere — Exhuma Kinetic Methodology (EKM)
- * Elevated from sapan.dev
+ * Closed-form 3D projection kernel.
  *
  * Big-Omega (Ω) Guarantees:
  * - Handcrafted 3D spherical trigonometry & Euler rotation matrices on 2D HTML5 Canvas.

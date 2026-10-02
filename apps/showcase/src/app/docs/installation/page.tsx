@@ -102,7 +102,7 @@ npx exhuma init
 				</DocsProse>
 				<CodeBlock
 					code={`{
-  "$schema": "https://exhuma.dev/schema.json",
+  "$schema": "https://exhuma-ui.com/schema.json",
   "flavor": "nextjs",
   "paths": {
     "components": "@/components/ui"

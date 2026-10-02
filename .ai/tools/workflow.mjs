@@ -5,9 +5,8 @@ import path from 'node:path';
 import { validateContext } from './context.mjs';
 
 export const VERSION = '1.2.0';
-const SOURCE = 'SapanMozammel/auterix';
-// Keep historical bundles and locks readable; new releases use the canonical identity.
-const SOURCES = new Set([SOURCE, 'SapanMozammel/claude-workflow']);
+const SOURCE = 'Fleect/auterix';
+const SOURCES = new Set([SOURCE]);
 const LOCK = '.ai/workflow.lock.json';
 const GUARD = '.ai/workflow.writer.json';
 const PROJECT = new Set([

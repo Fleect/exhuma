@@ -8,5 +8,5 @@ Exhuma is licensed under the MIT License. All community contributions remain ope
 
 ## Governance & Architecture Reference
 - Workflow Infrastructure: Auterix & Auterix Pro by [Fleect](https://fleect.com/).
-- Monorepo Topology: aufnehmen & sapan.dev.
+- Monorepo Topology: Fleect Enterprise Full-Stack Core Architecture.
 - Component Registry Distribution: shadcn/ui.

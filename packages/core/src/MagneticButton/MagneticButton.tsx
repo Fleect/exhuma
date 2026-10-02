@@ -26,7 +26,26 @@ export interface MagneticButtonProps extends ButtonHTMLAttributes<HTMLButtonElem
  */
 export const MagneticButton = memo(
 	React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
-		({ children, strength = 0.35, radius = 120, springDamping = 18, maxDisplacement = 36, className = '', style, type = 'button', asChild, dualTier = false, shockwave = false, onPointerMove, onPointerLeave, ...props }, forwardedRef) => {
+		(
+			{
+				children,
+				strength = 0.35,
+				radius = 120,
+				springDamping = 18,
+				maxDisplacement = 36,
+				className = '',
+				style,
+				type = 'button',
+				asChild,
+				dualTier = false,
+				shockwave = false,
+				onPointerMove,
+				onPointerLeave,
+				onPointerDown,
+				...props
+			},
+			forwardedRef
+		) => {
 			const buttonRef = useRef<HTMLButtonElement>(null);
 			React.useImperativeHandle(forwardedRef, () => buttonRef.current as HTMLButtonElement);
 
@@ -146,28 +165,18 @@ export const MagneticButton = memo(
 					isHoveredRef.current = true;
 					startRafIfNeeded();
 				},
-				[radius, strength, maxDisplacement, onPointerMove, startRafIfNeeded]
+				[radius, strength, maxDisplacement, onPointerMove, startRafIfNeeded, dualTier]
 			);
 
 			const handlePointerDown = useCallback(
 				(e: React.PointerEvent<HTMLButtonElement>) => {
-					props.onPointerDown?.(e);
+					onPointerDown?.(e);
 					if (shockwave && buttonRef.current) {
 						const el = buttonRef.current;
 						const rect = el.getBoundingClientRect();
 						const scaleX = el.offsetWidth > 0 ? rect.width / el.offsetWidth : 1;
 						const scaleY = el.offsetHeight > 0 ? rect.height / el.offsetHeight : 1;
-						const origin = calculateShockwaveOrigin(
-							e.clientX,
-							e.clientY,
-							rect.left,
-							rect.top,
-							el.offsetWidth,
-							el.offsetHeight,
-							56,
-							scaleX,
-							scaleY
-						);
+						const origin = calculateShockwaveOrigin(e.clientX, e.clientY, rect.left, rect.top, el.offsetWidth, el.offsetHeight, 56, scaleX, scaleY);
 						shockwaveOriginRef.current = { x: origin.x, y: origin.y };
 						shockwaveMaxRadiusRef.current = origin.maxRadius;
 						shockwaveStartRef.current = performance.now();
@@ -181,7 +190,7 @@ export const MagneticButton = memo(
 						startRafIfNeeded();
 					}
 				},
-				[shockwave, startRafIfNeeded, props.onPointerDown]
+				[shockwave, startRafIfNeeded, onPointerDown]
 			);
 
 			const handlePointerLeave = useCallback(
@@ -225,8 +234,8 @@ export const MagneticButton = memo(
 					{...props}
 				>
 					{shockwave && (
-						<span 
-							ref={shockwaveRef} 
+						<span
+							ref={shockwaveRef}
 							style={{
 								position: 'absolute',
 								top: 0,
@@ -239,10 +248,16 @@ export const MagneticButton = memo(
 								opacity: 0,
 								transform: 'translate3d(0, 0, 0) translate(-50%, -50%)',
 								willChange: 'width, height, opacity, transform',
-							}} 
+							}}
 						/>
 					)}
-					{dualTier ? <span ref={contentRef} style={{ display: 'inline-flex', willChange: 'transform' }}>{children}</span> : children}
+					{dualTier ? (
+						<span ref={contentRef} style={{ display: 'inline-flex', willChange: 'transform' }}>
+							{children}
+						</span>
+					) : (
+						children
+					)}
 				</button>
 			);
 		}

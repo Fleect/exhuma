@@ -8,7 +8,7 @@ We maintain uncompromising quality standards to ensure our open-source codebase 
 
 1. Clone repository:
    ```bash
-   git clone git@github.com:SapanMozammel/exhuma.git
+   git clone git@github.com:Fleect/exhuma.git
    cd exhuma
    ```
 2. Install dependencies:

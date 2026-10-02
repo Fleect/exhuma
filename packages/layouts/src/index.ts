@@ -11,38 +11,13 @@ export { BentoGrid, BentoCard, BentoHeader, BentoContent, BentoVisual } from './
 export { DiamondGrid, DiamondColumn, DiamondItem } from './DiamondGrid/DiamondGrid';
 
 // Mathematical Kernels
-export {
-	calculateMarqueeOffset,
-	dampFactor,
-	parseGapToPx,
-	calculateCoupledScrollVelocity,
-	evaluateMarqueeDirectionHysteresis,
-} from './InfiniteMarquee/marquee-math';
-export {
-	getDiamondLayoutConfig,
-	partitionDiamondItems,
-	calculateConcentricRipple,
-	calculateIsometricLift,
-} from './DiamondGrid/diamond-layout';
-export {
-	calculateFlipDisplacement,
-	solveBentoSpringPosition,
-	calculateRepulsionVector,
-} from './BentoGrid/bento-math';
-export {
-	calculateStaggerDelay,
-	calculatePreservedAspectRatio,
-} from './Masonry/masonry-math';
-export {
-	computeMasonryLayout,
-	computeResponsiveColumns,
-} from './RowMasonry/row-masonry-math';
+export { calculateMarqueeOffset, dampFactor, parseGapToPx, calculateCoupledScrollVelocity, evaluateMarqueeDirectionHysteresis } from './InfiniteMarquee/marquee-math';
+export { getDiamondLayoutConfig, partitionDiamondItems, calculateConcentricRipple, calculateIsometricLift } from './DiamondGrid/diamond-layout';
+export { calculateFlipDisplacement, solveBentoSpringPosition, calculateRepulsionVector } from './BentoGrid/bento-math';
+export { calculateStaggerDelay, calculatePreservedAspectRatio } from './Masonry/masonry-math';
+export { computeMasonryLayout, computeResponsiveColumns } from './RowMasonry/row-masonry-math';
 export type { MasonryItem } from './RowMasonry/row-masonry-math';
-export {
-	calculateSmoothstepGap,
-	calculateGridCellCoordinates,
-	calculateFlipShuffleDelta,
-} from './AutoGrid/grid-math';
+export { calculateSmoothstepGap, calculateGridCellCoordinates, calculateFlipShuffleDelta } from './AutoGrid/grid-math';
 
 export type {
 	AutoGridProps,
@@ -60,5 +35,3 @@ export type {
 	DiamondItemProps,
 	DiamondLayoutVariant,
 } from './types';
-
-

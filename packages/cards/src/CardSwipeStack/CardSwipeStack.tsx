@@ -249,7 +249,7 @@ export function CardSwipeStack<T>({
 						const u = p / 0.38;
 						const ease1 = 1 - Math.pow(1 - u, 3);
 						const curX = startX + (outX - startX) * ease1;
-						const curY = startY * (1 - ease1) + (targetBottomY * 0.3) * ease1;
+						const curY = startY * (1 - ease1) + targetBottomY * 0.3 * ease1;
 						const curRot = calculateCardRotation(curX, maxRotation * 1.15, thresholdDistance * 1.5);
 						const curScale = 1.0 - 0.04 * ease1;
 
@@ -266,7 +266,7 @@ export function CardSwipeStack<T>({
 						// Hermite cubic smoothstep for organic settling
 						const ease2 = w * w * (3 - 2 * w);
 						const curX = outX * (1 - ease2);
-						const curY = (targetBottomY * 0.3) + (targetBottomY - targetBottomY * 0.3) * ease2;
+						const curY = targetBottomY * 0.3 + (targetBottomY - targetBottomY * 0.3) * ease2;
 						const curRot = calculateCardRotation(outX, maxRotation * 1.15, thresholdDistance * 1.5) * (1 - ease2);
 						const curScale = 0.96 + (targetBottomScale - 0.96) * ease2;
 						const curOpacity = 1.0 + (targetBottomOpacity - 1.0) * ease2;
@@ -387,7 +387,7 @@ export function CardSwipeStack<T>({
 		setCurrentIndex((prev) => Math.max(0, prev - 1));
 
 		const restoredIndex = lastEntry.index;
-		const restoredItem = items[isRecycle ? (restoredIndex % items.length) : restoredIndex];
+		const restoredItem = items[isRecycle ? restoredIndex % items.length : restoredIndex];
 		if (onUndo && restoredItem) {
 			onUndo(restoredItem);
 		}

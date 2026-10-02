@@ -80,7 +80,7 @@ export function GlobalHeader() {
 			{/* Top Announcement Banner (shadcn / Vercel style) */}
 			{!bannerDismissed && (
 				<div className='border-border bg-muted text-2xs relative border-b py-1.5 pr-10 pl-4 text-center font-medium transition-colors'>
-					<Link href='https://github.com/SapanMozammel/exhuma' target='_blank' rel='noreferrer' className='text-foreground/80 hover:text-foreground group inline transition-colors'>
+					<Link href='https://github.com/Fleect/exhuma' target='_blank' rel='noreferrer' className='text-foreground/80 hover:text-foreground group inline transition-colors'>
 						<Star className='-mt-0.5 mr-1.5 inline-block h-3 w-3 fill-emerald-500/20 align-middle text-emerald-500' />
 						<span>Free &amp; open source, built for every frontend stack.</span> <span className='text-foreground font-semibold'>Star Exhuma on GitHub</span>{' '}
 						<ArrowRight className='text-primary -mt-0.5 ml-0.5 inline-block h-3 w-3 align-middle transition-transform group-hover:translate-x-0.5' />
@@ -149,7 +149,7 @@ export function GlobalHeader() {
 
 						{/* GitHub Repository */}
 						<Link
-							href='https://github.com/SapanMozammel/exhuma'
+							href='https://github.com/Fleect/exhuma'
 							target='_blank'
 							rel='noreferrer'
 							className='border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground inline-flex h-8 w-8 items-center justify-center rounded-md border shadow-xs transition-colors'

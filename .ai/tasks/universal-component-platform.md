@@ -2,7 +2,7 @@
 
 Task schema: 1
 Status: in_progress
-Owner: Sapan Mozammel
+Owner: Fleect Architecture Team
 Risk: medium
 Workflow: .ai/core/workflows/implementation.md
 Dependencies: none
@@ -15,7 +15,7 @@ Universal Web Components), featuring an interactive Studio Workbench and shadcn-
 
 ## Scope
 
-Establish Auterix WI workflow context and Auterix Pro guardrails; configure root monorepo tooling and quality gate checkers following aufnehmen and sapan.dev; implement the Universal Component Model (UCM) registry with 5
+Establish Auterix WI workflow context and Auterix Pro guardrails; configure root monorepo tooling and quality gate checkers following Fleect enterprise architecture; implement the Universal Component Model (UCM) registry with 5
 canonical components; build the multi-flavor ComponentViewer, DocsSidebar, and /studio workbench; verify all code snippets compile cleanly.
 
 ## Acceptance

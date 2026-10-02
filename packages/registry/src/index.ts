@@ -69,8 +69,6 @@ export const COMPONENT_REGISTRY: Record<string, UniversalComponent> = {
 	'cursor-tooltip': cursorTooltipComponent,
 };
 
-
-
 export const ALL_COMPONENTS: UniversalComponent[] = Object.values(COMPONENT_REGISTRY);
 export const COMPONENT_COUNT = ALL_COMPONENTS.length;
 
