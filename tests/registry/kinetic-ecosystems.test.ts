@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
+import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@fleect/exhuma-registry';
 import { requiresCoreDependency } from '../../packages/cli/src/commands/add';
 
 const expectedFiles: Record<
@@ -200,7 +200,7 @@ describe('kinetic cards ecosystem parity', () => {
 		}
 	});
 
-	it('keeps non-React framework sources independent from @exhuma/core', () => {
+	it('keeps non-React framework sources independent from @fleect/exhuma', () => {
 		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((candidate) => candidate !== 'react' && candidate !== 'nextjs')) {
 			const files = [
 				...horizontalScrollerComponent.generateCode(flavor, horizontalScrollerComponent.defaultProps),
@@ -211,14 +211,16 @@ describe('kinetic cards ecosystem parity', () => {
 				...expandableCardComponent.generateCode(flavor, expandableCardComponent.defaultProps),
 				...cardSwipeStackComponent.generateCode(flavor, cardSwipeStackComponent.defaultProps),
 			];
-			for (const file of files) expect(file.code).not.toContain('@exhuma/core');
-			expect(horizontalScrollerComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(stackingCardsComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(tiltCardComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(spotlightCardComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(comparisonSliderComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(expandableCardComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
-			expect(cardSwipeStackComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
+			for (const file of files) {
+				expect(file.code).not.toContain('@fleect/exhuma');
+			}
+			expect(horizontalScrollerComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(stackingCardsComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(tiltCardComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(spotlightCardComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(comparisonSliderComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(expandableCardComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
+			expect(cardSwipeStackComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
 		}
 	});
 
@@ -240,7 +242,7 @@ describe('kinetic cards ecosystem parity', () => {
 		}
 	});
 
-	it('installs @exhuma/core only for React-based web flavors', () => {
+	it('installs @fleect/exhuma only for React-based web flavors', () => {
 		for (const flavor of SUPPORTED_ECOSYSTEMS) {
 			expect(requiresCoreDependency(flavor)).toBe(flavor === 'react' || flavor === 'nextjs');
 		}

@@ -13,8 +13,8 @@
 		{ "name": "suffix", "label": "Suffix", "type": "string", "defaultValue": "", "description": "Trailing unit identifier (e.g. \"%\", \"ms\", \"k\", \"M\")." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -32,16 +32,16 @@
 			{
 				"filename": "NumberTicker.tsx",
 				"language": "tsx",
-				"description": "Number Ticker — Clean component powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport {\n  NumberTicker as CoreNumberTicker,\n  type NumberTickerProps as CoreNumberTickerProps,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface NumberTickerProps extends CoreNumberTickerProps {\n  className?: string;\n}\n\nexport const NumberTicker = React.forwardRef<HTMLSpanElement, NumberTickerProps>(\n  (\n    {\n      value = 1250,\n      initialValue = 0,\n      duration = 1.5,\n      decimalPlaces = 0,\n      prefix = '',\n      suffix = '',\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreNumberTicker\n        ref={ref}\n        value={value}\n        initialValue={initialValue}\n        duration={duration}\n        decimalPlaces={decimalPlaces}\n        prefix={prefix}\n        suffix={suffix}\n        className={clsx('inline-block tabular-nums font-bold tracking-tight text-foreground font-mono', className)}\n        {...props}\n      />\n    );\n  }\n);\nNumberTicker.displayName = 'NumberTicker';\n\nexport default NumberTicker;\n"
+				"description": "Number Ticker — Clean component powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport {\n  NumberTicker as CoreNumberTicker,\n  type NumberTickerProps as CoreNumberTickerProps,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface NumberTickerProps extends CoreNumberTickerProps {\n  className?: string;\n}\n\nexport const NumberTicker = React.forwardRef<HTMLSpanElement, NumberTickerProps>(\n  (\n    {\n      value = 1250,\n      initialValue = 0,\n      duration = 1.5,\n      decimalPlaces = 0,\n      prefix = '',\n      suffix = '',\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreNumberTicker\n        ref={ref}\n        value={value}\n        initialValue={initialValue}\n        duration={duration}\n        decimalPlaces={decimalPlaces}\n        prefix={prefix}\n        suffix={suffix}\n        className={clsx('inline-block tabular-nums font-bold tracking-tight text-foreground font-mono', className)}\n        {...props}\n      />\n    );\n  }\n);\nNumberTicker.displayName = 'NumberTicker';\n\nexport default NumberTicker;\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "NumberTicker.tsx",
 				"language": "tsx",
-				"description": "Number Ticker — Clean component powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  NumberTicker as CoreNumberTicker,\n  type NumberTickerProps as CoreNumberTickerProps,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface NumberTickerProps extends CoreNumberTickerProps {\n  className?: string;\n}\n\nexport const NumberTicker = React.forwardRef<HTMLSpanElement, NumberTickerProps>(\n  (\n    {\n      value = 1250,\n      initialValue = 0,\n      duration = 1.5,\n      decimalPlaces = 0,\n      prefix = '',\n      suffix = '',\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreNumberTicker\n        ref={ref}\n        value={value}\n        initialValue={initialValue}\n        duration={duration}\n        decimalPlaces={decimalPlaces}\n        prefix={prefix}\n        suffix={suffix}\n        className={clsx('inline-block tabular-nums font-bold tracking-tight text-foreground font-mono', className)}\n        {...props}\n      />\n    );\n  }\n);\nNumberTicker.displayName = 'NumberTicker';\n\nexport default NumberTicker;\n"
+				"description": "Number Ticker — Clean component powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  NumberTicker as CoreNumberTicker,\n  type NumberTickerProps as CoreNumberTickerProps,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface NumberTickerProps extends CoreNumberTickerProps {\n  className?: string;\n}\n\nexport const NumberTicker = React.forwardRef<HTMLSpanElement, NumberTickerProps>(\n  (\n    {\n      value = 1250,\n      initialValue = 0,\n      duration = 1.5,\n      decimalPlaces = 0,\n      prefix = '',\n      suffix = '',\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreNumberTicker\n        ref={ref}\n        value={value}\n        initialValue={initialValue}\n        duration={duration}\n        decimalPlaces={decimalPlaces}\n        prefix={prefix}\n        suffix={suffix}\n        className={clsx('inline-block tabular-nums font-bold tracking-tight text-foreground font-mono', className)}\n        {...props}\n      />\n    );\n  }\n);\nNumberTicker.displayName = 'NumberTicker';\n\nexport default NumberTicker;\n"
 			}
 		],
 		"vue": [

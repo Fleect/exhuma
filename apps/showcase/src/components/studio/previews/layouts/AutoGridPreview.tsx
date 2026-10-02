@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { AutoGrid, AutoGridItem } from '@exhuma/layouts';
+import { AutoGrid, AutoGridItem } from '@fleect/exhuma-layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function AutoGridPreview(props: ComponentPreviewProps) {

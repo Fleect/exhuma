@@ -37,7 +37,7 @@ Foundation setup initialized. Auterix core workflows, adapters, pre-commit guard
 - Completed Horizontal Scroller package behavior, workbench controls, pinned-camera showcase, mobile scroll/stack fallbacks, progress/fade options, and pure geometry exports/tests.
 - Added native source generation for Horizontal Scroller and kinetic Stacking Cards across all 13 supported ecosystems, including rAF coalescing, IntersectionObserver culling, compositor transforms, and deterministic
   cleanup in component-owned browser runtimes.
-- Repaired Angular, Astro, Vanilla, Web Component, React Native, and Flutter quick starts; isolated `@exhuma/core` installation to React and Next.js.
+- Repaired Angular, Astro, Vanilla, Web Component, React Native, and Flutter quick starts; isolated `@fleect/exhuma` installation to React and Next.js.
 - Made `build:registry` compile from canonical TypeScript source rather than stale package output, format its JSON deterministically, and regenerated showcase/CLI artifacts.
 - Added 13-ecosystem filename/export, lifecycle, quick-start, dependency-isolation, numeric-card-width, and artifact-synchronization coverage.
 - Verification passed: `pnpm config:check`, `pnpm arch:check`, `pnpm docs:check`, `pnpm typecheck`, `pnpm test` (391 tests), `pnpm format:check`, `pnpm lint` (0 errors; 38 existing `no-console` warnings),

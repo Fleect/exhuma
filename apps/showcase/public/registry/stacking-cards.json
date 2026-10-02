@@ -22,8 +22,8 @@
 		{ "name": "reverseScale", "label": "Reverse Scale", "type": "boolean", "defaultValue": true, "description": "Enable or disable reverse scaling exit cascade mechanics." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": [],
 		"svelte": [],
 		"solid": [],
@@ -41,16 +41,16 @@
 			{
 				"filename": "StackingCards.tsx",
 				"language": "tsx",
-				"description": "Stacking Cards — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as StackingCardsPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface StackingCardsProps extends React.ComponentPropsWithoutRef<typeof StackingCardsPrimitive.StackingCards> {\n  className?: string;\n}\n\nexport const StackingCards = React.forwardRef<HTMLDivElement, StackingCardsProps>(\n  ({ className, children, ...props }, ref) => (\n    <StackingCardsPrimitive.StackingCards\n      ref={ref}\n      className={clsx(\n        'relative flex flex-col w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </StackingCardsPrimitive.StackingCards>\n  )\n);\nStackingCards.displayName = 'StackingCards';\n"
+				"description": "Stacking Cards — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as StackingCardsPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface StackingCardsProps extends React.ComponentPropsWithoutRef<typeof StackingCardsPrimitive.StackingCards> {\n  className?: string;\n}\n\nexport const StackingCards = React.forwardRef<HTMLDivElement, StackingCardsProps>(\n  ({ className, children, ...props }, ref) => (\n    <StackingCardsPrimitive.StackingCards\n      ref={ref}\n      className={clsx(\n        'relative flex flex-col w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </StackingCardsPrimitive.StackingCards>\n  )\n);\nStackingCards.displayName = 'StackingCards';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "StackingCards.tsx",
 				"language": "tsx",
-				"description": "Stacking Cards — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as StackingCardsPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface StackingCardsProps extends React.ComponentPropsWithoutRef<typeof StackingCardsPrimitive.StackingCards> {\n  className?: string;\n}\n\nexport const StackingCards = React.forwardRef<HTMLDivElement, StackingCardsProps>(\n  ({ className, children, ...props }, ref) => (\n    <StackingCardsPrimitive.StackingCards\n      ref={ref}\n      className={clsx(\n        'relative flex flex-col w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </StackingCardsPrimitive.StackingCards>\n  )\n);\nStackingCards.displayName = 'StackingCards';\n"
+				"description": "Stacking Cards — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as StackingCardsPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface StackingCardsProps extends React.ComponentPropsWithoutRef<typeof StackingCardsPrimitive.StackingCards> {\n  className?: string;\n}\n\nexport const StackingCards = React.forwardRef<HTMLDivElement, StackingCardsProps>(\n  ({ className, children, ...props }, ref) => (\n    <StackingCardsPrimitive.StackingCards\n      ref={ref}\n      className={clsx(\n        'relative flex flex-col w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </StackingCardsPrimitive.StackingCards>\n  )\n);\nStackingCards.displayName = 'StackingCards';\n"
 			}
 		],
 		"vue": [

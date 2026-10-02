@@ -27,8 +27,8 @@
 		{ "name": "directionHysteresis", "label": "Direction Hysteresis", "type": "boolean", "defaultValue": false, "description": "Smooth direction reversal on scroll direction change." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -46,16 +46,16 @@
 			{
 				"filename": "InfiniteMarquee.tsx",
 				"language": "tsx",
-				"description": "Infinite Marquee — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as InfiniteMarqueePrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface InfiniteMarqueeProps extends React.ComponentPropsWithoutRef<typeof InfiniteMarqueePrimitive.InfiniteMarquee> {\n  className?: string;\n}\n\nexport const InfiniteMarquee = React.forwardRef<HTMLDivElement, InfiniteMarqueeProps>(\n  ({ className, children, ...props }, ref) => (\n    <InfiniteMarqueePrimitive.InfiniteMarquee\n      ref={ref}\n      className={clsx(\n        'relative flex overflow-hidden select-none w-full py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </InfiniteMarqueePrimitive.InfiniteMarquee>\n  )\n);\nInfiniteMarquee.displayName = 'InfiniteMarquee';\n"
+				"description": "Infinite Marquee — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as InfiniteMarqueePrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface InfiniteMarqueeProps extends React.ComponentPropsWithoutRef<typeof InfiniteMarqueePrimitive.InfiniteMarquee> {\n  className?: string;\n}\n\nexport const InfiniteMarquee = React.forwardRef<HTMLDivElement, InfiniteMarqueeProps>(\n  ({ className, children, ...props }, ref) => (\n    <InfiniteMarqueePrimitive.InfiniteMarquee\n      ref={ref}\n      className={clsx(\n        'relative flex overflow-hidden select-none w-full py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </InfiniteMarqueePrimitive.InfiniteMarquee>\n  )\n);\nInfiniteMarquee.displayName = 'InfiniteMarquee';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "InfiniteMarquee.tsx",
 				"language": "tsx",
-				"description": "Infinite Marquee — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as InfiniteMarqueePrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface InfiniteMarqueeProps extends React.ComponentPropsWithoutRef<typeof InfiniteMarqueePrimitive.InfiniteMarquee> {\n  className?: string;\n}\n\nexport const InfiniteMarquee = React.forwardRef<HTMLDivElement, InfiniteMarqueeProps>(\n  ({ className, children, ...props }, ref) => (\n    <InfiniteMarqueePrimitive.InfiniteMarquee\n      ref={ref}\n      className={clsx(\n        'relative flex overflow-hidden select-none w-full py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </InfiniteMarqueePrimitive.InfiniteMarquee>\n  )\n);\nInfiniteMarquee.displayName = 'InfiniteMarquee';\n"
+				"description": "Infinite Marquee — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as InfiniteMarqueePrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface InfiniteMarqueeProps extends React.ComponentPropsWithoutRef<typeof InfiniteMarqueePrimitive.InfiniteMarquee> {\n  className?: string;\n}\n\nexport const InfiniteMarquee = React.forwardRef<HTMLDivElement, InfiniteMarqueeProps>(\n  ({ className, children, ...props }, ref) => (\n    <InfiniteMarqueePrimitive.InfiniteMarquee\n      ref={ref}\n      className={clsx(\n        'relative flex overflow-hidden select-none w-full py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </InfiniteMarqueePrimitive.InfiniteMarquee>\n  )\n);\nInfiniteMarquee.displayName = 'InfiniteMarquee';\n"
 			}
 		],
 		"vue": [

@@ -4,18 +4,18 @@ import {
 	calculateSectionHeight,
 	calculateScrollProgress,
 	HorizontalScroller,
-} from '@exhuma/cards';
-import * as core from '@exhuma/core';
+} from '@fleect/exhuma-cards';
+import * as core from '@fleect/exhuma';
 
-describe('@exhuma/cards — HorizontalScroller Physics & Geometry', () => {
-	it('exports HorizontalScroller and mathematical functions from @exhuma/cards', () => {
+describe('@fleect/exhuma-cards — HorizontalScroller Physics & Geometry', () => {
+	it('exports HorizontalScroller and mathematical functions from @fleect/exhuma-cards', () => {
 		expect(HorizontalScroller).toBeDefined();
 		expect(calculateHorizontalDistance).toBeDefined();
 		expect(calculateSectionHeight).toBeDefined();
 		expect(calculateScrollProgress).toBeDefined();
 	});
 
-	it('re-exports calculation functions through @exhuma/core', () => {
+	it('re-exports calculation functions through @fleect/exhuma', () => {
 		expect(core.calculateHorizontalDistance).toBeDefined();
 		expect(core.calculateSectionHeight).toBeDefined();
 		expect(core.calculateScrollProgress).toBeDefined();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberTicker } from '@exhuma/core';
+import { NumberTicker } from '@fleect/exhuma';
 import { ComponentPreviewProps } from '../types';
 
 export function NumberTickerPreview(props: ComponentPreviewProps & { tickerResetKey?: number }) {

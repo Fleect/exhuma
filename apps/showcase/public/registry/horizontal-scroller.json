@@ -36,8 +36,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": [],
 		"svelte": [],
 		"solid": [],
@@ -55,16 +55,16 @@
 			{
 				"filename": "HorizontalScroller.tsx",
 				"language": "tsx",
-				"description": "Horizontal Scroller — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as HorizontalScrollerPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface HorizontalScrollerProps extends React.ComponentPropsWithoutRef<typeof HorizontalScrollerPrimitive.HorizontalScroller> {\n  className?: string;\n}\n\nexport const HorizontalScroller = React.forwardRef<HTMLDivElement, HorizontalScrollerProps>(\n  ({ className, children, ...props }, ref) => (\n    <HorizontalScrollerPrimitive.HorizontalScroller\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden w-full py-8',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </HorizontalScrollerPrimitive.HorizontalScroller>\n  )\n);\nHorizontalScroller.displayName = 'HorizontalScroller';\n"
+				"description": "Horizontal Scroller — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as HorizontalScrollerPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface HorizontalScrollerProps extends React.ComponentPropsWithoutRef<typeof HorizontalScrollerPrimitive.HorizontalScroller> {\n  className?: string;\n}\n\nexport const HorizontalScroller = React.forwardRef<HTMLDivElement, HorizontalScrollerProps>(\n  ({ className, children, ...props }, ref) => (\n    <HorizontalScrollerPrimitive.HorizontalScroller\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden w-full py-8',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </HorizontalScrollerPrimitive.HorizontalScroller>\n  )\n);\nHorizontalScroller.displayName = 'HorizontalScroller';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "HorizontalScroller.tsx",
 				"language": "tsx",
-				"description": "Horizontal Scroller — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as HorizontalScrollerPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface HorizontalScrollerProps extends React.ComponentPropsWithoutRef<typeof HorizontalScrollerPrimitive.HorizontalScroller> {\n  className?: string;\n}\n\nexport const HorizontalScroller = React.forwardRef<HTMLDivElement, HorizontalScrollerProps>(\n  ({ className, children, ...props }, ref) => (\n    <HorizontalScrollerPrimitive.HorizontalScroller\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden w-full py-8',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </HorizontalScrollerPrimitive.HorizontalScroller>\n  )\n);\nHorizontalScroller.displayName = 'HorizontalScroller';\n"
+				"description": "Horizontal Scroller — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as HorizontalScrollerPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface HorizontalScrollerProps extends React.ComponentPropsWithoutRef<typeof HorizontalScrollerPrimitive.HorizontalScroller> {\n  className?: string;\n}\n\nexport const HorizontalScroller = React.forwardRef<HTMLDivElement, HorizontalScrollerProps>(\n  ({ className, children, ...props }, ref) => (\n    <HorizontalScrollerPrimitive.HorizontalScroller\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden w-full py-8',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </HorizontalScrollerPrimitive.HorizontalScroller>\n  )\n);\nHorizontalScroller.displayName = 'HorizontalScroller';\n"
 			}
 		],
 		"vue": [

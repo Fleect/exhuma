@@ -21,12 +21,12 @@ export function getNumberTickerOuterFiles(flavor: EcosystemFlavor, props: Record
 					{
 						filename: 'NumberTicker.tsx',
 						language: 'tsx',
-						description: 'Number Ticker — Clean component powered by @exhuma/core kinetic primitives.',
+						description: 'Number Ticker — Clean component powered by @fleect/exhuma kinetic primitives.',
 						code: `${header}import * as React from 'react';
 import {
   NumberTicker as CoreNumberTicker,
   type NumberTickerProps as CoreNumberTickerProps,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export interface NumberTickerProps extends CoreNumberTickerProps {

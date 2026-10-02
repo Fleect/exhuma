@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { calculateMagneticPull, calculateMultiLayerDetachment, calculateShockwaveProgress, calculateShockwaveOrigin } from '../../packages/core/src/MagneticButton/magnetic-math';
-import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
+import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@fleect/exhuma-registry';
 
 const component = getComponentBySlug('magnetic-button')!;
 
@@ -179,11 +179,11 @@ describe('MagneticButton — Canonical JSON Synchronization', () => {
 		}
 	});
 
-	it('keeps non-React framework sources independent from @exhuma/core in ejected mode', () => {
+	it('keeps non-React framework sources independent from @fleect/exhuma in ejected mode', () => {
 		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((f) => f !== 'react' && f !== 'nextjs')) {
 			const files = component!.generateCode(flavor as EcosystemFlavor, component!.defaultProps, { eject: true });
 			for (const file of files) {
-				expect(file.code).not.toContain('@exhuma/core');
+				expect(file.code).not.toContain('@fleect/exhuma');
 			}
 		}
 	});

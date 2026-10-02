@@ -506,7 +506,7 @@ These components are preserved on the post-beta roadmap due to external specific
 
 ### 5. Animated 3D Sphere (`animated-sphere`)
 - **Overview**: 3D spherical particle system rendered via polar-to-Cartesian trigonometry and Euler rotation matrices.
-- **Target**: v1.2+ (part of the upcoming `@exhuma/creative` 3D WebGL package).
+- **Target**: v1.2+ (part of the upcoming `@fleect/exhuma-creative` 3D WebGL package).
 
 ---
 

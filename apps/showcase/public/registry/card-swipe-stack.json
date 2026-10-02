@@ -19,8 +19,8 @@
 		{ "name": "loop", "label": "Loop (Infinite Deck)", "type": "boolean", "defaultValue": false, "description": "Infinite deck recycling: swiped cards smoothly swoop under the deck back to the bottom of the stack." }
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -38,16 +38,16 @@
 			{
 				"filename": "CardSwipeStack.tsx",
 				"language": "tsx",
-				"description": "Card Swipe Stack — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as CardSwipeStackPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CardSwipeStackProps extends React.ComponentPropsWithoutRef<typeof CardSwipeStackPrimitive.CardSwipeStack> {\n  className?: string;\n}\n\nexport const CardSwipeStack = React.forwardRef<HTMLDivElement, CardSwipeStackProps>(\n  ({ className, children, ...props }, ref) => (\n    <CardSwipeStackPrimitive.CardSwipeStack\n      ref={ref}\n      className={clsx(\n        'relative flex items-center justify-center min-h-[14.5rem] w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CardSwipeStackPrimitive.CardSwipeStack>\n  )\n);\nCardSwipeStack.displayName = 'CardSwipeStack';\n"
+				"description": "Card Swipe Stack — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as CardSwipeStackPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface CardSwipeStackProps extends React.ComponentPropsWithoutRef<typeof CardSwipeStackPrimitive.CardSwipeStack> {\n  className?: string;\n}\n\nexport const CardSwipeStack = React.forwardRef<HTMLDivElement, CardSwipeStackProps>(\n  ({ className, children, ...props }, ref) => (\n    <CardSwipeStackPrimitive.CardSwipeStack\n      ref={ref}\n      className={clsx(\n        'relative flex items-center justify-center min-h-[14.5rem] w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CardSwipeStackPrimitive.CardSwipeStack>\n  )\n);\nCardSwipeStack.displayName = 'CardSwipeStack';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "CardSwipeStack.tsx",
 				"language": "tsx",
-				"description": "Card Swipe Stack — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as CardSwipeStackPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface CardSwipeStackProps extends React.ComponentPropsWithoutRef<typeof CardSwipeStackPrimitive.CardSwipeStack> {\n  className?: string;\n}\n\nexport const CardSwipeStack = React.forwardRef<HTMLDivElement, CardSwipeStackProps>(\n  ({ className, children, ...props }, ref) => (\n    <CardSwipeStackPrimitive.CardSwipeStack\n      ref={ref}\n      className={clsx(\n        'relative flex items-center justify-center min-h-[14.5rem] w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CardSwipeStackPrimitive.CardSwipeStack>\n  )\n);\nCardSwipeStack.displayName = 'CardSwipeStack';\n"
+				"description": "Card Swipe Stack — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as CardSwipeStackPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface CardSwipeStackProps extends React.ComponentPropsWithoutRef<typeof CardSwipeStackPrimitive.CardSwipeStack> {\n  className?: string;\n}\n\nexport const CardSwipeStack = React.forwardRef<HTMLDivElement, CardSwipeStackProps>(\n  ({ className, children, ...props }, ref) => (\n    <CardSwipeStackPrimitive.CardSwipeStack\n      ref={ref}\n      className={clsx(\n        'relative flex items-center justify-center min-h-[14.5rem] w-full',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </CardSwipeStackPrimitive.CardSwipeStack>\n  )\n);\nCardSwipeStack.displayName = 'CardSwipeStack';\n"
 			}
 		],
 		"vue": [

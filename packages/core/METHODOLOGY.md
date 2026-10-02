@@ -55,7 +55,7 @@ Every component in Exhuma adheres to **Zero External Dependencies** (NO Framer M
 
 ### Pillar 1: Pure Headless Mathematical Kernels
 
-- Math and DSA live in pure, zero-dependency functions in `@exhuma/core/math` and `@exhuma/core/physics`.
+- Math and DSA live in pure, zero-dependency functions in `@fleect/exhuma/math` and `@fleect/exhuma/physics`.
 - Decoupled from React, Vue, Svelte, or DOM. Runs identically in any environment.
 
 ### Pillar 2: Kinetic Compound Composition

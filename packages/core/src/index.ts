@@ -1,6 +1,6 @@
-export * from '@exhuma/cards';
-export * from '@exhuma/layouts';
-export * from '@exhuma/router';
+export * from '@fleect/exhuma-cards';
+export * from '@fleect/exhuma-layouts';
+export * from '@fleect/exhuma-router';
 
 // Physics & DSA Kernels
 export * from './physics/spring';

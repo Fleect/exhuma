@@ -20,8 +20,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -39,16 +39,16 @@
 			{
 				"filename": "ComparisonSlider.tsx",
 				"language": "tsx",
-				"description": "Comparison Slider — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport * as ComparisonSliderPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface ComparisonSliderProps extends React.ComponentPropsWithoutRef<typeof ComparisonSliderPrimitive.ComparisonSlider> {\n  className?: string;\n}\n\nexport const ComparisonSlider = React.forwardRef<HTMLDivElement, ComparisonSliderProps>(\n  ({ className, children, ...props }, ref) => (\n    <ComparisonSliderPrimitive.ComparisonSlider\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border select-none w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ComparisonSliderPrimitive.ComparisonSlider>\n  )\n);\nComparisonSlider.displayName = 'ComparisonSlider';\n"
+				"description": "Comparison Slider — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport * as ComparisonSliderPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface ComparisonSliderProps extends React.ComponentPropsWithoutRef<typeof ComparisonSliderPrimitive.ComparisonSlider> {\n  className?: string;\n}\n\nexport const ComparisonSlider = React.forwardRef<HTMLDivElement, ComparisonSliderProps>(\n  ({ className, children, ...props }, ref) => (\n    <ComparisonSliderPrimitive.ComparisonSlider\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border select-none w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ComparisonSliderPrimitive.ComparisonSlider>\n  )\n);\nComparisonSlider.displayName = 'ComparisonSlider';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "ComparisonSlider.tsx",
 				"language": "tsx",
-				"description": "Comparison Slider — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport * as ComparisonSliderPrimitive from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport interface ComparisonSliderProps extends React.ComponentPropsWithoutRef<typeof ComparisonSliderPrimitive.ComparisonSlider> {\n  className?: string;\n}\n\nexport const ComparisonSlider = React.forwardRef<HTMLDivElement, ComparisonSliderProps>(\n  ({ className, children, ...props }, ref) => (\n    <ComparisonSliderPrimitive.ComparisonSlider\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border select-none w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ComparisonSliderPrimitive.ComparisonSlider>\n  )\n);\nComparisonSlider.displayName = 'ComparisonSlider';\n"
+				"description": "Comparison Slider — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport * as ComparisonSliderPrimitive from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport interface ComparisonSliderProps extends React.ComponentPropsWithoutRef<typeof ComparisonSliderPrimitive.ComparisonSlider> {\n  className?: string;\n}\n\nexport const ComparisonSlider = React.forwardRef<HTMLDivElement, ComparisonSliderProps>(\n  ({ className, children, ...props }, ref) => (\n    <ComparisonSliderPrimitive.ComparisonSlider\n      ref={ref}\n      className={clsx(\n        'relative overflow-hidden rounded-2xl border border-border select-none w-full max-w-2xl mx-auto',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ComparisonSliderPrimitive.ComparisonSlider>\n  )\n);\nComparisonSlider.displayName = 'ComparisonSlider';\n"
 			}
 		],
 		"vue": [

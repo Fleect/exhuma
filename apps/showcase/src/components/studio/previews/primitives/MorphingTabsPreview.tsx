@@ -1,5 +1,5 @@
 import React from 'react';
-import { MorphingTabs } from '@exhuma/core';
+import { MorphingTabs } from '@fleect/exhuma';
 import { ComponentPreviewProps } from '../types';
 
 export function MorphingTabsPreview(props: ComponentPreviewProps) {

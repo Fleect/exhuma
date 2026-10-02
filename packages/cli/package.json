@@ -1,6 +1,6 @@
 {
 	"name": "exhuma",
-	"version": "0.2.0-beta.1",
+	"version": "0.2.0-beta.3",
 	"description": "Universal Component CLI — Add tactile, headless components to any project across 13 ecosystems",
 	"author": {
 		"name": "Fleect",
@@ -53,7 +53,7 @@
 		"type:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@exhuma/registry": "workspace:*",
+		"@fleect/exhuma-registry": "^0.2.0-beta.1",
 		"commander": "^13.1.0",
 		"ora": "^8.2.0",
 		"picocolors": "^1.1.1",

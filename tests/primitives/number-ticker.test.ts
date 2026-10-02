@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { easeOutExpo, calculateTickerValue } from '../../packages/core/src/NumberTicker/ticker-math';
-import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
+import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@fleect/exhuma-registry';
 
 describe('NumberTicker — Mathematical Foundations & Analytical Easing', () => {
 	it('easeOutExpo strictly conforms to closed-form asymptotic curve 1 - 2^(-10t)', () => {
@@ -189,11 +189,11 @@ describe('NumberTicker — 13-Ecosystem Code Generation Parity', () => {
 		});
 	}
 
-	it('keeps non-React framework sources independent from @exhuma/core', () => {
+	it('keeps non-React framework sources independent from @fleect/exhuma', () => {
 		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((f) => f !== 'react' && f !== 'nextjs')) {
 			const files = component.generateCode(flavor, component.defaultProps, { eject: true });
 			for (const file of files) {
-				expect(file.code).not.toContain('@exhuma/core');
+				expect(file.code).not.toContain('@fleect/exhuma');
 			}
 		}
 	});

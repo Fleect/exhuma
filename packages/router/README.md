@@ -1,4 +1,4 @@
-# @exhuma/router
+# @fleect/exhuma-router
 
 Production-ready layout frameworks, responsive navigation bars, and route protection guards for React and Next.js. Part of the **Exhuma** developer suite.
 
@@ -7,9 +7,9 @@ Production-ready layout frameworks, responsive navigation bars, and route protec
 ## Installation
 
 ```bash
-pnpm add @exhuma/router
+pnpm add @fleect/exhuma-router
 # or
-npm install @exhuma/router
+npm install @fleect/exhuma-router
 ```
 
 ---
@@ -28,7 +28,7 @@ npm install @exhuma/router
 ### Landing Layout
 
 ```tsx
-import { LandingLayout, Header, Footer } from '@exhuma/router';
+import { LandingLayout, Header, Footer } from '@fleect/exhuma-router';
 
 export default function MarketingPage() {
   return (
@@ -50,3 +50,10 @@ export default function MarketingPage() {
   );
 }
 ```
+
+---
+
+## License
+
+MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
+

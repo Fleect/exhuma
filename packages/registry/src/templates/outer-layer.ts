@@ -174,9 +174,9 @@ ${part.name}.displayName = '${part.name}';`
 					{
 						filename: `${pascalName}.tsx`,
 						language: 'tsx',
-						description: `${name} — Clean Shadcn-style outer layer powered by @exhuma/core kinetic primitives.`,
+						description: `${name} — Clean Shadcn-style outer layer powered by @fleect/exhuma kinetic primitives.`,
 						code: `${isNext ? "'use client';\n\n" : ''}import * as React from 'react';
-import * as ${pascalName}Primitive from '@exhuma/core';
+import * as ${pascalName}Primitive from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export interface ${pascalName}Props extends React.ComponentPropsWithoutRef<typeof ${pascalName}Primitive.${pascalName}> {

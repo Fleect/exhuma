@@ -1,5 +1,5 @@
 {
-	"name": "@exhuma/cards",
+	"name": "@fleect/exhuma-cards",
 	"version": "0.2.0-beta.1",
 	"description": "Tactile, physics-driven interactive cards and horizontal rail scrollers for React",
 	"author": {

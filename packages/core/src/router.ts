@@ -1,1 +1,1 @@
-export * from '@exhuma/router';
+export * from '@fleect/exhuma-router';

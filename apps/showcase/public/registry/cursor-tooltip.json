@@ -61,8 +61,8 @@
 		}
 	],
 	"dependencies": {
-		"react": ["@exhuma/core"],
-		"nextjs": ["@exhuma/core"],
+		"react": ["@fleect/exhuma"],
+		"nextjs": ["@fleect/exhuma"],
 		"vue": ["clsx"],
 		"svelte": ["clsx"],
 		"solid": ["clsx"],
@@ -80,16 +80,16 @@
 			{
 				"filename": "CursorTooltip.tsx",
 				"language": "tsx",
-				"description": "Cursor Tooltip — Clean Shadcn-style component powered by @exhuma/core kinetic primitives.",
-				"code": "import * as React from 'react';\nimport {\n  CursorTooltip as CoreCursorTooltip,\n  type CursorTooltipProps as CoreCursorTooltipProps,\n  type CursorTooltipVariant,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport type { CursorTooltipVariant };\n\nexport interface CursorTooltipProps extends CoreCursorTooltipProps {\n  className?: string;\n}\n\nexport const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps>(\n  (\n    {\n      content = 'Explore Showcase',\n      springDamping = 20,\n      direction = 'bottom-right',\n      offsetX = 16,\n      offsetY = 16,\n      variant = 'frosted',\n      collisionPadding = 12,\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreCursorTooltip\n        content={content}\n        springDamping={springDamping}\n        direction={direction as any}\n        offsetX={offsetX}\n        offsetY={offsetY}\n        variant={variant as CursorTooltipVariant}\n        collisionPadding={collisionPadding}\n        className={clsx('relative inline-block cursor-pointer', className)}\n        {...props}\n      >\n        <div ref={ref}>{children}</div>\n      </CoreCursorTooltip>\n    );\n  }\n);\nCursorTooltip.displayName = 'CursorTooltip';\n"
+				"description": "Cursor Tooltip — Clean Shadcn-style component powered by @fleect/exhuma kinetic primitives.",
+				"code": "import * as React from 'react';\nimport {\n  CursorTooltip as CoreCursorTooltip,\n  type CursorTooltipProps as CoreCursorTooltipProps,\n  type CursorTooltipVariant,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport type { CursorTooltipVariant };\n\nexport interface CursorTooltipProps extends CoreCursorTooltipProps {\n  className?: string;\n}\n\nexport const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps>(\n  (\n    {\n      content = 'Explore Showcase',\n      springDamping = 20,\n      direction = 'bottom-right',\n      offsetX = 16,\n      offsetY = 16,\n      variant = 'frosted',\n      collisionPadding = 12,\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreCursorTooltip\n        content={content}\n        springDamping={springDamping}\n        direction={direction as any}\n        offsetX={offsetX}\n        offsetY={offsetY}\n        variant={variant as CursorTooltipVariant}\n        collisionPadding={collisionPadding}\n        className={clsx('relative inline-block cursor-pointer', className)}\n        {...props}\n      >\n        <div ref={ref}>{children}</div>\n      </CoreCursorTooltip>\n    );\n  }\n);\nCursorTooltip.displayName = 'CursorTooltip';\n"
 			}
 		],
 		"nextjs": [
 			{
 				"filename": "CursorTooltip.tsx",
 				"language": "tsx",
-				"description": "Cursor Tooltip — Clean Shadcn-style component powered by @exhuma/core kinetic primitives.",
-				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  CursorTooltip as CoreCursorTooltip,\n  type CursorTooltipProps as CoreCursorTooltipProps,\n  type CursorTooltipVariant,\n} from '@exhuma/core';\nimport { clsx } from 'clsx';\n\nexport type { CursorTooltipVariant };\n\nexport interface CursorTooltipProps extends CoreCursorTooltipProps {\n  className?: string;\n}\n\nexport const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps>(\n  (\n    {\n      content = 'Explore Showcase',\n      springDamping = 20,\n      direction = 'bottom-right',\n      offsetX = 16,\n      offsetY = 16,\n      variant = 'frosted',\n      collisionPadding = 12,\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreCursorTooltip\n        content={content}\n        springDamping={springDamping}\n        direction={direction as any}\n        offsetX={offsetX}\n        offsetY={offsetY}\n        variant={variant as CursorTooltipVariant}\n        collisionPadding={collisionPadding}\n        className={clsx('relative inline-block cursor-pointer', className)}\n        {...props}\n      >\n        <div ref={ref}>{children}</div>\n      </CoreCursorTooltip>\n    );\n  }\n);\nCursorTooltip.displayName = 'CursorTooltip';\n"
+				"description": "Cursor Tooltip — Clean Shadcn-style component powered by @fleect/exhuma kinetic primitives.",
+				"code": "'use client';\n\nimport * as React from 'react';\nimport {\n  CursorTooltip as CoreCursorTooltip,\n  type CursorTooltipProps as CoreCursorTooltipProps,\n  type CursorTooltipVariant,\n} from '@fleect/exhuma';\nimport { clsx } from 'clsx';\n\nexport type { CursorTooltipVariant };\n\nexport interface CursorTooltipProps extends CoreCursorTooltipProps {\n  className?: string;\n}\n\nexport const CursorTooltip = React.forwardRef<HTMLDivElement, CursorTooltipProps>(\n  (\n    {\n      content = 'Explore Showcase',\n      springDamping = 20,\n      direction = 'bottom-right',\n      offsetX = 16,\n      offsetY = 16,\n      variant = 'frosted',\n      collisionPadding = 12,\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    return (\n      <CoreCursorTooltip\n        content={content}\n        springDamping={springDamping}\n        direction={direction as any}\n        offsetX={offsetX}\n        offsetY={offsetY}\n        variant={variant as CursorTooltipVariant}\n        collisionPadding={collisionPadding}\n        className={clsx('relative inline-block cursor-pointer', className)}\n        {...props}\n      >\n        <div ref={ref}>{children}</div>\n      </CoreCursorTooltip>\n    );\n  }\n);\nCursorTooltip.displayName = 'CursorTooltip';\n"
 			}
 		],
 		"vue": [

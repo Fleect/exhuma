@@ -1,5 +1,5 @@
 {
-	"name": "@exhuma/layouts",
+	"name": "@fleect/exhuma-layouts",
 	"version": "0.2.0-beta.1",
 	"description": "Zero-dependency CSS masonry, dynamic height balancing, and responsive AutoGrids for React",
 	"author": {

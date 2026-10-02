@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconSparkles as Sparkles } from '@tabler/icons-react';
-import { BorderBeam } from '@exhuma/cards';
+import { BorderBeam } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function BorderBeamPreview(props: ComponentPreviewProps) {

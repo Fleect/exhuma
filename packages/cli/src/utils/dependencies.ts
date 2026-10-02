@@ -56,7 +56,7 @@ export function ensureCoreDependency(cwd: string = process.cwd()): boolean {
 		};
 
 		const missing: string[] = [];
-		if (!allDeps['@exhuma/core']) missing.push('@exhuma/core');
+		if (!allDeps['@fleect/exhuma']) missing.push('@fleect/exhuma');
 		if (!allDeps['clsx']) missing.push('clsx');
 
 		if (missing.length === 0) {

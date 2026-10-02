@@ -9,7 +9,7 @@ import {
 	calculateMagneticSnap,
 	calculateSelectionCenter,
 } from '../../packages/core/src/CursorTooltip/cursor-math';
-import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@exhuma/registry';
+import { generateComponentUsage, getComponentBySlug, SUPPORTED_ECOSYSTEMS, type EcosystemFlavor } from '@fleect/exhuma-registry';
 
 const component = getComponentBySlug('cursor-tooltip')!;
 
@@ -223,11 +223,11 @@ describe('CursorTooltip — Canonical JSON Synchronization', () => {
 		}
 	});
 
-	it('keeps non-React framework sources independent from @exhuma/core in ejected mode', () => {
+	it('keeps non-React framework sources independent from @fleect/exhuma in ejected mode', () => {
 		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((f) => f !== 'react' && f !== 'nextjs')) {
 			const files = component!.generateCode(flavor as EcosystemFlavor, component!.defaultProps, { eject: true });
 			for (const file of files) {
-				expect(file.code).not.toContain('@exhuma/core');
+				expect(file.code).not.toContain('@fleect/exhuma');
 			}
 		}
 	});

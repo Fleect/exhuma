@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion } from '@exhuma/core';
+import { Accordion } from '@fleect/exhuma';
 import { ComponentPreviewProps } from '../types';
 
 export function AccordionPreview(props: ComponentPreviewProps) {

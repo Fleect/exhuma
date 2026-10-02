@@ -15,7 +15,7 @@ import {
 	IconBrandYoutube,
 	IconShare,
 } from '@tabler/icons-react';
-import { FloatingDock } from '@exhuma/core';
+import { FloatingDock } from '@fleect/exhuma';
 import { cn } from '@/lib/utils';
 import { ComponentPreviewProps } from '../types';
 

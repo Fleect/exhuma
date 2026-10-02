@@ -22,12 +22,12 @@ export function getMagneticButtonOuterFiles(flavor: EcosystemFlavor, props: Reco
 					{
 						filename: 'MagneticButton.tsx',
 						language: 'tsx',
-						description: 'Magnetic Button — Clean component powered by @exhuma/core kinetic primitives.',
+						description: 'Magnetic Button — Clean component powered by @fleect/exhuma kinetic primitives.',
 						code: `${header}import * as React from 'react';
 import {
   MagneticButton as CoreMagneticButton,
   type MagneticButtonProps as CoreMagneticButtonProps,
-} from '@exhuma/core';
+} from '@fleect/exhuma';
 import { clsx } from 'clsx';
 
 export interface MagneticButtonProps extends CoreMagneticButtonProps {

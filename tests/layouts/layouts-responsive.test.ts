@@ -141,7 +141,7 @@ describe('Exhuma Layouts — Universal 13-Ecosystem Parity & Big-Ω Gates', () =
 		const ejectedFiles = autoGridComponent.generateCode('react', autoGridComponent.defaultProps, { eject: true });
 		expect(ejectedFiles.length).toBeGreaterThan(0);
 		const code = ejectedFiles[0].code;
-		expect(code).not.toContain('@exhuma/core');
+		expect(code).not.toContain('@fleect/exhuma');
 		expect(code).toContain('AutoGrid');
 		expect(code).toContain('AutoGridItem');
 		expect(code).toContain('gridTemplateColumns');
@@ -151,7 +151,7 @@ describe('Exhuma Layouts — Universal 13-Ecosystem Parity & Big-Ω Gates', () =
 		const ejectedFiles = cssMasonryComponent.generateCode('react', cssMasonryComponent.defaultProps, { eject: true });
 		expect(ejectedFiles.length).toBeGreaterThan(0);
 		const code = ejectedFiles[0].code;
-		expect(code).not.toContain('@exhuma/core');
+		expect(code).not.toContain('@fleect/exhuma');
 		expect(code).toContain('CssMasonry');
 		expect(code).toContain('CssMasonryItem');
 		expect(code).toContain('columnCount');
@@ -217,7 +217,7 @@ describe('Exhuma Layouts — BentoGrid Architecture & Registry', () => {
 		const ejectedFiles = bentoGridComponent.generateCode('react', bentoGridComponent.defaultProps, { eject: true });
 		expect(ejectedFiles.length).toBeGreaterThan(0);
 		const code = ejectedFiles[0].code;
-		expect(code).not.toContain('@exhuma/core');
+		expect(code).not.toContain('@fleect/exhuma');
 		expect(code).toContain('BentoGrid');
 		expect(code).toContain('BentoCard');
 		expect(code).toContain('BentoHeader');
@@ -281,7 +281,7 @@ describe('Exhuma Layouts — DiamondGrid Architecture & Registry', () => {
 		const ejectedFiles = diamondGridComponent.generateCode('react', diamondGridComponent.defaultProps, { eject: true });
 		expect(ejectedFiles.length).toBeGreaterThan(0);
 		const code = ejectedFiles[0].code;
-		expect(code).not.toContain('@exhuma/core');
+		expect(code).not.toContain('@fleect/exhuma');
 		expect(code).toContain('DiamondGrid');
 		expect(code).toContain('DiamondColumn');
 		expect(code).toContain('DiamondItem');
@@ -398,7 +398,7 @@ describe('Exhuma Layouts — RowMasonry Studio Audit: Params, Presets & Canvas P
 
 	it('generates outer-layer payload across all 13 ecosystems for RowMasonry (standard and ejected)', async () => {
 		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
-		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@fleect/exhuma-registry');
 
 		for (const flavor of SUPPORTED_ECOSYSTEMS) {
 			const standard = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps);
@@ -415,7 +415,7 @@ describe('Exhuma Layouts — RowMasonry Studio Audit: Params, Presets & Canvas P
 		const { readFileSync } = await import('node:fs');
 		const { resolve } = await import('node:path');
 		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
-		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@fleect/exhuma-registry');
 
 		const artifactPath = resolve(process.cwd(), 'apps/showcase/public/registry/row-masonry.json');
 		const artifact = JSON.parse(readFileSync(artifactPath, 'utf8'));
@@ -434,7 +434,7 @@ describe('Exhuma Layouts — RowMasonry Studio Audit: Params, Presets & Canvas P
 		const { readFileSync } = await import('node:fs');
 		const { resolve } = await import('node:path');
 		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
-		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@fleect/exhuma-registry');
 
 		const cliPath = resolve(process.cwd(), 'packages/cli/src/registry/canonical.json');
 		const canonical = JSON.parse(readFileSync(cliPath, 'utf8'));
@@ -448,16 +448,16 @@ describe('Exhuma Layouts — RowMasonry Studio Audit: Params, Presets & Canvas P
 		}
 	});
 
-	it('verifies non-React framework implementations of RowMasonry are independent of @exhuma/core', async () => {
+	it('verifies non-React framework implementations of RowMasonry are independent of @fleect/exhuma', async () => {
 		const { rowMasonryComponent } = await import('../../packages/registry/src/components/row-masonry');
-		const { SUPPORTED_ECOSYSTEMS } = await import('@exhuma/registry');
+		const { SUPPORTED_ECOSYSTEMS } = await import('@fleect/exhuma-registry');
 
 		for (const flavor of SUPPORTED_ECOSYSTEMS.filter((f) => f !== 'react' && f !== 'nextjs')) {
 			const files = rowMasonryComponent.generateCode(flavor, rowMasonryComponent.defaultProps);
 			for (const file of files) {
-				expect(file.code).not.toContain('@exhuma/core');
+				expect(file.code).not.toContain('@fleect/exhuma');
 			}
-			expect(rowMasonryComponent.dependencies?.[flavor] ?? []).not.toContain('@exhuma/core');
+			expect(rowMasonryComponent.dependencies?.[flavor] ?? []).not.toContain('@fleect/exhuma');
 		}
 	});
 

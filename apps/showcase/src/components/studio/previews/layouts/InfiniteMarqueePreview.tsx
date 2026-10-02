@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { InfiniteMarquee } from '@exhuma/layouts';
+import { InfiniteMarquee } from '@fleect/exhuma-layouts';
 import { ECOSYSTEM_COUNT } from '@/components/docs/docs-stats';
 
 export default function InfiniteMarqueePreview(props: ComponentPreviewProps) {

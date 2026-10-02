@@ -6,17 +6,17 @@ Get started with **Exhuma** in your React or Next.js project in under 60 seconds
 
 ## 1. Installation
 
-You can install the unified `@exhuma/core` package:
+You can install the unified `@fleect/exhuma` package:
 
 ```bash
 # Using pnpm
-pnpm add @exhuma/core
+pnpm add @fleect/exhuma
 
 # Using npm
-npm install @exhuma/core
+npm install @fleect/exhuma
 
 # Using yarn
-yarn add @exhuma/core
+yarn add @fleect/exhuma
 ```
 
 Or copy-paste 100% owned source code directly into your repository with the Exhuma CLI:
@@ -31,10 +31,10 @@ npx exhuma add row-masonry
 
 ## 2. Using Stacking Cards
 
-Import `StackingCards` from `@exhuma/core` and pass any set of card elements as children:
+Import `StackingCards` from `@fleect/exhuma` and pass any set of card elements as children:
 
 ```tsx
-import { StackingCards } from '@exhuma/core';
+import { StackingCards } from '@fleect/exhuma';
 
 export default function ExperienceSection() {
   return (
@@ -62,7 +62,7 @@ export default function ExperienceSection() {
 `<RowMasonry>` calculates dynamic greedy shortest-column placement in $\mathcal{O}(N \log K)$, ensuring chronological reading order across rows with single-frame coalesced `requestAnimationFrame` batching:
 
 ```tsx
-import { RowMasonry, RowMasonryItem } from '@exhuma/core';
+import { RowMasonry, RowMasonryItem } from '@fleect/exhuma';
 
 export default function DynamicFeed({ items }: { items: { id: string; height: number; title: string }[] }) {
   return (
@@ -89,7 +89,7 @@ export default function DynamicFeed({ items }: { items: { id: string; height: nu
 For lightweight, zero-JavaScript column-count masonry:
 
 ```tsx
-import { CssMasonry } from '@exhuma/core';
+import { CssMasonry } from '@fleect/exhuma';
 
 export default function SimpleMasonry({ items }: { items: string[] }) {
   return (

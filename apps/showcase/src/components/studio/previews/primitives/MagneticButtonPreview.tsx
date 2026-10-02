@@ -1,5 +1,5 @@
 import React from 'react';
-import { MagneticButton } from '@exhuma/core';
+import { MagneticButton } from '@fleect/exhuma';
 import { IconSparkles as Sparkles } from '@tabler/icons-react';
 import { ComponentPreviewProps } from '../types';
 

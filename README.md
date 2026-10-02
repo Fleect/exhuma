@@ -1,11 +1,11 @@
 # Exhuma
 
-> **The Universal Kinetic Component Platform & Multi-Framework Registry.** 19 physics-driven primitives, 13 frontend ecosystems, zero layout thrashing, and zero runtime lock-in.
+> **The Universal Kinetic Component Platform & Multi-Framework Registry.** 20 physics-driven primitives, 13 frontend ecosystems, zero layout thrashing, and zero runtime lock-in.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15_App_Router-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![Tests](https://img.shields.io/badge/Tests-636%20passing-brightgreen?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Tests-701%20passing-brightgreen?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![Ecosystems](https://img.shields.io/badge/Ecosystems-13%20Supported-purple?style=flat-square)](https://exhuma-ui.com/docs/ecosystems)
 [![Primitives](https://img.shields.io/badge/Primitives-20%20Production-orange?style=flat-square)](https://exhuma-ui.com/docs/components)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
@@ -17,7 +17,7 @@ distributes canonical, zero-dependency source code across **13 frontend ecosyste
 
 ## ✨ Key Architectural Guarantees
 
-- **19 Audited Kinetic Primitives**: From 3D sticky stacking cards and elastic magnetic buttons to shared-element morphing tabs and comparison diff sliders.
+- **20 Audited Kinetic Primitives**: From 3D sticky stacking cards and elastic magnetic buttons to shared-element morphing tabs and comparison diff sliders.
 - **13 Framework Ecosystems**: Full implementation parity across React, Next.js, Vue 3, Nuxt, Svelte 5, SvelteKit, Angular 18+, SolidJS, Astro, Laravel Blade, Vanilla JS, WordPress Gutenberg, Web Components, React
   Native, and Flutter.
 - **$\Omega(1)$ Layout Thrashing Protection**: Pure compositor-driven execution utilizing `transform` and `opacity` GPU layers to ensure sustained 60fps/120fps motion without triggering forced synchronous layouts.
@@ -33,11 +33,11 @@ distributes canonical, zero-dependency source code across **13 frontend ecosyste
 | :--------------------------------------------- | :------------------------------------------------------------------------------------ | :-----: |
 | **`exhuma`** (`packages/cli`)                  | Universal Component CLI — add tactile components to any project across 13 ecosystems. | `Ready` |
 | **`create-exhuma`** (`packages/create-exhuma`) | Interactive project scaffolding wizard for quickstart boilerplates.                   | `Ready` |
-| **`@exhuma/core`**                             | Complete flagship bundle: cards, layouts, and router with subpath exports.            | `Ready` |
-| **`@exhuma/cards`**                            | Interactive card micro-interactions, stacking cards, tilt cards, and sliders.         | `Ready` |
-| **`@exhuma/layouts`**                          | High-performance CSS masonry grids, diamond grids, and auto-grids.                    | `Ready` |
-| **`@exhuma/router`**                           | Production layout framing, landing layouts, auth screens, and route guards.           | `Ready` |
-| **`@exhuma/registry`**                         | Canonical multi-flavor registry compiler and schema specifications.                   | `Ready` |
+| **`@fleect/exhuma`**                           | Complete flagship bundle: cards, layouts, and router with subpath exports.            | `Ready` |
+| **`@fleect/exhuma-cards`**                     | Interactive card micro-interactions, stacking cards, tilt cards, and sliders.         | `Ready` |
+| **`@fleect/exhuma-layouts`**                   | High-performance CSS masonry grids, diamond grids, and auto-grids.                    | `Ready` |
+| **`@fleect/exhuma-router`**                    | Production layout framing, landing layouts, auth screens, and route guards.           | `Ready` |
+| **`@fleect/exhuma-registry`**                  | Canonical multi-flavor registry compiler and schema specifications.                   | `Ready` |
 | **`showcase`** (`apps/showcase`)               | Next.js 15 documentation hub, interactive Component Studio, and live playgrounds.     | `Ready` |
 
 ---
@@ -52,7 +52,7 @@ Initialize Exhuma in your existing project:
 npx exhuma init
 ```
 
-Add any of the 19 components directly into your codebase:
+Add any of the 20 components directly into your codebase:
 
 ```bash
 # Add to your current project (auto-detects framework)
@@ -86,16 +86,16 @@ bun create exhuma
 ### Option C: Install Monorepo Packages
 
 ```bash
-# Install core package
-pnpm add @exhuma/core
+# Install flagship unified package
+pnpm add @fleect/exhuma
 
 # Or targeted standalone packages
-pnpm add @exhuma/cards @exhuma/layouts
+pnpm add @fleect/exhuma-cards @fleect/exhuma-layouts
 ```
 
 ```tsx
-import { StackingCards } from '@exhuma/core/cards';
-import { CssMasonry } from '@exhuma/core/layouts';
+import { StackingCards } from '@fleect/exhuma/cards';
+import { CssMasonry } from '@fleect/exhuma/layouts';
 
 export default function Page() {
   return (

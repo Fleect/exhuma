@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HorizontalScroller } from '@exhuma/cards';
+import { HorizontalScroller } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function HorizontalScrollerPreview(props: ComponentPreviewProps) {

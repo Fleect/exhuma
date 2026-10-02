@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { NumberTicker } from '@exhuma/core';
+import { NumberTicker } from '@fleect/exhuma';
 import { DocsSpecCard } from './DocsSpecCard';
 
 interface DocsInvariantCardProps {
@@ -16,7 +16,7 @@ interface DocsInvariantCardProps {
 
 /**
  * A spec card whose figure runs on Exhuma's own NumberTicker. Client-only
- * because @exhuma/core's built barrel uses hooks without a "use client" directive.
+ * because @fleect/exhuma's built barrel uses hooks without a "use client" directive.
  */
 export function DocsInvariantCard({ tag, title, value, prefix, suffix, children }: DocsInvariantCardProps) {
 	return (

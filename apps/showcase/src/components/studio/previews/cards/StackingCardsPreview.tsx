@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StackingCards } from '@exhuma/cards';
+import { StackingCards } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function StackingCardsPreview(props: ComponentPreviewProps) {

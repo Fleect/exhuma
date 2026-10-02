@@ -1,6 +1,6 @@
-# Routing Architecture (@exhuma/router)
+# Routing Architecture (@fleect/exhuma-router)
 
-`@exhuma/router` provides production-ready layout framing, navigation bars, and route guards.
+`@fleect/exhuma-router` provides production-ready layout framing, navigation bars, and route guards.
 
 ---
 
@@ -9,7 +9,7 @@
 Root marketing page layout with sticky header and footer slots:
 
 ```tsx
-import { LandingLayout, Header, Footer } from '@exhuma/router';
+import { LandingLayout, Header, Footer } from '@fleect/exhuma-router';
 
 export default function Layout({ children }) {
   return (
@@ -30,7 +30,7 @@ export default function Layout({ children }) {
 Login and signup framing supporting single-card and split-screen hero layouts:
 
 ```tsx
-import { AuthLayout } from '@exhuma/router';
+import { AuthLayout } from '@fleect/exhuma-router';
 
 <AuthLayout split={true} title="Sign In" subtitle="Welcome back">
   <LoginForm />

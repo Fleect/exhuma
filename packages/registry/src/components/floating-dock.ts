@@ -90,8 +90,8 @@ export const floatingDockComponent: UniversalComponent = {
 		hapticFeedback: false,
 	},
 	dependencies: {
-		react: ['@exhuma/core', 'clsx', '@tabler/icons-react'],
-		nextjs: ['@exhuma/core', 'clsx', '@tabler/icons-react'],
+		react: ['@fleect/exhuma', 'clsx', '@tabler/icons-react'],
+		nextjs: ['@fleect/exhuma', 'clsx', '@tabler/icons-react'],
 		vue: ['clsx'],
 		svelte: ['clsx'],
 		solid: ['clsx'],

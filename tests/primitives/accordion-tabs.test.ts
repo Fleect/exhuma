@@ -196,7 +196,7 @@ describe('Accordion — Big-Omega (Ω) Kinetics & State Reconciliation', () => {
 		expect(state.has('panel-2')).toBe(true);
 	});
 
-	it('exports all compound components from @exhuma/core', async () => {
+	it('exports all compound components from @fleect/exhuma', async () => {
 		const core = await import('../../packages/core/src/index');
 		expect(core.Accordion).toBeDefined();
 		expect(core.AccordionRoot).toBeDefined();

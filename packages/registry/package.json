@@ -1,5 +1,5 @@
 {
-	"name": "@exhuma/registry",
+	"name": "@fleect/exhuma-registry",
 	"version": "0.2.0-beta.1",
 	"description": "Canonical Universal Component Registry and 13-ecosystem code generation engine for Exhuma",
 	"author": {

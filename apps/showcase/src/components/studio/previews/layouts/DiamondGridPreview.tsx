@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ComponentPreviewProps } from '../types';
-import { DiamondGrid } from '@exhuma/layouts';
+import { DiamondGrid } from '@fleect/exhuma-layouts';
 
 export default function DiamondGridPreview(props: ComponentPreviewProps) {
 	const propValues = (props.props ?? props) as Record<string, any>;

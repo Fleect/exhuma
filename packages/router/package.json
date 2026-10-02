@@ -1,5 +1,5 @@
 {
-	"name": "@exhuma/router",
+	"name": "@fleect/exhuma-router",
 	"version": "0.2.0-beta.1",
 	"description": "Production-ready layout frameworks, navigation primitives, and route guards for React and Next.js",
 	"author": {

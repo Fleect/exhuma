@@ -13,7 +13,7 @@ import { comparisonSliderComponent } from '../../packages/registry/src/component
 import { generateComponentUsage } from '../../packages/registry/src/templates/usage-generator';
 
 describe('Exhuma Kinetic Methodology — Comparison Slider (Big-Ω)', () => {
-	it('exports ComparisonSlider and mathematical kernel from @exhuma/cards', () => {
+	it('exports ComparisonSlider and mathematical kernel from @fleect/exhuma-cards', () => {
 		expect(ComparisonSlider).toBeDefined();
 		expect(calculateSplitPosition).toBeDefined();
 		expect(calculateVerticalSplitPosition).toBeDefined();

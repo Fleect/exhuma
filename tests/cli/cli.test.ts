@@ -9,6 +9,7 @@ const TEST_DIR = resolve(__dirname, '../../scratch/cli-vitest');
 
 describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
   beforeAll(() => {
+    process.env.EXHUMA_OFFLINE = 'true';
     if (existsSync(TEST_DIR)) rmSync(TEST_DIR, { recursive: true, force: true });
     mkdirSync(TEST_DIR, { recursive: true });
   });
@@ -26,9 +27,9 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(stdout).toContain('build');
   });
 
-  it('outputs version number matching 0.1.1', () => {
+  it('outputs version number matching 0.2.0-beta.1', () => {
     const stdout = execSync(`node "${CLI_BIN}" --version`).toString();
-    expect(stdout.trim()).toBe('0.1.1');
+    expect(stdout.trim()).toBe('0.2.0-beta.1');
   });
 
   it('lists all canonical components and all 13 ecosystems', () => {
@@ -72,7 +73,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('AutoGrid');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
     expect(code).toContain('AutoGridPrimitive');
   });
 
@@ -163,7 +164,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('TabsIndicator');
     expect(code).toContain('TabsTrigger');
     expect(code).toContain('TabsContent');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Morphing Tabs component via exhuma add with ejected mode', () => {
@@ -185,7 +186,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('StackingCards');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Stacking Cards component via exhuma add with ejected mode', () => {
@@ -207,7 +208,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('SpotlightCard');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Spotlight Card component via exhuma add with ejected mode', () => {
@@ -228,7 +229,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('BorderBeam');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Border Beam component via exhuma add with ejected mode', () => {
@@ -251,7 +252,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
     expect(code).toContain('Accordion');
     expect(code).toContain('AccordionRoot');
     expect(code).toContain('AccordionTrigger');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Accordion component via exhuma add with ejected mode', () => {
@@ -276,7 +277,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('NumberTicker');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Number Ticker component via exhuma add with ejected mode', () => {
@@ -298,7 +299,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('MagneticButton');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Magnetic Button component via exhuma add with ejected mode', () => {
@@ -320,7 +321,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('FloatingDock');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Floating Dock component via exhuma add with ejected mode', () => {
@@ -342,7 +343,7 @@ describe('Exhuma CLI Suite — Automated End-to-End Test Gate', () => {
 
     const code = readFileSync(componentPath, 'utf8');
     expect(code).toContain('CursorTooltip');
-    expect(code).toContain('@exhuma/core');
+    expect(code).toContain('@fleect/exhuma');
   });
 
   it('installs real Cursor Tooltip component via exhuma add with ejected mode', () => {

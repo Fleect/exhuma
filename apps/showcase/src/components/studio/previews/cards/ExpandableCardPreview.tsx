@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ExpandableCard } from '@exhuma/cards';
+import { ExpandableCard } from '@fleect/exhuma-cards';
 import { ComponentPreviewProps } from '../types';
 
 export default function ExpandableCardPreview(props: ComponentPreviewProps) {

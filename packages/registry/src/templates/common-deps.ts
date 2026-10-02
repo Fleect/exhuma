@@ -1,8 +1,8 @@
 import { EcosystemFlavor } from '../schema';
 
 export const CORE_COMPONENT_DEPENDENCIES: Partial<Record<EcosystemFlavor, string[]>> = {
-	react: ['@exhuma/core'],
-	nextjs: ['@exhuma/core'],
+	react: ['@fleect/exhuma'],
+	nextjs: ['@fleect/exhuma'],
 	vue: ['clsx'],
 	svelte: ['clsx'],
 	solid: ['clsx'],
