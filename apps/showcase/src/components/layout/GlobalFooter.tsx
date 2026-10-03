@@ -61,11 +61,8 @@ export function GlobalFooter() {
 			<div className='container grid grid-cols-1 gap-7 py-10 text-xs md:grid-cols-[34fr_66fr] md:gap-5 lg:gap-10'>
 				<div className='space-y-3'>
 					<div className='flex items-center gap-2'>
-						<ExhumaLogo size={20} className='text-foreground shrink-0' />
-						<div className='flex items-center gap-1.5'>
-							<span className='font-display text-foreground text-base leading-none font-extrabold tracking-tight'>Exhuma</span>
-							<span className='border-border/70 bg-muted/60 text-muted-foreground text-4xs rounded-sm border px-1.5 py-0.5 font-mono font-medium'>v{APP_VERSION}</span>
-						</div>
+						<ExhumaLogo size={18} className='text-foreground shrink-0' />
+						<span className='border-border/70 bg-muted/60 text-muted-foreground text-4xs rounded-sm border px-1.5 py-0.5 font-mono font-medium'>v{APP_VERSION}</span>
 					</div>
 					<p className='text-muted-foreground text-2xs leading-relaxed'>
 						Universal tactile interaction engines and layout architecture adapted natively across 13 frontend ecosystems. Free, open-source under MIT.

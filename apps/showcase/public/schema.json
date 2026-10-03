@@ -1,48 +1,34 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://exhuma-ui.com/schema.json",
-  "title": "Exhuma Configuration",
-  "description": "Configuration schema for exhuma.json in Exhuma UI projects. A Fleect Artifact.",
-  "type": "object",
-  "required": ["flavor", "path"],
-  "properties": {
-    "$schema": {
-      "type": "string",
-      "description": "URI reference to this schema"
-    },
-    "flavor": {
-      "type": "string",
-      "enum": [
-        "react",
-        "nextjs",
-        "vue",
-        "svelte",
-        "angular",
-        "solid",
-        "astro",
-        "blade",
-        "vanilla",
-        "wordpress",
-        "webcomponent",
-        "react-native",
-        "flutter"
-      ],
-      "description": "The target frontend ecosystem/framework for component code generation."
-    },
-    "path": {
-      "type": "string",
-      "description": "Project-relative directory path where Exhuma components will be installed."
-    },
-    "typescript": {
-      "type": "boolean",
-      "default": true,
-      "description": "Whether components should be installed with TypeScript types (.tsx / .ts)."
-    },
-    "tailwind": {
-      "type": "boolean",
-      "default": true,
-      "description": "Whether components should use Tailwind CSS utility classes."
-    }
-  },
-  "additionalProperties": false
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://exhuma-ui.com/schema.json",
+	"title": "Exhuma Configuration",
+	"description": "Configuration schema for exhuma.json in Exhuma UI projects. A Fleect Artifact.",
+	"type": "object",
+	"required": ["flavor", "path"],
+	"properties": {
+		"$schema": {
+			"type": "string",
+			"description": "URI reference to this schema"
+		},
+		"flavor": {
+			"type": "string",
+			"enum": ["react", "nextjs", "vue", "svelte", "angular", "solid", "astro", "blade", "vanilla", "wordpress", "webcomponent", "react-native", "flutter"],
+			"description": "The target frontend ecosystem/framework for component code generation."
+		},
+		"path": {
+			"type": "string",
+			"description": "Project-relative directory path where Exhuma components will be installed."
+		},
+		"typescript": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether components should be installed with TypeScript types (.tsx / .ts)."
+		},
+		"tailwind": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether components should use Tailwind CSS utility classes."
+		}
+	},
+	"additionalProperties": false
 }

@@ -35,4 +35,3 @@ import { LandingLayout, DashboardLayout } from '@fleect/exhuma/router';
 ## License
 
 MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
-

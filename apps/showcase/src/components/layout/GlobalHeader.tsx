@@ -101,12 +101,9 @@ export function GlobalHeader() {
 				<div className='container-fluid flex h-14 items-center justify-between gap-4'>
 					{/* Brand Mark */}
 					<div className='flex items-center gap-3 lg:gap-6'>
-						<Link href='/' className='group flex items-center gap-2'>
-							<ExhumaLogo size={22} className='text-foreground shrink-0' />
-							<div className='flex items-center gap-1.5'>
-								<span className='font-display text-foreground group-hover:text-foreground/85 text-[16.5px] leading-none font-extrabold tracking-tight transition-colors'>Exhuma</span>
-								<span className='border-border/70 bg-muted/60 text-muted-foreground text-4xs hidden rounded-sm border px-1 py-0.5 font-mono font-medium sm:inline-block'>Beta</span>
-							</div>
+						<Link href='/' className='group flex items-center gap-1.5'>
+							<ExhumaLogo size={20} className='text-foreground shrink-0' />
+							<span className='border-border/70 bg-muted/60 text-muted-foreground text-4xs hidden rounded-sm border px-1 py-0.5 font-mono font-medium sm:inline-block'>Beta</span>
 						</Link>
 
 						{/* Navigation Links */}
