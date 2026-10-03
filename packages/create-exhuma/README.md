@@ -21,4 +21,3 @@ bun create exhuma
 ## License
 
 MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
-

@@ -61,4 +61,3 @@ export default function Features() {
 ## License
 
 MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
-

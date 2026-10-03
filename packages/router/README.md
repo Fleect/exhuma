@@ -56,4 +56,3 @@ export default function MarketingPage() {
 ## License
 
 MIT © [Fleect](https://fleect.com) — A Fleect Artifact.
-
